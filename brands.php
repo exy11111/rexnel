@@ -2,7 +2,7 @@
 	require ('session.php');
 	require ('db.php');
 
-	$sql = "SELECT * FROM sizes";
+	$sql = "SELECT * FROM brands";
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -13,7 +13,7 @@
 <html lang="en">
 <head>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-	<title>Sizes</title>
+	<title>Brands</title>
 	<meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
 	<link rel="icon" href="assets/img/kaiadmin/favicon.ico" type="image/x-icon"/>
 
@@ -101,7 +101,7 @@
 											<span class="sub-item">Sizes</span>
 										</a>
 									</li>
-									<li>
+                                    <li>
 										<a href="suppliers.php">
 											<span class="sub-item">Suppliers</span>
 										</a>
@@ -270,7 +270,7 @@
 			<div class="container">
 				<div class="page-inner">
 					<div class="page-header">
-						<h3 class="fw-bold mb-3">Sizes</h3>
+						<h3 class="fw-bold mb-3">Suppliers</h3>
 						<ul class="breadcrumbs mb-3">
 							<li class="nav-home">
 								<a href="#">
@@ -287,7 +287,7 @@
 								<i class="icon-arrow-right"></i>
 							</li>
 							<li class="nav-item">
-								<a href="#">Sizes</a>
+								<a href="#">Brands</a>
 							</li>
 						</ul>
 					</div>
@@ -296,10 +296,10 @@
 							<div class="card">
 								<div class="card-header">
 									<div class="d-flex align-items-center">
-										<h4 class="card-title">Sizes</h4>
+										<h4 class="card-title">Brands</h4>
 										<button class="btn btn-primary btn-round ms-auto" data-bs-toggle="modal" data-bs-target="#addRowModal">
 											<i class="fa fa-plus"></i>
-											Add Size
+											Add Brand
 										</button>
 									</div>
 								</div>
@@ -313,25 +313,25 @@
 														<span class="fw-mediumbold">
 														New</span> 
 														<span class="fw-light">
-															Size
+															Brand
 														</span>
 													</h5>
 													<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 												</div>
-                                                <form action="process_addsize.php" method="POST">
+                                                <form action="process_addbrand.php" method="POST">
                                                     <div class="modal-body">
-                                                        <p class="small">Create a new size using this form, make sure you fill them all</p>
+                                                        <p class="small">Create a new brand using this form, make sure you fill them all</p>
                                                         <div class="row">
                                                             <div class="col-sm-12">
                                                                 <div class="form-group form-group-default">
-                                                                    <label>Size Name</label>
-                                                                    <input type="text" name="size_name" class="form-control" placeholder="fill name" required>
+                                                                    <label>Brand Name</label>
+                                                                    <input type="text" name="brand_name" class="form-control" placeholder="fill name" required>
                                                                 </div>
                                                             </div>
-                                                            <div class="col-sm-12">
+															<div class="col-sm-12">
                                                                 <div class="form-group form-group-default">
-                                                                    <label>Size Description</label>
-                                                                    <input type="text" name="size_description" class="form-control" placeholder="fill description" required>
+                                                                    <label>Brand Description</label>
+                                                                    <textarea type="text" name="brand_description" class="form-control" placeholder="fill description" required></textarea>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -349,23 +349,25 @@
 										<table id="sizes" class="display table table-striped table-hover" >
 											<thead>
 												<tr>
-													<th style="width: 20%">Size Name</th>
-													<th>Size Description</th>
+													<th style="width: 10%">ID</th>
+													<th>Brand Name</th>
+                                                    <th>Brand Description</th>
 													<th style="width: 10%">Action</th>
 												</tr>
 											</thead>
 											<tbody>
 												<?php 
 													foreach($data as $row){
-														echo "<tr data-id=".htmlspecialchars($row['size_id']).">";
-														echo "<td>".htmlspecialchars($row['size_name'])."</td>";
-														echo "<td>".htmlspecialchars($row['size_description'])."</td>";
+														echo "<tr data-id=".htmlspecialchars($row['brand_id']).">";
+														echo "<td>".htmlspecialchars($row['brand_id'])."</td>";
+                                                        echo "<td>".htmlspecialchars($row['brand_name'])."</td>";
+                                                        echo "<td>".htmlspecialchars($row['brand_description'])."</td>";
 														echo "<td>
                                                                 <div class='form-button-action'>
                                                                     <button type='button' class='btn btn-link btn-primary btn-lg' data-bs-toggle='modal' data-bs-target='#editSizeModal' title='Edit Task'>
                                                                         <i class='fa fa-edit'></i>
                                                                     </button>
-                                                                    <button type='button' class='btn btn-link btn-danger remove-btn' data-id='".htmlspecialchars($row['size_id'])."' title='Remove'>
+                                                                    <button type='button' class='btn btn-link btn-danger remove-btn' data-id='".htmlspecialchars($row['brand_id'])."' title='Remove'>
                                                                         <i class='fa fa-times'></i>
                                                                     </button>
                                                                 </div>
@@ -375,14 +377,13 @@
 												?>
 											</tbody>
 										</table>
-                                        
                                         <script>
                                             document.addEventListener('DOMContentLoaded', function() {
                                                 const removeButtons = document.querySelectorAll('.remove-btn');
                                                 
                                                 removeButtons.forEach(button => {
                                                     button.addEventListener('click', function() {
-                                                        const sizeId = this.getAttribute('data-id');
+                                                        const supplierId = this.getAttribute('data-id');
                                                         Swal.fire({
                                                             title: 'Are you sure?',
                                                             text: "This action cannot be undone!",
@@ -395,13 +396,13 @@
                                                         }).then((result) => {
                                                             if (result.isConfirmed) {
                                                                 const xhr = new XMLHttpRequest();
-                                                                xhr.open('POST', 'process_deletesize.php', true);
+                                                                xhr.open('POST', 'process_deletesupplier.php', true);
                                                                 xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
                                                                 xhr.onload = function() {
                                                                     if (xhr.status === 200) {
                                                                         if (xhr.responseText === 'success') {
-                                                                            Swal.fire('Deleted!', 'The size has been deleted.', 'success').then(() => {
-                                                                                window.location.href = 'sizes.php';
+                                                                            Swal.fire('Deleted!', 'The supplier has been deleted.', 'success').then(() => {
+                                                                                window.location.href = 'suppliers.php';
                                                                             });
                                                                         } /*else if(xhr.responseText === 'exist'){
 																			Swal.fire({
@@ -431,11 +432,11 @@
 																				}
 																			});
 																		}*/else {
-                                                                            Swal.fire('Error!', 'There was an error deleting the size.', 'error');
+                                                                            Swal.fire('Error!', 'There was an error deleting the supplier.', 'error');
                                                                         }
                                                                     }
                                                                 };
-                                                                xhr.send('size_id=' + sizeId);
+                                                                xhr.send('supplier_id=' + supplierId);
                                                             }
                                                         });
                                                     });
@@ -452,29 +453,29 @@
                                                             <span class="fw-mediumbold">
                                                             Edit</span> 
                                                             <span class="fw-light">
-                                                                Size
+                                                                Brand
                                                             </span>
                                                         </h5>
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                     </div>
-                                                    <form action="process_editsize.php" method="POST">
+                                                    <form action="process_editbrand.php" method="POST">
                                                         <div class="modal-body">
-                                                            <p class="small">Edit the size details below.</p>
+                                                            <p class="small">Edit the brand details below.</p>
                                                             <div class="row">
-                                                                <div class="col-sm-12">
-                                                                    <div class="form-group form-group-default">
-                                                                        <label>Size Name</label>
-                                                                        <input type="text" name="size_name" id="editSizeName" class="form-control" placeholder="fill name" required>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-sm-12">
-                                                                    <div class="form-group form-group-default">
-                                                                        <label>Size Description</label>
-                                                                        <input type="text" name="size_description" id="editSizeDescription" class="form-control" placeholder="fill description" required>
-                                                                    </div>
+                                                            <div class="col-sm-12">
+                                                                <div class="form-group form-group-default">
+                                                                    <label>Brand Name</label>
+                                                                    <input type="text" name="brand_name" id="editBrandName" class="form-control" placeholder="fill name" required>
                                                                 </div>
                                                             </div>
-                                                            <input type="hidden" name="size_id" id="editSizeId">
+															<div class="col-sm-12">
+                                                                <div class="form-group form-group-default">
+                                                                    <label>Brand Description</label>
+                                                                    <textarea type="text" name="brand_description" id="editBrandDescription" class="form-control" placeholder="fill description" required></textarea>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                            <input type="hidden" name="brand_id" id="editBrandId">
                                                         </div>
                                                         <div class="modal-footer border-0">
                                                             <button type="submit" class="btn btn-primary">Save Changes</button>
@@ -537,14 +538,14 @@
                 var row = $(this).closest('tr');
                 var id = row.data('id');
                 $.ajax({
-                    url: 'process_getsizedata.php',
+                    url: 'process_getbranddata.php',
                     type: 'GET',
                     data: { id: id },
-                    dataType: 'json',
+                    dataType: 'json', 
                     success: function(data) {
-                        $('#editSizeName').val(data.size_name);
-                        $('#editSizeDescription').val(data.size_description);
-                        $('#editSizeId').val(data.size_id);
+                        $('#editBrandId').val(data.brand_id);
+                        $('#editBrandName').val(data.brand_name);
+                        $('#editBrandDescription').val(data.brand_description);
                         $('#editSizeModal').modal('show');
                     },
                     error: function(xhr, status, error) {
@@ -560,21 +561,21 @@
             <?php if ($_GET['status'] == 'success'): ?>
                 Swal.fire({
                     icon: 'success',
-                    title: 'Size Added!',
-                    text: 'The size has been successfully created.',
+                    title: 'Brand Added!',
+                    text: 'The brand has been successfully created.',
                 }).then((result) => {
                 });
             <?php elseif ($_GET['status'] == 'error'): ?>
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
-                    text: 'Something went wrong while creating the size.',
+                    text: 'Something went wrong while creating the brand.',
                 });
             <?php elseif ($_GET['status'] == 'exist'): ?>
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
-                    text: 'Size already exists.',
+                    text: 'Brand already exists.',
                 });
             <?php endif; ?>
         </script>
@@ -585,15 +586,15 @@
             <?php if ($_GET['editstatus'] == 'success'): ?>
                 Swal.fire({
                     icon: 'success',
-                    title: 'Size Edited!',
-                    text: 'The size has been successfully edited.',
+                    title: 'Supplier Edited!',
+                    text: 'The supplier has been successfully edited.',
                 }).then((result) => {
                 });
             <?php elseif ($_GET['editstatus'] == 'error'): ?>
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
-                    text: 'Something went wrong while editing the size.',
+                    text: 'Something went wrong while editing the supplier.',
                 });
             <?php endif; ?>
         </script>

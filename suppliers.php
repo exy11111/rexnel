@@ -2,7 +2,7 @@
 	require ('session.php');
 	require ('db.php');
 
-	$sql = "SELECT * FROM sizes";
+	$sql = "SELECT * FROM suppliers";
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -104,6 +104,11 @@
                                     <li>
 										<a href="suppliers.php">
 											<span class="sub-item">Suppliers</span>
+										</a>
+									</li>
+									<li>
+										<a href="brands.php">
+											<span class="sub-item">Brands</span>
 										</a>
 									</li>
 								</ul>
@@ -313,20 +318,43 @@
 													</h5>
 													<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 												</div>
-                                                <form action="process_addsize.php" method="POST">
+                                                <form action="process_addsupplier.php" method="POST">
                                                     <div class="modal-body">
                                                         <p class="small">Create a new supplier using this form, make sure you fill them all</p>
                                                         <div class="row">
                                                             <div class="col-sm-12">
                                                                 <div class="form-group form-group-default">
                                                                     <label>Supplier Name</label>
-                                                                    <input type="text" name="size_name" class="form-control" placeholder="fill name" required>
+                                                                    <input type="text" name="supplier_name" class="form-control" placeholder="fill name" required>
                                                                 </div>
                                                             </div>
                                                             <div class="col-sm-12">
                                                                 <div class="form-group form-group-default">
+                                                                    <label>Contact Name</label>
+                                                                    <input type="text" name="contact_name" class="form-control" placeholder="fill name" required>
+                                                                </div>
+                                                            </div>
+															<div class="col-sm-6">
+                                                                <div class="form-group form-group-default">
+                                                                    <label>Email</label>
+                                                                    <input type="email" name="email" class="form-control" placeholder="fill email" required>
+                                                                </div>
+                                                            </div>
+															<div class="col-sm-6">
+                                                                <div class="form-group form-group-default">
+                                                                    <label>Phone</label>
+                                                                    <input type="tel" name="phone" class="form-control" placeholder="fill phone" maxLength="11" oninput="validatePhoneNumber(this)" required>
+																	<script>
+																		function validatePhoneNumber(input) {
+																			input.value = input.value.replace(/[^0-9]/g, '');
+																		}
+																	</script>
+                                                                </div>
+                                                            </div>
+															<div class="col-sm-12">
+                                                                <div class="form-group form-group-default">
                                                                     <label>Address</label>
-                                                                    <input type="text" name="size_description" class="form-control" placeholder="fill address" required>
+                                                                    <textarea type="text" name="address" class="form-control" placeholder="fill address" required></textarea>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -344,11 +372,11 @@
 										<table id="sizes" class="display table table-striped table-hover" >
 											<thead>
 												<tr>
-													<th style="width: 20%">Supplier ID</th>
+													<th style="width: 10%">ID</th>
 													<th>Supplier Name</th>
                                                     <th>Contact Name</th>
-                                                    <th>Contact Email</th>
-                                                    <th>Contact Phone</th>
+                                                    <th>Email</th>
+                                                    <th>Phone</th>
                                                     <th>Address</th>
 													<th style="width: 10%">Action</th>
 												</tr>
@@ -356,19 +384,19 @@
 											<tbody>
 												<?php 
 													foreach($data as $row){
-														echo "<tr data-id=".htmlspecialchars($row['size_id']).">";
-														echo "<td>".htmlspecialchars($row['size_name'])."</td>";
-														echo "<td>".htmlspecialchars($row['size_description'])."</td>";
-                                                        echo "<td>".htmlspecialchars($row['size_description'])."</td>";
-                                                        echo "<td>".htmlspecialchars($row['size_description'])."</td>";
-                                                        echo "<td>".htmlspecialchars($row['size_description'])."</td>";
-                                                        echo "<td>".htmlspecialchars($row['size_description'])."</td>";
+														echo "<tr data-id=".htmlspecialchars($row['supplier_id']).">";
+														echo "<td>".htmlspecialchars($row['supplier_id'])."</td>";
+														echo "<td>".htmlspecialchars($row['supplier_name'])."</td>";
+                                                        echo "<td>".htmlspecialchars($row['contact_name'])."</td>";
+                                                        echo "<td>".htmlspecialchars($row['email'])."</td>";
+                                                        echo "<td>".htmlspecialchars($row['phone'])."</td>";
+                                                        echo "<td>".htmlspecialchars($row['address'])."</td>";
 														echo "<td>
                                                                 <div class='form-button-action'>
                                                                     <button type='button' class='btn btn-link btn-primary btn-lg' data-bs-toggle='modal' data-bs-target='#editSizeModal' title='Edit Task'>
                                                                         <i class='fa fa-edit'></i>
                                                                     </button>
-                                                                    <button type='button' class='btn btn-link btn-danger remove-btn' data-id='".htmlspecialchars($row['size_id'])."' title='Remove'>
+                                                                    <button type='button' class='btn btn-link btn-danger remove-btn' data-id='".htmlspecialchars($row['supplier_id'])."' title='Remove'>
                                                                         <i class='fa fa-times'></i>
                                                                     </button>
                                                                 </div>
@@ -384,7 +412,7 @@
                                                 
                                                 removeButtons.forEach(button => {
                                                     button.addEventListener('click', function() {
-                                                        const sizeId = this.getAttribute('data-id');
+                                                        const supplierId = this.getAttribute('data-id');
                                                         Swal.fire({
                                                             title: 'Are you sure?',
                                                             text: "This action cannot be undone!",
@@ -397,13 +425,13 @@
                                                         }).then((result) => {
                                                             if (result.isConfirmed) {
                                                                 const xhr = new XMLHttpRequest();
-                                                                xhr.open('POST', 'process_deletesize.php', true);
+                                                                xhr.open('POST', 'process_deletesupplier.php', true);
                                                                 xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
                                                                 xhr.onload = function() {
                                                                     if (xhr.status === 200) {
                                                                         if (xhr.responseText === 'success') {
-                                                                            Swal.fire('Deleted!', 'The size has been deleted.', 'success').then(() => {
-                                                                                window.location.href = 'sizes.php';
+                                                                            Swal.fire('Deleted!', 'The supplier has been deleted.', 'success').then(() => {
+                                                                                window.location.href = 'suppliers.php';
                                                                             });
                                                                         } /*else if(xhr.responseText === 'exist'){
 																			Swal.fire({
@@ -433,11 +461,11 @@
 																				}
 																			});
 																		}*/else {
-                                                                            Swal.fire('Error!', 'There was an error deleting the size.', 'error');
+                                                                            Swal.fire('Error!', 'There was an error deleting the supplier.', 'error');
                                                                         }
                                                                     }
                                                                 };
-                                                                xhr.send('size_id=' + sizeId);
+                                                                xhr.send('supplier_id=' + supplierId);
                                                             }
                                                         });
                                                     });
@@ -454,29 +482,52 @@
                                                             <span class="fw-mediumbold">
                                                             Edit</span> 
                                                             <span class="fw-light">
-                                                                Size
+                                                                Supplier
                                                             </span>
                                                         </h5>
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                     </div>
-                                                    <form action="process_editsize.php" method="POST">
+                                                    <form action="process_editsupplier.php" method="POST">
                                                         <div class="modal-body">
-                                                            <p class="small">Edit the size details below.</p>
+                                                            <p class="small">Edit the supplier details below.</p>
                                                             <div class="row">
-                                                                <div class="col-sm-12">
-                                                                    <div class="form-group form-group-default">
-                                                                        <label>Size Name</label>
-                                                                        <input type="text" name="size_name" id="editSizeName" class="form-control" placeholder="fill name" required>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-sm-12">
-                                                                    <div class="form-group form-group-default">
-                                                                        <label>Size Description</label>
-                                                                        <input type="text" name="size_description" id="editSizeDescription" class="form-control" placeholder="fill description" required>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <input type="hidden" name="size_id" id="editSizeId">
+																<div class="col-sm-12">
+																	<div class="form-group form-group-default">
+																		<label>Supplier Name</label>
+																		<input type="text" name="supplier_name" id="editSupplierName" class="form-control" placeholder="fill name" required>
+																	</div>
+																</div>
+																<div class="col-sm-12">
+																	<div class="form-group form-group-default">
+																		<label>Contact Name</label>
+																		<input type="text" name="contact_name" id="editContactName" class="form-control" placeholder="fill name" required>
+																	</div>
+																</div>
+																<div class="col-sm-6">
+																	<div class="form-group form-group-default">
+																		<label>Email</label>
+																		<input type="email" name="email" id="editEmail" class="form-control" placeholder="fill email" required>
+																	</div>
+																</div>
+																<div class="col-sm-6">
+																	<div class="form-group form-group-default">
+																		<label>Phone</label>
+																		<input type="tel" name="phone" id="editPhone" class="form-control" placeholder="fill phone" maxLength="11" oninput="validatePhoneNumber(this)" required>
+																		<script>
+																			function validatePhoneNumber(input) {
+																				input.value = input.value.replace(/[^0-9]/g, '');
+																			}
+																		</script>
+																	</div>
+																</div>
+																<div class="col-sm-12">
+																	<div class="form-group form-group-default">
+																		<label>Address</label>
+																		<textarea type="text" name="address" id="editAddress" class="form-control" placeholder="fill address" required></textarea>
+																	</div>
+																</div>
+                                                        	</div>
+                                                            <input type="hidden" name="size_id" id="editSupplierId">
                                                         </div>
                                                         <div class="modal-footer border-0">
                                                             <button type="submit" class="btn btn-primary">Save Changes</button>
@@ -539,14 +590,17 @@
                 var row = $(this).closest('tr');
                 var id = row.data('id');
                 $.ajax({
-                    url: 'process_getsizedata.php',
+                    url: 'process_getsupplierdata.php',
                     type: 'GET',
                     data: { id: id },
                     dataType: 'json',
                     success: function(data) {
-                        $('#editSizeName').val(data.size_name);
-                        $('#editSizeDescription').val(data.size_description);
-                        $('#editSizeId').val(data.size_id);
+                        $('#editSupplierId').val(data.supplier_id);
+                        $('#editSupplierName').val(data.supplier_name);
+                        $('#editContactName').val(data.contact_name);
+						$('#editEmail').val(data.email);
+						$('#editPhone').val(data.phone);
+						$('#editAddress').val(data.address);
                         $('#editSizeModal').modal('show');
                     },
                     error: function(xhr, status, error) {
@@ -562,21 +616,21 @@
             <?php if ($_GET['status'] == 'success'): ?>
                 Swal.fire({
                     icon: 'success',
-                    title: 'Size Added!',
-                    text: 'The size has been successfully created.',
+                    title: 'Supplier Added!',
+                    text: 'The supplier has been successfully created.',
                 }).then((result) => {
                 });
             <?php elseif ($_GET['status'] == 'error'): ?>
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
-                    text: 'Something went wrong while creating the size.',
+                    text: 'Something went wrong while creating the supplier.',
                 });
             <?php elseif ($_GET['status'] == 'exist'): ?>
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
-                    text: 'Size already exists.',
+                    text: 'Supplier already exists.',
                 });
             <?php endif; ?>
         </script>
@@ -587,15 +641,15 @@
             <?php if ($_GET['editstatus'] == 'success'): ?>
                 Swal.fire({
                     icon: 'success',
-                    title: 'Size Edited!',
-                    text: 'The size has been successfully edited.',
+                    title: 'Supplier Edited!',
+                    text: 'The supplier has been successfully edited.',
                 }).then((result) => {
                 });
             <?php elseif ($_GET['editstatus'] == 'error'): ?>
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
-                    text: 'Something went wrong while editing the category.',
+                    text: 'Something went wrong while editing the supplier.',
                 });
             <?php endif; ?>
         </script>

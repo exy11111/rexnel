@@ -111,6 +111,11 @@
 											<span class="sub-item">Suppliers</span>
 										</a>
 									</li>
+									<li>
+										<a href="brands.php">
+											<span class="sub-item">Brands</span>
+										</a>
+									</li>
 								</ul>
 							</div>
 						</li>
