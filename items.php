@@ -2,7 +2,11 @@
 	require ('session.php');
 	require ('db.php');
 
-	$sql = "SELECT item_id, item_name, price, category_name FROM items i JOIN categories c ON i.category_id = c.category_id";
+	$sql = "SELECT item_id, item_name, category_name, brand_name, supplier_name
+	FROM items i 
+	JOIN categories c ON i.category_id = c.category_id
+	JOIN brands b ON b.brand_id = i.brand_id
+	JOIN suppliers s ON s.supplier_id = i.supplier_id";
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -11,6 +15,16 @@
 	$stmt1 = $conn->prepare($sql1);
     $stmt1->execute();
     $data1 = $stmt1->fetchAll(PDO::FETCH_ASSOC);
+
+	$sql2 = "SELECT * FROM brands";
+	$stmt2 = $conn->prepare($sql2);
+    $stmt2->execute();
+    $data2 = $stmt2->fetchAll(PDO::FETCH_ASSOC);
+
+	$sql3 = "SELECT * FROM suppliers";
+	$stmt3 = $conn->prepare($sql3);
+    $stmt3->execute();
+    $data3 = $stmt3->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
 
@@ -92,8 +106,8 @@
 							<div class="collapse" id="inv">
 								<ul class="nav nav-collapse">
 									<li>
-										<a href="categories.php">
-											<span class="sub-item">Categories</span>
+										<a href="stock.php">
+											<span class="sub-item">Stock</span>
 										</a>
 									</li>
 									<li>
@@ -101,6 +115,12 @@
 											<span class="sub-item">Items</span>
 										</a>
 									</li>
+									<li>
+										<a href="categories.php">
+											<span class="sub-item">Categories</span>
+										</a>
+									</li>
+									
 									<li>
 										<a href="sizes.php">
 											<span class="sub-item">Sizes</span>
@@ -169,55 +189,7 @@
 				<nav class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom">
 
 					<div class="container-fluid">
-						<ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
-							<li class="nav-item topbar-icon dropdown hidden-caret">
-								<a class="nav-link dropdown-toggle" href="#" id="notifDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									<i class="fa fa-bell"></i>
-									<span class="notification">4</span>
-								</a>
-								<ul class="dropdown-menu notif-box animated fadeIn" aria-labelledby="notifDropdown">
-									<li>
-										<div class="dropdown-title">You have 4 new notification</div>
-									</li>
-									<li>
-										<div class="notif-scroll scrollbar-outer">
-											<div class="notif-center">
-												<a href="#">
-													<div class="notif-icon notif-primary"> <i class="fa fa-user-plus"></i> </div>
-													<div class="notif-content">
-														<span class="block">
-															New user registered
-														</span>
-														<span class="time">5 minutes ago</span> 
-													</div>
-												</a>
-												<a href="#">
-													<div class="notif-icon notif-success"> <i class="fa fa-comment"></i> </div>
-													<div class="notif-content">
-														<span class="block">
-															Rahmad commented on Admin
-														</span>
-														<span class="time">12 minutes ago</span> 
-													</div>
-												</a>
-												<a href="#">
-													<div class="notif-icon notif-danger"> <i class="fa fa-heart"></i> </div>
-													<div class="notif-content">
-														<span class="block">
-															Farrah liked Admin
-														</span>
-														<span class="time">17 minutes ago</span> 
-													</div>
-												</a>
-											</div>
-										</div>
-									</li>
-									<li>
-										<a class="see-all" href="javascript:void(0);">See all notifications<i class="fa fa-angle-right"></i> </a>
-									</li>
-								</ul>
-							</li>
-							
+						<ul class="navbar-nav topbar-nav ms-md-auto align-items-center">	
 							<li class="nav-item topbar-user dropdown hidden-caret">
 								<a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#" aria-expanded="false">
 									<div class="avatar-sm">
@@ -333,10 +305,11 @@
 																	<input type="text" name="item_name" class="form-control" placeholder="fill name" required>
 																</div>
 															</div>
-															<div class="col-md-6 pe-0">
+															<div class="col-sm-12">
 																<div class="form-group form-group-default">
 																	<label for="category">Category</label>
 																	<select class="form-select" name="category_id" required>
+																		<option value="">Select Category</option>
 																		<?php 
 																			foreach ($data1 as $row){
 																				echo "<option value='".$row['category_id']."'>".$row['category_name']."</option>";
@@ -345,10 +318,30 @@
 																	</select>
 																</div>
 															</div>
-															<div class="col-md-6">
+															<div class="col-sm-12">
 																<div class="form-group form-group-default">
-																	<label>Price</label>
-																	<input type="number" name="price" value="0.00" step="0.01" class="form-control" placeholder="fill price" required>
+																	<label for="category">Brand</label>
+																	<select class="form-select" name="brand_id" required>
+																		<option value="">Select Brand</option>
+																		<?php 
+																			foreach ($data2 as $row){
+																				echo "<option value='".$row['brand_id']."'>".$row['brand_name']."</option>";
+																			}
+																		?>
+																	</select>
+																</div>
+															</div>
+															<div class="col-sm-12">
+																<div class="form-group form-group-default">
+																	<label for="category">Supplier</label>
+																	<select class="form-select" name="supplier_id" required>
+																		<option value="">Select Supplier</option>
+																		<?php 
+																			foreach ($data3 as $row){
+																				echo "<option value='".$row['supplier_id']."'>".$row['supplier_name']."</option>";
+																			}
+																		?>
+																	</select>
 																</div>
 															</div>
 														</div>
@@ -366,10 +359,11 @@
 										<table id="add-row" class="display table table-striped table-hover" >
 											<thead>
 												<tr>
-													<th style="width:10%">Item ID</th>
+													<th style="width: 10%">Item ID</th>
 													<th>Item Name</th>
-													<th>Price</th>
 													<th>Category</th>
+													<th>Brand</th>
+													<th>Supplier</th>
 													<th style="width: 10%">Action</th>
 												</tr>
 											</thead>
@@ -379,8 +373,9 @@
 														echo "<tr data-id=".htmlspecialchars($row['item_id']).">";
 														echo "<td>".htmlspecialchars($row['item_id'])."</td>";
 														echo "<td>".htmlspecialchars($row['item_name'])."</td>";
-														echo "<td>₱".htmlspecialchars($row['price'])."</td>";
 														echo "<td>".htmlspecialchars($row['category_name'])."</td>";
+														echo "<td>".htmlspecialchars($row['brand_name'])."</td>";
+														echo "<td>".htmlspecialchars($row['supplier_name'])."</td>";
 														echo "<td>
                                                                 <div class='form-button-action'>
                                                                     <button type='button' class='btn btn-link btn-primary btn-lg' data-bs-toggle='modal' data-bs-target='#editItemModal' title='Edit Task'>
@@ -457,13 +452,14 @@
 																<div class="col-sm-12">
 																	<div class="form-group form-group-default">
 																		<label>Item Name</label>
-																		<input type="text" id="editItemName" name="item_name" class="form-control" placeholder="fill name" required>
+																		<input type="text" name="item_name" id="editItemName" class="form-control" placeholder="fill name" required>
 																	</div>
 																</div>
-																<div class="col-md-6 pe-0">
+																<div class="col-sm-12">
 																	<div class="form-group form-group-default">
 																		<label for="category">Category</label>
 																		<select class="form-select" id="editCategoryId" name="category_id" required>
+																			<option value="">Select Category</option>
 																			<?php 
 																				foreach ($data1 as $row){
 																					echo "<option value='".$row['category_id']."'>".$row['category_name']."</option>";
@@ -472,14 +468,33 @@
 																		</select>
 																	</div>
 																</div>
-																<div class="col-md-6">
+																<div class="col-sm-12">
 																	<div class="form-group form-group-default">
-																		<label>Price</label>
-																		<input type="number" id="editPrice" name="price" value="0.00" step="0.01" class="form-control" placeholder="fill price" required>
+																		<label for="category">Brand</label>
+																		<select class="form-select" id="editBrandId" name="brand_id" required>
+																		<option value="">Select Brand</option>
+																			<?php 
+																				foreach ($data2 as $row){
+																					echo "<option value='".$row['brand_id']."'>".$row['brand_name']."</option>";
+																				}
+																			?>
+																		</select>
+																	</div>
+																</div><div class="col-sm-12">
+																	<div class="form-group form-group-default">
+																		<label for="category">Supplier</label>
+																		<select class="form-select" id="editSupplierId" name="supplier_id" required>
+																			<option value="">Select Supplier</option>
+																			<?php 
+																				foreach ($data3 as $row){
+																					echo "<option value='".$row['supplier_id']."'>".$row['supplier_name']."</option>";
+																				}
+																			?>
+																		</select>
 																	</div>
 																</div>
 															</div>
-															<input type="hidden" name="item_id" id="editItemId">
+															<input type="text" name="item_id" id="editItemId" hidden>
 														</div>
 														<div class="modal-footer border-0">
 															<button type="submit" class="btn btn-primary">Save Changes</button>
@@ -602,10 +617,12 @@
                     data: { id: id },
                     dataType: 'json',
                     success: function(data) {
-                        $('#editItemName').val(data.item_name);
+						$('#editItemId').val(data.item_id);
+						$('#editItemName').val(data.item_name);
                         $('#editCategoryId').val(data.category_id);
-                        $('#editPrice').val(data.price);
-                        $('#editItemId').val(data.item_id);
+                        $('#editBrandId').val(data.brand_id);
+                        $('#editSupplierId').val(data.supplier_id);
+						
                     },
                     error: function(xhr, status, error) {
                         console.error("Error fetching data: " + error);

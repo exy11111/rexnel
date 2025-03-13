@@ -5,7 +5,8 @@ require('db.php');
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $item_name = $_POST['item_name'];
     $category_id = $_POST['category_id'];
-    $price = $_POST['price'];
+    $brand_id = $_POST['brand_id'];
+    $supplier_id = $_POST['supplier_id'];
 
     try {
         $sql = "SELECT * FROM items WHERE item_name = :item_name";
@@ -18,11 +19,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit();
         }
         else{
-            $sql = "INSERT INTO items (item_name, category_id, price) VALUES (:item_name, :category_id, :price)";
+            $sql = "INSERT INTO items (item_name, category_id, brand_id, supplier_id) VALUES (:item_name, :category_id, :brand_id, :supplier_id)";
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':item_name', $item_name);
             $stmt->bindParam(':category_id', $category_id);
-            $stmt->bindParam(':price', $price);
+            $stmt->bindParam(':brand_id', $brand_id);
+            $stmt->bindParam(':supplier_id', $supplier_id);
             $stmt->execute();
 
             header("Location: items.php?status=success");

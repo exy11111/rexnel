@@ -87,8 +87,8 @@
 							<div class="collapse" id="inv">
 								<ul class="nav nav-collapse">
 									<li>
-										<a href="categories.php">
-											<span class="sub-item">Categories</span>
+										<a href="stock.php">
+											<span class="sub-item">Stock</span>
 										</a>
 									</li>
 									<li>
@@ -96,6 +96,12 @@
 											<span class="sub-item">Items</span>
 										</a>
 									</li>
+									<li>
+										<a href="categories.php">
+											<span class="sub-item">Categories</span>
+										</a>
+									</li>
+									
 									<li>
 										<a href="sizes.php">
 											<span class="sub-item">Sizes</span>
@@ -164,55 +170,7 @@
 				<nav class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom">
 
 					<div class="container-fluid">
-						<ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
-							<li class="nav-item topbar-icon dropdown hidden-caret">
-								<a class="nav-link dropdown-toggle" href="#" id="notifDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									<i class="fa fa-bell"></i>
-									<span class="notification">4</span>
-								</a>
-								<ul class="dropdown-menu notif-box animated fadeIn" aria-labelledby="notifDropdown">
-									<li>
-										<div class="dropdown-title">You have 4 new notification</div>
-									</li>
-									<li>
-										<div class="notif-scroll scrollbar-outer">
-											<div class="notif-center">
-												<a href="#">
-													<div class="notif-icon notif-primary"> <i class="fa fa-user-plus"></i> </div>
-													<div class="notif-content">
-														<span class="block">
-															New user registered
-														</span>
-														<span class="time">5 minutes ago</span> 
-													</div>
-												</a>
-												<a href="#">
-													<div class="notif-icon notif-success"> <i class="fa fa-comment"></i> </div>
-													<div class="notif-content">
-														<span class="block">
-															Rahmad commented on Admin
-														</span>
-														<span class="time">12 minutes ago</span> 
-													</div>
-												</a>
-												<a href="#">
-													<div class="notif-icon notif-danger"> <i class="fa fa-heart"></i> </div>
-													<div class="notif-content">
-														<span class="block">
-															Farrah liked Admin
-														</span>
-														<span class="time">17 minutes ago</span> 
-													</div>
-												</a>
-											</div>
-										</div>
-									</li>
-									<li>
-										<a class="see-all" href="javascript:void(0);">See all notifications<i class="fa fa-angle-right"></i> </a>
-									</li>
-								</ul>
-							</li>
-							
+						<ul class="navbar-nav topbar-nav ms-md-auto align-items-center">	
 							<li class="nav-item topbar-user dropdown hidden-caret">
 								<a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#" aria-expanded="false">
 									<div class="avatar-sm">
@@ -270,7 +228,7 @@
 			<div class="container">
 				<div class="page-inner">
 					<div class="page-header">
-						<h3 class="fw-bold mb-3">Suppliers</h3>
+						<h3 class="fw-bold mb-3">Brands</h3>
 						<ul class="breadcrumbs mb-3">
 							<li class="nav-home">
 								<a href="#">
@@ -383,7 +341,7 @@
                                                 
                                                 removeButtons.forEach(button => {
                                                     button.addEventListener('click', function() {
-                                                        const supplierId = this.getAttribute('data-id');
+                                                        const brandId = this.getAttribute('data-id');
                                                         Swal.fire({
                                                             title: 'Are you sure?',
                                                             text: "This action cannot be undone!",
@@ -396,13 +354,13 @@
                                                         }).then((result) => {
                                                             if (result.isConfirmed) {
                                                                 const xhr = new XMLHttpRequest();
-                                                                xhr.open('POST', 'process_deletesupplier.php', true);
+                                                                xhr.open('POST', 'process_deletebrand.php', true);
                                                                 xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
                                                                 xhr.onload = function() {
                                                                     if (xhr.status === 200) {
                                                                         if (xhr.responseText === 'success') {
-                                                                            Swal.fire('Deleted!', 'The supplier has been deleted.', 'success').then(() => {
-                                                                                window.location.href = 'suppliers.php';
+                                                                            Swal.fire('Deleted!', 'The brand has been deleted.', 'success').then(() => {
+                                                                                window.location.href = 'brands.php';
                                                                             });
                                                                         } /*else if(xhr.responseText === 'exist'){
 																			Swal.fire({
@@ -432,11 +390,11 @@
 																				}
 																			});
 																		}*/else {
-                                                                            Swal.fire('Error!', 'There was an error deleting the supplier.', 'error');
+                                                                            Swal.fire('Error!', 'There was an error deleting the brand.', 'error');
                                                                         }
                                                                     }
                                                                 };
-                                                                xhr.send('supplier_id=' + supplierId);
+                                                                xhr.send('brand_id=' + brandId);
                                                             }
                                                         });
                                                     });
@@ -586,15 +544,15 @@
             <?php if ($_GET['editstatus'] == 'success'): ?>
                 Swal.fire({
                     icon: 'success',
-                    title: 'Supplier Edited!',
-                    text: 'The supplier has been successfully edited.',
+                    title: 'Brand Edited!',
+                    text: 'The brand has been successfully edited.',
                 }).then((result) => {
                 });
             <?php elseif ($_GET['editstatus'] == 'error'): ?>
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
-                    text: 'Something went wrong while editing the supplier.',
+                    text: 'Something went wrong while editing the brand.',
                 });
             <?php endif; ?>
         </script>
