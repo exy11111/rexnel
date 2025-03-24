@@ -2,6 +2,11 @@
 	require ('session.php');
 	require ('db.php');
 
+	$sql = "SELECT sum(quantity) as total_quantity FROM stock";
+	$stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $total_quantity = $stmt->fetch(PDO::FETCH_ASSOC);
+
 ?>
 
 
@@ -11,7 +16,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<title>Dashboard</title>
 	<meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
-	<link rel="icon" href="assets/img/kaiadmin/favicon.ico" type="image/x-icon"/>
+	<link rel="icon" href="assets/img/holicon.png" type="image/x-icon"/>
 
 	<!-- Fonts and icons -->
 	<script src="assets/js/plugin/webfont/webfont.min.js"></script>
@@ -30,6 +35,18 @@
 	<link rel="stylesheet" href="assets/css/plugins.min.css">
 	<link rel="stylesheet" href="assets/css/kaiadmin.min.css">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+	<style>
+		.card {
+			transition: transform 0.3s ease, box-shadow 0.3s ease;
+		}
+
+		.card:hover {
+			transform: scale(1.05);
+			box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+			background-color: #f8f9fa;
+		}
+
+	</style>
 
 </head>
 <body>
@@ -40,8 +57,8 @@
 				<!-- Logo Header -->
 				<div class="logo-header" data-background-color="dark">
 
-					<a href="index.php" class="logo">
-						<img src="assets/img/kaiadmin/logo_light.svg" alt="navbar brand" class="navbar-brand" height="20">
+					<a href="index.php" class="logo text-white fw-bold">
+						<img src="assets/img/holicon.png" alt="navbar brand" class="navbar-brand" height="40">&nbsp;House of Local
 					</a>
 					<div class="nav-toggle">
 						<button class="btn btn-toggle toggle-sidebar">
@@ -143,8 +160,8 @@
 					<!-- Logo Header -->
 					<div class="logo-header" data-background-color="dark">
 
-						<a href="index.php" class="logo">
-							<img src="assets/img/kaiadmin/logo_light.svg" alt="navbar brand" class="navbar-brand" height="20">
+						<a href="index.php" class="logo text-white fw-bold">
+							<img src="assets/img/holicon.png" alt="navbar brand" class="navbar-brand" height="40">&nbsp;House of Local
 						</a>
 						<div class="nav-toggle">
 							<button class="btn btn-toggle toggle-sidebar">
@@ -226,68 +243,76 @@
 						<div>
 							<h3 class="fw-bold mb-3">Dashboard</h3>
 						</div>
+						<!--
 						<div class="ms-md-auto py-2 py-md-0">
 							<a href="#" class="btn btn-label-info btn-round me-2">Manage</a>
 							<a href="#" class="btn btn-primary btn-round">Add Customer</a>
-						</div>
+						</div> 
+						-->
 					</div>
 					<div class="row">
 						<div class="col-sm-6 col-md-4">
-							<div class="card card-stats card-round">
-								<div class="card-body ">
-									<div class="row align-items-center">
-										<div class="col-icon">
-											<div class="icon-big text-center icon-primary bubble-shadow-small">
-												<i class="bi bi-box-fill"></i>
+							<a href="stock.php">
+								<div class="card card-stats card-round">
+									<div class="card-body ">
+										<div class="row align-items-center">
+											<div class="col-icon">
+												<div class="icon-big text-center icon-primary bubble-shadow-small">
+													<i class="bi bi-box-fill"></i>
+												</div>
 											</div>
-										</div>
-										<div class="col col-stats ms-3 ms-sm-0">
-											<div class="numbers">
-												<p class="card-category">Stock</p>
-												<h4 class="card-title">1,294</h4>
+											<div class="col col-stats ms-3 ms-sm-0">
+												<div class="numbers">
+													<p class="card-category">Stock</p>
+													<h4 class="card-title"><?php echo $total_quantity['total_quantity']?></h4>
+												</div>
 											</div>
 										</div>
 									</div>
 								</div>
-							</div>
+							</a>
 						</div>
 						<div class="col-sm-6 col-md-4">
-							<div class="card card-stats card-round">
-								<div class="card-body">
-									<div class="row align-items-center">
-										<div class="col-icon">
-											<div class="icon-big text-center icon-success bubble-shadow-small">
-												<i class="fas fa-luggage-cart"></i>
+							<a href="#">
+								<div class="card card-stats card-round">
+									<div class="card-body">
+										<div class="row align-items-center">
+											<div class="col-icon">
+												<div class="icon-big text-center icon-success bubble-shadow-small">
+													<i class="fas fa-luggage-cart"></i>
+												</div>
 											</div>
-										</div>
-										<div class="col col-stats ms-3 ms-sm-0">
-											<div class="numbers">
-												<p class="card-category">Sales</p>
-												<h4 class="card-title">₱ 1,345</h4>
+											<div class="col col-stats ms-3 ms-sm-0">
+												<div class="numbers">
+													<p class="card-category">Sales</p>
+													<h4 class="card-title">₱ 1,345</h4>
+												</div>
 											</div>
 										</div>
 									</div>
 								</div>
-							</div>
+							</a>
 						</div>
 						<div class="col-sm-6 col-md-4">
-							<div class="card card-stats card-round">
-								<div class="card-body">
-									<div class="row align-items-center">
-										<div class="col-icon">
-											<div class="icon-big text-center icon-secondary bubble-shadow-small">
-												<i class="fa fa-book"></i>
+							<a href="#">
+								<div class="card card-stats card-round">
+									<div class="card-body">
+										<div class="row align-items-center">
+											<div class="col-icon">
+												<div class="icon-big text-center icon-secondary bubble-shadow-small">
+													<i class="fa fa-book"></i>
+												</div>
 											</div>
-										</div>
-										<div class="col col-stats ms-3 ms-sm-0">
-											<div class="numbers">
-												<p class="card-category">Order</p>
-												<h4 class="card-title">576</h4>
+											<div class="col col-stats ms-3 ms-sm-0">
+												<div class="numbers">
+													<p class="card-category">Order</p>
+													<h4 class="card-title">576</h4>
+												</div>
 											</div>
 										</div>
 									</div>
 								</div>
-							</div>
+							</a>
 						</div>
 					</div>
 					

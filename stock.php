@@ -38,7 +38,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<title>Stock</title>
 	<meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
-	<link rel="icon" href="assets/img/kaiadmin/favicon.ico" type="image/x-icon"/>
+	<link rel="icon" href="assets/img/holicon.png" type="image/x-icon"/>
 
 	<!-- Fonts and icons -->
 	<script src="assets/js/plugin/webfont/webfont.min.js"></script>
@@ -68,8 +68,8 @@
 				<!-- Logo Header -->
 				<div class="logo-header" data-background-color="dark">
 
-					<a href="index.php" class="logo">
-						<img src="assets/img/kaiadmin/logo_light.svg" alt="navbar brand" class="navbar-brand" height="20">
+					<a href="index.php" class="logo text-white fw-bold">
+						<img src="assets/img/holicon.png" alt="navbar brand" class="navbar-brand" height="40">&nbsp;House of Local
 					</a>
 					<div class="nav-toggle">
 						<button class="btn btn-toggle toggle-sidebar">
@@ -171,8 +171,8 @@
 					<!-- Logo Header -->
 					<div class="logo-header" data-background-color="dark">
 
-						<a href="index.php" class="logo">
-							<img src="assets/img/kaiadmin/logo_light.svg" alt="navbar brand" class="navbar-brand" height="20">
+						<a href="index.php" class="logo text-white fw-bold">
+							<img src="assets/img/holicon.png" alt="navbar brand" class="navbar-brand" height="40">&nbsp;House of Local
 						</a>
 						<div class="nav-toggle">
 							<button class="btn btn-toggle toggle-sidebar">

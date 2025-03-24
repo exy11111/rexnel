@@ -15,7 +15,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<title>Suppliers</title>
 	<meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
-	<link rel="icon" href="assets/img/kaiadmin/favicon.ico" type="image/x-icon"/>
+	<link rel="icon" href="assets/img/holicon.png" type="image/x-icon"/>
 
 	<!-- Fonts and icons -->
 	<script src="assets/js/plugin/webfont/webfont.min.js"></script>
@@ -45,8 +45,8 @@
 				<!-- Logo Header -->
 				<div class="logo-header" data-background-color="dark">
 
-					<a href="index.php" class="logo">
-						<img src="assets/img/kaiadmin/logo_light.svg" alt="navbar brand" class="navbar-brand" height="20">
+					<a href="index.php" class="logo text-white fw-bold">
+						<img src="assets/img/holicon.png" alt="navbar brand" class="navbar-brand" height="40">&nbsp;House of Local
 					</a>
 					<div class="nav-toggle">
 						<button class="btn btn-toggle toggle-sidebar">
@@ -101,7 +101,6 @@
 											<span class="sub-item">Categories</span>
 										</a>
 									</li>
-									
 									<li>
 										<a href="sizes.php">
 											<span class="sub-item">Sizes</span>
@@ -148,8 +147,8 @@
 					<!-- Logo Header -->
 					<div class="logo-header" data-background-color="dark">
 
-						<a href="index.php" class="logo">
-							<img src="assets/img/kaiadmin/logo_light.svg" alt="navbar brand" class="navbar-brand" height="20">
+						<a href="index.php" class="logo text-white fw-bold">
+							<img src="assets/img/holicon.png" alt="navbar brand" class="navbar-brand" height="40">&nbsp;House of Local
 						</a>
 						<div class="nav-toggle">
 							<button class="btn btn-toggle toggle-sidebar">
@@ -391,9 +390,9 @@
                                                                             Swal.fire('Deleted!', 'The supplier has been deleted.', 'success').then(() => {
                                                                                 window.location.href = 'suppliers.php';
                                                                             });
-                                                                        } /*else if(xhr.responseText === 'exist'){
+                                                                        } else if(xhr.responseText === 'exist'){
 																			Swal.fire({
-																				title: 'Items in this category will also be deleted.',
+																				title: 'Items in this supplier will also be deleted.',
 																				text: "Are you sure? This action cannot be undone!",
 																				icon: 'warning',
 																				showCancelButton: true,
@@ -404,21 +403,21 @@
 																			}).then((result) => {
 																				if (result.isConfirmed) {
 																					const xhr1 = new XMLHttpRequest();
-																					xhr1.open('POST', 'process_confirmdeletecategory.php', true);
+																					xhr1.open('POST', 'process_confirmdeletesupplier.php', true);
 																					xhr1.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 																					xhr1.onload = function() {
 																						if (xhr1.status === 200) {
 																							if (xhr1.responseText === 'success') {
-																								Swal.fire('Deleted!', 'The category has been deleted.', 'success').then(() => {
-																									window.location.href = 'categories.php';
+																								Swal.fire('Deleted!', 'The supplier has been deleted.', 'success').then(() => {
+																									window.location.href = 'suppliers.php';
 																								});
 																							}
 																						}
 																					}
-																					xhr1.send('category_id=' + categoryId);
+																					xhr1.send('supplier_id=' + supplierId);
 																				}
 																			});
-																		}*/else {
+																		}else {
                                                                             Swal.fire('Error!', 'There was an error deleting the supplier.', 'error');
                                                                         }
                                                                     }
