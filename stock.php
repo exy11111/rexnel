@@ -159,6 +159,27 @@
 								</ul>
 							</div>
 						</li>
+						<li class="nav-item">
+							<a data-bs-toggle="collapse" href="#sales">
+								<i class="fas fa-layer-group"></i>
+								<p>Sales Management</p>
+								<span class="caret"></span>
+							</a>
+							<div class="collapse" id="sales">
+								<ul class="nav nav-collapse">
+									<li>
+										<a href="purchase.php">
+											<span class="sub-item">Purchase Log</span>
+										</a>
+									</li>
+									<li>
+										<a href="transactions.php">
+											<span class="sub-item">Transactions</span>
+										</a>
+									</li>
+								</ul>
+							</div>
+						</li>
 					</ul>
 				</div>
 			</div>
@@ -366,7 +387,6 @@
 										<table id="sizes" class="display table table-striped table-hover" >
 											<thead>
 												<tr>
-													<th style="width: 10%">ID</th>
 													<th>Item Name</th>
                                                     <th>Size</th>
 													<th>Quantity</th>
@@ -378,7 +398,6 @@
 												<?php 
 													foreach($d as $row){
 														echo "<tr data-id=".htmlspecialchars($row['stock_id']).">";
-														echo "<td>".htmlspecialchars($row['stock_id'])."</td>";
                                                         echo "<td>".htmlspecialchars($row['item_name'])."</td>";
                                                         echo "<td>".htmlspecialchars($row['size_name'])."</td>";
 														echo "<td>".htmlspecialchars($row['quantity'])."</td>";

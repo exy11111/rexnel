@@ -136,6 +136,27 @@
 								</ul>
 							</div>
 						</li>
+						<li class="nav-item">
+							<a data-bs-toggle="collapse" href="#sales">
+								<i class="fas fa-layer-group"></i>
+								<p>Sales Management</p>
+								<span class="caret"></span>
+							</a>
+							<div class="collapse" id="sales">
+								<ul class="nav nav-collapse">
+									<li>
+										<a href="purchase.php">
+											<span class="sub-item">Purchase Log</span>
+										</a>
+									</li>
+									<li>
+										<a href="transactions.php">
+											<span class="sub-item">Transactions</span>
+										</a>
+									</li>
+								</ul>
+							</div>
+						</li>
 					</ul>
 				</div>
 			</div>

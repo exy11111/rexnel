@@ -2,29 +2,10 @@
 	require ('session.php');
 	require ('db.php');
 
-	$sql = "SELECT item_id, barcode, item_name, category_name, brand_name, supplier_name
-	FROM items i 
-	JOIN categories c ON i.category_id = c.category_id
-	JOIN brands b ON b.brand_id = i.brand_id
-	JOIN suppliers s ON s.supplier_id = i.supplier_id";
+	$sql = "SELECT transaction_id, date, amount, payment_method FROM transactions t JOIN payment_method p ON t.pm_id = p.pm_id";
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-	$sql1 = "SELECT category_id, category_name FROM categories";
-	$stmt1 = $conn->prepare($sql1);
-    $stmt1->execute();
-    $data1 = $stmt1->fetchAll(PDO::FETCH_ASSOC);
-
-	$sql2 = "SELECT * FROM brands";
-	$stmt2 = $conn->prepare($sql2);
-    $stmt2->execute();
-    $data2 = $stmt2->fetchAll(PDO::FETCH_ASSOC);
-
-	$sql3 = "SELECT * FROM suppliers";
-	$stmt3 = $conn->prepare($sql3);
-    $stmt3->execute();
-    $data3 = $stmt3->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
 
@@ -32,7 +13,7 @@
 <html lang="en">
 <head>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-	<title>Items</title>
+	<title>Purchase Log</title>
 	<meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
 	<link rel="icon" href="assets/img/holicon.png" type="image/x-icon"/>
 
@@ -97,7 +78,7 @@
 							</span>
 							<h4 class="text-section">Menu</h4>
 						</li>
-						<li class="nav-item active">
+						<li class="nav-item">
 							<a data-bs-toggle="collapse" href="#inv">
 								<i class="fas fa-layer-group"></i>
 								<p>Inventory Management</p>
@@ -155,7 +136,7 @@
 								</ul>
 							</div>
 						</li>
-						<li class="nav-item">
+						<li class="nav-item active">
 							<a data-bs-toggle="collapse" href="#sales">
 								<i class="fas fa-layer-group"></i>
 								<p>Sales Management</p>
@@ -210,7 +191,7 @@
 				<nav class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom">
 
 					<div class="container-fluid">
-						<ul class="navbar-nav topbar-nav ms-md-auto align-items-center">	
+						<ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
 							<li class="nav-item topbar-user dropdown hidden-caret">
 								<a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#" aria-expanded="false">
 									<div class="avatar-sm">
@@ -268,7 +249,7 @@
 			<div class="container">
 				<div class="page-inner">
 					<div class="page-header">
-						<h3 class="fw-bold mb-3">Items</h3>
+						<h3 class="fw-bold mb-3">Purchase Log</h3>
 						<ul class="breadcrumbs mb-3">
 							<li class="nav-home">
 								<a href="#">
@@ -279,13 +260,13 @@
 								<i class="icon-arrow-right"></i>
 							</li>
 							<li class="nav-item">
-								<a href="#">Inventory Management</a>
+								<a href="#">Sales Management</a>
 							</li>
 							<li class="separator">
 								<i class="icon-arrow-right"></i>
 							</li>
 							<li class="nav-item">
-								<a href="#">Items</a>
+								<a href="#">Purchase Log</a>
 							</li>
 						</ul>
 					</div>
@@ -293,116 +274,38 @@
 						<div class="col-md-12">
 							<div class="card">
 								<div class="card-header">
-									<div class="d-flex align-items-center">
-										<h4 class="card-title">Items</h4>
-										<button class="btn btn-primary btn-round ms-auto" data-bs-toggle="modal" data-bs-target="#addRowModal">
+                                    <div class="d-flex align-items-center">
+										<h4 class="card-title">Purchase Log</h4>
+										<a href="purchase_create.php" class="btn btn-primary btn-round ms-auto">
 											<i class="fa fa-plus"></i>
-											Add Item
-										</button>
+											Add Purchase
+										</a>
 									</div>
 								</div>
 								<div class="card-body">
-									<!-- Modal -->
-									<div class="modal fade" id="addRowModal" tabindex="-1" role="dialog" aria-hidden="true">
-										<div class="modal-dialog" role="document">
-											<div class="modal-content">
-												<div class="modal-header border-0">
-													<h5 class="modal-title">
-														<span class="fw-mediumbold">
-														New</span> 
-														<span class="fw-light">
-															Item
-														</span>
-													</h5>
-													<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-												</div>
-												<form action="process_additem.php" method="POST">
-													<div class="modal-body">
-														<p class="small">Create a new item using this form, make sure you fill them all</p>
-														<div class="row">
-															<div class="col-sm-12">
-																<div class="form-group form-group-default">
-																	<label>Item Name</label>
-																	<input type="text" name="item_name" class="form-control" placeholder="fill name" required>
-																</div>
-															</div>
-															<div class="col-sm-12">
-																<div class="form-group form-group-default">
-																	<label for="category">Category</label>
-																	<select class="form-select" name="category_id" required>
-																		<option value="">Select Category</option>
-																		<?php 
-																			foreach ($data1 as $row){
-																				echo "<option value='".$row['category_id']."'>".$row['category_name']."</option>";
-																			}
-																		?>
-																	</select>
-																</div>
-															</div>
-															<div class="col-sm-12">
-																<div class="form-group form-group-default">
-																	<label for="category">Brand</label>
-																	<select class="form-select" name="brand_id" required>
-																		<option value="">Select Brand</option>
-																		<?php 
-																			foreach ($data2 as $row){
-																				echo "<option value='".$row['brand_id']."'>".$row['brand_name']."</option>";
-																			}
-																		?>
-																	</select>
-																</div>
-															</div>
-															<div class="col-sm-12">
-																<div class="form-group form-group-default">
-																	<label for="category">Supplier</label>
-																	<select class="form-select" name="supplier_id" required>
-																		<option value="">Select Supplier</option>
-																		<?php 
-																			foreach ($data3 as $row){
-																				echo "<option value='".$row['supplier_id']."'>".$row['supplier_name']."</option>";
-																			}
-																		?>
-																	</select>
-																</div>
-															</div>
-														</div>
-													</div>
-													<div class="modal-footer border-0">
-														<button type="submit" class="btn btn-primary">Add</button>
-														<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-													</div>
-												</form>
-											</div>
-										</div>
-									</div>
-
 									<div class="table-responsive">
-										<table id="add-row" class="display table table-striped table-hover" >
+										<table id="sizes" class="display table table-striped table-hover" >
 											<thead>
 												<tr>
-													<th style="width: 15%">Barcode</th>
-													<th>Item Name</th>
-													<th>Category</th>
-													<th>Brand</th>
-													<th>Supplier</th>
+													<th>Date</th>
+													<th>Total Amount</th>
+                                                    <th>Payment Method</th>
 													<th style="width: 10%">Action</th>
 												</tr>
 											</thead>
 											<tbody>
 												<?php 
 													foreach($data as $row){
-														echo "<tr data-id=".htmlspecialchars($row['item_id']).">";
-														echo "<td>".htmlspecialchars($row['barcode'])."</td>";
-														echo "<td>".htmlspecialchars($row['item_name'])."</td>";
-														echo "<td>".htmlspecialchars($row['category_name'])."</td>";
-														echo "<td>".htmlspecialchars($row['brand_name'])."</td>";
-														echo "<td>".htmlspecialchars($row['supplier_name'])."</td>";
+														echo "<tr data-id=".htmlspecialchars($row['transaction_id']).">";
+														echo "<td>".htmlspecialchars($row['date'])."</td>";
+														echo "<td>".htmlspecialchars($row['amount'])."</td>";
+                                                        echo "<td>".htmlspecialchars($row['payment_method'])."</td>";
 														echo "<td>
                                                                 <div class='form-button-action'>
-                                                                    <button type='button' class='btn btn-link btn-primary btn-lg' data-bs-toggle='modal' data-bs-target='#editItemModal' title='Edit Task'>
+                                                                    <button type='button' class='btn btn-link btn-primary btn-lg' data-bs-toggle='modal' data-bs-target='#editSizeModal' title='Edit Task'>
                                                                         <i class='fa fa-edit'></i>
                                                                     </button>
-                                                                    <button type='button' class='btn btn-link btn-danger remove-btn' data-id='".htmlspecialchars($row['item_id'])."' title='Remove'>
+                                                                    <button type='button' class='btn btn-link btn-danger remove-btn' data-id='".htmlspecialchars($row['transaction_id'])."' title='Remove'>
                                                                         <i class='fa fa-times'></i>
                                                                     </button>
                                                                 </div>
@@ -412,13 +315,14 @@
 												?>
 											</tbody>
 										</table>
-										<script>
+                                        
+                                        <script>
                                             document.addEventListener('DOMContentLoaded', function() {
                                                 const removeButtons = document.querySelectorAll('.remove-btn');
                                                 
                                                 removeButtons.forEach(button => {
                                                     button.addEventListener('click', function() {
-                                                        const itemId = this.getAttribute('data-id');
+                                                        const sizeId = this.getAttribute('data-id');
                                                         Swal.fire({
                                                             title: 'Are you sure?',
                                                             text: "This action cannot be undone!",
@@ -431,17 +335,17 @@
                                                         }).then((result) => {
                                                             if (result.isConfirmed) {
                                                                 const xhr = new XMLHttpRequest();
-                                                                xhr.open('POST', 'process_deleteitem.php', true);
+                                                                xhr.open('POST', 'process_deletesize.php', true);
                                                                 xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
                                                                 xhr.onload = function() {
                                                                     if (xhr.status === 200) {
                                                                         if (xhr.responseText === 'success') {
-                                                                            Swal.fire('Deleted!', 'The item has been deleted.', 'success').then(() => {
-                                                                                window.location.href = 'items.php';
+                                                                            Swal.fire('Deleted!', 'The size has been deleted.', 'success').then(() => {
+                                                                                window.location.href = 'sizes.php';
                                                                             });
                                                                         } else if(xhr.responseText === 'exist'){
 																			Swal.fire({
-																				title: 'Stock in this item will also be deleted.',
+																				title: 'Stocks in this size will also be deleted.',
 																				text: "Are you sure? This action cannot be undone!",
 																				icon: 'warning',
 																				showCancelButton: true,
@@ -452,27 +356,26 @@
 																			}).then((result) => {
 																				if (result.isConfirmed) {
 																					const xhr1 = new XMLHttpRequest();
-																					xhr1.open('POST', 'process_confirmdeleteitem.php', true);
+																					xhr1.open('POST', 'process_confirmdeletesize.php', true);
 																					xhr1.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 																					xhr1.onload = function() {
 																						if (xhr1.status === 200) {
 																							if (xhr1.responseText === 'success') {
-																								Swal.fire('Deleted!', 'The item has been deleted.', 'success').then(() => {
-																									window.location.href = 'items.php';
+																								Swal.fire('Deleted!', 'The size has been deleted.', 'success').then(() => {
+																									window.location.href = 'sizes.php';
 																								});
 																							}
 																						}
 																					}
-																					xhr1.send('brand_id=' + brandId);
+																					xhr1.send('size_id=' + sizeId);
 																				}
 																			});
-																		}
-																		else {
-                                                                            Swal.fire('Error!', 'There was an error deleting the item.', 'error');
+																		}else {
+                                                                            Swal.fire('Error!', 'There was an error deleting the size.', 'error');
                                                                         }
                                                                     }
                                                                 };
-                                                                xhr.send('item_id=' + itemId);
+                                                                xhr.send('size_id=' + sizeId);
                                                             }
                                                         });
                                                     });
@@ -480,79 +383,47 @@
                                             });
 
                                         </script>
-										<!-- Modal -->
-										<div class="modal fade" id="editItemModal" tabindex="-1" role="dialog" aria-hidden="true">
-											<div class="modal-dialog" role="document">
-												<div class="modal-content">
-													<div class="modal-header border-0">
-														<h5 class="modal-title">
-															<span class="fw-mediumbold">
-															Edit</span> 
-															<span class="fw-light">
-																Item
-															</span>
-														</h5>
-														<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-													</div>
-													<form action="process_edititem.php" method="POST">
-														<div class="modal-body">
-															<p class="small">Edit the item details below.</p>
-															<div class="row">
-																<div class="col-sm-12">
-																	<div class="form-group form-group-default">
-																		<label>Item Name</label>
-																		<input type="text" name="item_name" id="editItemName" class="form-control" placeholder="fill name" required>
-																	</div>
-																</div>
-																<div class="col-sm-12">
-																	<div class="form-group form-group-default">
-																		<label for="category">Category</label>
-																		<select class="form-select" id="editCategoryId" name="category_id" required>
-																			<option value="">Select Category</option>
-																			<?php 
-																				foreach ($data1 as $row){
-																					echo "<option value='".$row['category_id']."'>".$row['category_name']."</option>";
-																				}
-																			?>
-																		</select>
-																	</div>
-																</div>
-																<div class="col-sm-12">
-																	<div class="form-group form-group-default">
-																		<label for="category">Brand</label>
-																		<select class="form-select" id="editBrandId" name="brand_id" required>
-																		<option value="">Select Brand</option>
-																			<?php 
-																				foreach ($data2 as $row){
-																					echo "<option value='".$row['brand_id']."'>".$row['brand_name']."</option>";
-																				}
-																			?>
-																		</select>
-																	</div>
-																</div><div class="col-sm-12">
-																	<div class="form-group form-group-default">
-																		<label for="category">Supplier</label>
-																		<select class="form-select" id="editSupplierId" name="supplier_id" required>
-																			<option value="">Select Supplier</option>
-																			<?php 
-																				foreach ($data3 as $row){
-																					echo "<option value='".$row['supplier_id']."'>".$row['supplier_name']."</option>";
-																				}
-																			?>
-																		</select>
-																	</div>
-																</div>
-															</div>
-															<input type="text" name="item_id" id="editItemId" hidden>
-														</div>
-														<div class="modal-footer border-0">
-															<button type="submit" class="btn btn-primary">Save Changes</button>
-															<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-														</div>
-													</form>
-												</div>
-											</div>
-										</div>
+                                        <!-- Edit category modal -->
+                                        <div class="modal fade" id="editSizeModal" tabindex="-1" role="dialog" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header border-0">
+                                                        <h5 class="modal-title">
+                                                            <span class="fw-mediumbold">
+                                                            Edit</span> 
+                                                            <span class="fw-light">
+                                                                Size
+                                                            </span>
+                                                        </h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <form action="process_editsize.php" method="POST">
+                                                        <div class="modal-body">
+                                                            <p class="small">Edit the size details below.</p>
+                                                            <div class="row">
+                                                                <div class="col-sm-12">
+                                                                    <div class="form-group form-group-default">
+                                                                        <label>Size Name</label>
+                                                                        <input type="text" name="size_name" id="editSizeName" class="form-control" placeholder="fill name" required>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-sm-12">
+                                                                    <div class="form-group form-group-default">
+                                                                        <label>Size Description</label>
+                                                                        <input type="text" name="size_description" id="editSizeDescription" class="form-control" placeholder="fill description" required>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <input type="hidden" name="size_id" id="editSizeId">
+                                                        </div>
+                                                        <div class="modal-footer border-0">
+                                                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                                                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
 									</div>
 								</div>
 							</div>
@@ -591,87 +462,30 @@
 			
 
 			// Add Row
-			$('#add-row').DataTable({
+			$('#sizes').DataTable({
 				"pageLength": 10,
 			});
 
 			var action = '<td> <div class="form-button-action"> <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg" data-original-title="Edit Task"> <i class="fa fa-edit"></i> </button> <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Remove"> <i class="fa fa-times"></i> </button> </div> </td>';
-
-			$('#addRowButton').click(function() {
-				$('#add-row').dataTable().fnAddData([
-					$("#addName").val(),
-					$("#addPosition").val(),
-					$("#addOffice").val(),
-					action
-					]);
-				$('#addRowModal').modal('hide');
-
-			});
 		});
 	</script>
 
-	<?php if (isset($_GET['status'])): ?>
-        <script>
-            <?php if ($_GET['status'] == 'success'): ?>
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Item Added!',
-                    text: 'The item has been successfully created.',
-                }).then((result) => {
-                });
-            <?php elseif ($_GET['status'] == 'error'): ?>
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Something went wrong while creating the item.',
-                });
-            <?php elseif ($_GET['status'] == 'exist'): ?>
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Item already exists.',
-                });
-            <?php endif; ?>
-        </script>
-    <?php endif; ?>
-
-	<?php if (isset($_GET['editstatus'])): ?>
-        <script>
-            <?php if ($_GET['editstatus'] == 'success'): ?>
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Item Edited!',
-                    text: 'The item has been successfully edited.',
-                }).then((result) => {
-                });
-            <?php elseif ($_GET['editstatus'] == 'error'): ?>
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Something went wrong while editing the item.',
-                });
-            <?php endif; ?>
-        </script>
-    <?php endif; ?>
-
-	<!-- Auto populate in edit modal -->
+    <!-- Auto populate in edit modal -->
     <script>
         $(document).ready(function() {
-            $('#add-row').on('click', '.btn-link.btn-primary', function() {
+            $('#sizes').on('click', '.btn-link.btn-primary', function() {
                 var row = $(this).closest('tr');
                 var id = row.data('id');
                 $.ajax({
-                    url: 'process_getitemdata.php',
+                    url: 'process_getsizedata.php',
                     type: 'GET',
                     data: { id: id },
                     dataType: 'json',
                     success: function(data) {
-						$('#editItemId').val(data.item_id);
-						$('#editItemName').val(data.item_name);
-                        $('#editCategoryId').val(data.category_id);
-                        $('#editBrandId').val(data.brand_id);
-                        $('#editSupplierId').val(data.supplier_id);
-						
+                        $('#editSizeName').val(data.size_name);
+                        $('#editSizeDescription').val(data.size_description);
+                        $('#editSizeId').val(data.size_id);
+                        $('#editSizeModal').modal('show');
                     },
                     error: function(xhr, status, error) {
                         console.error("Error fetching data: " + error);
@@ -680,5 +494,49 @@
             });
         });
     </script>
+
+    <?php if (isset($_GET['status'])): ?>
+        <script>
+            <?php if ($_GET['status'] == 'success'): ?>
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Size Added!',
+                    text: 'The size has been successfully created.',
+                }).then((result) => {
+                });
+            <?php elseif ($_GET['status'] == 'error'): ?>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong while creating the size.',
+                });
+            <?php elseif ($_GET['status'] == 'exist'): ?>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Size already exists.',
+                });
+            <?php endif; ?>
+        </script>
+    <?php endif; ?>
+
+    <?php if (isset($_GET['editstatus'])): ?>
+        <script>
+            <?php if ($_GET['editstatus'] == 'success'): ?>
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Size Edited!',
+                    text: 'The size has been successfully edited.',
+                }).then((result) => {
+                });
+            <?php elseif ($_GET['editstatus'] == 'error'): ?>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong while editing the size.',
+                });
+            <?php endif; ?>
+        </script>
+    <?php endif; ?>
 </body>
 </html>

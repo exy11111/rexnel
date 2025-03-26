@@ -5,7 +5,17 @@
 	$sql = "SELECT sum(quantity) as total_quantity FROM stock";
 	$stmt = $conn->prepare($sql);
     $stmt->execute();
-    $total_quantity = $stmt->fetch(PDO::FETCH_ASSOC);
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+	if ($result['total_quantity'] === null) {
+        $quantity = 0;
+    }
+	else if($result['total_quantity'] > 999999){
+		$quantity = number_format(999999) . "+";
+	}
+	else{
+		$quantity = number_format($result['total_quantity']);
+	}
 
 ?>
 
@@ -148,6 +158,27 @@
 								</ul>
 							</div>
 						</li>
+						<li class="nav-item">
+							<a data-bs-toggle="collapse" href="#sales">
+								<i class="fas fa-layer-group"></i>
+								<p>Sales Management</p>
+								<span class="caret"></span>
+							</a>
+							<div class="collapse" id="sales">
+								<ul class="nav nav-collapse">
+									<li>
+										<a href="purchase.php">
+											<span class="sub-item">Purchase Log</span>
+										</a>
+									</li>
+									<li>
+										<a href="transactions.php">
+											<span class="sub-item">Transactions</span>
+										</a>
+									</li>
+								</ul>
+							</div>
+						</li>
 					</ul>
 				</div>
 			</div>
@@ -264,7 +295,7 @@
 											<div class="col col-stats ms-3 ms-sm-0">
 												<div class="numbers">
 													<p class="card-category">Stock</p>
-													<h4 class="card-title"><?php echo $total_quantity['total_quantity']?></h4>
+													<h4 class="card-title"><?php echo $quantity?></h4>
 												</div>
 											</div>
 										</div>
