@@ -92,11 +92,6 @@
 										</a>
 									</li>
 									<li>
-										<a href="items.php">
-											<span class="sub-item">Items</span>
-										</a>
-									</li>
-									<li>
 										<a href="categories.php">
 											<span class="sub-item">Categories</span>
 										</a>
@@ -146,11 +141,6 @@
 									<li>
 										<a href="purchase.php">
 											<span class="sub-item">Purchase Log</span>
-										</a>
-									</li>
-									<li>
-										<a href="transactions.php">
-											<span class="sub-item">Transactions</span>
 										</a>
 									</li>
 								</ul>

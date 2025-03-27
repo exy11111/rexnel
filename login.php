@@ -67,17 +67,17 @@
             </div>
           </div>
 
-          <div class="mb-3 form-check">
+          <!--<div class="mb-3 form-check">
             <input type="checkbox" class="form-check-input" id="rememberMe">
             <label class="form-check-label" for="rememberMe">Remember me</label>
-          </div>
+          </div> -->
 
           <!-- Submit button -->
-          <button type="submit" class="btn btn-primary w-100">Login</button>
+          <button type="submit" class="btn btn-primary w-100 mt-3">Login</button>
         </form>
-        <div class="text-center mt-3">
+        <!-- <div class="text-center mt-3">
           <a href="#">Forgot password?</a>
-        </div>
+        </div>-->
       </div>
     </div>
   </div>

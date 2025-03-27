@@ -2,11 +2,12 @@
 	require ('session.php');
 	require ('db.php');
 
-	$sql = "SELECT item_id, barcode, item_name, category_name, brand_name, supplier_name
+	$sql = "SELECT item_id, barcode, item_name, category_name, brand_name, supplier_name, size_name, price, stock
 	FROM items i 
 	JOIN categories c ON i.category_id = c.category_id
 	JOIN brands b ON b.brand_id = i.brand_id
-	JOIN suppliers s ON s.supplier_id = i.supplier_id";
+	JOIN suppliers s ON s.supplier_id = i.supplier_id
+	JOIN sizes ss ON i.size_id = ss.size_id";
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -25,6 +26,11 @@
 	$stmt3 = $conn->prepare($sql3);
     $stmt3->execute();
     $data3 = $stmt3->fetchAll(PDO::FETCH_ASSOC);
+
+	$sql4 = "SELECT * FROM sizes";
+	$stmt4 = $conn->prepare($sql4);
+    $stmt4->execute();
+    $data4 = $stmt4->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
 
@@ -168,11 +174,6 @@
 											<span class="sub-item">Purchase Log</span>
 										</a>
 									</li>
-									<li>
-										<a href="transactions.php">
-											<span class="sub-item">Transactions</span>
-										</a>
-									</li>
 								</ul>
 							</div>
 						</li>
@@ -303,7 +304,7 @@
 								</div>
 								<div class="card-body">
 									<!-- Modal -->
-									<div class="modal fade" id="addRowModal" tabindex="-1" role="dialog" aria-hidden="true">
+									<div class="modal modal-lg fade" id="addRowModal" tabindex="-1" role="dialog" aria-hidden="true">
 										<div class="modal-dialog" role="document">
 											<div class="modal-content">
 												<div class="modal-header border-0">
@@ -320,6 +321,17 @@
 													<div class="modal-body">
 														<p class="small">Create a new item using this form, make sure you fill them all</p>
 														<div class="row">
+															<div class="col-sm-12">
+																<div class="form-group form-group-default">
+																	<label>Barcode</label>
+																	<input type="text" name="barcode" class="form-control" oninput="validatePhoneNumber(this)" placeholder="fill barcode" required>
+																	<script>
+																		function validatePhoneNumber(input) {
+																			input.value = input.value.replace(/[^0-9]/g, '');
+																		}
+																	</script>
+																</div>
+															</div>
 															<div class="col-sm-12">
 																<div class="form-group form-group-default">
 																	<label>Item Name</label>
@@ -365,6 +377,31 @@
 																	</select>
 																</div>
 															</div>
+															<div class="col-sm-4">
+																<div class="form-group form-group-default">
+																	<label for="category">Size</label>
+																	<select class="form-select" name="size_id" required>
+																		<option value="">Select Size</option>
+																		<?php 
+																			foreach ($data4 as $row){
+																				echo "<option value='".$row['size_id']."'>".$row['size_name']."</option>";
+																			}
+																		?>
+																	</select>
+																</div>
+															</div>
+															<div class="col-sm-4">
+																<div class="form-group form-group-default">
+																	<label>Price</label>
+																	<input type="number" name="price" step=0.01 class="form-control" placeholder="fill price" required>
+																</div>
+															</div>
+															<div class="col-sm-4">
+																<div class="form-group form-group-default">
+																	<label>Stock</label>
+																	<input type="number" name="stock" class="form-control" placeholder="fill stock" required>
+																</div>
+															</div>
 														</div>
 													</div>
 													<div class="modal-footer border-0">
@@ -385,6 +422,9 @@
 													<th>Category</th>
 													<th>Brand</th>
 													<th>Supplier</th>
+													<th>Size</th>
+													<th>Price</th>
+													<th>Stock</th>
 													<th style="width: 10%">Action</th>
 												</tr>
 											</thead>
@@ -397,6 +437,9 @@
 														echo "<td>".htmlspecialchars($row['category_name'])."</td>";
 														echo "<td>".htmlspecialchars($row['brand_name'])."</td>";
 														echo "<td>".htmlspecialchars($row['supplier_name'])."</td>";
+														echo "<td>".htmlspecialchars($row['size_name'])."</td>";
+														echo "<td>".htmlspecialchars($row['price'])."</td>";
+														echo "<td>".htmlspecialchars($row['stock'])."</td>";
 														echo "<td>
                                                                 <div class='form-button-action'>
                                                                     <button type='button' class='btn btn-link btn-primary btn-lg' data-bs-toggle='modal' data-bs-target='#editItemModal' title='Edit Task'>
@@ -481,7 +524,7 @@
 
                                         </script>
 										<!-- Modal -->
-										<div class="modal fade" id="editItemModal" tabindex="-1" role="dialog" aria-hidden="true">
+										<div class="modal modal-lg fade" id="editItemModal" tabindex="-1" role="dialog" aria-hidden="true">
 											<div class="modal-dialog" role="document">
 												<div class="modal-content">
 													<div class="modal-header border-0">
@@ -500,10 +543,22 @@
 															<div class="row">
 																<div class="col-sm-12">
 																	<div class="form-group form-group-default">
+																		<label>Barcode</label>
+																		<input type="text" name="barcode" id="editBarcode" class="form-control" oninput="validatePhoneNumber(this)" placeholder="fill barcode" required>
+																		<script>
+																			function validatePhoneNumber(input) {
+																				input.value = input.value.replace(/[^0-9]/g, '');
+																			}
+																		</script>
+																	</div>
+																</div>
+																<div class="col-sm-12">
+																	<div class="form-group form-group-default">
 																		<label>Item Name</label>
 																		<input type="text" name="item_name" id="editItemName" class="form-control" placeholder="fill name" required>
 																	</div>
 																</div>
+																
 																<div class="col-sm-12">
 																	<div class="form-group form-group-default">
 																		<label for="category">Category</label>
@@ -529,7 +584,8 @@
 																			?>
 																		</select>
 																	</div>
-																</div><div class="col-sm-12">
+																</div>
+																<div class="col-sm-12">
 																	<div class="form-group form-group-default">
 																		<label for="category">Supplier</label>
 																		<select class="form-select" id="editSupplierId" name="supplier_id" required>
@@ -540,6 +596,31 @@
 																				}
 																			?>
 																		</select>
+																	</div>
+																</div>
+																<div class="col-sm-4">
+																	<div class="form-group form-group-default">
+																		<label for="category">Size</label>
+																		<select class="form-select" name="size_id" id="editSizeId" required>
+																			<option value="">Select Size</option>
+																			<?php 
+																				foreach ($data4 as $row){
+																					echo "<option value='".$row['size_id']."'>".$row['size_name']."</option>";
+																				}
+																			?>
+																		</select>
+																	</div>
+																</div>
+																<div class="col-sm-4">
+																	<div class="form-group form-group-default">
+																		<label>Price</label>
+																		<input type="number" name="price" step=0.01 id="editPrice" class="form-control" placeholder="fill price" required>
+																	</div>
+																</div>
+																<div class="col-sm-4">
+																	<div class="form-group form-group-default">
+																		<label>Stock</label>
+																		<input type="number" name="stock" id="editStock" class="form-control" placeholder="fill stock" required>
 																	</div>
 																</div>
 															</div>
@@ -666,11 +747,15 @@
                     data: { id: id },
                     dataType: 'json',
                     success: function(data) {
+						$('#editBarcode').val(data.barcode);
 						$('#editItemId').val(data.item_id);
 						$('#editItemName').val(data.item_name);
                         $('#editCategoryId').val(data.category_id);
                         $('#editBrandId').val(data.brand_id);
                         $('#editSupplierId').val(data.supplier_id);
+						$('#editSizeId').val(data.size_id);
+						$('#editPrice').val(data.price);
+						$('#editStock').val(data.stock);
 						
                     },
                     error: function(xhr, status, error) {

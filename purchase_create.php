@@ -17,6 +17,11 @@
 	$stmt2->execute();
 	$data2 = $stmt2->fetchAll(PDO::FETCH_ASSOC);
 
+	$sql3 = "SELECT * FROM payment_method";
+	$stmt3 = $conn->prepare($sql3);
+	$stmt3->execute();
+	$data3 = $stmt3->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
 
 <!DOCTYPE html>
@@ -103,11 +108,6 @@
 										</a>
 									</li>
 									<li>
-										<a href="items.php">
-											<span class="sub-item">Items</span>
-										</a>
-									</li>
-									<li>
 										<a href="categories.php">
 											<span class="sub-item">Categories</span>
 										</a>
@@ -158,11 +158,6 @@
 									<li>
 										<a href="purchase.php">
 											<span class="sub-item">Purchase Log</span>
-										</a>
-									</li>
-									<li>
-										<a href="transactions.php">
-											<span class="sub-item">Transactions</span>
 										</a>
 									</li>
 								</ul>
@@ -289,17 +284,17 @@
 					</div>
                     
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col-lg-6 col-md-12" >
                             <div class="card p-3">
                                 <h5 class="mt-2">Add Purchase</h5>
-                                <form action="" id="purchaseForm">
+                                <form id="purchaseForm" action="">
                                     <div class="mt-5 mb-3">
 										<label for="barcode" class="form-label">Barcode</label>
 										<input type="text" class="form-control" id="barcode" name="barcode" required>
                                     </div>
                                     <div class="mb-3">
 										<label for="item_name" class="form-label">Item</label>
-										<select name="" id="item_id" class="form-select">
+										<select name="" id="item_id" class="form-select" required>
 											<option>Select Item</option>
 											<?php foreach($data1 as $row):?>
 												<option value="<?php echo $row['item_id']?>"><?php echo $row['item_name']?></option>
@@ -328,16 +323,11 @@
                                         </div>
                                         <div class="col-4 mb-3">
                                             <label class="form-label">Size</label>
-                                            <select name="size" id="size_id" class="form-select" disabled>
-												<option>Select Size</option>
-												<?php foreach($data2 as $row):?>
-													<option value="<?php echo $row['size_id']?>"><?php echo $row['size_name']?></option>
-												<?php endforeach;?>
-											</select>
+                                            <input type="text" class="form-control" id="size" readonly>
                                         </div>
                                         <div class="col-4 mb-3">
                                             <label class="form-label">Quantity</label>
-                                            <input type="number" class="form-control" id="quantity">
+                                            <input type="number" class="form-control" id="quantity" required>
                                         </div>
                                         <div class="col-4 mb-3">
                                             <label class="form-label">Available Quantity</label>
@@ -345,7 +335,7 @@
                                         </div>
                                     </div>
     								<div class="d-flex justify-content-end">
-										<button class="btn btn-primary mb-2">Submit</button>
+										<button type="submit" class="btn btn-primary mb-2">Submit</button>
 									</div>
                                 </form>
                             </div>
@@ -354,15 +344,16 @@
                             <div class="card p-3">
 								<div class="row">
 									<div class="col-6">
-										<button class="btn btn-primary mb-2">Checkout</button>
+										<button class="btn btn-primary mb-2" onclick="submitReceipt()">Checkout</button>
 									</div>
 									<div class="col-6">
-										<h5 class="text-end">Total Price: ₱0.00</h5>
+										<h5 class="text-end" id="totalPrice">Total Price: ₱0.00</h5>
 									</div>
 									
 									
 								</div>
                                 <h5 class="mt-2 text-center fw-bold">House of Local</h5>
+								<div class="table-responsive">
                                 <table class="table table-bordered" id="receipt">
                                     <thead>
                                         <tr>
@@ -374,22 +365,21 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>T-Shirt White</td>
-                                            <td>1</td>
-                                            <td>S</td>
-                                            <td>₱100.00</td>
-                                            <td>
-                                                <div class='form-button-action'>
-                                                    <button type='button' class='btn btn-link btn-danger remove-btn' title='Remove'>
-                                                        <i class="bi bi-trash-fill fs-3"></i>
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        </tr>
+                                        
                                     </tbody>
                                 </table>
                             </div>
+							<div class="col-md-4 mt-3">
+								<div class="form-group form-group-default">
+									<label>Payment Method</label>
+									<select class="form-select" name="pm_id" required>
+										<option>Choose Payment Method</option>
+										<?php foreach ($data3 as $row):?>
+											<option value="<?php echo $row['pm_id']?>"><?php echo $row['payment_method']?></option>
+										<?php endforeach; ?>
+									</select>
+								</div>
+							</div>
                         </div>
                     </div>
                 </div>
@@ -437,17 +427,25 @@
 						title: 'Error',
 						text: data.error
 					});
+					console.log(data);
 					document.getElementById('item_id').value = '';
 					document.getElementById('category').value = '';
 					document.getElementById('brand').value = '';
 					document.getElementById('supplier').value = '';
-					document.getElementById('size_id').disabled = true;
+					document.getElementById('size').value = '';
+					document.getElementById('price').value = '';
+					document.getElementById('available_stock').value = '';
+					document.getElementById('quantity').value = '';
 				} else {
+					console.log(data);
 					document.getElementById('item_id').value = data.item_id;
 					document.getElementById('category').value = data.category_name;
 					document.getElementById('brand').value = data.brand_name;
 					document.getElementById('supplier').value = data.supplier_name;
-					document.getElementById('size_id').disabled = false;
+					document.getElementById('size').value = data.size_name;
+					document.getElementById('price').value = data.price;
+					document.getElementById('available_stock').value = data.stock;
+					document.getElementById('quantity').value = 1;
 				}
 			})
 			.catch(error => console.error('Error:', error));
@@ -473,42 +471,18 @@
 					document.getElementById('category').value = '';
 					document.getElementById('brand').value = '';
 					document.getElementById('supplier').value = '';
-					document.getElementById('size_id').disabled = true;
+					document.getElementById('size').value = '';
+					document.getElementById('price').value = '';
+					document.getElementById('available_stock').value = '';
+					document.getElementById('quantity').value = '';
 				} else {
 					document.getElementById('barcode').value = data.barcode;
 					document.getElementById('category').value = data.category_name;
 					document.getElementById('brand').value = data.brand_name;
 					document.getElementById('supplier').value = data.supplier_name;
-					document.getElementById('size_id').disabled = false;
-				}
-			})
-			.catch(error => console.error('Error:', error));
-		});
-
-		document.getElementById('size_id').addEventListener('change', function() {
-			let sizeId = this.value;
-			let itemId = document.getElementById('item_id').value;
-
-			let url = `process_getbarcodedata.php?size_id=${encodeURIComponent(sizeId)}&item_id=${encodeURIComponent(itemId)}`;
-
-			fetch(url, {
-				method: 'GET',
-				headers: {
-					'Content-Type': 'application/x-www-form-urlencoded'
-				}
-			})
-			.then(response => response.json())
-			.then(data => {
-				if (data.error) {
-					Swal.fire({
-						icon: 'error',
-						title: 'Error',
-						text: data.error
-					});
-					document.getElementById('price').value = '';
-				} else {
+					document.getElementById('size').value = data.size_name;
 					document.getElementById('price').value = data.price;
-					document.getElementById('available_stock').value = data.quantity;
+					document.getElementById('available_stock').value = data.stock;
 					document.getElementById('quantity').value = 1;
 				}
 			})
@@ -516,19 +490,196 @@
 		});
 
 		function addRow() {
-			let table = document.getElementById("receipt").getElementsByTagName('tbody')[0];
-			let newRow = table.insertRow();
+			let item_id = document.getElementById("item_id").value;
+			let quantity = parseFloat(document.getElementById("quantity").value);
+			let available = parseFloat(document.getElementById('available_stock').value);
 
-			let cell1 = newRow.insertCell(0);
-			let cell2 = newRow.insertCell(1);
-			let cell3 = newRow.insertCell(2);
-			let cell4 = newRow.insertCell(3);
-			let cell5 = newRow.insertCell(4);
+			if (!item_id) {
+				Swal.fire({
+					icon: 'error',
+					title: 'Error!',
+					text: "Please enter an item."
+				});
+				return;
+			} else if (quantity < 1) {
+				Swal.fire({
+					icon: 'error',
+					title: 'Error!',
+					text: "Please enter a valid quantity."
+				});
+				return;
+			} else if(quantity > available){
+				Swal.fire({
+					icon: 'error',
+					title: 'Error!',
+					text: "Item out of stock."
+				});
+				return;
+			}
 
-			cell1.innerHTML = "";
-			cell2.innerHTML = "30";
-			cell3.innerHTML = '<button onclick="deleteRow(this)">Delete</button>';
+			fetch("process_getreceiptdata.php?item_id=" + encodeURIComponent(item_id))
+				.then(response => response.json())
+				.then(data => {
+					if (data.error) {
+						Swal.fire({
+							icon: 'error',
+							title: 'Error!',
+							text: data.error
+						});
+						return;
+					}
+
+					let table = document.getElementById("receipt").getElementsByTagName("tbody")[0];
+					let rows = table.getElementsByTagName("tr");
+					let pricePerUnit = parseFloat(data.price);
+					let updated = false;
+
+					// Check if item already exists
+					for (let i = 0; i < rows.length; i++) {
+						let existingItemId = rows[i].getElementsByTagName("td")[5].innerText;
+						
+						if (existingItemId === item_id) {
+							let existingQuantity = parseFloat(rows[i].getElementsByTagName("td")[1].innerText);
+							let newQuantity = existingQuantity + quantity;
+							let newTotalPrice = newQuantity * pricePerUnit;
+							
+							rows[i].getElementsByTagName("td")[1].innerText = newQuantity;
+							rows[i].getElementsByTagName("td")[3].innerText = "₱" + newTotalPrice.toFixed(2);
+							updated = true;
+							break;
+						}
+					}
+
+					if (!updated) {
+						let newRow = table.insertRow();
+						let cell1 = newRow.insertCell(0);
+						let cell2 = newRow.insertCell(1);
+						let cell3 = newRow.insertCell(2);
+						let cell4 = newRow.insertCell(3);
+						let cell5 = newRow.insertCell(4);
+						let cell6 = newRow.insertCell(5);
+
+						cell1.innerHTML = data.item_name;
+						cell2.innerHTML = quantity;
+						cell3.innerHTML = data.size_name;
+						cell4.innerHTML = "₱" + (quantity * pricePerUnit).toFixed(2);
+						cell5.innerHTML = "<button type='button' class='btn btn-link btn-danger' title='Remove' onclick='deleteRow(this)'><i class='fa fa-times'></i></button>";
+						cell6.innerHTML = item_id;
+						cell6.style.display = "none";
+					}
+
+					document.getElementById("item_id").value = "";
+					document.getElementById('barcode').value = '';
+					document.getElementById('category').value = '';
+					document.getElementById('brand').value = '';
+					document.getElementById('supplier').value = '';
+					document.getElementById('size').value = '';
+					document.getElementById('price').value = '';
+					document.getElementById('available_stock').value = '';
+					document.getElementById('quantity').value = '';
+
+					updateTotalPrice();
+				})
+				.catch(error => console.error("Error:", error));
 		}
+
+
+		document.getElementById("purchaseForm").addEventListener("submit", function(event) {
+			event.preventDefault();
+			addRow();
+		});
+
+		function updateTotalPrice() {
+			let total = 0;
+			let table = document.getElementById("receipt");
+			let rows = table.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
+
+			for (let i = 0; i < rows.length; i++) {
+				let cell4 = rows[i].getElementsByTagName("td")[3];
+				let price = parseFloat(cell4.innerText.replace("₱", "").replace(",", "")) || 0;
+				total += price;
+			}
+
+			document.getElementById("totalPrice").innerText = "Total Price: ₱" + total.toFixed(2);
+		}
+
+		function deleteRow(button) {
+			let row = button.parentNode.parentNode;
+			row.parentNode.removeChild(row);
+			updateTotalPrice();
+		}
+
+		function submitReceipt() {
+			let table = document.getElementById("receipt");
+			let rows = table.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
+			let receiptData = [];
+
+			let paymentMethod = document.querySelector("select[name='pm_id']").value;
+			if (paymentMethod === "Choose Payment Method") {
+				Swal.fire("Error!", "Please select a valid payment method.", "error");
+				return;
+			}
+
+			let totalPriceText = document.getElementById("totalPrice").innerText;
+			let totalPrice = parseFloat(totalPriceText.replace("Total Price: ₱", "").replace(",", ""));
+
+			for (let i = 0; i < rows.length; i++) {
+				let cells = rows[i].getElementsByTagName("td");
+
+				let rowData = {
+					quantity: parseInt(cells[1].innerText), // Convert to integer
+					price: parseFloat(cells[3].innerText.replace("₱", "").trim()).toFixed(2), // Convert to decimal (10,2)
+					item_id: parseInt(cells[5] ? cells[5].innerText : "0") // Convert to integer (default 0 if empty)
+				};
+
+				receiptData.push(rowData);
+			}
+
+
+			if (receiptData.length === 0) {
+				Swal.fire("Error!", "Your receipt is empty. Add items before checking out.", "error");
+				return;
+			}
+
+			Swal.fire({
+				title: "Are you sure you want to checkout?",
+				text: "You won't be able to undo this action.",
+				icon: "warning",
+				showCancelButton: true,
+				confirmButtonText: "Yes, Checkout!",
+				cancelButtonText: "Cancel"
+			}).then((result) => {
+				if (result.isConfirmed) {
+
+					fetch("process_receipt.php", {
+						method: "POST",
+						headers: { "Content-Type": "application/json" },
+						body: JSON.stringify({
+							receipt: receiptData,
+							total_price: totalPrice,
+							payment_method: paymentMethod
+						})
+					})
+					.then(response => response.json())
+					.then(data => {
+						if (data.success) {
+							Swal.fire({
+								title: "Success!",
+								text: "Purchase submitted successfully!",
+								icon: "success",
+								confirmButtonText: "OK"
+							}).then(() => {
+								window.location.href = "purchase.php";
+							});
+						} else {
+							Swal.fire("Error!", data.error, "error");
+						}
+					})
+					.catch(error => console.error("Error:", error));
+				}
+			});
+		}
+
 	</script>
 </body>
 </html>

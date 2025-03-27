@@ -2,7 +2,7 @@
 	require ('session.php');
 	require ('db.php');
 
-	$sql = "SELECT sum(quantity) as total_quantity FROM stock";
+	$sql = "SELECT sum(stock) as total_quantity FROM items";
 	$stmt = $conn->prepare($sql);
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -16,6 +16,11 @@
 	else{
 		$quantity = number_format($result['total_quantity']);
 	}
+
+	$sql1 = "SELECT sum(price) as total_sales FROM purchases";
+	$stmt1 = $conn->prepare($sql1);
+	$stmt1->execute();
+	$result1 = $stmt1->fetch(PDO::FETCH_ASSOC);
 
 ?>
 
@@ -114,11 +119,6 @@
 										</a>
 									</li>
 									<li>
-										<a href="items.php">
-											<span class="sub-item">Items</span>
-										</a>
-									</li>
-									<li>
 										<a href="categories.php">
 											<span class="sub-item">Categories</span>
 										</a>
@@ -169,11 +169,6 @@
 									<li>
 										<a href="purchase.php">
 											<span class="sub-item">Purchase Log</span>
-										</a>
-									</li>
-									<li>
-										<a href="transactions.php">
-											<span class="sub-item">Transactions</span>
 										</a>
 									</li>
 								</ul>
@@ -304,7 +299,7 @@
 							</a>
 						</div>
 						<div class="col-sm-6 col-md-4">
-							<a href="#">
+							<a href="purchase.php">
 								<div class="card card-stats card-round">
 									<div class="card-body">
 										<div class="row align-items-center">
@@ -316,7 +311,7 @@
 											<div class="col col-stats ms-3 ms-sm-0">
 												<div class="numbers">
 													<p class="card-category">Sales</p>
-													<h4 class="card-title">₱ 1,345</h4>
+													<h4 class="card-title">₱<?php echo number_format($result1['total_sales'], 2) ?></h4>
 												</div>
 											</div>
 										</div>
@@ -337,7 +332,7 @@
 											<div class="col col-stats ms-3 ms-sm-0">
 												<div class="numbers">
 													<p class="card-category">Order</p>
-													<h4 class="card-title">576</h4>
+													<h4 class="card-title">...</h4>
 												</div>
 											</div>
 										</div>
