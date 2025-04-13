@@ -11,7 +11,7 @@ $stmt->execute();
 
 $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-$sql2 = "SELECT firstname, lastname FROM userdetails WHERE user_id = :user_id";
+$sql2 = "SELECT firstname, lastname, email FROM userdetails WHERE user_id = :user_id";
 $stmt2 = $conn->prepare($sql2);
 $stmt2->bindParam(':user_id', $user_id, PDO::PARAM_INT);
 $stmt2->execute();
@@ -23,7 +23,8 @@ if ($row && $row2) {
         'user_id' => $row['user_id'],
         'firstname' => $row2['firstname'],
         'lastname' => $row2['lastname'],
-        'username' => $row['username']
+        'username' => $row['username'],
+        'email' => $row2['email']
     ]);
 } else {
     echo json_encode(['error' => 'User not found']);

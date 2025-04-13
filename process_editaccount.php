@@ -8,6 +8,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST['username'];
     $password = $_POST['password'];
     $user_id = $_POST['user_id'];
+    $destination = $_POST['destination'];
 
     try {
         $sql = "";
@@ -36,11 +37,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt2->bindParam(':user_id', $user_id);
         $stmt2->execute();
 
-        header("Location: staff.php?editstatus=success");
+        header("Location: ".$destination."?editstatus=success");
         exit();
 
     } catch (PDOException $e) {
-        header("Location: staff.php?editstatus=error");
+        header("Location: ".$destination."?editstatus=error");
         exit();
     }
 }

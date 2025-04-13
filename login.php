@@ -1,5 +1,6 @@
 <?php 
   session_start();
+  date_default_timezone_set('Asia/Manila');
 
   if ($_SERVER["REQUEST_METHOD"] == "POST") {
     include('db.php');
@@ -15,9 +16,13 @@
       $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
       if (password_verify($password, $user['password'])) {
-        $_SESSION['username'] = $username;
         $_SESSION['user_id'] = $user['user_id'];
         $_SESSION['loggedin'] = true;
+
+        $currentDateTime = date('g:i A');
+        $todayDateTime = "Today at " . $currentDateTime;
+        $_SESSION['last_login'] = $todayDateTime;
+
         header("Location: index.php");
       }
       else {

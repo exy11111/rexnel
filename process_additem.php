@@ -40,6 +40,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt->bindParam(':price', $price);
             $stmt->bindParam(':stock', $stock);
             $stmt->execute();
+            
+            $added_by = $_SESSION['username'];
+            $formatted_price = number_format($price, 2, '.', '');
+            $message = "$added_by added an item: {$item_name} ({$stock} pcs, ₱{$formatted_price})";
+            $icon = "bi-plus-circle";
+            $target_url = "stock.php";
+
+            $sql = "SELECT user_id FROM users";
+            $stmt = $conn->prepare($sql);
+            $stmt->execute();
+            $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            foreach ($users as $user) {
+                $sql = "INSERT INTO notifications (user_id, message, icon, target_url) 
+                        VALUES (:user_id, :message, :icon, :target_url)";
+                $stmt = $conn->prepare($sql);
+                $stmt->bindParam(':user_id', $user['user_id']);
+                $stmt->bindParam(':message', $message);
+                $stmt->bindParam(':icon', $icon);
+                $stmt->bindParam(':target_url', $target_url);
+                $stmt->execute();
+            }
 
             header("Location: stock.php?status=success");
             exit();

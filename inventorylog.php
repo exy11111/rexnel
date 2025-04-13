@@ -2,43 +2,13 @@
 	require ('session.php');
 	require ('db.php');
 
-	$sql = "SELECT item_id, barcode, item_name, category_name, brand_name, supplier_name, size_name, price, stock
-	FROM items i 
-	JOIN categories c ON i.category_id = c.category_id
-	JOIN brands b ON b.brand_id = i.brand_id
-	JOIN suppliers s ON s.supplier_id = i.supplier_id
-	JOIN sizes ss ON i.size_id = ss.size_id";
-    $stmt = $conn->prepare($sql);
-    $stmt->execute();
-    $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-	$sql1 = "SELECT category_id, category_name FROM categories";
-	$stmt1 = $conn->prepare($sql1);
-    $stmt1->execute();
-    $data1 = $stmt1->fetchAll(PDO::FETCH_ASSOC);
-
-	$sql2 = "SELECT * FROM brands";
-	$stmt2 = $conn->prepare($sql2);
-    $stmt2->execute();
-    $data2 = $stmt2->fetchAll(PDO::FETCH_ASSOC);
-
-	$sql3 = "SELECT * FROM suppliers";
-	$stmt3 = $conn->prepare($sql3);
-    $stmt3->execute();
-    $data3 = $stmt3->fetchAll(PDO::FETCH_ASSOC);
-
-	$sql4 = "SELECT * FROM sizes";
-	$stmt4 = $conn->prepare($sql4);
-    $stmt4->execute();
-    $data4 = $stmt4->fetchAll(PDO::FETCH_ASSOC);
-
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-	<title>Items</title>
+	<title>Inventory Log</title>
 	<meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
 	<link rel="icon" href="assets/img/holicon.png" type="image/x-icon"/>
 
@@ -112,13 +82,13 @@
 							<div class="collapse" id="inv">
 								<ul class="nav nav-collapse">
 									<li>
-										<a href="stock.php">
-											<span class="sub-item">Stock</span>
+										<a href="inventorylog.php">
+											<span class="sub-item">Inventory Log</span>
 										</a>
 									</li>
 									<li>
-										<a href="items.php">
-											<span class="sub-item">Items</span>
+										<a href="stock.php">
+											<span class="sub-item">Stock</span>
 										</a>
 									</li>
 									<li>
@@ -286,7 +256,7 @@
 								<i class="icon-arrow-right"></i>
 							</li>
 							<li class="nav-item">
-								<a href="#">Items</a>
+								<a href="#">Inventory Log</a>
 							</li>
 						</ul>
 					</div>
