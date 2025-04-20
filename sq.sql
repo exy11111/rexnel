@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 20, 2025 at 10:04 AM
+-- Generation Time: Apr 21, 2025 at 01:03 AM
 -- Server version: 10.4.32-MariaDB
--- PHP Version: 8.0.30
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -125,28 +125,29 @@ CREATE TABLE IF NOT EXISTS `items` (
   `stock` int(11) NOT NULL,
   `branch_id` int(11) NOT NULL,
   PRIMARY KEY (`item_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `items`
 --
 
 INSERT INTO `items` (`item_id`, `item_name`, `barcode`, `category_id`, `brand_id`, `supplier_id`, `size_id`, `price`, `stock`, `branch_id`) VALUES
-(31, 'DBtk', '001', 16, 12, 9, 11, 1000.00, 97, 1),
-(32, 'DBtk', '002', 16, 12, 9, 12, 1700.00, 1000, 1),
-(33, 'Brigade', '003', 16, 12, 9, 11, 900.00, 1000, 1),
-(34, 'Highmind', '004', 16, 12, 9, 11, 900.00, 1000, 1),
-(35, 'Highmind', '005', 16, 12, 9, 12, 1000.00, 998, 1),
-(36, 'Unfirend', '006', 16, 12, 9, 11, 900.00, 1000, 1),
-(37, 'offhigh', '007', 16, 12, 9, 11, 900.00, 1000, 1),
-(38, 'at your pace', '008', 16, 12, 9, 11, 900.00, 1000, 1),
-(39, 'Coziest', '009', 16, 12, 9, 11, 900.00, 1000, 1),
-(40, 'Undrafted', '010', 16, 12, 9, 12, 1000.00, 1000, 1),
-(41, 'HoL ', '011', 16, 12, 9, 9, 300.00, 1000, 1),
-(42, 'Degraded', '012', 16, 12, 9, 11, 850.00, 1000, 1),
-(43, 'Classic', '013', 16, 12, 9, 11, 900.00, 1000, 1),
-(44, 'Thrilling', '014', 16, 12, 9, 9, 450.00, 1000, 1),
-(45, 'Daily Flight', '015', 16, 12, 9, 10, 600.00, 1000, 1);
+(31, 'DBtk', '001', 16, 12, 9, 11, 1000.00, 86, 1),
+(32, 'DBtk', '002', 16, 12, 9, 12, 1700.00, 989, 1),
+(33, 'Brigade', '003', 16, 12, 9, 11, 900.00, 997, 1),
+(34, 'Highmind', '004', 16, 12, 9, 11, 900.00, 998, 1),
+(35, 'Highmind', '005', 16, 12, 9, 12, 1000.00, 989, 1),
+(36, 'Unfirend', '006', 16, 12, 9, 11, 900.00, 998, 1),
+(37, 'offhigh', '007', 16, 12, 9, 11, 900.00, 989, 1),
+(38, 'at your pace', '008', 16, 12, 9, 11, 900.00, 994, 1),
+(39, 'Coziest', '009', 16, 12, 9, 11, 900.00, 995, 1),
+(40, 'Undrafted', '010', 16, 12, 9, 12, 1000.00, 987, 1),
+(41, 'HoL ', '011', 16, 12, 9, 9, 300.00, 987, 1),
+(42, 'Degraded', '012', 16, 12, 9, 11, 850.00, 995, 1),
+(43, 'Classic', '013', 16, 12, 9, 11, 900.00, 987, 1),
+(44, 'Thrilling', '014', 16, 12, 9, 9, 450.00, 986, 1),
+(45, 'Daily Flight', '015', 16, 12, 9, 10, 600.00, 998, 1),
+(46, 'gnarly', '018', 16, 12, 9, 11, 1250.00, 992, 1);
 
 -- --------------------------------------------------------
 
@@ -164,7 +165,7 @@ CREATE TABLE IF NOT EXISTS `notifications` (
   `icon` varchar(50) DEFAULT 'bi-info-circle',
   `target_url` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`notification_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=59 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `notifications`
@@ -223,7 +224,9 @@ INSERT INTO `notifications` (`notification_id`, `message`, `user_id`, `created_a
 (53, ' added an item: Thrilling (1000 pcs, ₱450.00)', 19, '2025-04-20 05:23:58', 0, 'bi-plus-circle', 'stock.php'),
 (54, ' added an item: Thrilling (1000 pcs, ₱450.00)', 20, '2025-04-20 05:23:58', 0, 'bi-plus-circle', 'stock.php'),
 (55, ' added an item: Daily Flight (1000 pcs, ₱600.00)', 19, '2025-04-20 05:24:27', 0, 'bi-plus-circle', 'stock.php'),
-(56, ' added an item: Daily Flight (1000 pcs, ₱600.00)', 20, '2025-04-20 05:24:27', 0, 'bi-plus-circle', 'stock.php');
+(56, ' added an item: Daily Flight (1000 pcs, ₱600.00)', 20, '2025-04-20 05:24:27', 0, 'bi-plus-circle', 'stock.php'),
+(57, ' added an item: gnarly (1000 pcs, ₱1250.00)', 19, '2025-04-20 22:37:55', 0, 'bi-plus-circle', 'stock.php'),
+(58, ' added an item: gnarly (1000 pcs, ₱1250.00)', 20, '2025-04-20 22:37:55', 0, 'bi-plus-circle', 'stock.php');
 
 -- --------------------------------------------------------
 
@@ -261,7 +264,7 @@ CREATE TABLE IF NOT EXISTS `purchases` (
   `date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `branch_id` int(11) NOT NULL,
   PRIMARY KEY (`purchase_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `purchases`
@@ -270,7 +273,24 @@ CREATE TABLE IF NOT EXISTS `purchases` (
 INSERT INTO `purchases` (`purchase_id`, `price`, `pm_id`, `date`, `branch_id`) VALUES
 (23, 2000.00, 1, '2025-03-01 07:56:57', 1),
 (24, 1000.00, 1, '2025-03-01 07:56:57', 1),
-(25, 2000.00, 1, '2025-03-01 07:56:57', 1);
+(25, 2000.00, 1, '2025-03-01 07:56:57', 1),
+(26, 600.00, 1, '2025-03-01 07:56:57', 1),
+(27, 900.00, 1, '2025-03-01 07:56:57', 1),
+(28, 1000.00, 1, '2025-03-01 07:56:57', 1),
+(29, 1800.00, 1, '2025-03-01 07:56:57', 1),
+(30, 1250.00, 1, '2025-03-01 07:56:57', 1),
+(31, 900.00, 1, '2025-03-01 07:56:57', 1),
+(32, 900.00, 1, '2025-03-01 07:56:57', 1),
+(33, 11600.00, 1, '2025-03-01 22:42:17', 1),
+(34, 6900.00, 1, '2025-03-02 22:44:24', 1),
+(35, 4100.00, 1, '2025-03-02 22:45:19', 1),
+(36, 12950.00, 1, '2025-03-03 22:47:22', 1),
+(37, 13950.00, 1, '2025-03-04 22:49:39', 1),
+(38, 13850.00, 1, '2025-03-05 22:52:50', 1),
+(39, 10150.00, 1, '2025-03-06 22:54:03', 1),
+(40, 12300.00, 1, '2025-03-07 22:55:52', 1),
+(41, 10600.00, 1, '2025-03-08 22:57:39', 1),
+(42, 11400.00, 1, '2025-04-20 22:59:16', 1);
 
 -- --------------------------------------------------------
 
@@ -285,7 +305,7 @@ CREATE TABLE IF NOT EXISTS `purchase_items` (
   `item_id` int(11) NOT NULL,
   `quantity` int(11) NOT NULL,
   PRIMARY KEY (`pi_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=112 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `purchase_items`
@@ -294,7 +314,96 @@ CREATE TABLE IF NOT EXISTS `purchase_items` (
 INSERT INTO `purchase_items` (`pi_id`, `purchase_id`, `item_id`, `quantity`) VALUES
 (20, 23, 31, 2),
 (21, 24, 31, 1),
-(22, 25, 35, 2);
+(22, 25, 35, 2),
+(23, 26, 41, 2),
+(24, 27, 43, 1),
+(25, 28, 40, 1),
+(26, 29, 37, 2),
+(27, 30, 46, 1),
+(28, 31, 39, 1),
+(29, 32, 36, 1),
+(30, 33, 44, 4),
+(31, 33, 45, 1),
+(32, 33, 31, 1),
+(33, 33, 32, 2),
+(34, 33, 35, 2),
+(35, 33, 33, 1),
+(36, 33, 40, 1),
+(37, 33, 43, 1),
+(38, 34, 35, 1),
+(39, 34, 43, 2),
+(40, 34, 32, 1),
+(41, 34, 41, 2),
+(42, 34, 38, 1),
+(43, 34, 37, 1),
+(44, 35, 42, 1),
+(45, 35, 44, 1),
+(46, 35, 31, 1),
+(47, 35, 39, 1),
+(48, 35, 36, 1),
+(49, 36, 31, 2),
+(50, 36, 42, 1),
+(51, 36, 44, 1),
+(52, 36, 40, 1),
+(53, 36, 39, 1),
+(54, 36, 35, 2),
+(55, 36, 46, 1),
+(56, 36, 37, 2),
+(57, 36, 43, 2),
+(58, 36, 38, 1),
+(59, 37, 31, 1),
+(60, 37, 39, 2),
+(61, 37, 41, 2),
+(62, 37, 43, 1),
+(63, 37, 42, 1),
+(64, 37, 32, 3),
+(65, 37, 40, 1),
+(66, 37, 44, 2),
+(67, 37, 33, 1),
+(68, 37, 37, 1),
+(69, 38, 32, 1),
+(70, 38, 31, 2),
+(71, 38, 35, 2),
+(72, 38, 41, 1),
+(73, 38, 43, 2),
+(74, 38, 40, 3),
+(75, 38, 37, 1),
+(76, 38, 46, 1),
+(77, 38, 38, 1),
+(78, 39, 32, 1),
+(79, 39, 31, 1),
+(80, 39, 34, 1),
+(81, 39, 41, 2),
+(82, 39, 43, 1),
+(83, 39, 40, 2),
+(84, 39, 37, 1),
+(85, 39, 46, 1),
+(86, 39, 38, 1),
+(87, 40, 32, 1),
+(88, 40, 31, 1),
+(89, 40, 34, 1),
+(90, 40, 41, 2),
+(91, 40, 43, 1),
+(92, 40, 40, 2),
+(93, 40, 37, 2),
+(94, 40, 46, 2),
+(95, 40, 38, 1),
+(96, 41, 44, 4),
+(97, 41, 45, 1),
+(98, 41, 32, 2),
+(99, 41, 35, 2),
+(100, 41, 33, 1),
+(101, 41, 40, 1),
+(102, 41, 43, 1),
+(103, 42, 44, 2),
+(104, 42, 37, 1),
+(105, 42, 40, 1),
+(106, 42, 46, 2),
+(107, 42, 38, 1),
+(108, 42, 41, 2),
+(109, 42, 31, 2),
+(110, 42, 43, 1),
+(111, 42, 42, 2);
 
 -- --------------------------------------------------------
 
@@ -458,7 +567,7 @@ INSERT INTO `users` (`user_id`, `username`, `password`, `branch_id`, `created_at
 (17, 'admin', '$2y$10$9.uk1x5UYAXfYGPHM3GKDOgGRCf231bOVUXdOI59DH8VBJIQjiZii', 0, '2025-03-13 14:40:04'),
 (19, 'exy', '$2y$10$ITp8OblRl/j.SnHtFVejX.RBfoxf84eQcylfG.IlLf8jJq.x0Z2RK', 1, '2025-03-26 03:41:00'),
 (20, 'mikyla', '$2y$10$rdJaAo35jwwC68UasthmwezHSpi1el4Bkeasm9DC9Z1T.gDB.WdqS', 1, '2025-03-26 04:56:43'),
-(21, 'vj', '$2y$10$DtL7kKDtx66zUAM7iXqgUOqYVCyFtnWeXnOgUWKVF3g6CFxhADhJi', 2, '2025-04-20 07:33:16');
+(21, 'vj', '$2y$10$itUrIxsLASMxQl.A6Y8fAegbtGx6xaz09P3msY2LdQ2k3bPvIsvFK', 2, '2025-04-20 07:33:16');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
