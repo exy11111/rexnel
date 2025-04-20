@@ -217,9 +217,28 @@
 				<nav class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom">
 
 					<div class="container-fluid">
-						<ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
+					<ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
 							<!-- notif area -->
 							<?php 
+								if(isset($_SESSION['user_id'])){
+									$sql = "SELECT username, email, firstname, lastname, created_at FROM users JOIN userdetails ON users.user_id = userdetails.user_id WHERE users.user_id = :user_id";
+									$stmt = $conn->prepare($sql);
+									$stmt->bindParam(":user_id", $_SESSION['user_id']);
+									$stmt->execute();
+									$user_data = $stmt->fetch(PDO::FETCH_ASSOC);
+									if($user_data) {
+										$username = $user_data['username'];
+										$email = $user_data['email'];
+										$firstname = $user_data['firstname'];
+										$lastname = $user_data['lastname'];
+										$fullname = $firstname . " " . $lastname;
+										$created_at = $user_data['created_at'];
+									} else {
+										$username = "User not found.";
+										$email = "User not found.";
+									}
+								}
+
 								if (isset($_GET['notif_id'])) {
 									$notif_id = $_GET['notif_id'];
 								
@@ -320,23 +339,7 @@
                       					</a>
                     				</li>
                   				</ul>
-                			</li>	
-							<?php 
-								if(isset($_SESSION['user_id'])){
-									$sql = "SELECT username, email FROM users JOIN userdetails ON users.user_id = userdetails.user_id WHERE users.user_id = :user_id";
-									$stmt = $conn->prepare($sql);
-									$stmt->bindParam(":user_id", $_SESSION['user_id']);
-									$stmt->execute();
-									$user_data = $stmt->fetch(PDO::FETCH_ASSOC);
-									if($user_data) {
-										$username = $user_data['username'];
-										$email = $user_data['email'];
-									} else {
-										$username = "User not found.";
-										$email = "User not found.";
-									}
-								}
-							?>
+                			</li>
 							<li class="nav-item topbar-user dropdown hidden-caret">
 								<a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#" aria-expanded="false">
 									<div class="avatar-sm">
@@ -353,15 +356,17 @@
 												<div class="avatar-lg"><img src="assets/img/profile.png" alt="image profile" class="avatar-img rounded"></div>
 												<div class="u-text">
 													<h4><?php echo $username?></h4>
-													<p class="text-muted"><?php echo $email?></p><a href="profile.html" class="btn btn-xs btn-secondary btn-sm">View Profile</a>
+													<p class="text-muted"><?php echo $email?></p><a href="#" class="btn btn-xs btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#profileModal">View Profile</a>
 												</div>
 											</div>
 										</li>
 										<li>
+											<?php if($_SESSION['user_id'] == 17):?>
 											<div class="dropdown-divider"></div>
-											<a class="dropdown-item" href="#">My Profile</a>
+											<a class="dropdown-item" href="adminportal.php">Change Branch</a>
+											<?php endif; ?>
 											<div class="dropdown-divider"></div>
-											<a class="dropdown-item" href="#">Account Setting</a>
+											<a class="dropdown-item" href="#" id="accountSetting" data-bs-toggle="modal" data-bs-target="#editAccountModal" data-id="<?php if(isset($_SESSION['user_id'])){echo $_SESSION['user_id'];}  ?>">Account Setting</a>
 											<div class="dropdown-divider"></div>
 											<a id="logoutBtn" class="dropdown-item" href="#">Logout</a>
 										</li>
@@ -385,6 +390,7 @@
 									</div>
 								</ul>
 							</li>
+							
 						</ul>
 					</div>
 				</nav>
@@ -856,6 +862,34 @@
 	<!-- Kaiadmin JS -->
 	<script src="assets/js/kaiadmin.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.0/dist/sweetalert2.all.min.js"></script>
+	<?php include 'modal_profile.php'?>
+	<?php include 'modal_editaccount.php';?>
+	<!-- Auto populate in edit modal -->
+    <script>
+        $(document).ready(function() {
+            $('#accountSetting').on('click', function() {
+                var userId = $(this).attr('data-id');
+                $.ajax({
+                    url: 'process_getaccountdata.php',
+                    type: 'GET',
+                    data: { id: userId },
+                    dataType: 'json',
+                    success: function(data) {
+                        $('#editFirstName').val(data.firstname);
+                        $('#editLastName').val(data.lastname);
+                        $('#editUsername').val(data.username);
+                        $('#editUserId').val(data.user_id);
+						$('#editEmail').val(data.email);
+						$('#editDestination').val('index.php');
+                        $('#editAccountModal').modal('show');
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error fetching data: " + error);
+                    }
+                });
+            });
+        });
+    </script>
 	<script >
 		$(document).ready(function() {
 			

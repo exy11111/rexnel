@@ -24,25 +24,6 @@
 	$stmt1->execute();
 	$result1 = $stmt1->fetch(PDO::FETCH_ASSOC);
 
-	if(isset($_SESSION['user_id'])){
-		$sql = "SELECT username, email, firstname, lastname, created_at FROM users JOIN userdetails ON users.user_id = userdetails.user_id WHERE users.user_id = :user_id";
-		$stmt = $conn->prepare($sql);
-		$stmt->bindParam(":user_id", $_SESSION['user_id']);
-		$stmt->execute();
-		$user_data = $stmt->fetch(PDO::FETCH_ASSOC);
-		if($user_data) {
-			$username = $user_data['username'];
-			$email = $user_data['email'];
-			$firstname = $user_data['firstname'];
-			$lastname = $user_data['lastname'];
-			$fullname = $firstname . " " . $lastname;
-			$created_at = $user_data['created_at'];
-		} else {
-			$username = "User not found.";
-			$email = "User not found.";
-		}
-	}
-
 ?>
 
 
@@ -237,6 +218,25 @@
 						<ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
 							<!-- notif area -->
 							<?php 
+								if(isset($_SESSION['user_id'])){
+									$sql = "SELECT username, email, firstname, lastname, created_at FROM users JOIN userdetails ON users.user_id = userdetails.user_id WHERE users.user_id = :user_id";
+									$stmt = $conn->prepare($sql);
+									$stmt->bindParam(":user_id", $_SESSION['user_id']);
+									$stmt->execute();
+									$user_data = $stmt->fetch(PDO::FETCH_ASSOC);
+									if($user_data) {
+										$username = $user_data['username'];
+										$email = $user_data['email'];
+										$firstname = $user_data['firstname'];
+										$lastname = $user_data['lastname'];
+										$fullname = $firstname . " " . $lastname;
+										$created_at = $user_data['created_at'];
+									} else {
+										$username = "User not found.";
+										$email = "User not found.";
+									}
+								}
+
 								if (isset($_GET['notif_id'])) {
 									$notif_id = $_GET['notif_id'];
 								
@@ -359,6 +359,10 @@
 											</div>
 										</li>
 										<li>
+											<?php if($_SESSION['user_id'] == 17):?>
+											<div class="dropdown-divider"></div>
+											<a class="dropdown-item" href="adminportal.php">Change Branch</a>
+											<?php endif; ?>
 											<div class="dropdown-divider"></div>
 											<a class="dropdown-item" href="#" id="accountSetting" data-bs-toggle="modal" data-bs-target="#editAccountModal" data-id="<?php if(isset($_SESSION['user_id'])){echo $_SESSION['user_id'];}  ?>">Account Setting</a>
 											<div class="dropdown-divider"></div>

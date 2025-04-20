@@ -1,5 +1,6 @@
 <?php
     require('db.php');
+    require('session.php');
 
     if (isset($_POST['barcode'])) {
         $barcode = $_POST['barcode'];
@@ -9,9 +10,10 @@
         JOIN brands b ON i.brand_id = b.brand_id
         JOIN suppliers s ON i.supplier_id = s.supplier_id 
         JOIN sizes ss ON i.size_id = ss.size_id
-        WHERE barcode = :barcode";
+        WHERE barcode = :barcode AND i.branch_id = :branch_id";
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':barcode', $barcode);
+        $stmt->bindParam(':branch_id', $branch_id);
         $stmt->execute();
         
         if ($stmt->rowCount() > 0) {

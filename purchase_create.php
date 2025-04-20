@@ -2,13 +2,9 @@
 	require ('session.php');
 	require ('db.php');
 
-	$sql = "SELECT transaction_id, created_at FROM transactions";
-    $stmt = $conn->prepare($sql);
-    $stmt->execute();
-    $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-	$sql1 = "SELECT * FROM items";
+	$sql1 = "SELECT * FROM items WHERE branch_id = :branch_id";
 	$stmt1 = $conn->prepare($sql1);
+	$stmt1->bindParam('branch_id', $_SESSION['branch_id']);
 	$stmt1->execute();
 	$data1 = $stmt1->fetchAll(PDO::FETCH_ASSOC);
 

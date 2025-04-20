@@ -8,8 +8,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST['username'];
     $password = $_POST['password'];
     $user_id = $_POST['user_id'];
-    $branch_id = $_POST['branch_id'];
     $destination = $_POST['destination'];
+    $branch_id = $_POST['branch_id'];
 
     try {
         $sql = "SELECT username FROM users WHERE username = :username AND user_id != :user_id";
@@ -18,32 +18,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bindParam(':user_id', $user_id);
         $stmt->execute();
 
-        if($stmt->rowCount() > 0){
-            header("Location: ".$destination."?editstatus=exist");
+        if ($stmt->rowCount() > 0) {
+            header("Location: " . $destination . "?editstatus=exist");
             exit();
         }
 
+        $sql = "UPDATE users SET username = :username";
+        $params = [':username' => $username, ':user_id' => $user_id];
 
-
-        $sql = "";
-        $hashedPassword = "";
         if (!empty($password)) {
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-            $sql = "UPDATE users SET username = :username, password = :password, branch_id = :branch_id WHERE user_id = :user_id";
+            $sql .= ", password = :password";
+            $params[':password'] = $hashedPassword;
         }
-        else{
-            $sql = "UPDATE users SET username = :username, branch_id = :branch_id WHERE user_id = :user_id";
-        }
-        $stmt = $conn->prepare($sql);
-        $stmt->bindParam(':username', $username);
-        $stmt->bindParam(':branch_id', $branch_id);
-        if (!empty($password)) {
-            $stmt->bindParam(':password', $hashedPassword);
-        }
-        $stmt->bindParam(':user_id', $user_id);
-        $stmt->execute();
 
-        $userid = $conn->lastInsertId();
+        if (!empty($branch_id)) {
+            $sql .= ", branch_id = :branch_id";
+            $params[':branch_id'] = $branch_id;
+        }
+
+        $sql .= " WHERE user_id = :user_id";
+
+        $stmt = $conn->prepare($sql);
+        $stmt->execute($params);
 
         $sql2 = "UPDATE userdetails SET firstname = :firstname, lastname = :lastname WHERE user_id = :user_id";
         $stmt2 = $conn->prepare($sql2);
@@ -52,13 +49,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt2->bindParam(':user_id', $user_id);
         $stmt2->execute();
 
-        header("Location: ".$destination."?editstatus=success");
+        header("Location: " . $destination . "?editstatus=success");
         exit();
 
     } catch (PDOException $e) {
-        header("Location: ".$destination."?editstatus=error");
+        header("Location: " . $destination . "?editstatus=error");
         exit();
     }
 }
-
 ?>

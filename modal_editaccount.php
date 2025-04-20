@@ -13,6 +13,7 @@
                 <div class="modal-body">
                     <p class="small">Edit the account details below.</p>
                     <div class="row">
+                        <?php if(isset($branch_data)):?>
                         <div class="col-sm-12">
                             <div class="form-group form-group-default">
                                 <label>Branch</label>
@@ -24,6 +25,7 @@
                                 </select>
                             </div>
                         </div>
+                        <?php endif; ?>
                         <div class="col-md-6 pe-0">
                             <div class="form-group form-group-default">
                                 <label>First Name</label>
