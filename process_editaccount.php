@@ -11,6 +11,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $destination = $_POST['destination'];
 
     try {
+        $sql = "SELECT username FROM users WHERE username = :username AND user_id != :user_id";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':username', $username);
+        $stmt->bindParam(':user_id', $user_id);
+        $stmt->execute();
+
+        if($stmt->rowCount() > 0){
+            header("Location: ".$destination."?editstatus=exist");
+            exit();
+        }
+
+
+
         $sql = "";
         $hashedPassword = "";
         if (!empty($password)) {

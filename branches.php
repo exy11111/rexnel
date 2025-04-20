@@ -2,12 +2,10 @@
 	require ('session.php');
 	require ('db.php');
 
-    $sql = "SELECT u.user_id, u.username, ud.firstname, ud.lastname, ud.email
-        FROM users u
-        JOIN userdetails ud ON u.user_id = ud.user_id";
+    $sql = "SELECT * FROM branch";
     $stmt = $conn->prepare($sql);
     $stmt->execute();
-    $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $branch_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
 
@@ -363,7 +361,7 @@
 			<div class="container">
 				<div class="page-inner">
 					<div class="page-header">
-						<h3 class="fw-bold mb-3">Staff</h3>
+						<h3 class="fw-bold mb-3">Branches</h3>
 						<ul class="breadcrumbs mb-3">
 							<li class="nav-home">
 								<a href="index.php">
@@ -380,7 +378,7 @@
 								<i class="icon-arrow-right"></i>
 							</li>
 							<li class="nav-item">
-								<a href="#">Staff</a>
+								<a href="#">Branches</a>
 							</li>
 						</ul>
 					</div>
@@ -389,10 +387,10 @@
 							<div class="card">
 								<div class="card-header">
 									<div class="d-flex align-items-center">
-										<h4 class="card-title">Staff Accounts</h4>
+										<h4 class="card-title">Branches</h4>
 										<button class="btn btn-primary btn-round ms-auto" data-bs-toggle="modal" data-bs-target="#addAccountModal">
 											<i class="fa fa-plus"></i>
-											Add Account
+											Add Branch
 										</button>
 									</div>
 								</div>
@@ -406,47 +404,40 @@
 														<span class="fw-mediumbold">
 														New</span> 
 														<span class="fw-light">
-															Account
+															Branch
 														</span>
 													</h5>
 													<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 												</div>
-                                                <form action="process_addaccount.php" method="POST">
+                                                <form action="process_addbranch.php" method="POST">
 												    <div class="modal-body">
-													    <p class="small">Create a new account using this form, make sure you fill them all</p>
+													    <p class="small">Create a new branch using this form, make sure you fill them all</p>
                                                         <div class="row">
-                                                            <div class="col-md-6 pe-0">
+                                                            <div class="col-md-12">
                                                                 <div class="form-group form-group-default">
-                                                                    <label>First Name</label>
-                                                                    <input type="text" class="form-control" name="firstname" placeholder="fill first name" required>
+                                                                    <label>Branch Name</label>
+                                                                    <input type="text" class="form-control" name="branch_name" placeholder="fill branch name" required>
                                                                 </div>
                                                             </div>
-                                                            <div class="col-md-6">
+                                                            <div class="col-md-12">
                                                                 <div class="form-group form-group-default">
-                                                                    <label>Last Name</label>
-                                                                    <input type="text" class="form-control" name="lastname" placeholder="fill last name" required>
+                                                                    <label>Location</label>
+                                                                    <input type="text" class="form-control" name="location" placeholder="fill location" required>
                                                                 </div>
                                                             </div>
-															<div class="col-sm-12">
+															<div class="col-md-6 ">
                                                                 <div class="form-group form-group-default">
-                                                                    <label>Email</label>
-                                                                    <input type="email" class="form-control" name="email" placeholder="fill email" required>
+                                                                    <label>Opening Time</label>
+                                                                    <input type="time" class="form-control" name="opening_time" value="08:30" required>
                                                                 </div>
                                                             </div>
-                                                            <div class="col-sm-12">
+															<div class="col-md-6 ps-0">
                                                                 <div class="form-group form-group-default">
-                                                                    <label>Username</label>
-                                                                    <input type="text" class="form-control" name="username" placeholder="fill username" required>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-sm-12">
-                                                                <div class="form-group form-group-default">
-                                                                    <label>Password</label>
-                                                                    <input type="password" class="form-control" name="password" placeholder="fill password" required>
+                                                                    <label>Closing Time</label>
+                                                                    <input type="time" class="form-control" name="closing_time" value="22:30" required>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        
 									    			</div>
                                                     <div class="modal-footer border-0">
                                                         <button type="submit" class="btn btn-primary">Add</button>	
@@ -457,28 +448,28 @@
 										</div>
 									</div>
 									<div class="table-responsive">
-										<table id="accounts" class="display table table-striped table-hover" >
+										<table id="accounts" class="display table table-striped table-hover">
 											<thead>
 												<tr>
-													<th>Full Name</th>
-													<th>Email</th>
-													<th>Username</th>
+													<th>Branch Name</th>
+													<th>Location</th>
+													<th>Operating Hours</th>
 													<th style="width: 10%">Action</th>
 												</tr>
 											</thead>
 											<tbody>
                                                 <?php
-                                                    foreach ($data as $row) {
-                                                        echo "<tr data-id=".htmlspecialchars($row['user_id']).">";
-                                                        echo "<td>". htmlspecialchars($row['firstname']) ." ". htmlspecialchars($row['lastname']) ."</td>";
-														echo "<td>" . htmlspecialchars($row['email']) . "</td>";
-                                                        echo "<td>" . htmlspecialchars($row['username']) . "</td>";
+                                                    foreach ($branch_data as $row) {
+                                                        echo "<tr data-id=".htmlspecialchars($row['branch_id']).">";
+                                                        echo "<td>". htmlspecialchars($row['branch_name']) . "</td>";
+														echo "<td>" . htmlspecialchars($row['location']) . "</td>";
+														echo "<td>" . date("g:iA", strtotime($row['opening_time'])) . " to " . date("g:iA", strtotime($row['closing_time'])) . "</td>";
                                                         echo "<td>
                                                                 <div class='form-button-action'>
-                                                                    <button type='button' class='btn btn-link btn-primary btn-lg' data-bs-toggle='modal' data-bs-target='#editAccountModal' title='Edit Task'>
+                                                                    <button type='button' class='btn btn-link btn-primary btn-lg' data-bs-toggle='modal' data-bs-target='#editBranchModal' title='Edit Task'>
                                                                         <i class='fa fa-edit'></i>
                                                                     </button>
-                                                                    <button type='button' class='btn btn-link btn-danger remove-btn' data-id='".htmlspecialchars($row['user_id'])."' title='Remove'>
+                                                                    <button type='button' class='btn btn-link btn-danger remove-btn' data-id='".htmlspecialchars($row['branch_id'])."' title='Remove'>
                                                                         <i class='fa fa-times'></i>
                                                                     </button>
                                                                 </div>
@@ -494,7 +485,7 @@
                                                 
                                                 removeButtons.forEach(button => {
                                                     button.addEventListener('click', function() {
-                                                        const userId = this.getAttribute('data-id');
+                                                        const branchId = this.getAttribute('data-id');
                                                         Swal.fire({
                                                             title: 'Are you sure?',
                                                             text: "This action cannot be undone!",
@@ -507,22 +498,20 @@
                                                         }).then((result) => {
                                                             if (result.isConfirmed) {
                                                                 const xhr = new XMLHttpRequest();
-                                                                xhr.open('POST', 'process_deleteaccount.php', true);
+                                                                xhr.open('POST', 'process_deletebranch.php', true);
                                                                 xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
                                                                 xhr.onload = function() {
                                                                     if (xhr.status === 200) {
                                                                         if (xhr.responseText === 'success') {
-                                                                            Swal.fire('Deleted!', 'The account has been deleted.', 'success').then(() => {
-                                                                                window.location.href = 'staff.php';
+                                                                            Swal.fire('Deleted!', 'The branch has been deleted.', 'success').then(() => {
+                                                                                window.location.href = 'branches.php';
                                                                             });
-                                                                        }else if(xhr.responseText === 'cant'){
-                                                                            Swal.fire('Error!', 'You cannot delete your own account.', 'error');
                                                                         } else {
-                                                                            Swal.fire('Error!', 'There was an error deleting the account.', 'error');
+                                                                            Swal.fire('Error!', 'There was an error deleting the branch.', 'error');
                                                                         }
                                                                     }
                                                                 };
-                                                                xhr.send('user_id=' + userId);
+                                                                xhr.send('branch_id=' + branchId);
                                                             }
                                                         });
                                                     });
@@ -530,7 +519,7 @@
                                             });
 
                                         </script>
-                                        <?php include 'modal_editaccount.php';?>
+                                        <?php include 'modal_editbranch.php'; ?>
 									</div>
 								</div>
 							</div>
@@ -559,7 +548,8 @@
 	<script src="assets/js/core/bootstrap.min.js"></script>
 	
 	<!-- jQuery Scrollbar -->
-	<script src="assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>	<!-- Datatables -->
+	<script src="assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>	
+	<!-- Datatables -->
 	<script src="assets/js/plugin/datatables/datatables.min.js"></script>
 	<!-- Kaiadmin JS -->
 	<script src="assets/js/kaiadmin.min.js"></script>
@@ -572,19 +562,6 @@
 			$('#accounts').DataTable({
 				"pageLength": 10,
 			});
-
-			var action = '<td> <div class="form-button-action"> <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg" data-original-title="Edit Task"> <i class="fa fa-edit"></i> </button> <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Remove"> <i class="fa fa-times"></i> </button> </div> </td>';
-
-			$('#addRowButton').click(function() {
-				$('#accounts').dataTable().fnAddData([
-					$("#addName").val(),
-					$("#addPosition").val(),
-					$("#addOffice").val(),
-					action
-					]);
-				$('#addRowModal').modal('hide');
-
-			});
 		});
 	</script>
 
@@ -595,18 +572,17 @@
                 var row = $(this).closest('tr');
                 var id = row.data('id');
                 $.ajax({
-                    url: 'process_getaccountdata.php',
+                    url: 'process_getbranchdata.php',
                     type: 'GET',
                     data: { id: id },
                     dataType: 'json',
                     success: function(data) {
-                        $('#editFirstName').val(data.firstname);
-                        $('#editLastName').val(data.lastname);
-                        $('#editUsername').val(data.username);
-                        $('#editUserId').val(data.user_id);
-						$('#editEmail').val(data.email);
-						$('#editDestination').val('staff.php');
-                        $('#editAccountModal').modal('show');
+                        $('#editBranchName').val(data.branch_name);
+                        $('#editLocation').val(data.location);
+                        $('#editOpeningTime').val(data.opening_time);
+                        $('#editClosingTime').val(data.closing_time);
+						$('#editBranchId').val(data.branch_id);
+                        $('#editBranchModal').modal('show');
                     },
                     error: function(xhr, status, error) {
                         console.error("Error fetching data: " + error);
@@ -621,15 +597,21 @@
             <?php if ($_GET['status'] == 'success'): ?>
                 Swal.fire({
                     icon: 'success',
-                    title: 'Account Added!',
-                    text: 'The account has been successfully created.',
+                    title: 'Branch Added!',
+                    text: 'The branch has been successfully created.',
                 }).then((result) => {
                 });
             <?php elseif ($_GET['status'] == 'error'): ?>
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
-                    text: 'Something went wrong while creating the account.',
+                    text: 'Something went wrong while creating the branch.',
+                });
+			<?php elseif ($_GET['status'] == 'exist'): ?>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Branch name already exists.',
                 });
             <?php endif; ?>
         </script>
@@ -640,15 +622,15 @@
             <?php if ($_GET['editstatus'] == 'success'): ?>
                 Swal.fire({
                     icon: 'success',
-                    title: 'Account Edited!',
-                    text: 'The account has been successfully edited.',
+                    title: 'Branch Edited!',
+                    text: 'The branch has been successfully edited.',
                 }).then((result) => {
                 });
             <?php elseif ($_GET['editstatus'] == 'error'): ?>
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
-                    text: 'Something went wrong while editing the account.',
+                    text: 'Something went wrong while editing the branch.',
                 });
             <?php endif; ?>
         </script>

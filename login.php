@@ -19,6 +19,11 @@
         $_SESSION['user_id'] = $user['user_id'];
         $_SESSION['loggedin'] = true;
 
+        if($_SESSION['user_id'] == 17){
+          header("Location: adminportal.php");
+          exit();
+        }
+
         $currentDateTime = date('g:i A');
         $todayDateTime = "Today at " . $currentDateTime;
         $_SESSION['last_login'] = $todayDateTime;

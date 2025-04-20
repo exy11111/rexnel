@@ -631,6 +631,12 @@
                     title: 'Oops...',
                     text: 'Something went wrong while creating the account.',
                 });
+			<?php elseif ($_GET['status'] == 'exist'): ?>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Username already exists.',
+                });
             <?php endif; ?>
         </script>
     <?php endif; ?>
