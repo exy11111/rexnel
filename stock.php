@@ -7,28 +7,34 @@
 	JOIN categories c ON i.category_id = c.category_id
 	JOIN brands b ON b.brand_id = i.brand_id
 	JOIN suppliers s ON s.supplier_id = i.supplier_id
-	JOIN sizes ss ON i.size_id = ss.size_id";
+	JOIN sizes ss ON i.size_id = ss.size_id
+	WHERE i.branch_id = :branch_id";
     $stmt = $conn->prepare($sql);
+	$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
     $stmt->execute();
     $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-	$sql1 = "SELECT category_id, category_name FROM categories";
+	$sql1 = "SELECT category_id, category_name FROM categories WHERE branch_id = :branch_id";
 	$stmt1 = $conn->prepare($sql1);
+	$stmt1->bindParam(':branch_id', $_SESSION['branch_id']);
     $stmt1->execute();
     $data1 = $stmt1->fetchAll(PDO::FETCH_ASSOC);
 
-	$sql2 = "SELECT * FROM brands";
+	$sql2 = "SELECT * FROM brands WHERE branch_id = :branch_id";
 	$stmt2 = $conn->prepare($sql2);
+	$stmt2->bindParam(':branch_id', $_SESSION['branch_id']);
     $stmt2->execute();
     $data2 = $stmt2->fetchAll(PDO::FETCH_ASSOC);
 
-	$sql3 = "SELECT * FROM suppliers";
+	$sql3 = "SELECT * FROM suppliers WHERE branch_id = :branch_id";
 	$stmt3 = $conn->prepare($sql3);
+	$stmt3->bindParam(':branch_id', $_SESSION['branch_id']);
     $stmt3->execute();
     $data3 = $stmt3->fetchAll(PDO::FETCH_ASSOC);
 
-	$sql4 = "SELECT * FROM sizes";
+	$sql4 = "SELECT * FROM sizes WHERE branch_id = :branch_id";
 	$stmt4 = $conn->prepare($sql4);
+	$stmt4->bindParam(':branch_id', $_SESSION['branch_id']);
     $stmt4->execute();
     $data4 = $stmt4->fetchAll(PDO::FETCH_ASSOC);
 
@@ -621,8 +627,8 @@
 														echo "<td>".htmlspecialchars($row['brand_name'])."</td>";
 														echo "<td>".htmlspecialchars($row['supplier_name'])."</td>";
 														echo "<td>".htmlspecialchars($row['size_name'])."</td>";
-														echo "<td>".htmlspecialchars($row['price'])."</td>";
-														echo "<td>".htmlspecialchars($row['stock'])."</td>";
+														echo "<td>₱" . number_format($row['price'], 2) . "</td>";
+														echo "<td>" . number_format($row['stock']) . "</td>";
 														echo "<td>
                                                                 <div class='form-button-action'>
                                                                     <button type='button' class='btn btn-link btn-primary btn-lg' data-bs-toggle='modal' data-bs-target='#editItemModal' title='Edit Task'>

@@ -8,6 +8,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST['username'];
     $password = $_POST['password'];
     $user_id = $_POST['user_id'];
+    $branch_id = $_POST['branch_id'];
     $destination = $_POST['destination'];
 
     try {
@@ -28,13 +29,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $hashedPassword = "";
         if (!empty($password)) {
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-            $sql = "UPDATE users SET username = :username, password = :password WHERE user_id = :user_id";
+            $sql = "UPDATE users SET username = :username, password = :password, branch_id = :branch_id WHERE user_id = :user_id";
         }
         else{
-            $sql = "UPDATE users SET username = :username WHERE user_id = :user_id";
+            $sql = "UPDATE users SET username = :username, branch_id = :branch_id WHERE user_id = :user_id";
         }
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':username', $username);
+        $stmt->bindParam(':branch_id', $branch_id);
         if (!empty($password)) {
             $stmt->bindParam(':password', $hashedPassword);
         }

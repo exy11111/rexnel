@@ -19,14 +19,15 @@
         $_SESSION['user_id'] = $user['user_id'];
         $_SESSION['loggedin'] = true;
 
+        $currentDateTime = date('g:i A');
+        $todayDateTime = "Today at " . $currentDateTime;
+        $_SESSION['last_login'] = $todayDateTime;
+
         if($_SESSION['user_id'] == 17){
           header("Location: adminportal.php");
           exit();
         }
-
-        $currentDateTime = date('g:i A');
-        $todayDateTime = "Today at " . $currentDateTime;
-        $_SESSION['last_login'] = $todayDateTime;
+        $_SESSION['branch_id'] = $user['branch_id'];
 
         header("Location: index.php");
       }

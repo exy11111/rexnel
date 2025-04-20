@@ -2,6 +2,11 @@
 	require ('session.php');
 	require ('db.php');
 
+	if($_SESSION['user_id'] != 17){
+		header('Location: index.php?access=denied');
+		exit();
+	}
+
     $sql = "SELECT * FROM branch";
     $stmt = $conn->prepare($sql);
     $stmt->execute();
@@ -388,10 +393,12 @@
 								<div class="card-header">
 									<div class="d-flex align-items-center">
 										<h4 class="card-title">Branches</h4>
+										<?php if($_SESSION['user_id'] == 17):?>
 										<button class="btn btn-primary btn-round ms-auto" data-bs-toggle="modal" data-bs-target="#addAccountModal">
 											<i class="fa fa-plus"></i>
 											Add Branch
 										</button>
+										<?php endif; ?>
 									</div>
 								</div>
 								<div class="card-body">
@@ -451,20 +458,25 @@
 										<table id="accounts" class="display table table-striped table-hover">
 											<thead>
 												<tr>
+													<th>ID</th>
 													<th>Branch Name</th>
 													<th>Location</th>
 													<th>Operating Hours</th>
+													<?php if($_SESSION['user_id'] == 17):?>
 													<th style="width: 10%">Action</th>
+													<?php endif; ?>
 												</tr>
 											</thead>
 											<tbody>
                                                 <?php
                                                     foreach ($branch_data as $row) {
                                                         echo "<tr data-id=".htmlspecialchars($row['branch_id']).">";
+														echo "<td>". htmlspecialchars($row['branch_id']) . "</td>";
                                                         echo "<td>". htmlspecialchars($row['branch_name']) . "</td>";
 														echo "<td>" . htmlspecialchars($row['location']) . "</td>";
 														echo "<td>" . date("g:iA", strtotime($row['opening_time'])) . " to " . date("g:iA", strtotime($row['closing_time'])) . "</td>";
-                                                        echo "<td>
+                                                        if($_SESSION['user_id'] == 17){
+															echo "<td>
                                                                 <div class='form-button-action'>
                                                                     <button type='button' class='btn btn-link btn-primary btn-lg' data-bs-toggle='modal' data-bs-target='#editBranchModal' title='Edit Task'>
                                                                         <i class='fa fa-edit'></i>
@@ -474,6 +486,8 @@
                                                                     </button>
                                                                 </div>
                                                             </td>";
+														}
+														
                                                         echo "</tr>";
                                                     }
                                                 ?>
@@ -553,7 +567,7 @@
 	<script src="assets/js/plugin/datatables/datatables.min.js"></script>
 	<!-- Kaiadmin JS -->
 	<script src="assets/js/kaiadmin.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.0/dist/sweetalert2.all.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.0/dist/sweetalert2.all.min.js"></script>
 	<script >
 		$(document).ready(function() {
 			
@@ -635,5 +649,7 @@
             <?php endif; ?>
         </script>
     <?php endif; ?>
+
+	
 </body>
 </html>

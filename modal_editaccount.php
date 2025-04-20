@@ -13,6 +13,17 @@
                 <div class="modal-body">
                     <p class="small">Edit the account details below.</p>
                     <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group form-group-default">
+                                <label>Branch</label>
+                                <select name="branch_id" id="editBranchId" class="form-select">
+                                    <option value="">Select Branch</option>
+                                    <?php foreach($branch_data as $row):?>
+                                        <option value="<?php echo $row['branch_id']?>"><?php echo $row['branch_name']?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                        </div>
                         <div class="col-md-6 pe-0">
                             <div class="form-group form-group-default">
                                 <label>First Name</label>

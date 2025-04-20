@@ -7,14 +7,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $lastname = $_POST['lastname'];
     $username = $_POST['username'];
     $password = $_POST['password'];
+    $branch_id = $_POST['branch_id'];
     $email = $_POST['email'];
 
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
     try {
-        $sql = "INSERT INTO users (username, password) VALUES (:username, :password)";
+        $sql = "INSERT INTO users (username, password, branch_id) VALUES (:username, :password, :branch_id)";
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':username', $username);
         $stmt->bindParam(':password', $hashedPassword);
+        $stmt->bindParam(':branch_id', $branch_id);
         $stmt->execute();
 
         $userid = $conn->lastInsertId();

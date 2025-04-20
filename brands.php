@@ -2,8 +2,9 @@
 	require ('session.php');
 	require ('db.php');
 
-	$sql = "SELECT * FROM brands";
+	$sql = "SELECT * FROM brands WHERE branch_id = :branch_id";
     $stmt = $conn->prepare($sql);
+	$stmt->bindParam(':branch_id', $branch_id);
     $stmt->execute();
     $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

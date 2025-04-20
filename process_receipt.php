@@ -13,14 +13,16 @@ if (!isset($data['receipt']) || empty($data['receipt']) ||
 $receipt = $data['receipt'];
 $total_price = $data['total_price'];
 $payment_method = $data['payment_method'];
+$branch_id = $data['branch_id'];
 
 try {
     $conn->beginTransaction();
 
-    $stmt = $conn->prepare("INSERT INTO purchases (price, pm_id) VALUES (:price, :pm_id)");
+    $stmt = $conn->prepare("INSERT INTO purchases (price, pm_id, branch_id) VALUES (:price, :pm_id, :branch_id)");
     $stmt->execute([
         ':price' => $total_price,
-        ':pm_id' => $payment_method
+        ':pm_id' => $payment_method,
+        ':branch_id' => $branch_id
     ]);
     $purchase_id = $conn->lastInsertId();
 

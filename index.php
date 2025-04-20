@@ -2,8 +2,9 @@
 	require ('session.php');
 	require ('db.php');
 
-	$sql = "SELECT sum(stock) as total_quantity FROM items";
+	$sql = "SELECT sum(stock) as total_quantity FROM items WHERE branch_id = :branch_id";
 	$stmt = $conn->prepare($sql);
+	$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -17,8 +18,9 @@
 		$quantity = number_format($result['total_quantity']);
 	}
 
-	$sql1 = "SELECT sum(price) as total_sales, COUNT(purchase_id) as orders FROM purchases WHERE DATE(date) = CURDATE()";
+	$sql1 = "SELECT sum(price) as total_sales, COUNT(purchase_id) as orders FROM purchases WHERE (DATE(date) = CURDATE()) AND branch_id = :branch_id";
 	$stmt1 = $conn->prepare($sql1);
+	$stmt1->bindParam(":branch_id", $_SESSION['branch_id']);
 	$stmt1->execute();
 	$result1 = $stmt1->fetch(PDO::FETCH_ASSOC);
 
@@ -472,8 +474,9 @@
 						
 						<!-- FETCH -->
 						<?php
-							$sql = "SELECT item_name, stock FROM items";
+							$sql = "SELECT item_name, stock, size_name FROM items JOIN sizes ON items.size_id = sizes.size_id WHERE items.branch_id = :branch_id";
 							$stmt = $conn->prepare($sql);
+							$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
 							$stmt->execute();
 							$items = $stmt->fetchAll(PDO::FETCH_ASSOC);
 							
@@ -484,7 +487,7 @@
 							$lowStockThreshold = 10;
 							
 							foreach ($items as $item) {
-								$itemNames[] = $item['item_name'];
+								$itemNames[] = $item['item_name'].' '.$item['size_name'];
 								$itemStocks[] = $item['stock'];
 								
 								if ($item['stock'] < $lowStockThreshold) {
@@ -496,9 +499,12 @@
 
 							$sql = "SELECT DATE(date) AS day, SUM(price) AS total_price
 							FROM purchases
+							WHERE branch_id = :branch_id
 							GROUP BY DATE(date)
-							ORDER BY day ASC";
+							ORDER BY day ASC
+							";
 							$stmt = $conn->prepare($sql);
+							$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
 							$stmt->execute();
 							$sales = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -564,9 +570,11 @@
 									$sql = "SELECT purchase_id, price, date, payment_method 
 									FROM purchases p1 
 									JOIN payment_method p2 ON p1.pm_id = p2.pm_id
+									WHERE p1.branch_id = :branch_id
 									ORDER BY p1.date DESC 
 									LIMIT 1";
 									$stmt = $conn->prepare($sql);
+									$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
 									$stmt->execute();
 									$recent_order = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -582,9 +590,11 @@
 											JOIN brands b ON b.brand_id = i.brand_id
 											JOIN suppliers s ON s.supplier_id = i.supplier_id
 											JOIN sizes ss ON i.size_id = ss.size_id
+											WHERE i.branch_id = :branch_id
 											ORDER BY stock ASC
 											LIMIT 1";
 									$stmt = $conn->prepare($sql);
+									$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
 									$stmt->execute();
 									$lowest_stock = $stmt->fetch(PDO::FETCH_ASSOC);
 								?>
@@ -597,15 +607,26 @@
 													<li><strong>Last Login:</strong> <?php echo $_SESSION['last_login']?></li>
 													<li>
 														<strong>Recent Order:</strong>
-														<span class="me-2">Order #<?php echo $recent_order['purchase_id']?>:</span>
-														₱<span class="text-muted"><?php echo $recent_order['price']?></span>
+														<?php if ($recent_order): ?>
+															<span class="me-2">Order #<?php echo htmlspecialchars($recent_order['purchase_id']); ?>:</span>
+															₱<span class="text-muted"><?php echo number_format($recent_order['price'], 2); ?></span>
+														<?php else: ?>
+															None
+														<?php endif; ?>
 													</li>
 												</ul>
 											</div>
 											<div class="col-md-8">
 												<ul>
-													<li><strong>Recent Notification:</strong> <?php echo $recent_notif['message']?></li>
-													<li><strong>Lowest Stock Alert:</strong> <?php echo $lowest_stock['item_name']?>: <?php echo $lowest_stock['stock']?> stock left</li>
+													<?php if(!$_SESSION['user_id'] == 17): ?><li><strong>Recent Notification:</strong> <?php echo $recent_notif['message']?></li><?php endif; ?>
+													<li>
+														<strong>Lowest Stock Alert:</strong> 
+														<?php if ($lowest_stock && $lowest_stock['stock'] <= 100): ?>
+															<?php echo htmlspecialchars($lowest_stock['item_name']); ?>: 
+															<?php echo number_format($lowest_stock['stock']); ?> stock left
+														<?php else: echo 'None';?>
+														<?php endif; ?>
+													</li>
 												</ul>
 											</div>
 										</div>
@@ -653,6 +674,16 @@
             <?php endif; ?>
         </script>
     <?php endif; ?>
+	<?php if(isset($_GET['access']) && $_GET['access'] == 'denied'): ?>
+		<script>
+			Swal.fire({
+			icon: 'error',
+			title: 'Access Denied',
+			text: 'You do not have permission to view this page.',
+			confirmButtonText: 'OK'
+			});
+		</script>
+	<?php endif;?>
 	
 	<!--   Core JS Files   -->
 	<script src="assets/js/core/jquery-3.7.1.min.js"></script>
@@ -690,8 +721,9 @@
 	<?php include 'modal_editaccount.php';?>
 
 	<?php
-		$sql = "SELECT item_name, stock FROM items";
+		$sql = "SELECT item_name, stock, size_name FROM items JOIN sizes ON items.size_id = sizes.size_id WHERE items.branch_id = :branch_id";
 		$stmt = $conn->prepare($sql);
+		$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
 		$stmt->execute();
 		$items = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		
@@ -702,7 +734,7 @@
 		$lowStockThreshold = 10;
 		
 		foreach ($items as $item) {
-			$itemNames[] = $item['item_name'];
+			$itemNames[] = $item['item_name'].' '.$item['size_name'];
 			$itemStocks[] = $item['stock'];
 			
 			if ($item['stock'] < $lowStockThreshold) {
@@ -714,9 +746,11 @@
 
 		$sql = "SELECT DATE(date) AS day, SUM(price) AS total_price
         FROM purchases
+		WHERE branch_id = :branch_id
         GROUP BY DATE(date)
         ORDER BY day ASC";
 		$stmt = $conn->prepare($sql);
+		$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
 		$stmt->execute();
 		$sales = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

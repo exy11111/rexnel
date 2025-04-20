@@ -28,8 +28,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit();
         }
         else{
-            $sql = "INSERT INTO items (barcode, item_name, category_id, brand_id, supplier_id, size_id, price, stock) 
-            VALUES (:barcode, :item_name, :category_id, :brand_id, :supplier_id, :size_id, :price, :stock)";
+            $sql = "INSERT INTO items (barcode, item_name, category_id, brand_id, supplier_id, size_id, price, stock, branch_id) 
+            VALUES (:barcode, :item_name, :category_id, :brand_id, :supplier_id, :size_id, :price, :stock, :branch_id)";
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':barcode', $barcode);
             $stmt->bindParam(':item_name', $item_name);
@@ -39,6 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt->bindParam(':size_id', $size_id);
             $stmt->bindParam(':price', $price);
             $stmt->bindParam(':stock', $stock);
+            $stmt->bindParam(':branch_id', $_SESSION['branch_id']);
             $stmt->execute();
             
             $added_by = $_SESSION['username'];
@@ -47,8 +48,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $icon = "bi-plus-circle";
             $target_url = "stock.php";
 
-            $sql = "SELECT user_id FROM users";
+            $sql = "SELECT user_id FROM users WHERE branch_id = :branch_id";
             $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':branch_id', $_SESSION['branch_id']);
             $stmt->execute();
             $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

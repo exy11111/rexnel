@@ -2,8 +2,9 @@
 	require ('session.php');
 	require ('db.php');
 
-	$sql = "SELECT category_id, category_name FROM categories";
+	$sql = "SELECT category_id, category_name FROM categories WHERE branch_id = :branch_id";
     $stmt = $conn->prepare($sql);
+	$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
     $stmt->execute();
     $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -436,7 +437,7 @@
 										<table id="categories" class="display table table-striped table-hover" >
 											<thead>
 												<tr>
-													<th style="width: 20%">Category ID</th>
+													<th style="width: 10%">ID</th>
 													<th>Category Name</th>
 													<th style="width: 10%">Action</th>
 												</tr>

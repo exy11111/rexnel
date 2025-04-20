@@ -2,12 +2,24 @@
 	require ('session.php');
 	require ('db.php');
 
+	if($_SESSION['user_id'] != 17){
+		header('Location: index.php?access=denied');
+		exit();
+	}
+
     $sql = "SELECT u.user_id, u.username, ud.firstname, ud.lastname, ud.email
         FROM users u
-        JOIN userdetails ud ON u.user_id = ud.user_id";
+        JOIN userdetails ud ON u.user_id = ud.user_id
+		WHERE u.branch_id = :branch_id";
     $stmt = $conn->prepare($sql);
+	$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
     $stmt->execute();
     $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+	$sql = "SELECT * FROM branch";
+	$stmt = $conn->prepare($sql);
+	$stmt->execute();
+	$branch_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
 
@@ -390,10 +402,12 @@
 								<div class="card-header">
 									<div class="d-flex align-items-center">
 										<h4 class="card-title">Staff Accounts</h4>
+										<?php if($_SESSION['user_id'] == 17):?>
 										<button class="btn btn-primary btn-round ms-auto" data-bs-toggle="modal" data-bs-target="#addAccountModal">
 											<i class="fa fa-plus"></i>
 											Add Account
 										</button>
+										<?php endif; ?>
 									</div>
 								</div>
 								<div class="card-body">
@@ -415,6 +429,17 @@
 												    <div class="modal-body">
 													    <p class="small">Create a new account using this form, make sure you fill them all</p>
                                                         <div class="row">
+															<div class="col-sm-12">
+                                                                <div class="form-group form-group-default">
+                                                                    <label>Branch</label>
+                                                                    <select name="branch_id" class="form-select">
+																		<option value="">Select Branch</option>
+																		<?php foreach($branch_data as $row):?>
+																			<option value="<?php echo $row['branch_id']?>"><?php echo $row['branch_name']?></option>
+																		<?php endforeach; ?>
+																	</select>
+                                                                </div>
+                                                            </div>
                                                             <div class="col-md-6 pe-0">
                                                                 <div class="form-group form-group-default">
                                                                     <label>First Name</label>
@@ -463,7 +488,9 @@
 													<th>Full Name</th>
 													<th>Email</th>
 													<th>Username</th>
+													<?php if($_SESSION['user_id'] == 17): ?>
 													<th style="width: 10%">Action</th>
+													<?php endif; ?>
 												</tr>
 											</thead>
 											<tbody>
@@ -473,7 +500,8 @@
                                                         echo "<td>". htmlspecialchars($row['firstname']) ." ". htmlspecialchars($row['lastname']) ."</td>";
 														echo "<td>" . htmlspecialchars($row['email']) . "</td>";
                                                         echo "<td>" . htmlspecialchars($row['username']) . "</td>";
-                                                        echo "<td>
+														if($_SESSION['user_id'] == 17){
+															echo "<td>
                                                                 <div class='form-button-action'>
                                                                     <button type='button' class='btn btn-link btn-primary btn-lg' data-bs-toggle='modal' data-bs-target='#editAccountModal' title='Edit Task'>
                                                                         <i class='fa fa-edit'></i>
@@ -483,6 +511,8 @@
                                                                     </button>
                                                                 </div>
                                                             </td>";
+														}
+                                                        
                                                         echo "</tr>";
                                                     }
                                                 ?>
@@ -605,6 +635,7 @@
                         $('#editUsername').val(data.username);
                         $('#editUserId').val(data.user_id);
 						$('#editEmail').val(data.email);
+						$('#editBranchId').val(data.branch_id);
 						$('#editDestination').val('staff.php');
                         $('#editAccountModal').modal('show');
                     },
