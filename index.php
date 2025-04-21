@@ -1,7 +1,6 @@
 <?php 
 	require ('session.php');
 	require ('db.php');
-
 	$sql = "SELECT sum(stock) as total_quantity FROM items WHERE branch_id = :branch_id";
 	$stmt = $conn->prepare($sql);
 	$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
@@ -31,7 +30,7 @@
 <html lang="en">
 <head>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-	<title>Dashboard</title>
+	<title>Dashboard </title>
 	<meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
 	<link rel="icon" href="assets/img/holicon.png" type="image/x-icon"/>
 
