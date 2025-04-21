@@ -1,5 +1,6 @@
 <?php
     require "db.php";
+    require "session.php";
 
     if (!isset($_POST['purchase_id'])) {
         echo json_encode(["success" => false, "error" => "Invalid request."]);
