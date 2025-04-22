@@ -14,15 +14,17 @@ $receipt = $data['receipt'];
 $total_price = $data['total_price'];
 $payment_method = $data['payment_method'];
 $branch_id = $data['branch_id'];
+$date = date('Y-m-d H:i:s');
 
 try {
     $conn->beginTransaction();
 
-    $stmt = $conn->prepare("INSERT INTO purchases (price, pm_id, branch_id) VALUES (:price, :pm_id, :branch_id)");
+    $stmt = $conn->prepare("INSERT INTO purchases (price, pm_id, date, branch_id) VALUES (:price, :pm_id, :date, :branch_id)");
     $stmt->execute([
         ':price' => $total_price,
         ':pm_id' => $payment_method,
-        ':branch_id' => $branch_id
+        ':branch_id' => $branch_id,
+        ':date' => $date
     ]);
     $purchase_id = $conn->lastInsertId();
 
