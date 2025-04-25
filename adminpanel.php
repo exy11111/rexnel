@@ -431,7 +431,7 @@
                         }
                     ?>
                     <div class="row">
-                        <div class="col-md-6 d-flex flex-column">
+                        <div class="col-md-4 d-flex flex-column">
                             <div class="card h-100">
                                 <div class="card-header">
                                     <div class="card-title">Sales Overview</div>
@@ -454,33 +454,52 @@
                             </div>
                             
                         </div>
-
-                        <div class="col-md-6 d-flex flex-column">
-                            <div class="card">
+                        <div class="col-md-4 d-flex flex-column">
+                            <div class="card h-100">
                                 <div class="card-header">
-                                    <div class="card-title">Stock Overview</div>
+                                    <div class="card-title">Sales Overview</div>
                                 </div>
                                 <div class="card-body">
-                                    <div class="chart-container">
-                                        <canvas id="items_chart"></canvas>
+                                    <div class="chart-container mb-5">
+                                        <canvas id="sales_chart"></canvas>
                                     </div>
-                                    <div class="dropdown mb-3">
-                                        <button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                                            Filter Items
-                                        </button>
-                                        <ul class="dropdown-menu" id="itemFilterList">
-                                            <?php foreach ($itemNames as $index => $item): ?>
-                                                <li>
-                                                    <label class="dropdown-item">
-                                                        <input type="checkbox" class="form-check-input me-1 item-filter" value="<?= $index ?>" checked>
-                                                        <?= htmlspecialchars($item) ?>
-                                                    </label>
-                                                </li>
-                                            <?php endforeach; ?>
-                                        </ul>
+                                    <div class="row mb-3">
+                                        <div class="col">
+                                            <label for="startDate">Start Date</label>
+                                            <input type="date" id="startDate" class="form-control">
+                                        </div>
+                                        <div class="col">
+                                            <label for="endDate">End Date</label>
+                                            <input type="date" id="endDate" class="form-control">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                            
+                        </div>
+                        <div class="col-md-4 d-flex flex-column">
+                            <div class="card h-100">
+                                <div class="card-header">
+                                    <div class="card-title">Sales Overview</div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="chart-container mb-5">
+                                        <canvas id="sales_chart"></canvas>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <div class="col">
+                                            <label for="startDate">Start Date</label>
+                                            <input type="date" id="startDate" class="form-control">
+                                        </div>
+                                        <div class="col">
+                                            <label for="endDate">End Date</label>
+                                            <input type="date" id="endDate" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
                             <?php 
                                 $sql = "SELECT purchase_id, price, date, payment_method 
                                 FROM purchases p1 
