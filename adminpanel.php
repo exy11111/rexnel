@@ -1,27 +1,6 @@
 <?php 
 	require ('session.php');
 	require ('db.php');
-	$sql = "SELECT sum(stock) as total_quantity FROM items WHERE branch_id = :branch_id";
-	$stmt = $conn->prepare($sql);
-	$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
-    $stmt->execute();
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
-
-	if ($result['total_quantity'] === null) {
-        $quantity = 0;
-    }
-	else if($result['total_quantity'] > 999999){
-		$quantity = number_format(999999) . "+";
-	}
-	else{
-		$quantity = number_format($result['total_quantity']);
-	}
-
-	$sql1 = "SELECT sum(price) as total_sales, COUNT(purchase_id) as orders FROM purchases WHERE (DATE(date) = CURDATE()) AND branch_id = :branch_id";
-	$stmt1 = $conn->prepare($sql1);
-	$stmt1->bindParam(":branch_id", $_SESSION['branch_id']);
-	$stmt1->execute();
-	$result1 = $stmt1->fetch(PDO::FETCH_ASSOC);
 
 ?>
 
@@ -407,237 +386,169 @@
 						</div> 
 						-->
 					</div>
-					<div class="row">
-						<div class="col-sm-6 col-md-4">
-							<a href="purchase.php">
-								<div class="card card1 card-stats card-round">
-									<div class="card-body">
-										<div class="row align-items-center">
-											<div class="col-icon">
-												<div class="icon-big text-center icon-success bubble-shadow-small">
-													<i class="fas fa-luggage-cart"></i>
-												</div>
-											</div>
-											<div class="col col-stats ms-3 ms-sm-0">
-												<div class="numbers w-100">
-													<p class="card-category">Sales Today</p>
-													<h4 class="card-title">₱<?php echo number_format($result1['total_sales'], 2) ?></h4>
-													
-												</div>
-												<span id="percentageText" class="text-muted float-end"></span>
-											</div>
-										</div>
-									</div>
-								</div>
-							</a>
-						</div>
-						<div class="col-sm-6 col-md-4">
-							<a href="stock.php">
-								<div class="card card1 card-stats card-round">
-									<div class="card-body ">
-										<div class="row align-items-center">
-											<div class="col-icon">
-												<div class="icon-big text-center icon-primary bubble-shadow-small">
-													<i class="bi bi-box-fill"></i>
-												</div>
-											</div>
-											<div class="col col-stats ms-3 ms-sm-0">
-												<div class="numbers">
-													<p class="card-category">Stock</p>
-													<h4 class="card-title"><?php echo $quantity?></h4>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</a>
-						</div>
-						<div class="col-sm-6 col-md-4">
-							<a href="purchase.php">
-								<div class="card card1 card-stats card-round">
-									<div class="card-body">
-										<div class="row align-items-center">
-											<div class="col-icon">
-												<div class="icon-big text-center icon-secondary bubble-shadow-small">
-													<i class="fa fa-book"></i>
-												</div>
-											</div>
-											<div class="col col-stats ms-3 ms-sm-0">
-												<div class="numbers">
-													<p class="card-category">Orders Today</p>
-													<h4 class="card-title"><?php echo $result1['orders']?></h4>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</a>
-						</div>
 						
-						
-						<!-- FETCH -->
-						<?php
-							$sql = "SELECT item_name, stock, size_name FROM items JOIN sizes ON items.size_id = sizes.size_id WHERE items.branch_id = :branch_id";
-							$stmt = $conn->prepare($sql);
-							$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
-							$stmt->execute();
-							$items = $stmt->fetchAll(PDO::FETCH_ASSOC);
-							
-							$itemNames = [];
-							$itemStocks = [];
-							$colors = [];
-							
-							$lowStockThreshold = 10;
-							
-							foreach ($items as $item) {
-								$itemNames[] = $item['item_name'].' '.$item['size_name'];
-								$itemStocks[] = $item['stock'];
-								
-								if ($item['stock'] < $lowStockThreshold) {
-									$colors[] = 'rgb(255, 99, 71)'; 
-								} else {
-									$colors[] = 'rgb(34, 193, 34)';
-								}
-							}
+                    <!-- FETCH -->
+                    <?php
+                        $sql = "SELECT item_name, stock, size_name FROM items JOIN sizes ON items.size_id = sizes.size_id WHERE items.branch_id = :branch_id";
+                        $stmt = $conn->prepare($sql);
+                        $stmt->bindParam(':branch_id', $_SESSION['branch_id']);
+                        $stmt->execute();
+                        $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                        
+                        $itemNames = [];
+                        $itemStocks = [];
+                        $colors = [];
+                        
+                        $lowStockThreshold = 10;
+                        
+                        foreach ($items as $item) {
+                            $itemNames[] = $item['item_name'].' '.$item['size_name'];
+                            $itemStocks[] = $item['stock'];
+                            
+                            if ($item['stock'] < $lowStockThreshold) {
+                                $colors[] = 'rgb(255, 99, 71)'; 
+                            } else {
+                                $colors[] = 'rgb(34, 193, 34)';
+                            }
+                        }
 
-							$sql = "SELECT DATE(date) AS day, SUM(price) AS total_price
-							FROM purchases
-							WHERE branch_id = :branch_id
-							GROUP BY DATE(date)
-							ORDER BY day ASC
-							";
-							$stmt = $conn->prepare($sql);
-							$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
-							$stmt->execute();
-							$sales = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                        $sql = "SELECT DATE(date) AS day, SUM(price) AS total_price
+                        FROM purchases
+                        WHERE branch_id = :branch_id
+                        GROUP BY DATE(date)
+                        ORDER BY day ASC
+                        ";
+                        $stmt = $conn->prepare($sql);
+                        $stmt->bindParam(':branch_id', $_SESSION['branch_id']);
+                        $stmt->execute();
+                        $sales = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-							$labels = [];
-							$values = [];
-							foreach ($sales as $row) {
-								$labels[] = date("M d, Y", strtotime($row['day']));
-								$values[] = (float) $row['total_price'];
-							}
-						?>
-						<div class="row">
-							<div class="col-md-6 d-flex flex-column">
-								<div class="card h-100">
-									<div class="card-header">
-										<div class="card-title">Sales Overview</div>
-									</div>
-									<div class="card-body">
-										<div class="chart-container mb-5">
-											<canvas id="sales_chart"></canvas>
-										</div>
-										<div class="row mb-3">
-											<div class="col">
-												<label for="startDate">Start Date</label>
-												<input type="date" id="startDate" class="form-control">
-											</div>
-											<div class="col">
-												<label for="endDate">End Date</label>
-												<input type="date" id="endDate" class="form-control">
-											</div>
-										</div>
-									</div>
-								</div>
-								
-							</div>
+                        $labels = [];
+                        $values = [];
+                        foreach ($sales as $row) {
+                            $labels[] = date("M d, Y", strtotime($row['day']));
+                            $values[] = (float) $row['total_price'];
+                        }
+                    ?>
+                    <div class="row">
+                        <div class="col-md-6 d-flex flex-column">
+                            <div class="card h-100">
+                                <div class="card-header">
+                                    <div class="card-title">Sales Overview</div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="chart-container mb-5">
+                                        <canvas id="sales_chart"></canvas>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <div class="col">
+                                            <label for="startDate">Start Date</label>
+                                            <input type="date" id="startDate" class="form-control">
+                                        </div>
+                                        <div class="col">
+                                            <label for="endDate">End Date</label>
+                                            <input type="date" id="endDate" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
 
-							<div class="col-md-6 d-flex flex-column">
-								<div class="card">
-									<div class="card-header">
-										<div class="card-title">Stock Overview</div>
-									</div>
-									<div class="card-body">
-										<div class="chart-container">
-											<canvas id="items_chart"></canvas>
-										</div>
-										<div class="dropdown mb-3">
-											<button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-												Filter Items
-											</button>
-											<ul class="dropdown-menu" id="itemFilterList">
-												<?php foreach ($itemNames as $index => $item): ?>
-													<li>
-														<label class="dropdown-item">
-															<input type="checkbox" class="form-check-input me-1 item-filter" value="<?= $index ?>" checked>
-															<?= htmlspecialchars($item) ?>
-														</label>
-													</li>
-												<?php endforeach; ?>
-											</ul>
-										</div>
-									</div>
-								</div>
-								<?php 
-									$sql = "SELECT purchase_id, price, date, payment_method 
-									FROM purchases p1 
-									JOIN payment_method p2 ON p1.pm_id = p2.pm_id
-									WHERE p1.branch_id = :branch_id
-									ORDER BY p1.date DESC 
-									LIMIT 1";
-									$stmt = $conn->prepare($sql);
-									$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
-									$stmt->execute();
-									$recent_order = $stmt->fetch(PDO::FETCH_ASSOC);
+                        <div class="col-md-6 d-flex flex-column">
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="card-title">Stock Overview</div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="chart-container">
+                                        <canvas id="items_chart"></canvas>
+                                    </div>
+                                    <div class="dropdown mb-3">
+                                        <button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                            Filter Items
+                                        </button>
+                                        <ul class="dropdown-menu" id="itemFilterList">
+                                            <?php foreach ($itemNames as $index => $item): ?>
+                                                <li>
+                                                    <label class="dropdown-item">
+                                                        <input type="checkbox" class="form-check-input me-1 item-filter" value="<?= $index ?>" checked>
+                                                        <?= htmlspecialchars($item) ?>
+                                                    </label>
+                                                </li>
+                                            <?php endforeach; ?>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <?php 
+                                $sql = "SELECT purchase_id, price, date, payment_method 
+                                FROM purchases p1 
+                                JOIN payment_method p2 ON p1.pm_id = p2.pm_id
+                                WHERE p1.branch_id = :branch_id
+                                ORDER BY p1.date DESC 
+                                LIMIT 1";
+                                $stmt = $conn->prepare($sql);
+                                $stmt->bindParam(':branch_id', $_SESSION['branch_id']);
+                                $stmt->execute();
+                                $recent_order = $stmt->fetch(PDO::FETCH_ASSOC);
 
-									$sql = "SELECT * FROM notifications WHERE user_id = :user_id ORDER BY created_at DESC LIMIT 1";
-									$stmt = $conn->prepare($sql);
-									$stmt->bindParam(':user_id', $_SESSION['user_id']);
-									$stmt->execute();
-									$recent_notif = $stmt->fetch(PDO::FETCH_ASSOC);
+                                $sql = "SELECT * FROM notifications WHERE user_id = :user_id ORDER BY created_at DESC LIMIT 1";
+                                $stmt = $conn->prepare($sql);
+                                $stmt->bindParam(':user_id', $_SESSION['user_id']);
+                                $stmt->execute();
+                                $recent_notif = $stmt->fetch(PDO::FETCH_ASSOC);
 
-									$sql = "SELECT item_id, barcode, item_name, category_name, brand_name, supplier_name, size_name, price, stock
-											FROM items i 
-											JOIN categories c ON i.category_id = c.category_id
-											JOIN brands b ON b.brand_id = i.brand_id
-											JOIN suppliers s ON s.supplier_id = i.supplier_id
-											JOIN sizes ss ON i.size_id = ss.size_id
-											WHERE i.branch_id = :branch_id
-											ORDER BY stock ASC
-											LIMIT 1";
-									$stmt = $conn->prepare($sql);
-									$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
-									$stmt->execute();
-									$lowest_stock = $stmt->fetch(PDO::FETCH_ASSOC);
-								?>
-								<div class="card mt-auto">
-									<div class="card-body">
-										<h5 class="card-title mb-2">Recent Activity</h5>
-										<div class="row">
-											<div class="col-md-4">
-												<ul>
-													<li><strong>Last Login:</strong> <?php echo $_SESSION['last_login']?></li>
-													<li>
-														<strong>Recent Order:</strong>
-														<?php if ($recent_order): ?>
-															<span class="me-2">Order #<?php echo htmlspecialchars($recent_order['purchase_id']); ?>:</span>
-															₱<span class="text-muted"><?php echo number_format($recent_order['price'], 2); ?></span>
-														<?php else: ?>
-															None
-														<?php endif; ?>
-													</li>
-												</ul>
-											</div>
-											<div class="col-md-8">
-												<ul>
-													<?php if(!$_SESSION['user_id'] == 17): ?><li><strong>Recent Notification:</strong> <?php echo $recent_notif['message']?></li><?php endif; ?>
-													<li>
-														<strong>Lowest Stock Alert:</strong> 
-														<?php if ($lowest_stock && $lowest_stock['stock'] <= 100): ?>
-															<?php echo htmlspecialchars($lowest_stock['item_name']); ?>: 
-															<?php echo number_format($lowest_stock['stock']); ?> stock left
-														<?php else: echo 'None';?>
-														<?php endif; ?>
-													</li>
-												</ul>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
+                                $sql = "SELECT item_id, barcode, item_name, category_name, brand_name, supplier_name, size_name, price, stock
+                                        FROM items i 
+                                        JOIN categories c ON i.category_id = c.category_id
+                                        JOIN brands b ON b.brand_id = i.brand_id
+                                        JOIN suppliers s ON s.supplier_id = i.supplier_id
+                                        JOIN sizes ss ON i.size_id = ss.size_id
+                                        WHERE i.branch_id = :branch_id
+                                        ORDER BY stock ASC
+                                        LIMIT 1";
+                                $stmt = $conn->prepare($sql);
+                                $stmt->bindParam(':branch_id', $_SESSION['branch_id']);
+                                $stmt->execute();
+                                $lowest_stock = $stmt->fetch(PDO::FETCH_ASSOC);
+                            ?>
+                            <div class="card mt-auto">
+                                <div class="card-body">
+                                    <h5 class="card-title mb-2">Recent Activity</h5>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <ul>
+                                                <li><strong>Last Login:</strong> <?php echo $_SESSION['last_login']?></li>
+                                                <li>
+                                                    <strong>Recent Order:</strong>
+                                                    <?php if ($recent_order): ?>
+                                                        <span class="me-2">Order #<?php echo htmlspecialchars($recent_order['purchase_id']); ?>:</span>
+                                                        ₱<span class="text-muted"><?php echo number_format($recent_order['price'], 2); ?></span>
+                                                    <?php else: ?>
+                                                        None
+                                                    <?php endif; ?>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <ul>
+                                                <?php if(!$_SESSION['user_id'] == 17): ?><li><strong>Recent Notification:</strong> <?php echo $recent_notif['message']?></li><?php endif; ?>
+                                                <li>
+                                                    <strong>Lowest Stock Alert:</strong> 
+                                                    <?php if ($lowest_stock && $lowest_stock['stock'] <= 100): ?>
+                                                        <?php echo htmlspecialchars($lowest_stock['item_name']); ?>: 
+                                                        <?php echo number_format($lowest_stock['stock']); ?> stock left
+                                                    <?php else: echo 'None';?>
+                                                    <?php endif; ?>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 					
 				</div>
 			</div>
