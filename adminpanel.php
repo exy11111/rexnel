@@ -386,50 +386,6 @@
 						</div> 
 						-->
 					</div>
-						
-                    <!-- FETCH -->
-                    <?php
-                        $sql = "SELECT item_name, stock, size_name FROM items JOIN sizes ON items.size_id = sizes.size_id WHERE items.branch_id = :branch_id";
-                        $stmt = $conn->prepare($sql);
-                        $stmt->bindParam(':branch_id', $_SESSION['branch_id']);
-                        $stmt->execute();
-                        $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                        
-                        $itemNames = [];
-                        $itemStocks = [];
-                        $colors = [];
-                        
-                        $lowStockThreshold = 10;
-                        
-                        foreach ($items as $item) {
-                            $itemNames[] = $item['item_name'].' '.$item['size_name'];
-                            $itemStocks[] = $item['stock'];
-                            
-                            if ($item['stock'] < $lowStockThreshold) {
-                                $colors[] = 'rgb(255, 99, 71)'; 
-                            } else {
-                                $colors[] = 'rgb(34, 193, 34)';
-                            }
-                        }
-
-                        $sql = "SELECT DATE(date) AS day, SUM(price) AS total_price
-                        FROM purchases
-                        WHERE branch_id = :branch_id
-                        GROUP BY DATE(date)
-                        ORDER BY day ASC
-                        ";
-                        $stmt = $conn->prepare($sql);
-                        $stmt->bindParam(':branch_id', $_SESSION['branch_id']);
-                        $stmt->execute();
-                        $sales = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-                        $labels = [];
-                        $values = [];
-                        foreach ($sales as $row) {
-                            $labels[] = date("M d, Y", strtotime($row['day']));
-                            $values[] = (float) $row['total_price'];
-                        }
-                    ?>
                     <div class="row">
                         <div class="col-md-4 d-flex flex-column">
                             <div class="card h-100">
@@ -586,9 +542,8 @@
 	<?php include 'modal_editaccount.php';?>
 
 	<?php
-		$sql = "SELECT item_name, stock, size_name FROM items JOIN sizes ON items.size_id = sizes.size_id WHERE items.branch_id = :branch_id";
+		$sql = "SELECT item_name, stock, size_name FROM items JOIN sizes ON items.size_id = sizes.size_id WHERE items.branch_id = 1";
 		$stmt = $conn->prepare($sql);
-		$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
 		$stmt->execute();
 		$items = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		
@@ -638,7 +593,7 @@
 		var items_chart = document.getElementById("items_chart").getContext("2d");
 		var sales_chart = document.getElementById("sales_chart").getContext("2d");
 		
-		var myItemsChart = new Chart(items_chart, {
+		/*var myItemsChart = new Chart(items_chart, {
 			type: 'bar',
 			data: {
 				labels: itemNames,
@@ -664,6 +619,7 @@
 				}
 			}
 		});
+
 		document.querySelectorAll(".item-filter").forEach(function (checkbox) {
 			checkbox.addEventListener("change", function () {
 				let selectedIndices = [];
@@ -682,7 +638,7 @@
 
 				myItemsChart.update();
 			});
-		});
+		}); */
 
 		var mySalesChart = new Chart(sales_chart, {
 			type: 'line',
