@@ -479,12 +479,19 @@
 							
 						</div>
                     </div>
-
+					
 					<div class="row mb-3">
+						<?php 
+							$sql = "SELECT branch_id, branch_name FROM branches";
+							$stmt = $conn->prepare($sql);
+							$stmt->execute();
+							$branch_data = $stmt->fetchAll();
+						?>
+						<?php foreach($branch_data as $row): ?>
 						<div class="col-md-4 col-12">
 							<div class="card">
 								<div class="card-header">
-									<div class="card-title">Stock Overview</div>
+									<div class="card-title"><?php echo $row['branch_name'];?></div>
 								</div>
 								<div class="card-body">
 									<div class="chart-container mb-1">
@@ -493,48 +500,49 @@
 								</div>
 							</div>
 						</div>
+						<script>
+							const branchId = <?php echo $row['branch_id'];?>;
+
+							fetch(`process_getstockoverview.php?branch_id=${branchId}`)
+								.then(response => {
+									if (!response.ok) {
+										throw new Error('Network response was not ok');
+									}
+									return response.json();
+								})
+								.then(chartData => {
+									const ctx = document.getElementById('stock_chart').getContext('2d');
+									new Chart(ctx, {
+										type: 'bar',
+										data: chartData,
+										options: {
+											responsive: true,
+											scales: {
+												yAxes: [{
+													ticks: {
+														beginAtZero: true,
+														callback: function(value) {
+															return value + ' units';
+														}
+													}
+												}],
+												xAxes: [{
+													ticks: {
+														autoSkip: true,
+														maxTicksLimit: 10
+													}
+												}]
+											}
+										}
+									});
+								})
+								.catch(error => {
+									console.error('Fetch/Parsing Error:', error);
+								});
+						</script>
+						<?php endforeach; ?>
 					</div>
 
-					<script>
-						const branchId = 1; // You can dynamically set this value as needed
-
-						fetch(`process_getstockoverview.php?branch_id=${branchId}`)
-							.then(response => {
-								if (!response.ok) {
-									throw new Error('Network response was not ok');
-								}
-								return response.json();
-							})
-							.then(chartData => {
-								const ctx = document.getElementById('stock_chart').getContext('2d');
-								new Chart(ctx, {
-									type: 'bar',
-									data: chartData,
-									options: {
-										responsive: true,
-										scales: {
-											yAxes: [{
-												ticks: {
-													beginAtZero: true,
-													callback: function(value) {
-														return value + ' units'; // Label for Y-axis
-													}
-												}
-											}],
-											xAxes: [{
-												ticks: {
-													autoSkip: true,
-													maxTicksLimit: 10
-												}
-											}]
-										}
-									}
-								});
-							})
-							.catch(error => {
-								console.error('Fetch/Parsing Error:', error);
-							});
-					</script>
 					
 				</div>
 			</div>
