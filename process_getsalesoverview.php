@@ -1,4 +1,6 @@
 <?php
+    require ('db.php');
+    require ('session.php');
     $dateQuery = $conn->query("SELECT DISTINCT DATE(date) as day FROM purchases ORDER BY day ASC");
     $dates = $dateQuery->fetchAll(PDO::FETCH_COLUMN);
 
