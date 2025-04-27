@@ -390,7 +390,10 @@
 						-->
 					</div>
                     <div class="row">
-                        <div class="col-md-4 d-flex flex-column">
+						<div class="col-md-2">
+
+						</div>
+                        <div class="col-md-8 d-flex flex-column">
                             <div class="card h-100">
                                 <div class="card-header">
                                     <div class="card-title">Sales Overview</div>
@@ -443,9 +446,8 @@
 													ticks: {
 														beginAtZero: true,
 														userCallback: function(value) {
-															// Check if the value is a number
 															if (typeof value === 'number') {
-																return '₱' + value.toLocaleString(); // Adds the peso sign and comma separator
+																return '₱' + value.toLocaleString();
 															}
 															return value;
 														}
@@ -454,14 +456,12 @@
 												xAxes: [{
 													ticks: {
 														autoSkip: true,
-														maxTicksLimit: 10, // Adjust this value if you want to control how many labels fit
+														maxTicksLimit: 10,
 														userCallback: function(label) {
-															// Check if the label is a valid date
 															var date = new Date(label);
 															if (!isNaN(date.getTime())) {
-																// Format the date as "Apr 22, 2025
 																var options = { year: 'numeric', month: 'short', day: 'numeric' };
-																return date.toLocaleDateString('en-US', options); // Format to "Apr 22, 2025"
+																return date.toLocaleDateString('en-US', options);
 															}
 															return label;
 														}
@@ -475,53 +475,9 @@
 									console.error('Fetch/Parsing Error:', error);
 								});
 						</script>
-
-
-                        <div class="col-md-4 d-flex flex-column">
-                            <div class="card h-100">
-                                <div class="card-header">
-                                    <div class="card-title">Sales Overview</div>
-                                </div>
-                                <div class="card-body">
-                                    <div class="chart-container mb-5">
-                                        <canvas id="sales_chart1"></canvas>
-                                    </div>
-                                    <div class="row mb-3">
-                                        <div class="col">
-                                            <label for="startDate">Start Date</label>
-                                            <input type="date" id="startDate" class="form-control">
-                                        </div>
-                                        <div class="col">
-                                            <label for="endDate">End Date</label>
-                                            <input type="date" id="endDate" class="form-control">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                        </div>
-                        <div class="col-md-4 d-flex flex-column">
-                            <div class="card h-100">
-                                <div class="card-header">
-                                    <div class="card-title">Sales Overview</div>
-                                </div>
-                                <div class="card-body">
-                                    <div class="chart-container mb-5">
-                                        <canvas id="sales_chart2"></canvas>
-                                    </div>
-                                    <div class="row mb-3">
-                                        <div class="col">
-                                            <label for="startDate">Start Date</label>
-                                            <input type="date" id="startDate" class="form-control">
-                                        </div>
-                                        <div class="col">
-                                            <label for="endDate">End Date</label>
-                                            <input type="date" id="endDate" class="form-control">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+						<div class="col-md-2">
+							
+						</div>
                     </div>
 					
 				</div>
