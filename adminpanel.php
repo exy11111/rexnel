@@ -399,7 +399,7 @@
                                     <div class="card-title">Sales Overview</div>
                                 </div>
                                 <div class="card-body">
-                                    <div class="chart-container mb-5">
+                                    <div class="chart-container">
                                         <canvas id="sales_chart"></canvas>
                                     </div>
                                     <div class="row mb-3">
@@ -479,6 +479,10 @@
 							
 						</div>
                     </div>
+
+					<div class="row">
+
+					</div>
 					
 				</div>
 			</div>
