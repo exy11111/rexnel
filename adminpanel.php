@@ -418,14 +418,14 @@
 									if (!response.ok) {
 										throw new Error('Network response was not ok');
 									}
-									return response.text(); // Fetch as text first
+									return response.text();
 								})
 								.then(text => {
 									if (text.trim() === "") {
 										throw new Error('Empty response from server');
 									}
 									try {
-										return JSON.parse(text); // Try to manually parse JSON
+										return JSON.parse(text);
 									} catch (e) {
 										console.error('JSON parse error:', e, text);
 										throw e;
