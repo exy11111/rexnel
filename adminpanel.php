@@ -399,10 +399,10 @@
                                     <div class="card-title">Sales Overview</div>
                                 </div>
                                 <div class="card-body">
-                                    <div class="chart-container mb-3">
+                                    <div class="chart-container mb-1">
                                         <canvas id="sales_chart"></canvas>
                                     </div>
-                                    <div class="row mb-3">
+                                    <div class="row mb-1">
                                         <div class="col">
                                             <label for="startDate">Start Date</label>
                                             <input type="date" id="startDate" class="form-control">
