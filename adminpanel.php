@@ -488,58 +488,58 @@
 							$branch_data = $stmt->fetchAll();
 						?>
 						<?php foreach($branch_data as $row): ?>
-						<div class="col-md-4 col-12">
-							<div class="card">
-								<div class="card-header">
-									<div class="card-title"><?php echo $row['branch_name'];?></div>
-								</div>
-								<div class="card-body">
-									<div class="chart-container mb-1">
-										<canvas id="stock_chart"></canvas>
+							<div class="col-md-4 col-12">
+								<div class="card">
+									<div class="card-header">
+										<div class="card-title"><?php echo $row['branch_name'];?></div>
+									</div>
+									<div class="card-body">
+										<div class="chart-container mb-1">
+											<canvas id="stock_chart_<?php echo $row['branch_id'];?>"></canvas>
+										</div>
 									</div>
 								</div>
 							</div>
-						</div>
-						<script>
-							const branchId = <?php echo $row['branch_id'];?>;
+							<script>
+								const branchId = <?php echo $row['branch_id'];?>;
 
-							fetch(`process_getstockoverview.php?branch_id=${branchId}`)
-								.then(response => {
-									if (!response.ok) {
-										throw new Error('Network response was not ok');
-									}
-									return response.json();
-								})
-								.then(chartData => {
-									const ctx = document.getElementById('stock_chart').getContext('2d');
-									new Chart(ctx, {
-										type: 'bar',
-										data: chartData,
-										options: {
-											responsive: true,
-											scales: {
-												yAxes: [{
-													ticks: {
-														beginAtZero: true,
-														callback: function(value) {
-															return value + ' units';
-														}
-													}
-												}],
-												xAxes: [{
-													ticks: {
-														autoSkip: true,
-														maxTicksLimit: 10
-													}
-												}]
-											}
+								fetch(`process_getstockoverview.php?branch_id=${branchId}`)
+									.then(response => {
+										if (!response.ok) {
+											throw new Error('Network response was not ok');
 										}
+										return response.json();
+									})
+									.then(chartData => {
+										const ctx = document.getElementById('stock_chart_<?php echo $row['branch_id']?>').getContext('2d');
+										new Chart(ctx, {
+											type: 'bar',
+											data: chartData,
+											options: {
+												responsive: true,
+												scales: {
+													yAxes: [{
+														ticks: {
+															beginAtZero: true,
+															callback: function(value) {
+																return value + ' units';
+															}
+														}
+													}],
+													xAxes: [{
+														ticks: {
+															autoSkip: true,
+															maxTicksLimit: 10
+														}
+													}]
+												}
+											}
+										});
+									})
+									.catch(error => {
+										console.error('Fetch/Parsing Error:', error);
 									});
-								})
-								.catch(error => {
-									console.error('Fetch/Parsing Error:', error);
-								});
-						</script>
+							</script>
 						<?php endforeach; ?>
 					</div>
 
