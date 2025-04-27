@@ -439,17 +439,18 @@
 										options: {
 											responsive: true,
 											scales: {
-												y: { beginAtZero: true,
+												yAxes: [{
 													ticks: {
-														callback: function(value) {
-															// Ensure the value is valid number before formatting
+														beginAtZero: true,
+														userCallback: function(value) {
+															// Check if the value is a number
 															if (typeof value === 'number') {
 																return '₱' + value.toLocaleString(); // Adds the peso sign and comma separator
 															}
 															return value;
 														}
 													}
-												 }
+												}]
 											}
 										}
 									});
