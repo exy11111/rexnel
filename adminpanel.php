@@ -487,18 +487,28 @@
 							$stmt->execute();
 							$branch_data = $stmt->fetchAll();
 						?>
-						
+
 						<?php foreach($branch_data as $row): ?>
 							<div class="col-md-4 col-12">
 								<div class="card">
 									<div class="card-header">
 										<div class="card-title"><?php echo $row['branch_name']; ?> Stock</div>
-										<!-- Add a filter dropdown here -->
-										<select class="form-select" id="filter_<?php echo $row['branch_id']; ?>" onchange="filterStock(<?php echo $row['branch_id']; ?>)">
-											<option value="all">All Items</option>
-											<option value="low_stock">Low Stock</option>
-											<option value="out_of_stock">Out of Stock</option>
-										</select>
+										<!-- Filter Checkboxes for each item -->
+										<div id="filters_<?php echo $row['branch_id']; ?>" class="filters">
+											<?php 
+												// Fetch stock items for the current branch
+												$sql_items = "SELECT item_id, item_name FROM stock WHERE branch_id = ?";
+												$stmt_items = $conn->prepare($sql_items);
+												$stmt_items->execute([$row['branch_id']]);
+												$items = $stmt_items->fetchAll();
+											?>
+											<?php foreach($items as $item): ?>
+												<label>
+													<input type="checkbox" class="item-filter" data-branch="<?php echo $row['branch_id']; ?>" data-item="<?php echo $item['item_id']; ?>" checked>
+													<?php echo $item['item_name']; ?>
+												</label><br>
+											<?php endforeach; ?>
+										</div>
 									</div>
 									<div class="card-body">
 										<div class="chart-container mb-1">
@@ -510,51 +520,63 @@
 							</div>
 
 							<script>
-								// Fetching stock data with filter
-								function filterStock(branchId) {
-									const filterValue = document.getElementById('filter_' + branchId).value;
-									
-									// Modify the fetch URL to include the filter parameter
-									fetch(`process_getstockoverview.php?branch_id=${branchId}&filter=${filterValue}`)
-										.then(response => {
-											if (!response.ok) {
-												throw new Error('Network response was not ok');
-											}
-											return response.json();
-										})
-										.then(chartData => {
-											const ctx = document.getElementById('stock_chart_' + branchId).getContext('2d');
-											new Chart(ctx, {
-												type: 'bar',
-												data: chartData,
-												options: {
-													responsive: true,
-													scales: {
-														yAxes: [{
-															ticks: {
-																beginAtZero: true,
-																callback: function(value) {
-																	return value + ' units';
-																}
+								const branchId = <?php echo $row['branch_id']; ?>;
+
+								// Fetching data for each branch
+								fetch(`process_getstockoverview.php?branch_id=${branchId}`)
+									.then(response => response.json())
+									.then(chartData => {
+										const ctx = document.getElementById('stock_chart_<?php echo $row['branch_id']; ?>').getContext('2d');
+										const chart = new Chart(ctx, {
+											type: 'bar',
+											data: chartData,
+											options: {
+												responsive: true,
+												scales: {
+													yAxes: [{
+														ticks: {
+															beginAtZero: true,
+															callback: function(value) {
+																return value + ' units';
 															}
-														}],
-														xAxes: [{
-															ticks: {
-																autoSkip: true,
-																maxTicksLimit: 10
-															}
-														}]
-													}
+														}
+													}],
+													xAxes: [{
+														ticks: {
+															autoSkip: true,
+															maxTicksLimit: 10
+														}
+													}]
 												}
-											});
-										})
-										.catch(error => {
-											console.error('Fetch/Parsing Error:', error);
+											}
 										});
-								}
+
+										// Handle the item filtering based on checkbox
+										const checkboxes = document.querySelectorAll(`#filters_<?php echo $row['branch_id']; ?> .item-filter`);
+										checkboxes.forEach(checkbox => {
+											checkbox.addEventListener('change', (e) => {
+												const itemId = e.target.getAttribute('data-item');
+												const itemIndex = chartData.labels.indexOf(itemId);
+
+												if (e.target.checked) {
+													// Show the item in the chart
+													chartData.datasets[0].data[itemIndex] = chartData.originalData[itemIndex];  // Restore original data
+												} else {
+													// Hide the item in the chart (set its data to 0 or remove)
+													chartData.datasets[0].data[itemIndex] = 0;
+												}
+
+												chart.update();  // Redraw the chart with updated data
+											});
+										});
+									})
+									.catch(error => {
+										console.error('Fetch/Parsing Error:', error);
+									});
 							</script>
 						<?php endforeach; ?>
 					</div>
+
 
 
 
