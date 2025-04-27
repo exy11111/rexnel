@@ -487,18 +487,11 @@
 							$stmt->execute();
 							$branch_data = $stmt->fetchAll();
 						?>
-						
 						<?php foreach($branch_data as $row): ?>
 							<div class="col-md-4 col-12">
 								<div class="card">
 									<div class="card-header">
-										<div class="card-title"><?php echo $row['branch_name']; ?> Stock</div>
-										<!-- Add a filter dropdown here -->
-										<select class="form-select" id="filter_<?php echo $row['branch_id']; ?>" onchange="filterStock(<?php echo $row['branch_id']; ?>)">
-											<option value="all">All Items</option>
-											<option value="low_stock">Low Stock</option>
-											<option value="out_of_stock">Out of Stock</option>
-										</select>
+										<div class="card-title"><?php echo $row['branch_name'];?> Stock</div>
 									</div>
 									<div class="card-body">
 										<div class="chart-container mb-1">
@@ -508,54 +501,50 @@
 									</div>
 								</div>
 							</div>
-
 							<script>
-								// Fetching stock data with filter
-								function filterStock(branchId) {
-									const filterValue = document.getElementById('filter_' + branchId).value;
-									
-									// Modify the fetch URL to include the filter parameter
-									fetch(`process_getstockoverview.php?branch_id=${branchId}&filter=${filterValue}`)
-										.then(response => {
-											if (!response.ok) {
-												throw new Error('Network response was not ok');
-											}
-											return response.json();
-										})
-										.then(chartData => {
-											const ctx = document.getElementById('stock_chart_' + branchId).getContext('2d');
-											new Chart(ctx, {
-												type: 'bar',
-												data: chartData,
-												options: {
-													responsive: true,
-													scales: {
-														yAxes: [{
-															ticks: {
-																beginAtZero: true,
-																callback: function(value) {
-																	return value + ' units';
-																}
+								const branchId = <?php echo $row['branch_id']; ?>;
+
+								// Fetch data for each branch using the unique branchId
+								fetch(`process_getstockoverview.php?branch_id=${branchId}`)
+									.then(response => {
+										if (!response.ok) {
+											throw new Error('Network response was not ok');
+										}
+										return response.json();
+									})
+									.then(chartData => {
+										// Correctly access the unique canvas element for this branch
+										const ctx = document.getElementById('stock_chart_<?php echo $row['branch_id']; ?>').getContext('2d');
+										new Chart(ctx, {
+											type: 'bar',
+											data: chartData,
+											options: {
+												responsive: true,
+												scales: {
+													yAxes: [{
+														ticks: {
+															beginAtZero: true,
+															callback: function(value) {
+																return value + ' units'; // Label for Y-axis
 															}
-														}],
-														xAxes: [{
-															ticks: {
-																autoSkip: true,
-																maxTicksLimit: 10
-															}
-														}]
-													}
+														}
+													}],
+													xAxes: [{
+														ticks: {
+															autoSkip: true,
+															maxTicksLimit: 10
+														}
+													}]
 												}
-											});
-										})
-										.catch(error => {
-											console.error('Fetch/Parsing Error:', error);
+											}
 										});
-								}
+									})
+									.catch(error => {
+										console.error('Fetch/Parsing Error:', error);
+									});
 							</script>
 						<?php endforeach; ?>
 					</div>
-
 
 
 					
