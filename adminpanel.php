@@ -2,6 +2,9 @@
 	require ('session.php');
 	require ('db.php');
 
+	if(isset($_SESSION['role_id']) && $_SESSION['role_id'] != 1){
+		header('Location: index.php');
+	}
 ?>
 
 
@@ -495,7 +498,6 @@
 									</div>
 									<div class="card-body">
 										<div class="chart-container mb-1">
-											<!-- Make sure the canvas ID is unique for each branch -->
 											<canvas id="stock_chart_<?php echo $row['branch_id']; ?>"></canvas>
 										</div>
 									</div>
@@ -503,8 +505,6 @@
 							</div>
 							<script>
 								const branchId = <?php echo $row['branch_id']; ?>;
-
-								// Fetch data for each branch using the unique branchId
 								fetch(`process_getstockoverview.php?branch_id=${branchId}`)
 									.then(response => {
 										if (!response.ok) {
@@ -513,7 +513,6 @@
 										return response.json();
 									})
 									.then(chartData => {
-										// Correctly access the unique canvas element for this branch
 										const ctx = document.getElementById('stock_chart_<?php echo $row['branch_id']; ?>').getContext('2d');
 										new Chart(ctx, {
 											type: 'bar',
@@ -525,7 +524,7 @@
 														ticks: {
 															beginAtZero: true,
 															callback: function(value) {
-																return value + ' units'; // Label for Y-axis
+																return value + ' units'; 
 															}
 														}
 													}],

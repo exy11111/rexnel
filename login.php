@@ -22,6 +22,7 @@
         $currentDateTime = date('g:i A');
         $todayDateTime = "Today at " . $currentDateTime;
         $_SESSION['last_login'] = $todayDateTime;
+        $_SESSION['role_id'] = $user['role_id'];
 
         if($_SESSION['user_id'] == 17){
           header("Location: adminportal.php");
