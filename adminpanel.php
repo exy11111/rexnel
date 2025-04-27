@@ -480,74 +480,52 @@
 						</div>
                     </div>
 
-					<div class="row">
-						<div class="col-md-2">
+					<div id="charts-container" class="row">
+						
+					</div>
+					
+					<script>
+						// Fetch data for all branches and their stock levels
+						fetch('process_getstockoverview.php')
+							.then(response => response.json())
+							.then(data => {
+								// Loop through each branch and create a chart dynamically
+								const container = document.getElementById('charts-container');
+								
+								data.forEach((branchData, index) => {
+									// Create a new div for each chart dynamically
+									const chartDiv = document.createElement('div');
+									chartDiv.classList.add('col-md-4'); // Bootstrap class to fit 3 charts in a row
+									
+									// Create a canvas element for each branch
+									const canvas = document.createElement('canvas');
+									canvas.id = `branch_${branchData.branch_id}_chart`; // Unique ID for each branch
+									chartDiv.appendChild(canvas);
 
-						</div>
-						<div class="col-md-8 col-12">
-							<div class="card h-100">
-								<div class="card-header">
-									<div class="card-title">Stocks Overview</div>
-								</div>
-								<div class="card-body">
-									<div class="chart-container mb-1">
-										<canvas id="stock_chart"></canvas>
-									</div>
-									<div class="row mb-1">
-										<div class="col">
-											<label for="startDate">Start Date</label>
-											<input type="date" id="startDate" class="form-control">
-										</div>
-										<div class="col">
-											<label for="endDate">End Date</label>
-											<input type="date" id="endDate" class="form-control">
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<script>
-							fetch('process_getstockoverview.php')
-								.then(response => {
-									if (!response.ok) {
-										throw new Error('Network response was not ok');
-									}
-									return response.text();
-								})
-								.then(text => {
-									if (text.trim() === "") {
-										throw new Error('Empty response from server');
-									}
-									try {
-										return JSON.parse(text);
-									} catch (e) {
-										console.error('JSON parse error:', e, text);
-										throw e;
-									}
-								})
-								.then(data => {
-									const ctx = document.getElementById('stock_chart').getContext('2d');
+									// Append the new chart div to the container
+									container.appendChild(chartDiv);
+
+									// Create the chart using Chart.js
+									const ctx = canvas.getContext('2d');
 									new Chart(ctx, {
-										type: 'bar', // You can change this to another type like 'line' or 'pie'
+										type: 'bar', // Bar chart
 										data: {
-											labels: data.items, // Items from the response
-											datasets: [
-												{
-													label: 'Stock Levels',
-													data: data.stocks, // Stock levels from the response
-													backgroundColor: [
-														'rgba(75, 192, 192, 0.2)',
-														'rgba(255, 99, 132, 0.2)',
-														'rgba(54, 162, 235, 0.2)',
-													],
-													borderColor: [
-														'rgba(75, 192, 192, 1)',
-														'rgba(255, 99, 132, 1)',
-														'rgba(54, 162, 235, 1)',
-													],
-													borderWidth: 1
-												}
-											]
+											labels: branchData.item_names, // Item names for this branch
+											datasets: [{
+												label: `${branchData.branch_name} Stock Levels`,
+												data: branchData.stock_levels, // Stock levels for each item
+												backgroundColor: [
+													'rgba(75, 192, 192, 0.2)',
+													'rgba(255, 99, 132, 0.2)',
+													'rgba(54, 162, 235, 0.2)',
+												],
+												borderColor: [
+													'rgba(75, 192, 192, 1)',
+													'rgba(255, 99, 132, 1)',
+													'rgba(54, 162, 235, 1)',
+												],
+												borderWidth: 1
+											}]
 										},
 										options: {
 											responsive: true,
@@ -555,34 +533,20 @@
 												y: {
 													beginAtZero: true,
 													ticks: {
-														userCallback: function(value) {
-															if (typeof value === 'number') {
-																return value.toLocaleString(); // Adds commas for thousands
-															}
-															return value;
+														callback: function(value) {
+															return '₱' + value.toLocaleString(); // Format y-axis with peso sign and commas
 														}
-													}
-												},
-												x: {
-													title: {
-														display: true,
-														text: 'Items'
 													}
 												}
 											}
 										}
 									});
-								})
-								.catch(error => {
-									console.error('Fetch/Parsing Error:', error);
 								});
-
-						</script>
-						<div class="col-md-2">
-
-						</div>
-					</div>
-					
+							})
+							.catch(error => {
+								console.error('Error fetching stock data:', error);
+							});
+					</script>
 				</div>
 			</div>
 			

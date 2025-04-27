@@ -1,36 +1,27 @@
 <?php
-    require ('db.php');
-    require ('session.php');
+    require('db.php');
 
+    // Fetch all branches
     $query = "
-        SELECT b.branch_name, i.item_name, i.stock
+        SELECT b.branch_id, b.branch_name, i.item_name, i.stock
         FROM items i
-        JOIN sizes s ON i.size_id = s.size_id
         JOIN branches b ON i.branch_id = b.branch_id
-        WHERE b.branch_id IN (1, 2, 3)
     ";
 
     $stmt = $conn->query($query);
-    $itemsData = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $data = [];
 
-    // Prepare data for the chart or table
-    $branches = [];
-    $itemNames = [];
-    $stockLevels = [];
-
-    foreach ($itemsData as $row) {
-        // Store the branch name
-        $branches[] = $row['branch_name'];
-
-        // Store the item name and stock level for each item
-        $itemNames[] = $row['item_name'];
-        $stockLevels[] = (int)$row['stock'];
+    // Group data by branch_id
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $branchId = $row['branch_id'];
+        $data[$branchId]['branch_name'] = $row['branch_name'];
+        $data[$branchId]['item_names'][] = $row['item_name'];
+        $data[$branchId]['stock_levels'][] = (int)$row['stock'];
     }
 
-    // Return the data as JSON for the front-end
-    echo json_encode([
-        'branches' => $branches,
-        'items' => $itemNames,
-        'stocks' => $stockLevels,
-    ]);
+    // Convert to a numerical index for the response
+    $response = array_values($data);
+
+    // Return the data as JSON
+    echo json_encode($response);
 ?>
