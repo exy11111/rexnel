@@ -439,7 +439,13 @@
 										options: {
 											responsive: true,
 											scales: {
-												y: { beginAtZero: true }
+												y: { beginAtZero: true,
+													ticks: {
+														callback: function(value) {
+															return '₱' + value.toLocaleString();
+														}
+													}
+												 }
 											}
 										}
 									});
