@@ -393,7 +393,7 @@
 						<div class="col-md-2">
 
 						</div>
-                        <div class="col-md-8 d-flex flex-column">
+                        <div class="col-md-8">
                             <div class="card h-100">
                                 <div class="card-header">
                                     <div class="card-title">Sales Overview</div>
