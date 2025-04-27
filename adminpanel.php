@@ -480,73 +480,89 @@
 						</div>
                     </div>
 
-					<div id="charts-container" class="row">
-						
+					<div class="row">
+						<div class="col-md-2"></div>
+						<div class="col-md-8 col-12">
+							<div class="card h-100">
+								<div class="card-header">
+									<div class="card-title">Stock Overview for Branches</div>
+								</div>
+								<div class="card-body">
+									<div class="chart-container mb-1">
+										<canvas id="stock_chart"></canvas>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-2"></div>
 					</div>
-					
+
 					<script>
-						// Fetch data for all branches and their stock levels
-						fetch('process_getstockoverview.php')
-							.then(response => response.json())
-							.then(data => {
-								// Loop through each branch and create a chart dynamically
-								const container = document.getElementById('charts-container');
-								
-								data.forEach((branchData, index) => {
-									// Create a new div for each chart dynamically
-									const chartDiv = document.createElement('div');
-									chartDiv.classList.add('col-md-4'); // Bootstrap class to fit 3 charts in a row
-									
-									// Create a canvas element for each branch
-									const canvas = document.createElement('canvas');
-									canvas.id = `branch_${branchData.branch_id}_chart`; // Unique ID for each branch
-									chartDiv.appendChild(canvas);
+						// Sample Sales Data
+						const salesData = {
+							labels: ['2021-01-01', '2021-01-02', '2021-01-03', '2021-01-04', '2021-01-05'],
+							datasets: [{
+								label: 'Sales in ₱',
+								data: [12000, 15000, 18000, 9000, 11000],
+								borderColor: 'rgba(75, 192, 192, 1)',
+								backgroundColor: 'rgba(75, 192, 192, 0.2)',
+								fill: true,
+								borderWidth: 2
+							}]
+						};
 
-									// Append the new chart div to the container
-									container.appendChild(chartDiv);
+						// Sample Stock Data
+						const stockData = {
+							labels: ['Branch 1', 'Branch 2', 'Branch 3'],
+							datasets: [{
+								label: 'Stock Levels',
+								data: [120, 75, 150], // Example stock levels for 3 branches
+								backgroundColor: 'rgba(54, 162, 235, 0.6)',
+								borderColor: 'rgba(54, 162, 235, 1)',
+								borderWidth: 1
+							}]
+						};
 
-									// Create the chart using Chart.js
-									const ctx = canvas.getContext('2d');
-									new Chart(ctx, {
-										type: 'bar', // Bar chart
-										data: {
-											labels: branchData.item_names, // Item names for this branch
-											datasets: [{
-												label: `${branchData.branch_name} Stock Levels`,
-												data: branchData.stock_levels, // Stock levels for each item
-												backgroundColor: [
-													'rgba(75, 192, 192, 0.2)',
-													'rgba(255, 99, 132, 0.2)',
-													'rgba(54, 162, 235, 0.2)',
-												],
-												borderColor: [
-													'rgba(75, 192, 192, 1)',
-													'rgba(255, 99, 132, 1)',
-													'rgba(54, 162, 235, 1)',
-												],
-												borderWidth: 1
-											}]
-										},
-										options: {
-											responsive: true,
-											scales: {
-												y: {
-													beginAtZero: true,
-													ticks: {
-														callback: function(value) {
-															return '₱' + value.toLocaleString(); // Format y-axis with peso sign and commas
-														}
-													}
-												}
+						// Create the Sales Line Chart
+						const salesCtx = document.getElementById('sales_chart').getContext('2d');
+						new Chart(salesCtx, {
+							type: 'line',
+							data: salesData,
+							options: {
+								responsive: true,
+								scales: {
+									y: {
+										ticks: {
+											callback: function(value) {
+												return '₱' + value.toLocaleString();
 											}
 										}
-									});
-								});
-							})
-							.catch(error => {
-								console.error('Error fetching stock data:', error);
-							});
+									}
+								}
+							}
+						});
+
+						// Create the Stock Bar Chart
+						const stockCtx = document.getElementById('stock_chart').getContext('2d');
+						new Chart(stockCtx, {
+							type: 'bar',
+							data: stockData,
+							options: {
+								responsive: true,
+								scales: {
+									y: {
+										beginAtZero: true,
+										ticks: {
+											callback: function(value) {
+												return value + ' units'; // Add unit label for Y-axis
+											}
+										}
+									}
+								}
+							}
+						});
 					</script>
+					
 				</div>
 			</div>
 			
