@@ -512,13 +512,43 @@
 									if (!response.ok) {
 										throw new Error('Network response was not ok');
 									}
-									return response.json();
+									return response.text();
 								})
-								.then(chartData => {
+								.then(text => {
+									if (text.trim() === "") {
+										throw new Error('Empty response from server');
+									}
+									try {
+										return JSON.parse(text);
+									} catch (e) {
+										console.error('JSON parse error:', e, text);
+										throw e;
+									}
+								})
+								.then(data => {
 									const ctx = document.getElementById('stock_chart').getContext('2d');
 									new Chart(ctx, {
-										type: 'bar',
-										data: chartData,
+										type: 'bar', // You can change this to another type like 'line' or 'pie'
+										data: {
+											labels: data.items, // Items from the response
+											datasets: [
+												{
+													label: 'Stock Levels',
+													data: data.stocks, // Stock levels from the response
+													backgroundColor: [
+														'rgba(75, 192, 192, 0.2)',
+														'rgba(255, 99, 132, 0.2)',
+														'rgba(54, 162, 235, 0.2)',
+													],
+													borderColor: [
+														'rgba(75, 192, 192, 1)',
+														'rgba(255, 99, 132, 1)',
+														'rgba(54, 162, 235, 1)',
+													],
+													borderWidth: 1
+												}
+											]
+										},
 										options: {
 											responsive: true,
 											scales: {
@@ -526,12 +556,17 @@
 													beginAtZero: true,
 													ticks: {
 														userCallback: function(value) {
-															// Format Y-axis with comma separators
 															if (typeof value === 'number') {
-																return value.toLocaleString(); // Adds comma separators
+																return value.toLocaleString(); // Adds commas for thousands
 															}
 															return value;
 														}
+													}
+												},
+												x: {
+													title: {
+														display: true,
+														text: 'Items'
 													}
 												}
 											}
@@ -539,8 +574,9 @@
 									});
 								})
 								.catch(error => {
-									console.error('Error fetching stock data:', error);
+									console.error('Fetch/Parsing Error:', error);
 								});
+
 						</script>
 						<div class="col-md-2">
 

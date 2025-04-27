@@ -2,46 +2,35 @@
     require ('db.php');
     require ('session.php');
 
-    // Query to fetch branch names and stock data for each branch
     $query = "
-        SELECT b.branch_name, SUM(i.stock) AS total_stock
+        SELECT b.branch_name, i.item_name, i.stock
         FROM items i
         JOIN sizes s ON i.size_id = s.size_id
         JOIN branches b ON i.branch_id = b.branch_id
-        GROUP BY b.branch_name
+        WHERE b.branch_id IN (1, 2, 3)
     ";
 
     $stmt = $conn->query($query);
-    $stockData = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $itemsData = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Prepare the labels and stock values for the chart
+    // Prepare data for the chart or table
     $branches = [];
+    $itemNames = [];
     $stockLevels = [];
 
-    foreach ($stockData as $row) {
+    foreach ($itemsData as $row) {
+        // Store the branch name
         $branches[] = $row['branch_name'];
-        $stockLevels[] = (int)$row['total_stock'];
+
+        // Store the item name and stock level for each item
+        $itemNames[] = $row['item_name'];
+        $stockLevels[] = (int)$row['stock'];
     }
 
     // Return the data as JSON for the front-end
     echo json_encode([
-        'labels' => $branches,
-        'datasets' => [
-            [
-                'label' => 'Stock Levels',
-                'data' => $stockLevels,
-                'backgroundColor' => [
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                ],
-                'borderColor' => [
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                ],
-                'borderWidth' => 1
-            ]
-        ]
+        'branches' => $branches,
+        'items' => $itemNames,
+        'stocks' => $stockLevels,
     ]);
 ?>
