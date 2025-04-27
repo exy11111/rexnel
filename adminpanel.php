@@ -389,7 +389,7 @@
 						</div> 
 						-->
 					</div>
-                    <div class="row">
+                    <div class="row mb-3">
 						<div class="col-md-2">
 
 						</div>
@@ -480,7 +480,7 @@
 						</div>
                     </div>
 
-					<div class="row">
+					<div class="row mb-3">
 						<div class="col-md-2"></div>
 						<div class="col-md-8 col-12">
 							<div class="card h-100">
