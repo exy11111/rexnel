@@ -459,7 +459,7 @@
 															// Check if the label is a valid date
 															var date = new Date(label);
 															if (!isNaN(date.getTime())) {
-																// Format the date as "Apr 22, 2025"
+																// Format the date as "Apr 22, 2025
 																var options = { year: 'numeric', month: 'short', day: 'numeric' };
 																return date.toLocaleDateString('en-US', options); // Format to "Apr 22, 2025"
 															}
