@@ -498,69 +498,36 @@
 					</div>
 
 					<script>
-						// Sample Sales Data
-						const salesData = {
-							labels: ['2021-01-01', '2021-01-02', '2021-01-03', '2021-01-04', '2021-01-05'],
-							datasets: [{
-								label: 'Sales in ₱',
-								data: [12000, 15000, 18000, 9000, 11000],
-								borderColor: 'rgba(75, 192, 192, 1)',
-								backgroundColor: 'rgba(75, 192, 192, 0.2)',
-								fill: true,
-								borderWidth: 2
-							}]
-						};
-
-						// Sample Stock Data
-						const stockData = {
-							labels: ['Branch 1', 'Branch 2', 'Branch 3'],
-							datasets: [{
-								label: 'Stock Levels',
-								data: [120, 75, 150], // Example stock levels for 3 branches
-								backgroundColor: 'rgba(54, 162, 235, 0.6)',
-								borderColor: 'rgba(54, 162, 235, 1)',
-								borderWidth: 1
-							}]
-						};
-
-						// Create the Sales Line Chart
-						const salesCtx = document.getElementById('sales_chart').getContext('2d');
-						new Chart(salesCtx, {
-							type: 'line',
-							data: salesData,
-							options: {
-								responsive: true,
-								scales: {
-									y: {
-										ticks: {
-											callback: function(value) {
-												return '₱' + value.toLocaleString();
+						fetch('process_getstockoverview.php')
+							.then(response => {
+								if (!response.ok) {
+									throw new Error('Network response was not ok');
+								}
+								return response.json();
+							})
+							.then(chartData => {
+								const ctx = document.getElementById('stock_chart').getContext('2d');
+								new Chart(ctx, {
+									type: 'bar',
+									data: chartData,
+									options: {
+										responsive: true,
+										scales: {
+											y: {
+												beginAtZero: true,
+												ticks: {
+													callback: function(value) {
+														return value + ' units'; // Label for Y-axis
+													}
+												}
 											}
 										}
 									}
-								}
-							}
-						});
-
-						// Create the Stock Bar Chart
-						const stockCtx = document.getElementById('stock_chart').getContext('2d');
-						new Chart(stockCtx, {
-							type: 'bar',
-							data: stockData,
-							options: {
-								responsive: true,
-								scales: {
-									y: {
-										beginAtZero: true,
-										ticks: {
-											callback: function(value) {
-												return value + ' units'; // Add unit label for Y-axis
-											}
-										}
-									}
-								}
-							}
-						});
+								});
+							})
+							.catch(error => {
+								console.error('Fetch/Parsing Error:', error);
+							});
 					</script>
 					
 				</div>

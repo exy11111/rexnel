@@ -1,27 +1,36 @@
 <?php
-    require('db.php');
+require('db.php');
 
-    // Fetch all branches
-    $query = "
-        SELECT b.branch_id, b.branch_name, i.item_name, i.stock
-        FROM items i
-        JOIN branches b ON i.branch_id = b.branch_id
-    ";
+// Query to get stock data for branch_id = 1
+$query = "
+    SELECT i.item_name, i.stock
+    FROM items i
+    WHERE i.branch_id = 1
+";
 
-    $stmt = $conn->query($query);
-    $data = [];
+$stmt = $conn->query($query);
+$stockData = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Group data by branch_id
-    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $branchId = $row['branch_id'];
-        $data[$branchId]['branch_name'] = $row['branch_name'];
-        $data[$branchId]['item_names'][] = $row['item_name'];
-        $data[$branchId]['stock_levels'][] = (int)$row['stock'];
-    }
+// Prepare the data for the chart
+$itemNames = [];
+$stockLevels = [];
 
-    // Convert to a numerical index for the response
-    $response = array_values($data);
+foreach ($stockData as $row) {
+    $itemNames[] = $row['item_name'];
+    $stockLevels[] = (int)$row['stock'];
+}
 
-    // Return the data as JSON
-    echo json_encode($response);
+// Return the data as JSON
+echo json_encode([
+    'labels' => $itemNames,
+    'datasets' => [
+        [
+            'label' => 'Stock Levels',
+            'data' => $stockLevels,
+            'backgroundColor' => 'rgba(54, 162, 235, 0.6)',
+            'borderColor' => 'rgba(54, 162, 235, 1)',
+            'borderWidth' => 1
+        ]
+    ]
+]);
 ?>
