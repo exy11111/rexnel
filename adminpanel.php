@@ -399,7 +399,7 @@
                                     <div class="card-title">Sales Overview</div>
                                 </div>
                                 <div class="card-body">
-                                    <div class="chart-container">
+                                    <div class="chart-container mb-1">
                                         <canvas id="sales_chart"></canvas>
                                     </div>
                                     <div class="row mb-3">
