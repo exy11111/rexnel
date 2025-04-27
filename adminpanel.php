@@ -482,7 +482,7 @@
 
 					<div class="row mb-3">
 						<div class="col-md-4 col-12">
-							<div class="card h-100">
+							<div class="card">
 								<div class="card-header">
 									<div class="card-title">Stock Overview</div>
 								</div>
