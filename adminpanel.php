@@ -393,7 +393,7 @@
 						<div class="col-md-2">
 
 						</div>
-                        <div class="col-md-8 col-12">
+                        <div class="col-md-4 col-12">
                             <div class="card h-100">
                                 <div class="card-header">
                                     <div class="card-title">Sales Overview</div>
@@ -481,11 +481,10 @@
                     </div>
 
 					<div class="row mb-3">
-						<div class="col-md-2"></div>
-						<div class="col-md-8 col-12">
+						<div class="col-md-4 col-12">
 							<div class="card h-100">
 								<div class="card-header">
-									<div class="card-title">Stock Overview for Branches</div>
+									<div class="card-title">Stock Overview</div>
 								</div>
 								<div class="card-body">
 									<div class="chart-container mb-1">
@@ -494,7 +493,6 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-md-2"></div>
 					</div>
 
 					<script>
