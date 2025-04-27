@@ -30,6 +30,9 @@
 	<link rel="stylesheet" href="assets/css/plugins.min.css">
 	<link rel="stylesheet" href="assets/css/kaiadmin.min.css">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+	<!-- Chart JS -->
+	<script src="assets/js/plugin/chart.js/chart.min.js"></script>
 	<style>
 		.card1 {
 			transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -561,8 +564,7 @@
 	<!-- jQuery Scrollbar -->
 	<script src="assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
 
-	<!-- Chart JS -->
-	<script src="assets/js/plugin/chart.js/chart.min.js"></script>
+	
 
 	<!-- jQuery Sparkline -->
 	<script src="assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js"></script>
