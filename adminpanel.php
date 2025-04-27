@@ -487,11 +487,11 @@
 						<div class="col-md-8 col-12">
 							<div class="card h-100">
 								<div class="card-header">
-									<div class="card-title">Sales Overview</div>
+									<div class="card-title">Stocks Overview</div>
 								</div>
 								<div class="card-body">
 									<div class="chart-container mb-1">
-										<canvas id="sales_chart"></canvas>
+										<canvas id="stock_chart"></canvas>
 									</div>
 									<div class="row mb-1">
 										<div class="col">
@@ -543,7 +543,7 @@
 								});
 						</script>
 						<div class="col-md-2">
-							
+
 						</div>
 					</div>
 					
