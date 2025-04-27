@@ -442,7 +442,11 @@
 												y: { beginAtZero: true,
 													ticks: {
 														callback: function(value) {
-															return '₱' + value.toLocaleString();
+															// Ensure the value is valid number before formatting
+															if (typeof value === 'number') {
+																return '₱' + value.toLocaleString(); // Adds the peso sign and comma separator
+															}
+															return value;
 														}
 													}
 												 }
