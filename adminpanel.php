@@ -414,7 +414,23 @@
                         </div>
 						<script>
 							fetch('process_getsalesoverview.php')
-								.then(response => response.json())
+								.then(response => {
+									if (!response.ok) {
+										throw new Error('Network response was not ok');
+									}
+									return response.text(); // Fetch as text first
+								})
+								.then(text => {
+									if (text.trim() === "") {
+										throw new Error('Empty response from server');
+									}
+									try {
+										return JSON.parse(text); // Try to manually parse JSON
+									} catch (e) {
+										console.error('JSON parse error:', e, text);
+										throw e;
+									}
+								})
 								.then(chartData => {
 									const ctx = document.getElementById('sales_chart').getContext('2d');
 									new Chart(ctx, {
@@ -427,6 +443,9 @@
 											}
 										}
 									});
+								})
+								.catch(error => {
+									console.error('Fetch/Parsing Error:', error);
 								});
 						</script>
 
