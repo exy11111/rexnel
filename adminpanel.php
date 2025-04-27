@@ -450,6 +450,22 @@
 															return value;
 														}
 													}
+												}],
+												xAxes: [{
+													ticks: {
+														autoSkip: true,
+														maxTicksLimit: 10, // Adjust this value if you want to control how many labels fit
+														userCallback: function(label) {
+															// Check if the label is a valid date
+															var date = new Date(label);
+															if (!isNaN(date.getTime())) {
+																// Format the date as "Apr 22, 2025"
+																var options = { year: 'numeric', month: 'short', day: 'numeric' };
+																return date.toLocaleDateString('en-US', options); // Format to "Apr 22, 2025"
+															}
+															return label;
+														}
+													}
 												}]
 											}
 										}
