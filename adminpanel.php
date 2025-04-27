@@ -541,198 +541,34 @@
 	<?php include 'modal_profile.php'?>
 	<?php include 'modal_editaccount.php';?>
 
-	<?php
-		$sql = "SELECT item_name, stock, size_name FROM items JOIN sizes ON items.size_id = sizes.size_id WHERE items.branch_id = 1";
-		$stmt = $conn->prepare($sql);
-		$stmt->execute();
-		$items = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		
-		$itemNames = [];
-		$itemStocks = [];
-		$colors = [];
-		
-		$lowStockThreshold = 10;
-		
-		foreach ($items as $item) {
-			$itemNames[] = $item['item_name'].' '.$item['size_name'];
-			$itemStocks[] = $item['stock'];
-			
-			if ($item['stock'] < $lowStockThreshold) {
-				$colors[] = 'rgb(255, 99, 71)'; 
-			} else {
-				$colors[] = 'rgb(34, 193, 34)';
-			}
-		}
-
-		$sql = "SELECT DATE(date) AS day, SUM(price) AS total_price
-        FROM purchases
-		WHERE branch_id = :branch_id
-        GROUP BY DATE(date)
-        ORDER BY day ASC";
-		$stmt = $conn->prepare($sql);
-		$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
-		$stmt->execute();
-		$sales = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-		$labels = [];
-		$values = [];
-		foreach ($sales as $row) {
-			$labels[] = date("M d, Y", strtotime($row['day']));
-			$values[] = (float) $row['total_price'];
-		}
-	?>
-		
 	<script>
-		var itemNames = <?php echo json_encode($itemNames); ?>;
-		var itemStocks = <?php echo json_encode($itemStocks); ?>;
-		var colors = <?php echo json_encode($colors); ?>;
-
-		var labels = <?php echo json_encode($labels); ?>;
-    	var values = <?php echo json_encode($values); ?>;
-		
-		var items_chart = document.getElementById("items_chart").getContext("2d");
-		var sales_chart = document.getElementById("sales_chart").getContext("2d");
-		
-		/*var myItemsChart = new Chart(items_chart, {
-			type: 'bar',
-			data: {
-				labels: itemNames,
-				datasets: [{
-					label: "Stock",
-					backgroundColor: colors,
-					borderColor: colors,
-					data: itemStocks
-				}],
-			},
-			options: {
-				responsive: true,
-				maintainAspectRatio: false,
-				scales: {
-					yAxes: [{
-						ticks: {
-							beginAtZero: true
-						}
-					}]
-				},
-				legend: {
-					display: false 
-				}
-			}
-		});
-
-		document.querySelectorAll(".item-filter").forEach(function (checkbox) {
-			checkbox.addEventListener("change", function () {
-				let selectedIndices = [];
-				document.querySelectorAll(".item-filter:checked").forEach(cb => {
-				selectedIndices.push(parseInt(cb.value));
-				});
-
-				const filteredLabels = selectedIndices.map(i => itemNames[i]);
-				const filteredStocks = selectedIndices.map(i => itemStocks[i]);
-				const filteredColors = selectedIndices.map(i => colors[i]);
-
-				myItemsChart.data.labels = filteredLabels;
-				myItemsChart.data.datasets[0].data = filteredStocks;
-				myItemsChart.data.datasets[0].backgroundColor = filteredColors;
-				myItemsChart.data.datasets[0].borderColor = filteredColors;
-
-				myItemsChart.update();
-			});
-		}); */
-
-		var mySalesChart = new Chart(sales_chart, {
+		const ctx = document.getElementById('sales_chart').getContext('2d');
+		const salesChart = new Chart(ctx, {
 			type: 'line',
 			data: {
-				labels: labels,
+				labels: ['January', 'February', 'March', 'April', 'May', 'June'],
 				datasets: [{
-					label: 'Total Purchases',
-					data: values,
-					borderColor: 'rgb(255, 99, 132)',
-					backgroundColor: 'rgba(255, 99, 132, 0.2)',
-					lineTension: 0.1
+					label: 'Sales',
+					data: [120, 190, 300, 250, 220, 400],
+					borderColor: 'rgba(75, 192, 192, 1)',
+					backgroundColor: 'rgba(75, 192, 192, 0.2)',
+					borderWidth: 2,
+					tension: 0.4, // for smooth curves
+					fill: true
 				}]
 			},
 			options: {
 				responsive: true,
 				scales: {
-					x: {
-						title: {
-							display: true,
-							text: 'Date'
-						}
-					},
 					y: {
-						title: {
-							display: true,
-							text: 'Total Price'
-						},
 						beginAtZero: true
 					}
-				},
-				legend: {
-					display: false 
 				}
 			}
 		});
-
-		const originalLabels = <?php echo json_encode($labels); ?>;
-		const originalValues = <?php echo json_encode($values); ?>;
-
-		const currentDayValue = originalValues[originalValues.length - 1];
-
-		const today = new Date();
-		const currentDay = new Date(originalLabels[originalLabels.length - 1]);
-		currentDay.setHours(0, 0, 0, 0);
-
-		let percentageChange = 0;
-		if (currentDay.getTime() === today.setHours(0, 0, 0, 0)) {
-			const last7DaysValues = originalValues.slice(originalValues.length - 8, originalValues.length - 1);
-			const totalSumOfLast7Days = last7DaysValues.reduce((acc, value) => acc + value, 0);
-			const averageOfLast7Days = totalSumOfLast7Days / last7DaysValues.length;
-			percentageChange = (((currentDayValue - averageOfLast7Days) / averageOfLast7Days) * 100).toFixed(2);
-
-			if (percentageChange > 0) {
-				percentageChange = '+' + percentageChange;
-			}
-		}
-
-		document.getElementById("percentageText").textContent = percentageChange + "%";
-
-		if (percentageChange > 0) {
-			document.getElementById("percentageText").classList.add("text-success");
-		} else if (percentageChange < 0) {
-			document.getElementById("percentageText").classList.add("text-danger");
-		} else {
-			document.getElementById("percentageText").classList.add("text-muted");
-		}
-
-		document.getElementById("startDate").addEventListener("change", filterSalesChart);
-		document.getElementById("endDate").addEventListener("change", filterSalesChart);
-
-		function filterSalesChart() {
-			const start = new Date(document.getElementById("startDate").value);
-			const end = new Date(document.getElementById("endDate").value);
-
-			start.setHours(0, 0, 0, 0);
-			end.setHours(23, 59, 59, 999);
-
-			const filteredLabels = [];
-			const filteredValues = [];
-
-			originalLabels.forEach((label, index) => {
-				const current = new Date(label);
-				current.setHours(0, 0, 0, 0);
-				if ((!isNaN(start) && current < start) || (!isNaN(end) && current > end)) return;
-				filteredLabels.push(label);
-				filteredValues.push(originalValues[index]);
-			});
-
-			mySalesChart.data.labels = filteredLabels;
-			mySalesChart.data.datasets[0].data = filteredValues;
-			mySalesChart.update();
-		}
-
 	</script>
+	
+	
 	<!-- Auto populate in edit modal -->
     <script>
         $(document).ready(function() {
