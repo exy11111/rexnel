@@ -408,8 +408,55 @@
                                     </div>
                                 </div>
                             </div>
-                            
                         </div>
+						<script>
+							const sales_chart = document.getElementById('sales_chart').getContext('2d');
+							const salesChart = new Chart(sales_chart, {
+								type: 'line',
+								data: {
+									labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+									datasets: [
+										{
+											label: 'Product A',
+											data: [120, 190, 300, 250, 220, 400],
+											borderColor: 'rgba(75, 192, 192, 1)',
+											backgroundColor: 'rgba(75, 192, 192, 0.2)',
+											borderWidth: 2,
+											tension: 0.4,
+											fill: false
+										},
+										{
+											label: 'Product B',
+											data: [80, 150, 200, 180, 170, 300],
+											borderColor: 'rgba(255, 99, 132, 1)',
+											backgroundColor: 'rgba(255, 99, 132, 0.2)',
+											borderWidth: 2,
+											tension: 0.4,
+											fill: false
+										},
+										{
+											label: 'Product C',
+											data: [60, 100, 150, 130, 120, 250],
+											borderColor: 'rgba(54, 162, 235, 1)',
+											backgroundColor: 'rgba(54, 162, 235, 0.2)',
+											borderWidth: 2,
+											tension: 0.4,
+											fill: false
+										}
+									]
+								},
+								options: {
+									responsive: true,
+									scales: {
+										y: {
+											beginAtZero: true
+										}
+									}
+								}
+							});
+						</script>
+
+
                         <div class="col-md-4 d-flex flex-column">
                             <div class="card h-100">
                                 <div class="card-header">
@@ -540,33 +587,6 @@
 
 	<?php include 'modal_profile.php'?>
 	<?php include 'modal_editaccount.php';?>
-
-	<script>
-		const ctx = document.getElementById('sales_chart').getContext('2d');
-		const salesChart = new Chart(ctx, {
-			type: 'line',
-			data: {
-				labels: ['January', 'February', 'March', 'April', 'May', 'June'],
-				datasets: [{
-					label: 'Sales',
-					data: [120, 190, 300, 250, 220, 400],
-					borderColor: 'rgba(75, 192, 192, 1)',
-					backgroundColor: 'rgba(75, 192, 192, 0.2)',
-					borderWidth: 2,
-					tension: 0.4, // for smooth curves
-					fill: true
-				}]
-			},
-			options: {
-				responsive: true,
-				scales: {
-					y: {
-						beginAtZero: true
-					}
-				}
-			}
-		});
-	</script>
 	
 	
 	<!-- Auto populate in edit modal -->
