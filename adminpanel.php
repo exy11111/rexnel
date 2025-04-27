@@ -481,7 +481,70 @@
                     </div>
 
 					<div class="row">
+						<div class="col-md-2">
 
+						</div>
+						<div class="col-md-8 col-12">
+							<div class="card h-100">
+								<div class="card-header">
+									<div class="card-title">Sales Overview</div>
+								</div>
+								<div class="card-body">
+									<div class="chart-container mb-1">
+										<canvas id="sales_chart"></canvas>
+									</div>
+									<div class="row mb-1">
+										<div class="col">
+											<label for="startDate">Start Date</label>
+											<input type="date" id="startDate" class="form-control">
+										</div>
+										<div class="col">
+											<label for="endDate">End Date</label>
+											<input type="date" id="endDate" class="form-control">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<script>
+							fetch('process_getstockoverview.php')
+								.then(response => {
+									if (!response.ok) {
+										throw new Error('Network response was not ok');
+									}
+									return response.json();
+								})
+								.then(chartData => {
+									const ctx = document.getElementById('stock_chart').getContext('2d');
+									new Chart(ctx, {
+										type: 'bar',
+										data: chartData,
+										options: {
+											responsive: true,
+											scales: {
+												y: {
+													beginAtZero: true,
+													ticks: {
+														userCallback: function(value) {
+															// Format Y-axis with comma separators
+															if (typeof value === 'number') {
+																return value.toLocaleString(); // Adds comma separators
+															}
+															return value;
+														}
+													}
+												}
+											}
+										}
+									});
+								})
+								.catch(error => {
+									console.error('Error fetching stock data:', error);
+								});
+						</script>
+						<div class="col-md-2">
+							
+						</div>
 					</div>
 					
 				</div>
