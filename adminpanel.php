@@ -496,7 +496,9 @@
 					</div>
 
 					<script>
-						fetch('process_getstockoverview.php')
+						const branchId = 1; // You can dynamically set this value as needed
+
+						fetch(`process_getstockoverview.php?branch_id=${branchId}`)
 							.then(response => {
 								if (!response.ok) {
 									throw new Error('Network response was not ok');
@@ -511,14 +513,20 @@
 									options: {
 										responsive: true,
 										scales: {
-											y: {
-												beginAtZero: true,
+											yAxes: [{
 												ticks: {
+													beginAtZero: true,
 													callback: function(value) {
 														return value + ' units'; // Label for Y-axis
 													}
 												}
-											}
+											}],
+											xAxes: [{
+												ticks: {
+													autoSkip: true,
+													maxTicksLimit: 10
+												}
+											}]
 										}
 									}
 								});

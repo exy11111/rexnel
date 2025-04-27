@@ -1,14 +1,19 @@
 <?php
 require('db.php');
 
-// Query to get stock data for branch_id = 1
+// Get branch_id from query string
+$branchId = isset($_GET['branch_id']) ? (int)$_GET['branch_id'] : 1; // Default to 1 if not provided
+
+// Query to get stock data for the selected branch_id
 $query = "
     SELECT i.item_name, i.stock
     FROM items i
-    WHERE i.branch_id = 1
+    WHERE i.branch_id = :branch_id
 ";
 
-$stmt = $conn->query($query);
+$stmt = $conn->prepare($query);
+$stmt->bindParam(':branch_id', $branchId, PDO::PARAM_INT);
+$stmt->execute();
 $stockData = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Prepare the data for the chart
