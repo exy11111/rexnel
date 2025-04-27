@@ -482,7 +482,7 @@
 					
 					<div class="row mb-3">
 						<?php 
-							$sql = "SELECT branch_id, branch_name FROM branches";
+							$sql = "SELECT branch_id, branch_name FROM branch";
 							$stmt = $conn->prepare($sql);
 							$stmt->execute();
 							$branch_data = $stmt->fetchAll();
