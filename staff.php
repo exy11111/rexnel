@@ -447,10 +447,10 @@
 												    <div class="modal-body">
 													    <p class="small">Create a new account using this form, make sure you fill them all</p>
                                                         <div class="row">
-															<div class="col-sm-12">
+															<div class="col-sm-12 <?php if($_SESSION['role_id'] != 1): echo 'd-none'; endif; ?>">
                                                                 <div class="form-group form-group-default">
                                                                     <label>Branch</label>
-                                                                    <select name="branch_id" class="form-select">
+                                                                    <select name="branch_id" class="form-select" value="<?php if($_SESSION['role_id'] != 1): echo $_SESSION['branch_id']; endif; ?>">
 																		<option value="">Select Branch</option>
 																		<?php foreach($branch_data as $row):?>
 																			<option value="<?php echo $row['branch_id']?>"><?php echo $row['branch_name']?></option>
