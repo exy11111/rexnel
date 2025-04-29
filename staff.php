@@ -461,7 +461,7 @@
 															<div class="col-sm-12">
                                                                 <div class="form-group form-group-default">
                                                                     <label>Role</label>
-                                                                    <select name="branch_id" class="form-select <?php if($_SESSION['role_id'] != 1): echo 'd-none'; endif; ?>" value="<?php if($_SESSION['role_id'] != 1): echo '3'; endif; ?>">
+                                                                    <select name="role_id" class="form-select <?php if($_SESSION['role_id'] != 1): echo 'd-none'; endif; ?>" value="<?php if($_SESSION['role_id'] != 1): echo '3'; endif; ?>">
 																		<option value="">Select Role</option>
 																		<?php foreach($roles_data as $row):?>
 																			<option value="<?php echo $row['role_id']?>"><?php echo $row['role_name']?></option>
