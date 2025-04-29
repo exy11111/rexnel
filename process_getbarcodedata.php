@@ -1,6 +1,7 @@
 <?php
     require('db.php');
     require('session.php');
+    $branch_id = $_SESSION['branch_id'];
 
     if (isset($_POST['barcode'])) {
         $barcode = $_POST['barcode'];
