@@ -2,6 +2,8 @@
 	require ('session.php');
 	require ('db.php');
 
+	$branch_id = $_SESSION['branch_id'];
+
 	$sql = "SELECT * FROM brands WHERE branch_id = :branch_id";
     $stmt = $conn->prepare($sql);
 	$stmt->bindParam(':branch_id', $branch_id);
