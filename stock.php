@@ -622,7 +622,7 @@
 													<th>Size</th>
 													<th>Price</th>
 													<th>Stock</th>
-													<th style="width: 10%">Action</th>
+													<?php if($_SESSION['role_id'] == 1 || $_SESSION['role_id'] == 2):?> <th style="width: 10%">Action</th> <?php endif; ?>
 												</tr>
 											</thead>
 											<tbody>
@@ -637,7 +637,8 @@
 														echo "<td>".htmlspecialchars($row['size_name'])."</td>";
 														echo "<td>₱" . number_format($row['price'], 2) . "</td>";
 														echo "<td>" . number_format($row['stock']) . "</td>";
-														echo "<td>
+														if($_SESSION['role_id'] == 1 || $_SESSION['role_id'] == 2){
+															echo "<td>
                                                                 <div class='form-button-action'>
                                                                     <button type='button' class='btn btn-link btn-primary btn-lg' data-bs-toggle='modal' data-bs-target='#editItemModal' title='Edit Task'>
                                                                         <i class='fa fa-edit'></i>
@@ -647,6 +648,7 @@
                                                                     </button>
                                                                 </div>
                                                             </td>";
+														}
                                                         echo "</tr>";
 													}
 												?>
