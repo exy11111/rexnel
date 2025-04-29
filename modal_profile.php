@@ -14,7 +14,16 @@
                 </div>
                 <p><span class="fw-mediumbold">Username:</span> <?php echo $username?></p>
                 <p><span class="fw-mediumbold">Full Name:</span> <?php echo $fullname?></p>
-                <p><span class="fw-mediumbold">Email Address:</span> <?php echo $email?> <span class="float-end me-3"><i class="bi bi-patch-check-fill text-primary"></i>Verified</span></p>
+                <p>
+                    <span class="fw-mediumbold">Email Address:</span> <?php echo $email?> 
+                    <span class="float-end me-3">
+                        <?php if ($is_verified): ?>
+                            <i class="bi bi-patch-check-fill text-primary"></i> Verified
+                        <?php else: ?>
+                            <i class="bi bi-x-circle-fill text-danger"></i> Not Verified
+                        <?php endif; ?>
+                    </span>
+                </p>
                 <p><span class="fw-mediumbold">Account Creation Date:</span> <?php echo date("M j, Y - g:i A", strtotime($created_at)); ?></p>
             </div>
             <div class="modal-footer border-0">
