@@ -458,7 +458,7 @@
 																	</select>
                                                                 </div>
                                                             </div>
-															<div class="col-sm-12">
+															<div class="col-sm-12 <?php if($_SESSION['role_id'] != 1): echo 'd-none'; endif; ?>">
                                                                 <div class="form-group form-group-default">
                                                                     <label class="<?php if($_SESSION['role_id'] != 1): echo 'd-none'; endif; ?>">Role</label>
                                                                     <select name="role_id" class="form-select <?php if($_SESSION['role_id'] != 1): echo 'd-none'; endif; ?>" value="<?php if($_SESSION['role_id'] != 1): echo '3'; endif; ?>">
