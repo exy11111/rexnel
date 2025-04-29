@@ -39,7 +39,6 @@
 <script>
 document.addEventListener("DOMContentLoaded", function() {
     $('#resend-verification').on('click', function(e) {
-        e.preventDefault();
         Swal.fire({
             title: 'Resend Verification?',
             text: 'A new verification email will be sent.',
