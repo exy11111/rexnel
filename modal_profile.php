@@ -20,7 +20,9 @@
                         <?php if ($is_verified): ?>
                             <i class="bi bi-patch-check-fill text-primary"></i> Verified
                         <?php else: ?>
-                            <i class="bi bi-x-circle-fill text-danger"></i> Not Verified
+                            <a href="#" id="resend-verification" class="text-danger text-decoration-none">
+                                <i class="bi bi-x-circle-fill"></i> Not Verified
+                            </a>
                         <?php endif; ?>
                     </span>
                 </p>
@@ -33,3 +35,32 @@
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    $('#resend-verification').on('click', function(e) {
+        e.preventDefault();
+        Swal.fire({
+            title: 'Resend Verification?',
+            text: 'A new verification email will be sent.',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, send it',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: 'resend_verification.php',
+                    method: 'POST',
+                    data: { user_id: <?= $user_id ?> }, // Ensure $user_id is defined
+                    success: function(response) {
+                        Swal.fire('Sent!', 'Verification email has been sent.', 'success');
+                    },
+                    error: function() {
+                        Swal.fire('Error!', 'Something went wrong. Try again.', 'error');
+                    }
+                });
+            }
+        });
+    });
+});
+</script>
