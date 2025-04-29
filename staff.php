@@ -2,7 +2,7 @@
 	require ('session.php');
 	require ('db.php');
 
-	if($_SESSION['user_id'] != 17){
+	if($_SESSION['role_id'] != 1 || $_SESSION['role_id'] != 2){
 		header('Location: index.php?access=denied');
 		exit();
 	}
@@ -20,6 +20,11 @@
 	$stmt = $conn->prepare($sql);
 	$stmt->execute();
 	$branch_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+	$sql = "SELECT * FROM roles";
+	$stmt = $conn->prepare($sql);
+	$stmt->execute();
+	$roles_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
 
@@ -449,6 +454,17 @@
 																		<option value="">Select Branch</option>
 																		<?php foreach($branch_data as $row):?>
 																			<option value="<?php echo $row['branch_id']?>"><?php echo $row['branch_name']?></option>
+																		<?php endforeach; ?>
+																	</select>
+                                                                </div>
+                                                            </div>
+															<div class="col-sm-12">
+                                                                <div class="form-group form-group-default">
+                                                                    <label>Role</label>
+                                                                    <select name="branch_id" class="form-select <?php if($_SESSION['role_id'] != 1): echo 'd-none'; endif; ?>" value="<?php if($_SESSION['role_id'] != 1): echo '3'; endif; ?>">
+																		<option value="">Select Role</option>
+																		<?php foreach($roles_data as $row):?>
+																			<option value="<?php echo $row['role_id']?>"><?php echo $row['role_name']?></option>
 																		<?php endforeach; ?>
 																	</select>
                                                                 </div>

@@ -2,6 +2,8 @@
 require('session.php');
 require('db.php');
 
+$branch_id = $_SESSION['branch_id'];
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $item_id = $_POST['item_id'];
     $quantity = $_POST['quantity'];
@@ -39,13 +41,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt = $conn->prepare($sql);
             $stmt->execute();
             $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            $insertNotif = $conn->prepare("INSERT INTO notifications (user_id, message, icon, target_url) VALUES (:user_id, :message, :icon, :target_url)");
+            $insertNotif = $conn->prepare("INSERT INTO notifications (user_id, message, icon, target_url) VALUES (:user_id, :message, :icon, :target_url) WHERE branch_id = :branch_id");
             foreach ($users as $user) {
                 $insertNotif->execute([
                     ':user_id' => $user['user_id'],
                     ':message' => $message,
                     ':icon' => $icon,
-                    ':target_url' => $target_url
+                    ':target_url' => $target_url,
+                    ':branch_id' => $branch_id
                 ]);
             }
 
