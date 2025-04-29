@@ -12,7 +12,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     try {
-        $sql = "SELECT item_id, stock, item_name FROM stock WHERE item_id = :item_id";
+        $sql = "SELECT item_id, stock, item_name FROM items WHERE item_id = :item_id";
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':item_id', $item_id);
         $stmt->execute();
@@ -53,7 +53,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit();
         }
         else{
-            
+            header("Location: stock.php?stockstatus=error");
+            exit();
         }
     }
     catch (PDOException $e) {
