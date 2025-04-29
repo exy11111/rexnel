@@ -397,10 +397,12 @@
 								<div class="card-header">
 									<div class="d-flex align-items-center">
 										<h4 class="card-title">Categories</h4>
+										<?php if($_SESSION['role_id'] == 1 || $_SESSION['role_id'] == 2): ?>
 										<button class="btn btn-primary btn-round ms-auto" data-bs-toggle="modal" data-bs-target="#addRowModal">
 											<i class="fa fa-plus"></i>
 											Add Category
 										</button>
+										<?php endif; ?>
 									</div>
 								</div>
 								<div class="card-body">
@@ -445,7 +447,9 @@
 												<tr>
 													<th style="width: 10%">ID</th>
 													<th>Category Name</th>
+													<?php if($_SESSION['role_id'] == 1 || $_SESSION['role_id'] == 2):?>
 													<th style="width: 10%">Action</th>
+													<?php endif;?>
 												</tr>
 											</thead>
 											<tbody>
@@ -454,7 +458,8 @@
 														echo "<tr data-id=".htmlspecialchars($row['category_id']).">";
 														echo "<td>".htmlspecialchars($row['category_id'])."</td>";
 														echo "<td>".htmlspecialchars($row['category_name'])."</td>";
-														echo "<td>
+														if($_SESSION['role_id'] == 1 || $_SESSION['role_id'] == 2){
+															echo "<td>
                                                                 <div class='form-button-action'>
                                                                     <button type='button' class='btn btn-link btn-primary btn-lg' data-bs-toggle='modal' data-bs-target='#editCategoryModal' title='Edit Task'>
                                                                         <i class='fa fa-edit'></i>
@@ -464,6 +469,8 @@
                                                                     </button>
                                                                 </div>
                                                             </td>";
+														}
+														
                                                         echo "</tr>";
 													}
 												?>
