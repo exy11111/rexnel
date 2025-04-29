@@ -956,14 +956,14 @@
                 Swal.fire({
                     icon: 'success',
                     title: 'Item Added!',
-                    text: 'The item has been successfully created.',
+                    text: 'The item has been successfully updated.',
                 }).then((result) => {
                 });
             <?php elseif ($_GET['stockstatus'] == 'error'): ?>
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
-                    text: 'Something went wrong while creating the item.',
+                    text: 'Something went wrong while updating the item.',
                 });
             <?php elseif ($_GET['stockstatus'] == 'less'): ?>
                 Swal.fire({
