@@ -453,7 +453,7 @@
 													<th style="width: 10%; display: none;">ID</th>
 													<th style="width: 20%">Size Name</th>
 													<th>Size Description</th>
-													<?phpif($_SESSION['role_id'] == 1 || $_SESSION['role_id'] == 2): ?><th style="width: 10%">Action</th><?php endif; ?>
+													<?php if($_SESSION['role_id'] == 1 || $_SESSION['role_id'] == 2): ?><th style="width: 10%">Action</th><?php endif; ?>
 												</tr>
 											</thead>
 											<tbody>
