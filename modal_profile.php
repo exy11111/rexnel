@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 $.ajax({
                     url: 'resend_verification.php',
                     method: 'POST',
-                    data: { user_id: <?= $user_id ?> },
+                    data: { user_id: <?= $_SESSION['user_id'] ?> },
                     success: function(response) {
                         Swal.fire('Sent!', 'Verification email has been sent.', 'success');
                     },
