@@ -20,7 +20,7 @@
                         <?php if ($is_verified): ?>
                             <i class="bi bi-patch-check-fill text-primary"></i> Verified
                         <?php else: ?>
-                            <a href="#" id="resend-verification" class="text-danger text-decoration-none">
+                            <a href="#" id="resend-verification" class="text-danger">
                                 <i class="bi bi-x-circle-fill"></i> Not Verified
                             </a>
                         <?php endif; ?>
