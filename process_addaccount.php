@@ -9,14 +9,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = $_POST['password'];
     $branch_id = $_POST['branch_id'];
     $email = $_POST['email'];
-
+    if($_SESSION['role_id'] == 2){
+        $role_id = 3;
+    }
+    else{
+        $role_id = $_POST['role_id'];
+    }
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
     try {
-        $sql = "INSERT INTO users (username, password, branch_id) VALUES (:username, :password, :branch_id)";
+        $sql = "INSERT INTO users (username, password, branch_id, role_id) VALUES (:username, :password, :branch_id, :role_id)";
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':username', $username);
         $stmt->bindParam(':password', $hashedPassword);
         $stmt->bindParam(':branch_id', $branch_id);
+        $stmt->bindParam(':role_id', $role_id);
         $stmt->execute();
 
         $userid = $conn->lastInsertId();
