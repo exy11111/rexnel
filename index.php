@@ -223,12 +223,13 @@
 							<!-- notif area -->
 							<?php 
 								if(isset($_SESSION['user_id'])){
-									$sql = "SELECT username, email, firstname, lastname, created_at, is_verified FROM users JOIN userdetails ON users.user_id = userdetails.user_id WHERE users.user_id = :user_id";
+									$sql = "SELECT user_id, username, email, firstname, lastname, created_at, is_verified FROM users JOIN userdetails ON users.user_id = userdetails.user_id WHERE users.user_id = :user_id";
 									$stmt = $conn->prepare($sql);
 									$stmt->bindParam(":user_id", $_SESSION['user_id']);
 									$stmt->execute();
 									$user_data = $stmt->fetch(PDO::FETCH_ASSOC);
 									if($user_data) {
+										$user_id = $user_data['user_id'];
 										$username = $user_data['username'];
 										$email = $user_data['email'];
 										$firstname = $user_data['firstname'];
