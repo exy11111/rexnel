@@ -460,7 +460,7 @@
                                                             </div>
 															<div class="col-sm-12">
                                                                 <div class="form-group form-group-default">
-                                                                    <label>Role</label>
+                                                                    <label class="<?php if($_SESSION['role_id'] != 1): echo 'd-none'; endif; ?>">Role</label>
                                                                     <select name="role_id" class="form-select <?php if($_SESSION['role_id'] != 1): echo 'd-none'; endif; ?>" value="<?php if($_SESSION['role_id'] != 1): echo '3'; endif; ?>">
 																		<option value="">Select Role</option>
 																		<?php foreach($roles_data as $row):?>
