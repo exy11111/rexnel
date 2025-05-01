@@ -14,8 +14,11 @@ if (isset($_GET['ftoken'])) {
     if ($stmt->rowCount() === 1) {
         $showModal = true;
     } else {
-        echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>";
-        echo "<script>
+        // Instead of echoing script directly, use header() for redirect
+        header("Content-Type: text/html; charset=UTF-8");
+        echo "
+        <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
+        <script>
             Swal.fire({
                 icon: 'error',
                 title: 'Invalid or Expired Link',
@@ -24,8 +27,9 @@ if (isset($_GET['ftoken'])) {
             }).then(() => {
                 window.location.href = 'login.php';
             });
-        </script>";
-        exit;
+        </script>
+        ";
+        exit; // Ensure no further code runs after this.
     }
 } else {
     header("Location: login.php");
