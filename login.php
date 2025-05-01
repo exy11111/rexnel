@@ -143,5 +143,33 @@
         </div>
     </div>
 
+    <script>
+<?php if ($fp_status === 'success'): ?>
+Swal.fire({
+    icon: 'success',
+    title: 'Email Sent',
+    text: 'A password reset link has been sent to your email.'
+});
+<?php elseif ($fp_status === 'user_not_found'): ?>
+Swal.fire({
+    icon: 'error',
+    title: 'Not Found',
+    text: 'No account found with that email address.'
+});
+<?php elseif ($fp_status === 'email_error'): ?>
+Swal.fire({
+    icon: 'error',
+    title: 'Send Failed',
+    text: 'Something went wrong while sending the email.'
+});
+<?php elseif ($fp_status === 'invalid_request'): ?>
+Swal.fire({
+    icon: 'error',
+    title: 'Invalid Request',
+    text: 'Please try again properly.'
+});
+<?php endif; ?>
+</script>
+
 </body>
 </html>
