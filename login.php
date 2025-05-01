@@ -89,7 +89,7 @@
           <button type="submit" class="btn btn-primary w-100 mt-3">Login</button>
         </form>
         <div class="text-center mt-3">
-          <a href="#">Forgot password?</a>
+          <a href="#" data-bs-toggle="modal" data-bs-target="#forgot">Forgot password?</a>
         </div>
       </div>
     </div>
@@ -109,5 +109,38 @@
       });
     </script>
   <?php endif; ?>
+
+  <!-- Modal -->
+  <div class="modal fade" id="forgot" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Forgot Password</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                
+                <form action="process_sendforgotpassword.php" method="GET">
+                    <!-- Modal Body -->
+                    <div class="modal-body">
+                        <p class="small">Please fill out the email form to recover your account.</p>
+                        <div class="mb-3">
+                            <div class="input-group">
+                                <span class="input-group-text pe-3"><i class="bi bi-envelope-fill"></i></span>
+                                <input type="email" name="email" class="form-control" placeholder="Email Address" required>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Modal Footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success">Continue</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
