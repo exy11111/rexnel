@@ -40,7 +40,7 @@
 document.addEventListener("DOMContentLoaded", function() {
     $('#resend-verification').on('click', function(e) {
         Swal.fire({
-            title: 'Resend Verification?',
+            title: 'Send Verification?',
             text: 'A new verification email will be sent.',
             icon: 'question',
             showCancelButton: true,
@@ -48,11 +48,30 @@ document.addEventListener("DOMContentLoaded", function() {
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: 'resend_verification.php',
+                    url: 'process_resendverification.php',
                     method: 'POST',
                     data: { user_id: <?= $_SESSION['user_id'] ?> },
                     success: function(response) {
-                        Swal.fire('Sent!', 'Verification email has been sent.', 'success');
+                        switch (response.trim()) {
+                            case "success":
+                                Swal.fire('Sent!', 'Verification email has been sent.', 'success');
+                                break;
+                            case "already_verified":
+                                Swal.fire('Notice', 'This account is already verified.', 'info');
+                                break;
+                            case "email_error":
+                                Swal.fire('Error', 'Email could not be sent. Try again later.', 'error');
+                                break;
+                            case "user_not_found":
+                                Swal.fire('Error', 'User not found.', 'error');
+                                break;
+                            case "invalid_request":
+                                Swal.fire('Error', 'Invalid request.', 'error');
+                                break;
+                            default:
+                                Swal.fire('Error', 'Unexpected server response.', 'error');
+                                break;
+                        }
                     },
                     error: function() {
                         Swal.fire('Error!', 'Something went wrong. Try again.', 'error');
