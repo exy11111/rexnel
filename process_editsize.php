@@ -6,12 +6,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $size_name = $_POST['size_name'];
     $size_description = $_POST['size_description'];
     $size_id = $_POST['size_id'];
+    $branch_id = $_SESSION['branch_id'];
 
     try{
 
-        $sql = "SELECT * FROM sizes WHERE size_name = :size_name";
+        $sql = "SELECT * FROM sizes WHERE size_name = :size_name AND branch_id = :branch_id";
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':size_name', $size_name);
+        $stmt->bindParam(':branch_id', $branch_id);
         $stmt->execute();
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 

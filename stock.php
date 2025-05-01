@@ -32,7 +32,7 @@
     $stmt3->execute();
     $data3 = $stmt3->fetchAll(PDO::FETCH_ASSOC);
 
-	$sql4 = "SELECT * FROM sizes WHERE branch_id = :branch_id";
+	$sql4 = "SELECT * FROM sizes";
 	$stmt4 = $conn->prepare($sql4);
 	$stmt4->bindParam(':branch_id', $_SESSION['branch_id']);
     $stmt4->execute();

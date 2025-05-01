@@ -13,7 +13,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stock = $_POST['stock'];
 
     try {
-        $sql = "SELECT * FROM items WHERE barcode = :barcode OR (item_name = :item_name AND size_id = :size_id AND supplier_id = :supplier_id AND brand_id = :brand_id AND category_id = :category_id)";
+        $sql = "SELECT * FROM items WHERE (barcode = :barcode AND branch_id = :branch_id)
+        OR 
+        (item_name = :item_name AND size_id = :size_id AND supplier_id = :supplier_id AND brand_id = :brand_id AND category_id = :category_id)";
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':barcode', $barcode);
         $stmt->bindParam(':item_name', $item_name);
@@ -21,6 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bindParam(':supplier_id', $supplier_id);
         $stmt->bindParam(':brand_id', $brand_id);
         $stmt->bindParam(':category_id', $category_id);
+        $stmt->bindParam(':branch_id', $_SESSION['branch_id']);
         $stmt->execute();
 
         if ($stmt->rowCount() > 0) {

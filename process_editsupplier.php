@@ -9,11 +9,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $phone = $_POST['phone'];
     $address = $_POST['address'];
     $supplier_id = $_POST['supplier_id'];
+    $branch_id = $_SESSION['branch_id'];
 
     try{
-        $sql = "SELECT * FROM suppliers WHERE supplier_name = :supplier_name";
+        $sql = "SELECT * FROM suppliers WHERE supplier_name = :supplier_name AND branch_id = :branch_id";
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':supplier_name', $supplier_name);
+        $stmt->bindParam(':branch_id', $branch_id);
         $stmt->execute();
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 

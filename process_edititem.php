@@ -12,9 +12,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $size_id = $_POST['size_id'];
     $stock = $_POST['stock'];
     $price = $_POST['price'];
+    $branch_id = $_SESSION['branch_id'];
 
     try {
-        $sql = "SELECT item_id FROM items WHERE (barcode = :barcode OR (item_name = :item_name AND category_id = :category_id AND brand_id = :brand_id AND supplier_id = :supplier_id AND size_id = :size_id)) AND item_id != :item_id";
+        $sql = "SELECT item_id FROM items WHERE 
+        branch_id = :branch_id AND 
+        (
+            barcode = :barcode OR 
+            (
+                item_name = :item_name AND 
+                category_id = :category_id AND 
+                brand_id = :brand_id AND 
+                supplier_id = :supplier_id AND 
+                size_id = :size_id
+            )
+        ) AND item_id != :item_id";
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':barcode', $barcode);
         $stmt->bindParam(':item_name', $item_name);
@@ -23,6 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bindParam(':supplier_id', $supplier_id);
         $stmt->bindParam(':size_id', $size_id);
         $stmt->bindParam(':item_id', $item_id);
+        $stmt->bindParam(':branch_id', $branch_id);
         $stmt->execute();
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 

@@ -8,9 +8,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $brand_id = $_POST['brand_id'];
 
     try{
-        $sql = "SELECT * FROM brands WHERE brand_name = :brand_name";
+        $sql = "SELECT * FROM brands WHERE brand_name = :brand_name AND branch_id = :branch_id";
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':brand_name', $brand_name);
+        $stmt->bindParam(':branch_id', $branch_id);
         $stmt->execute();
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
