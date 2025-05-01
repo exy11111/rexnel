@@ -121,7 +121,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 
-                <form action="process_sfp.php" method="GET">
+                <form id="forgotForm">
                     <!-- Modal Body -->
                     <div class="modal-body">
                         <p class="small">Please fill out the email form to recover your account.</p>
