@@ -41,7 +41,6 @@
             $mail->Password = 'S8uN4#qPm2bV!rYx';
             $mail->SMTPSecure = 'ssl';
             $mail->Port = 465;
-            $mail->SMTPDebug = 2;
             
             $mail->setFrom('support@houseoflocal.store', 'House of Local');
             $mail->addAddress($email);
