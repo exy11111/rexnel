@@ -121,14 +121,14 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 
-                <form id="forgotForm">
+                <form id="forgotForm" method="POST">
                     <!-- Modal Body -->
                     <div class="modal-body">
                         <p class="small">Please fill out the email form to recover your account.</p>
                         <div class="mb-3">
                             <div class="input-group">
                                 <span class="input-group-text pe-3"><i class="bi bi-envelope-fill"></i></span>
-                                <input type="email" name="email" class="form-control" placeholder="Email Address" required>
+                                <input type="email" name="email" id="email" class="form-control" placeholder="Email Address" required>
                             </div>
                         </div>
                     </div>
