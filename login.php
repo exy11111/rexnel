@@ -172,5 +172,33 @@ Swal.fire({
 <?php endif; ?>
 </script>
 
+<?php
+if (isset($_GET['reset'])) {
+    $resetStatus = $_GET['reset'];
+
+    if ($resetStatus == 'success') {
+        echo "<script>
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Password successfully reset!',
+                    text: 'You can now log in with your new password.',
+                    confirmButtonText: 'Login'
+                }).then(() => {
+                    window.location.href = 'login.php';
+                });
+              </script>";
+    } elseif ($resetStatus == 'error') {
+        echo "<script>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error occurred!',
+                    text: 'Something went wrong. Please try again.',
+                    confirmButtonText: 'Try Again'
+                });
+              </script>";
+    }
+}
+?>
+
 </body>
 </html>
