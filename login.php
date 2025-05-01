@@ -121,7 +121,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 
-                <form action="process_sendforgotpassword.php" method="GET">
+                <form action="process_sfp.php" method="GET">
                     <!-- Modal Body -->
                     <div class="modal-body">
                         <p class="small">Please fill out the email form to recover your account.</p>
@@ -142,5 +142,57 @@
             </div>
         </div>
     </div>
+    <script>
+document.getElementById('forgotForm').addEventListener('submit', function(e) {
+    e.preventDefault(); // Prevent form from submitting normally
+
+    const form = e.target;
+    const formData = new FormData(form);
+
+    fetch('process_sfp.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.text())
+    .then(result => {
+        let icon = 'error';
+        let title = 'Error';
+        let text = '';
+
+        if (result === 'success') {
+            icon = 'success';
+            title = 'Email Sent';
+            text = 'A password reset link has been sent to your email.';
+        } else if (result === 'user_not_found') {
+            text = 'No account found with that email address.';
+        } else if (result === 'email_error') {
+            text = 'Something went wrong while sending the email.';
+        } else {
+            text = 'Invalid request.';
+        }
+
+        Swal.fire({
+            icon: icon,
+            title: title,
+            text: text
+        });
+
+        if (result === 'success') {
+            form.reset(); // Clear form if successful
+            const modal = bootstrap.Modal.getInstance(document.getElementById('forgot'));
+            modal.hide(); // Close modal
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Something went wrong. Please try again.'
+        });
+    });
+});
+</script>
+
 </body>
 </html>
