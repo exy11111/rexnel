@@ -67,7 +67,8 @@ if (isset($_GET['ftoken'])) {
 <script>
     Swal.fire({
         icon: 'error',
-        title: '<?= $error_message ?>',
+        title: 'Error!',
+        text: '<?= $error_message ?>',
         confirmButtonText: 'Go to Login'
     }).then(() => {
         window.location.href = 'login.php';
