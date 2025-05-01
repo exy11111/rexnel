@@ -5,6 +5,7 @@
 
 	$sql = "SELECT * FROM sizes WHERE branch_id = :branch_id";
     $stmt = $conn->prepare($sql);
+	$stmt->bindParam(':branch_id', $branch_id);
     $stmt->execute();
     $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
