@@ -88,9 +88,9 @@
           <!-- Submit button -->
           <button type="submit" class="btn btn-primary w-100 mt-3">Login</button>
         </form>
-        <!-- <div class="text-center mt-3">
+        <div class="text-center mt-3">
           <a href="#">Forgot password?</a>
-        </div>-->
+        </div>
       </div>
     </div>
   </div>
