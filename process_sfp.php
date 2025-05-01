@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email'])) {
     $email = $_POST['email'];
 
     // Check if email exists
-    $stmt = $conn->prepare("SELECT user_id, ftoken FROM users WHERE email = :email");
+    $stmt = $conn->prepare("SELECT user_id, ftoken FROM users JOIN userdetails ON users.user_id = userdetails.user_id WHERE userdetails.email = :email");
     $stmt->bindParam(':email', $email);
     $stmt->execute();
 
