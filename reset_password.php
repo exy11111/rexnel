@@ -14,22 +14,8 @@ if (isset($_GET['ftoken'])) {
     if ($stmt->rowCount() === 1) {
         $showModal = true;
     } else {
-        // Instead of echoing script directly, use header() for redirect
-        header("Content-Type: text/html; charset=UTF-8");
-        echo "
-        <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
-        <script>
-            Swal.fire({
-                icon: 'error',
-                title: 'Invalid or Expired Link',
-                text: 'Please request a new password reset link.',
-                confirmButtonText: 'Go to Login'
-            }).then(() => {
-                window.location.href = 'login.php';
-            });
-        </script>
-        ";
-        exit; // Ensure no further code runs after this.
+        // Store the error message for later display using PHP
+        $error_message = "Invalid or Expired Link. Please request a new password reset link.";
     }
 } else {
     header("Location: login.php");
@@ -73,6 +59,20 @@ if (isset($_GET['ftoken'])) {
     </div>
   </div>
 </div>
+<?php endif; ?>
+
+<?php if (isset($error_message)): ?>
+<!-- Show SweetAlert for invalid/expired link -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    Swal.fire({
+        icon: 'error',
+        title: '<?= $error_message ?>',
+        confirmButtonText: 'Go to Login'
+    }).then(() => {
+        window.location.href = 'login.php';
+    });
+</script>
 <?php endif; ?>
 
 </body>
