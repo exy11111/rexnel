@@ -7,6 +7,7 @@
 
     use PHPMailer\PHPMailer\PHPMailer;
     use PHPMailer\PHPMailer\Exception;
+    ob_start();
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'])) {
         $user_id = $_POST['user_id'];
@@ -87,6 +88,7 @@
     else {
         echo "invalid_request";
     }
+    ob_end_flush();
 
 
 
