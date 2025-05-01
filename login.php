@@ -1,6 +1,7 @@
 <?php 
   session_start();
   date_default_timezone_set('Asia/Manila');
+  $fp_status = $_GET['fp'] ?? null;
 
   if ($_SERVER["REQUEST_METHOD"] == "POST") {
     include('db.php');
