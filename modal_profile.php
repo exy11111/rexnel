@@ -28,9 +28,6 @@
                 </p>
                 <p><span class="fw-mediumbold">Account Creation Date:</span> <?php echo date("M j, Y - g:i A", strtotime($created_at)); ?></p>
             </div>
-            <div class="modal-footer border-0">
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-            </div>
         </div>
     </div>
 </div>
