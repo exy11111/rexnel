@@ -1,6 +1,4 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
 require('session.php');
 require('db.php'); 
 
@@ -22,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($row) {
-            if($row['supplier_id'] != $supplier_id){
+            if ($row['supplier_id'] != $supplier_id) {
                 header("Location: suppliers.php?status=exist");
                 exit();
             }
