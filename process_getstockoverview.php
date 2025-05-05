@@ -2,7 +2,7 @@
 require('db.php');
 
 // Get branch_id from query string
-$branchId = isset($_GET['branch_id']) ? (int)$_GET['branch_id'] : 1; // Default to 1 if not provided
+$branchId = isset($_GET['branch_id']) ? $_GET['branch_id'] : 1; // Default to 1 if not provided
 
 // Query to get stock data for the selected branch_id
 $query = "

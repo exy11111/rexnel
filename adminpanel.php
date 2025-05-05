@@ -504,7 +504,7 @@
 								</div>
 							</div>
 							<script>
-								const branchId = <?php echo $row['branch_id']; ?>;
+								const branchId<?php echo $row['branch_id'];?> = <?php echo $row['branch_id']; ?>;
 								fetch(`process_getstockoverview.php?branch_id=${branchId}`)
 									.then(response => {
 										if (!response.ok) {
