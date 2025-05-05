@@ -41,10 +41,10 @@
 <body>
 	<div class="wrapper">
 		<!-- Sidebar -->
-		<div class="sidebar" data-background-color="dark">
+		<div class="sidebar" style="background-color: #000 !important;">
 			<div class="sidebar-logo">
 				<!-- Logo Header -->
-				<div class="logo-header" data-background-color="dark">
+				<div class="logo-header" style="background-color: #000 !important;">
 
 					<a href="index.php" class="logo text-white fw-bold">
 						<img src="assets/img/holicon.png" alt="navbar brand" class="navbar-brand" height="40">&nbsp;House of Local
@@ -67,8 +67,16 @@
 			<div class="sidebar-wrapper scrollbar scrollbar-inner">
 				<div class="sidebar-content">
 					<ul class="nav nav-secondary">
+						<?php if($_SESSION['role_id'] == 1):?>
 						<li class="nav-item">
-							<a href="index.php">
+							<a href="adminpanel.php" class="text-white">
+								<i class="fas fa-home"></i>
+								<p>Admin Panel</p>
+							</a>
+						</li>
+						<?php endif; ?>
+						<li class="nav-item">
+							<a href="index.php" class="text-white">
 								<i class="fas fa-home"></i>
 								<p>Dashboard</p>
 							</a>
@@ -80,44 +88,44 @@
 							<h4 class="text-section">Menu</h4>
 						</li>
 						<li class="nav-item">
-							<a data-bs-toggle="collapse" href="#inv">
+							<a data-bs-toggle="collapse" href="#base" class="text-white">
 								<i class="fas fa-layer-group"></i>
 								<p>Inventory Management</p>
 								<span class="caret"></span>
 							</a>
-							<div class="collapse" id="inv">
+							<div class="collapse" id="base">
 								<ul class="nav nav-collapse">
 									<li>
 										<a href="stock.php">
-											<span class="sub-item">Stock</span>
+											<span class="sub-item text-white">Stock</span>
 										</a>
 									</li>
 									<li>
 										<a href="categories.php">
-											<span class="sub-item">Categories</span>
+											<span class="sub-item text-white">Categories</span>
 										</a>
 									</li>
 									
 									<li>
 										<a href="sizes.php">
-											<span class="sub-item">Sizes</span>
+											<span class="sub-item text-white">Sizes</span>
 										</a>
 									</li>
 									<li>
 										<a href="suppliers.php">
-											<span class="sub-item">Suppliers</span>
+											<span class="sub-item text-white">Suppliers</span>
 										</a>
 									</li>
 									<li>
 										<a href="brands.php">
-											<span class="sub-item">Brands</span>
+											<span class="sub-item text-white">Brands</span>
 										</a>
 									</li>
 								</ul>
 							</div>
 						</li>
-                        <li class="nav-item">
-							<a data-bs-toggle="collapse" href="#acc">
+						<li class="nav-item">
+							<a data-bs-toggle="collapse" href="#acc"  class="text-white">
 								<i class="fas fa-layer-group"></i>
 								<p>Account Management</p>
 								<span class="caret"></span>
@@ -126,19 +134,19 @@
 								<ul class="nav nav-collapse">
 									<li>
 										<a href="staff.php">
-											<span class="sub-item">Staff</span>
+											<span class="sub-item text-white">Staff</span>
 										</a>
 									</li>
 									<li>
 										<a href="branches.php">
-											<span class="sub-item">Branches</span>
+											<span class="sub-item text-white">Branches</span>
 										</a>
 									</li>
 								</ul>
 							</div>
 						</li>
 						<li class="nav-item active">
-							<a data-bs-toggle="collapse" href="#sales">
+							<a data-bs-toggle="collapse" href="#sales"  class="text-white">
 								<i class="fas fa-layer-group"></i>
 								<p>Sales Management</p>
 								<span class="caret"></span>
@@ -147,7 +155,7 @@
 								<ul class="nav nav-collapse">
 									<li>
 										<a href="purchase.php">
-											<span class="sub-item">Purchase Log</span>
+											<span class="sub-item text-white">Purchase Log</span>
 										</a>
 									</li>
 								</ul>
