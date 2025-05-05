@@ -74,8 +74,8 @@
 			box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 			background-color: #f8f9fa;
 		}.nav-item.active a {
-	color: #fff !important;
-}
+			color: #fff !important;
+		}
 
 	</style>
 
@@ -117,7 +117,7 @@
 							</a>
 						</li>
 						<?php endif; ?>
-						<li class="nav-item active">
+						<li class="nav-item active text-white">
 							<a href="index.php" class="text-white">
 								<i class="fas fa-home"></i>
 								<p>Dashboard</p>
