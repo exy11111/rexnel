@@ -81,10 +81,10 @@
 <body>
 	<div class="wrapper">
 		<!-- Sidebar -->
-		<div class="sidebar" style="background-color: #000 !important; color: #fff !important;">
+		<div class="sidebar" style="background-color: #000 !important;">
 			<div class="sidebar-logo">
 				<!-- Logo Header -->
-				<div class="logo-header" style="background-color: #000 !important; color: #fff !important;">
+				<div class="logo-header" style="background-color: #000 !important;">
 
 					<a href="index.php" class="logo text-white fw-bold">
 						<img src="assets/img/holicon.png" alt="navbar brand" class="navbar-brand" height="40">&nbsp;House of Local
@@ -104,7 +104,7 @@
 				</div>
 				<!-- End Logo Header -->	
 			</div>	
-			<div class="sidebar-wrapper scrollbar scrollbar-inner">
+			<div class="sidebar-wrapper scrollbar scrollbar-inner text-white">
 				<div class="sidebar-content">
 					<ul class="nav nav-secondary">
 						<?php if($_SESSION['role_id'] == 1):?>
