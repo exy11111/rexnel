@@ -75,6 +75,11 @@
 			background-color: #f8f9fa;
 		}
 
+		.sidebar .nav-item.active > a {
+	background-color: #000 !important;
+	color: #fff !important;
+}
+
 	</style>
 
 </head>
@@ -116,7 +121,7 @@
 						</li>
 						<?php endif; ?>
 						<li class="nav-item active">
-							<a href="index.php"  class="text-white">
+							<a href="index.php" class="text-white">
 								<i class="fas fa-home"></i>
 								<p>Dashboard</p>
 							</a>
