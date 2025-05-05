@@ -22,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit();
         }
         else{
-            $sql = "INSERT INTO suppliers (supplier_name, contact_name, email, phone, address, :branch_id) VALUES (:supplier_name, :contact_name, :email, :phone, :address, :branch_id)";
+            $sql = "INSERT INTO suppliers (supplier_name, contact_name, email, phone, address, branch_id) VALUES (:supplier_name, :contact_name, :email, :phone, :address, :branch_id)";
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':supplier_name', $supplier_name);
             $stmt->bindParam(':contact_name', $contact_name);
