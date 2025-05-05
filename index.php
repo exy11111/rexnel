@@ -73,9 +73,13 @@
 			transform: scale(1.05);
 			box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 			background-color: #f8f9fa;
-		}.nav-item.active a {
-			color: #fff !important;
-		}
+		}.nav-item a:hover {
+	color: #fff !important;
+}
+
+.nav-item a:hover * {
+	color: #fff !important;
+}
 
 	</style>
 
@@ -111,14 +115,14 @@
 					<ul class="nav nav-secondary">
 						<?php if($_SESSION['role_id'] == 1):?>
 						<li class="nav-item">
-							<a href="adminpanel.php" class="text-white">
+							<a href="adminpanel.php">
 								<i class="fas fa-home"></i>
 								<p>Admin Panel</p>
 							</a>
 						</li>
 						<?php endif; ?>
 						<li class="nav-item text-white">
-							<a href="index.php" class="text-white">
+							<a href="index.php">
 								<i class="fas fa-home"></i>
 								<p>Dashboard</p>
 							</a>
