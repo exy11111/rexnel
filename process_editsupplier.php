@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 require('session.php');
 require('db.php'); 
 
@@ -24,7 +26,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 header("Location: suppliers.php?status=exist");
                 exit();
             }
-            
         }
         else{
             $sql = "UPDATE suppliers SET supplier_name = :supplier_name, 
