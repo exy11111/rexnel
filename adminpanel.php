@@ -505,7 +505,7 @@
 							</div>
 							<script>
 								const branchId<?php echo $row['branch_id'];?> = <?php echo $row['branch_id']; ?>;
-								fetch(`process_getstockoverview.php?branch_id=${branchId}`)
+								fetch(`process_getstockoverview.php?branch_id=${ branchId<?php echo $row['branch_id'];?>}`)
 									.then(response => {
 										if (!response.ok) {
 											throw new Error('Network response was not ok');
