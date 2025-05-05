@@ -74,8 +74,7 @@
 			box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 			background-color: #f8f9fa;
 		}
-
-		.sidebar .nav-item.active {
+	.nav-item.active {
 	background-color: #000 !important;
 	color: #fff !important;
 }
