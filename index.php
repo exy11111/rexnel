@@ -1,7 +1,6 @@
 <?php 
 	require ('session.php');
 	require ('db.php');
-	$dateNow = strtotime(date("Y-m-d"));
 
 	$sql = "SELECT sum(stock) as total_quantity FROM items WHERE branch_id = :branch_id";
 	$stmt = $conn->prepare($sql);
@@ -19,11 +18,16 @@
 		$quantity = number_format($result['total_quantity']);
 	}
 
-	$sql1 = "SELECT sum(price) as total_sales, COUNT(purchase_id) as orders FROM purchases WHERE DATE(date) = :date AND branch_id = :branch_id";
+	$dateNow = date("Y-m-d"); // today's date in Y-m-d format
+
+	$sql1 = "SELECT SUM(price) AS total_sales, COUNT(purchase_id) AS orders 
+			FROM purchases 
+			WHERE DATE(date) = :date AND branch_id = :branch_id";
 	$stmt1 = $conn->prepare($sql1);
 	$stmt1->bindParam(":branch_id", $_SESSION['branch_id']);
 	$stmt1->bindParam(":date", $dateNow);
 	$stmt1->execute();
+
 	$result1 = $stmt1->fetch(PDO::FETCH_ASSOC);
 
 	$sql = "SELECT branch_name FROM branch WHERE branch_id = :branch_id";
