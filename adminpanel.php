@@ -518,6 +518,7 @@
 											type: 'bar',
 											data: chartData<?php echo $row['branch_id'];?>,
 											options: {
+												spanGaps: true,
 												responsive: true,
 												scales: {
 													yAxes: [{
