@@ -61,6 +61,9 @@
   <div class="container d-flex justify-content-center align-items-center vh-100">
     <div class="card p-3" style="width: 100%; max-width: 400px;">
       <div class="card-body">
+      <div class="text-center mb-4">
+        <img src="assets/img/lg.png" alt="Login Image" class="img-fluid" style="max-width: 150px;">
+      </div>
         <h5 class="card-title text-center mb-4">Login</h5>
         <form action="" method="POST">
           <!-- Email input -->
