@@ -778,7 +778,7 @@
 			}).then((result) => {
 				if (result.isConfirmed) {
 
-					if (paymentMethod === "1") { // adjust "1" to your actual GCash pm_id
+					if (paymentMethod === "2") { // adjust "1" to your actual GCash pm_id
 						Swal.fire({
 							title: "Scan to Pay via GCash",
 							text: "Please scan this QR code before confirming payment.",
