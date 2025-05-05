@@ -117,8 +117,8 @@
 							</a>
 						</li>
 						<?php endif; ?>
-						<li class="nav-item text-white">
-							<a href="index.php" class="text-white text-decoration-underline">
+						<li class="nav-item active">
+							<a href="index.php" class="text-white">
 								<i class="fas fa-home"></i>
 								<p>Dashboard</p>
 							</a>
