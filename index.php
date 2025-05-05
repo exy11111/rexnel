@@ -73,13 +73,9 @@
 			transform: scale(1.05);
 			box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 			background-color: #f8f9fa;
-		}.nav-item a:hover {
-	color: #fff !important;
-}
-
-.nav-item a:hover * {
-	color: #fff !important;
-}
+		}.nav-item.active a {
+			color: #fff !important;
+		}
 
 	</style>
 
@@ -115,14 +111,14 @@
 					<ul class="nav nav-secondary">
 						<?php if($_SESSION['role_id'] == 1):?>
 						<li class="nav-item">
-							<a href="adminpanel.php">
+							<a href="adminpanel.php" class="text-white">
 								<i class="fas fa-home"></i>
 								<p>Admin Panel</p>
 							</a>
 						</li>
 						<?php endif; ?>
 						<li class="nav-item text-white">
-							<a href="index.php">
+							<a href="index.php" class="text-white">
 								<i class="fas fa-home"></i>
 								<p>Dashboard</p>
 							</a>
@@ -134,7 +130,7 @@
 							<h4 class="text-section">Menu</h4>
 						</li>
 						<li class="nav-item">
-							<a data-bs-toggle="collapse" href="#base">
+							<a data-bs-toggle="collapse" href="#base" class="text-white">
 								<i class="fas fa-layer-group"></i>
 								<p>Inventory Management</p>
 								<span class="caret"></span>
@@ -143,35 +139,35 @@
 								<ul class="nav nav-collapse">
 									<li>
 										<a href="stock.php">
-											<span class="sub-item">Stock</span>
+											<span class="sub-item text-white">Stock</span>
 										</a>
 									</li>
 									<li>
 										<a href="categories.php">
-											<span class="sub-item">Categories</span>
+											<span class="sub-item text-white">Categories</span>
 										</a>
 									</li>
 									
 									<li>
 										<a href="sizes.php">
-											<span class="sub-item">Sizes</span>
+											<span class="sub-item text-white">Sizes</span>
 										</a>
 									</li>
 									<li>
 										<a href="suppliers.php">
-											<span class="sub-item">Suppliers</span>
+											<span class="sub-item text-white">Suppliers</span>
 										</a>
 									</li>
 									<li>
 										<a href="brands.php">
-											<span class="sub-item">Brands</span>
+											<span class="sub-item text-white">Brands</span>
 										</a>
 									</li>
 								</ul>
 							</div>
 						</li>
 						<li class="nav-item">
-							<a data-bs-toggle="collapse" href="#acc">
+							<a data-bs-toggle="collapse" href="#acc"  class="text-white">
 								<i class="fas fa-layer-group"></i>
 								<p>Account Management</p>
 								<span class="caret"></span>
@@ -180,19 +176,19 @@
 								<ul class="nav nav-collapse">
 									<li>
 										<a href="staff.php">
-											<span class="sub-item">Staff</span>
+											<span class="sub-item text-white">Staff</span>
 										</a>
 									</li>
 									<li>
 										<a href="branches.php">
-											<span class="sub-item">Branches</span>
+											<span class="sub-item text-white">Branches</span>
 										</a>
 									</li>
 								</ul>
 							</div>
 						</li>
 						<li class="nav-item">
-							<a data-bs-toggle="collapse" href="#sales">
+							<a data-bs-toggle="collapse" href="#sales"  class="text-white">
 								<i class="fas fa-layer-group"></i>
 								<p>Sales Management</p>
 								<span class="caret"></span>
@@ -201,7 +197,7 @@
 								<ul class="nav nav-collapse">
 									<li>
 										<a href="purchase.php">
-											<span class="sub-item">Purchase Log</span>
+											<span class="sub-item text-white">Purchase Log</span>
 										</a>
 									</li>
 								</ul>
