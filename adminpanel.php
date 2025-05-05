@@ -514,7 +514,7 @@
 									})
 									.then(chartData => {
 										const ctx<?php echo $row['branch_id'];?> = document.getElementById('stock_chart_<?php echo $row['branch_id']; ?>').getContext('2d');
-										new Chart(ctx, {
+										new Chart(ctx<?php echo $row['branch_id'];?>, {
 											type: 'bar',
 											data: chartData,
 											options: {
