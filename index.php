@@ -2,10 +2,6 @@
 	require ('session.php');
 	require ('db.php');
 
-	if(isset($_SESSION['role_id']) && $_SESSION['role_id'] == 1){
-		header('Location: adminpanel.php');
-	}
-
 	$sql = "SELECT sum(stock) as total_quantity FROM items WHERE branch_id = :branch_id";
 	$stmt = $conn->prepare($sql);
 	$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
