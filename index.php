@@ -75,7 +75,7 @@
 			background-color: #f8f9fa;
 		}
 
-		.sidebar .nav-item.active > a {
+		.sidebar .nav-item.active {
 	background-color: #000 !important;
 	color: #fff !important;
 }
