@@ -104,11 +104,11 @@
 				</div>
 				<!-- End Logo Header -->	
 			</div>	
-			<div class="sidebar-wrapper scrollbar scrollbar-inner text-white">
+			<div class="sidebar-wrapper scrollbar scrollbar-inner">
 				<div class="sidebar-content">
 					<ul class="nav nav-secondary">
 						<?php if($_SESSION['role_id'] == 1):?>
-						<li class="nav-item">
+						<li class="nav-item text-white">
 							<a href="adminpanel.php">
 								<i class="fas fa-home"></i>
 								<p>Admin Panel</p>
