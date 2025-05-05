@@ -27,6 +27,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 header("Location: suppliers.php?status=exist");
                 exit();
             }
+            else{
+                header("Location: suppliers.php?status=error");
+                exit();
+            }
         } else {
             $sql = "UPDATE suppliers SET supplier_name = :supplier_name, 
                     contact_name = :contact_name, 
