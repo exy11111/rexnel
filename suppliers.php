@@ -598,7 +598,7 @@
                                                         </h5>
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                     </div>
-                                                    <form action="process_editsupplier.php" method="POST">
+                                                    <form action="test" method="POST">
                                                         <div class="modal-body">
                                                             <p class="small">Edit the supplier details below.</p>
                                                             <div class="row">
