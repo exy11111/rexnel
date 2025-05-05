@@ -8,7 +8,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $phone = $_POST['phone'];
     $address = $_POST['address'];
-    $branch_id = $_POST['branch_id'];
+    $branch_id = $_SESSION['branch_id'];
 
     try {
         $sql = "SELECT supplier_name FROM suppliers WHERE supplier_name = :supplier_name AND branch_id = :branch_id";

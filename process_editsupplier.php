@@ -19,9 +19,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->execute();
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($stmt->rowCount() > 0 && $row['supplier_id'] != $supplier_id) {
-            header("Location: suppliers.php?status=exist");
-            exit();
+        if ($row) {
+            if($row['supplier_id'] != $supplier_id){
+                header("Location: suppliers.php?status=exist");
+                exit();
+            }
+            
         }
         else{
             $sql = "UPDATE suppliers SET supplier_name = :supplier_name, 

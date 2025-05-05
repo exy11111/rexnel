@@ -638,7 +638,7 @@
 																	</div>
 																</div>
                                                         	</div>
-                                                            <input type="hidden" name="size_id" id="editSupplierId">
+                                                            <input type="hidden" name="supplier_id" id="editSupplierId">
                                                         </div>
                                                         <div class="modal-footer border-0">
                                                             <button type="submit" class="btn btn-primary">Save Changes</button>
