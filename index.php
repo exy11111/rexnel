@@ -899,7 +899,9 @@
 				percentageChange = '+' + percentageChange;
 			}
 		}
-
+		if (isNaN(percentageChange)) {
+			percentageChange = '0';
+		}
 		document.getElementById("percentageText").textContent = percentageChange + "%";
 
 		if (percentageChange > 0) {
