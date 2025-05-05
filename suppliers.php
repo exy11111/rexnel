@@ -198,7 +198,7 @@
 							<!-- notif area -->
 							<?php 
 								if(isset($_SESSION['user_id'])){
-									$sql = "SELECT username, email, firstname, lastname, created_at FROM users JOIN userdetails ON users.user_id = userdetails.user_id WHERE users.user_id = :user_id";
+									$sql = "SELECT username, email, firstname, lastname, created_at, is_verified FROM users JOIN userdetails ON users.user_id = userdetails.user_id WHERE users.user_id = :user_id";
 									$stmt = $conn->prepare($sql);
 									$stmt->bindParam(":user_id", $_SESSION['user_id']);
 									$stmt->execute();
@@ -210,6 +210,7 @@
 										$lastname = $user_data['lastname'];
 										$fullname = $firstname . " " . $lastname;
 										$created_at = $user_data['created_at'];
+										$is_verified = $user_data['is_verified'];
 									} else {
 										$username = "User not found.";
 										$email = "User not found.";
