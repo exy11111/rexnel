@@ -778,32 +778,76 @@
 			}).then((result) => {
 				if (result.isConfirmed) {
 
-					fetch("process_receipt.php", {
-						method: "POST",
-						headers: { "Content-Type": "application/json" },
-						body: JSON.stringify({
-							receipt: receiptData,
-							total_price: totalPrice,
-							payment_method: paymentMethod,
-							branch_id: <?php echo $_SESSION['branch_id'];?>
+					if (paymentMethod === "1") { // adjust "1" to your actual GCash pm_id
+						Swal.fire({
+							title: "Scan to Pay via GCash",
+							text: "Please scan this QR code before confirming payment.",
+							imageUrl: "gcash.jpg",
+							imageAlt: "GCash QR Code",
+							showCancelButton: true,
+							confirmButtonText: "Paid",
+							cancelButtonText: "Cancel"
+						}).then((qrResult) => {
+							if (qrResult.isConfirmed) {
+								fetch("process_receipt.php", {
+									method: "POST",
+									headers: { "Content-Type": "application/json" },
+									body: JSON.stringify({
+										receipt: receiptData,
+										total_price: totalPrice,
+										payment_method: paymentMethod,
+										branch_id: <?php echo $_SESSION['branch_id'];?>
+									})
+								})
+								.then(response => response.json())
+								.then(data => {
+									if (data.success) {
+										Swal.fire({
+											title: "Success!",
+											text: "Purchase submitted successfully!",
+											icon: "success",
+											confirmButtonText: "OK"
+										}).then(() => {
+											window.location.href = "purchase.php";
+										});
+									} else {
+										Swal.fire("Error!", data.error, "error");
+									}
+								})
+								.catch(error => console.error("Error:", error));
+							}
+						});
+					}
+					else{
+						fetch("process_receipt.php", {
+							method: "POST",
+							headers: { "Content-Type": "application/json" },
+							body: JSON.stringify({
+								receipt: receiptData,
+								total_price: totalPrice,
+								payment_method: paymentMethod,
+								branch_id: <?php echo $_SESSION['branch_id'];?>
+							})
 						})
-					})
-					.then(response => response.json())
-					.then(data => {
-						if (data.success) {
-							Swal.fire({
-								title: "Success!",
-								text: "Purchase submitted successfully!",
-								icon: "success",
-								confirmButtonText: "OK"
-							}).then(() => {
-								window.location.href = "purchase.php";
-							});
-						} else {
-							Swal.fire("Error!", data.error, "error");
-						}
-					})
-					.catch(error => console.error("Error:", error));
+						.then(response => response.json())
+						.then(data => {
+							if (data.success) {
+								Swal.fire({
+									title: "Success!",
+									text: "Purchase submitted successfully!",
+									icon: "success",
+									confirmButtonText: "OK"
+								}).then(() => {
+									window.location.href = "purchase.php";
+								});
+							} else {
+								Swal.fire("Error!", data.error, "error");
+							}
+						})
+						.catch(error => console.error("Error:", error));
+					}
+
+					
 				}
 			});
 		}
