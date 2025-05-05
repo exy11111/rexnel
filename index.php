@@ -24,6 +24,12 @@
 	$stmt1->execute();
 	$result1 = $stmt1->fetch(PDO::FETCH_ASSOC);
 
+	$sql = "SELECT branch_name FROM branch WHERE branch_id = :branch_id";
+	$stmt = $conn->prepare($sql);
+	$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
+	$stmt->execute();
+	$branch_name = $stmt->fetchColumn();
+
 ?>
 
 
@@ -95,6 +101,14 @@
 			<div class="sidebar-wrapper scrollbar scrollbar-inner">
 				<div class="sidebar-content">
 					<ul class="nav nav-secondary">
+						<?php if($_SESSION['role_id'] == 1):?>
+						<li class="nav-item">
+							<a href="adminpanel.php">
+								<i class="fas fa-home"></i>
+								<p>Admin Panel</p>
+							</a>
+						</li>
+						<?php endif; ?>
 						<li class="nav-item active">
 							<a href="index.php">
 								<i class="fas fa-home"></i>
@@ -400,13 +414,6 @@
 				<div class="page-inner">
 					<div class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4">
 						<div>
-							<?php 
-							$sql = "SELECT branch_name FROM branch WHERE branch_id = :branch_id";
-							$stmt = $conn->prepare($sql);
-							$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
-							$stmt->execute();
-							$branch_name = $stmt->fetchColumn();
-							?>
 							<h3 class="fw-bold mb-3"><?php echo $branch_name; ?></h3>
 						</div>
 						<!--
