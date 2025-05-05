@@ -513,7 +513,7 @@
 										return response.json();
 									})
 									.then(chartData => {
-										const ctx = document.getElementById('stock_chart_<?php echo $row['branch_id']; ?>').getContext('2d');
+										const ctx<?php echo $row['branch_id'];?> = document.getElementById('stock_chart_<?php echo $row['branch_id']; ?>').getContext('2d');
 										new Chart(ctx, {
 											type: 'bar',
 											data: chartData,
