@@ -116,7 +116,7 @@
 						</li>
 						<?php endif; ?>
 						<li class="nav-item active">
-							<a href="index.php">
+							<a href="index.php"  class="text-white">
 								<i class="fas fa-home"></i>
 								<p>Dashboard</p>
 							</a>
