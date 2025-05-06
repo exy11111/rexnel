@@ -325,6 +325,7 @@
 										$fullname = $firstname . " " . $lastname;
 										$created_at = $user_data['created_at'];
 										$is_verified = $user_data['is_verified'];
+									}
 									else {
 										$username = "User not found.";
 										$email = "User not found.";
