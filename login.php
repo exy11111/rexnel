@@ -5,7 +5,7 @@
 
   if ($_SERVER["REQUEST_METHOD"] == "POST") {
     include('db.php');
-    $username = $_POST['username'];
+    $username = $_POST['username'];//1
     $password = $_POST['password'];
 
     $sql = "SELECT * FROM users WHERE username = :username";
