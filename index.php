@@ -139,7 +139,7 @@
 								<ul class="nav nav-collapse">
 									<li>
 										<a href="stock.php">
-											<span class="sub-item text-white">Stock</span>
+											<span class="sub-item text-white">Stockawdawdawdawdwad</span>
 										</a>
 									</li>
 									<li>
