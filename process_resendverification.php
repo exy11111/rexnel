@@ -38,7 +38,7 @@
             $mail->Host = 'smtp.hostinger.com';
             $mail->SMTPAuth = true;
             $mail->Username = 'support@houseoflocal.store';
-            $mail->Password = 'S8uN4#qPm2bV!rYx';
+            $mail->Password = 'pM&ka&M7';
             $mail->SMTPSecure = 'ssl';
             $mail->Port = 465;
             
@@ -75,7 +75,7 @@
             if ($mail->send()) {
                 echo "success";
             } else {
-                echo "email_error";
+                echo "email_error ".$mail->ErrorInfo;
             }
 
 
