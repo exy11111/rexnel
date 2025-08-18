@@ -6,6 +6,10 @@
         header('Location: purchase.php');
     }
 
+	if(isset($_GET['purchase_id'])){
+		$purchase_id = $_GET['purchase_id'];q
+	}
+
 	$sql = "SELECT i.item_name, pi.quantity, s.size_name, pi.quantity * i.price AS item_price FROM purchase_items pi
     JOIN items i ON i.item_id = pi.item_id
     JOIN sizes s ON i.size_id = s.size_id
@@ -14,6 +18,11 @@
     $stmt->bindParam(':purchase_id', $_GET['purchase_id']);
     $stmt->execute();
     $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+	$stmt = $conn->prepare("SELECT proof_image FROM purchases WHERE purchase_id = :id");
+	$stmt->execute([':id' => $purchase_id]);
+	$proofImagePath = $stmt->fetchColumn();
+
 
 ?>
 
@@ -425,31 +434,45 @@
 					</div>
                     <div id="receiptContent">
 						<div class="card p-3">
-							<?php $totalPrice = 0;
-							foreach($data as $row){$totalPrice+=$row['item_price'];}?>
+							<?php
+							$totalPrice = 0;
+							foreach ($data as $row) {
+								$totalPrice += $row['item_price'];
+							}
+							?>
+
 							<h5 class="text-end" id="totalPrice">Total Price: ₱<?php echo number_format($totalPrice, 2); ?></h5>
 							<h5 class="mt-2 text-center fw-bold">House of Local</h5>
+
 							<div class="table-responsive">
-							<table class="table table-bordered" id="receipt">
-								<thead>
-									<tr>
-										<th>Item Name</th>
-										<th>Quantity</th>
-										<th>Size</th>
-										<th>Price</th>
-									</tr>
-								</thead>
-								<tbody>
-									<?php foreach ($data as $row): ?>
+								<table class="table table-bordered" id="receipt">
+									<thead>
 										<tr>
-											<td><?php echo $row['item_name']; ?></td>
-											<td><?php echo $row['quantity']; ?></td>
-											<td><?php echo $row['size_name']; ?></td>
-											<td><?php echo $row['item_price']; ?></td>
+											<th>Item Name</th>
+											<th>Quantity</th>
+											<th>Size</th>
+											<th>Price</th>
 										</tr>
-									<?php endforeach; ?>
-								</tbody>
-							</table>
+									</thead>
+									<tbody>
+										<?php foreach ($data as $row): ?>
+											<tr>
+												<td><?php echo $row['item_name']; ?></td>
+												<td><?php echo $row['quantity']; ?></td>
+												<td><?php echo $row['size_name']; ?></td>
+												<td>₱<?php echo number_format($row['item_price'], 2); ?></td>
+											</tr>
+										<?php endforeach; ?>
+									</tbody>
+								</table>
+							</div>
+
+							<?php if (!empty($proofImagePath) && file_exists($proofImagePath)): ?>
+								<div class="text-center mt-4">
+									<h6 class="fw-semibold">Proof of Payment</h6>
+									<img src="<?php echo $proofImagePath; ?>" alt="Proof of Payment" class="img-fluid rounded" style="max-width: 300px; border: 1px solid #ccc;" />
+								</div>
+							<?php endif; ?>
 						</div>
 					</div>
                     <div class="d-flex justify-content-center mb-5">
