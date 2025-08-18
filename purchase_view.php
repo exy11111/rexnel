@@ -7,7 +7,7 @@
     }
 
 	if(isset($_GET['purchase_id'])){
-		$purchase_id = $_GET['purchase_id'];q
+		$purchase_id = $_GET['purchase_id'];
 	}
 
 	$sql = "SELECT i.item_name, pi.quantity, s.size_name, pi.quantity * i.price AS item_price FROM purchase_items pi
