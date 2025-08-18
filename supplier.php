@@ -36,6 +36,12 @@
 	$stmt->execute();
 	$branch_name = $stmt->fetchColumn();
 
+	$sql = "SELECT purchase_id, price, date, payment_method FROM purchases p1 JOIN payment_method p2 ON p1.pm_id = p2.pm_id WHERE p1.branch_id = :branch_id ORDER BY p1.date DESC";
+    $stmt = $conn->prepare($sql);
+	$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
+    $stmt->execute();
+    $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
 
 
@@ -110,15 +116,9 @@
 				<div class="sidebar-content">
 					<ul class="nav nav-secondary">
 						<?php if($_SESSION['role_id'] == 1):?>
-						<li class="nav-item">
-							<a href="adminpanel.php" class="text-white">
-								<i class="fas fa-home"></i>
-								<p>Admin Panel</p>
-							</a>
-						</li>
 						<?php endif; ?>
 						<li class="nav-item active">
-							<a href="index.php" class="text-white">
+							<a href="supplier.php" class="text-white">
 								<i class="fas fa-home"></i>
 								<p>Dashboard</p>
 							</a>
@@ -130,78 +130,10 @@
 							<h4 class="text-section">Menu</h4>
 						</li>
 						<li class="nav-item">
-							<a data-bs-toggle="collapse" href="#base" class="text-white">
+							<a href="orderssupplier.php" class="text-white">
 								<i class="fas fa-layer-group"></i>
-								<p>Inventory Management</p>
-								<span class="caret"></span>
+								<p>Orders</p>
 							</a>
-							<div class="collapse" id="base">
-								<ul class="nav nav-collapse">
-									<li>
-										<a href="stock.php">
-											<span class="sub-item text-white">Stock</span>
-										</a>
-									</li>
-									<li>
-										<a href="categories.php">
-											<span class="sub-item text-white">Categories</span>
-										</a>
-									</li>
-									
-									<li>
-										<a href="sizes.php">
-											<span class="sub-item text-white">Sizes</span>
-										</a>
-									</li>
-									<li>
-										<a href="suppliers.php">
-											<span class="sub-item text-white">Suppliers</span>
-										</a>
-									</li>
-									<li>
-										<a href="brands.php">
-											<span class="sub-item text-white">Brands</span>
-										</a>
-									</li>
-								</ul>
-							</div>
-						</li>
-						<li class="nav-item">
-							<a data-bs-toggle="collapse" href="#acc"  class="text-white">
-								<i class="fas fa-layer-group"></i>
-								<p>Account Management</p>
-								<span class="caret"></span>
-							</a>
-							<div class="collapse" id="acc">
-								<ul class="nav nav-collapse">
-									<li>
-										<a href="staff.php">
-											<span class="sub-item text-white">Staff</span>
-										</a>
-									</li>
-									<li>
-										<a href="branches.php">
-											<span class="sub-item text-white">Branches</span>
-										</a>
-									</li>
-								</ul>
-							</div>
-						</li>
-						<li class="nav-item">
-							<a data-bs-toggle="collapse" href="#sales"  class="text-white">
-								<i class="fas fa-layer-group"></i>
-								<p>Sales Management</p>
-								<span class="caret"></span>
-							</a>
-							<div class="collapse" id="sales">
-								<ul class="nav nav-collapse">
-									<li>
-										<a href="purchase.php">
-											<span class="sub-item text-white">Purchase Log</span>
-										</a>
-									</li>
-								</ul>
-							</div>
 						</li>
 					</ul>
 				</div>
@@ -233,7 +165,196 @@
 					</div>
 					<!-- End Logo Header -->
 				</div>
-				 <?php include 'include_navbar.php' ?>
+				<!-- Navbar Header -->
+				<nav class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom">
+
+					<div class="container-fluid">
+						<ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
+							<!-- notif area -->
+							<?php 
+								if(isset($_SESSION['user_id'])){
+									$sql = "SELECT username, email, firstname, lastname, created_at, is_verified FROM users JOIN userdetails ON users.user_id = userdetails.user_id WHERE users.user_id = :user_id";
+									$stmt = $conn->prepare($sql);
+									$stmt->bindParam(":user_id", $_SESSION['user_id']);
+									$stmt->execute();
+									$user_data = $stmt->fetch(PDO::FETCH_ASSOC);
+									if($user_data) {
+										$username = $user_data['username'];
+										$email = $user_data['email'];
+										$firstname = $user_data['firstname'];
+										$lastname = $user_data['lastname'];
+										$fullname = $firstname . " " . $lastname;
+										$created_at = $user_data['created_at'];
+										$is_verified = $user_data['is_verified'];
+									} else {
+										$username = "User not found.";
+										$email = "User not found.";
+									}
+								}
+
+								if (isset($_GET['notif_id'])) {
+									$notif_id = $_GET['notif_id'];
+								
+									$sql = "UPDATE notifications SET seen = 1 WHERE notification_id = :notif_id";
+									$stmt = $conn->prepare($sql);
+									$stmt->bindParam(':notif_id', $notif_id, PDO::PARAM_INT);
+									$stmt->execute();
+
+									$sql = "SELECT target_url FROM notifications WHERE notification_id = :notif_id";
+									$stmt = $conn->prepare($sql);
+									$stmt->bindParam(':notif_id', $notif_id, PDO::PARAM_INT);
+									$stmt->execute();
+									$notif = $stmt->fetch(PDO::FETCH_ASSOC);
+									if ($notif && isset($notif['target_url'])) {
+										$target_url = $notif['target_url'];
+										echo "<script>window.location = '$target_url';</script>";
+										exit();
+									}
+								}
+							
+								$sql = "SELECT * FROM notifications WHERE user_id = :user_id ORDER BY created_at DESC LIMIT 5";
+								$stmt = $conn->prepare($sql);
+								$stmt->bindParam(':user_id', $_SESSION['user_id']);
+								$stmt->execute();
+								$notifications = $stmt->fetchAll();
+								$notif_count = count(array_filter($notifications, function($notif) {
+									return $notif['seen'] == 0;
+								}));
+
+								function timeAgo($datetime) {
+									date_default_timezone_set('Asia/Manila');
+								
+									$timestamp = strtotime($datetime);
+									if (!$timestamp || $timestamp > time()) return 'just now';
+								
+									$diff = time() - $timestamp;
+								
+									$units = [
+										'year'   => 31536000,
+										'month'  => 2592000,
+										'week'   => 604800,
+										'day'    => 86400,
+										'hour'   => 3600,
+										'minute' => 60,
+										'second' => 1
+									];
+								
+									foreach ($units as $unit => $seconds) {
+										$value = floor($diff / $seconds);
+										if ($value >= 1) {
+											$label = $value == 1 ? $unit : $unit . 's';
+											return "$value $label ago";
+										}
+									}
+								
+									return 'just now';
+								}
+								
+							?>
+							<li class="nav-item topbar-icon dropdown hidden-caret">
+								<a
+									class="nav-link dropdown-toggle"
+									href="#"
+									id="notifDropdown"
+									role="button"
+									data-bs-toggle="dropdown"
+									aria-haspopup="true"
+									aria-expanded="false"
+								>
+                    				<i class="fa fa-bell"></i>
+                    				<?php if ($notif_count > 0): ?>
+										<span class="notification"><?= $notif_count ?></span>
+									<?php endif; ?>
+                  				</a>
+                  				<ul class="dropdown-menu notif-box animated fadeIn" aria-labelledby="notifDropdown">
+                    				<li>
+                      					<div class="dropdown-title">You have <?= $notif_count ?> new notification</div>
+                    				</li>
+                    				<li>
+                      					<div class="notif-scroll scrollbar-outer">
+                        					<div class="notif-center">
+												<?php foreach($notifications as $row):?>
+													<a href="?notif_id=<?php echo $row['notification_id']; ?>" class="<?= $row['seen'] == 0 ? 'bg-light' : '' ?> p-2 rounded">
+														<div class="notif-icon notif-primary flex-shrink-0" style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;">
+															<i class="bi <?php echo $row['icon']?>"></i>
+														</div>
+														<div class="notif-content">
+															<span class="block"> <?php echo $row['message']?> </span>
+															<span class="time"><?= timeAgo($row['created_at']) ?></span>
+														</div>
+													</a>
+												<?php endforeach; ?>
+                        					</div>
+                      					</div>
+                    				</li>
+                    				<li>
+                      					<a class="see-all" href="javascript:void(0);">See all notifications<i class="fa fa-angle-right"></i>
+                      					</a>
+                    				</li>
+                  				</ul>
+                			</li>
+							<li class="nav-item topbar-user dropdown hidden-caret">
+								<a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#" aria-expanded="false">
+									<div class="avatar-sm">
+										<?php
+											$profilePhoto = !empty($user_data['profile_photo']) && file_exists($user_data['profile_photo']) 
+												? $user_data['profile_photo'] 
+												: 'assets/img/profile.png';
+										?>
+
+										<img src="<?= $profilePhoto ?>" alt="Profile Photo" class="avatar-img rounded-circle">
+
+									</div>
+									<span class="profile-username">
+										<span class="op-7">Hi,</span> <span class="fw-bold"><?php echo $username?></span>
+									</span>
+								</a>
+								<ul class="dropdown-menu dropdown-user animated fadeIn">
+									<div class="dropdown-user-scroll scrollbar-outer">
+										<li>
+											<div class="user-box">
+												<div class="avatar-lg"><img src="assets/img/profile.png" alt="image profile" class="avatar-img rounded"></div>
+												<div class="u-text">
+													<h4><?php echo $username?></h4>
+													<p class="text-muted"><?php echo $email?></p><a href="#" class="btn btn-xs btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#profileModal">View Profile</a>
+												</div>
+											</div>
+										</li>
+										<li>
+											<?php if($_SESSION['user_id'] == 17):?>
+											<div class="dropdown-divider"></div>
+											<a class="dropdown-item" href="adminportal.php">Change Branch</a>
+											<?php endif; ?>
+											<div class="dropdown-divider"></div>
+											<a class="dropdown-item" href="#" id="accountSetting" data-bs-toggle="modal" data-bs-target="#editAccountModal" data-id="<?php if(isset($_SESSION['user_id'])){echo $_SESSION['user_id'];}  ?>">Account Setting</a>
+											<div class="dropdown-divider"></div>
+											<a id="logoutBtn" class="dropdown-item" href="#">Logout</a>
+										</li>
+										<script>
+                                            document.getElementById('logoutBtn').addEventListener('click', function() {
+                                                Swal.fire({
+                                                    title: 'Are you sure?',
+                                                    text: "Do you want to logout?",
+                                                    icon: 'warning',
+                                                    showCancelButton: true,
+                                                    confirmButtonText: 'Yes, Logout!',
+                                                    cancelButtonText: 'Cancel',
+                                                    reverseButtons: true
+                                                }).then((result) => {
+                                                    if (result.isConfirmed) {
+                                                        window.location.href = "logout.php";
+                                                    }
+                                                });
+                                            });
+                                        </script>
+									</div>
+								</ul>
+							</li>
+							
+						</ul>
+					</div>
+				</nav>
+				<!-- End Navbar -->
 			</div>
 			
 			<div class="container">
@@ -262,7 +383,7 @@
 											</div>
 											<div class="col col-stats ms-3 ms-sm-0">
 												<div class="numbers w-100">
-													<p class="card-category">Sales Today</p>
+													<p class="card-category">Total Orders</p>
 													<h4 class="card-title">₱<?php echo number_format($result1['total_sales'], 2) ?></h4>
 													
 												</div>
@@ -285,7 +406,7 @@
 											</div>
 											<div class="col col-stats ms-3 ms-sm-0">
 												<div class="numbers">
-													<p class="card-category">Stock</p>
+													<p class="card-category">Pending Orders</p>
 													<h4 class="card-title"><?php echo $quantity?></h4>
 												</div>
 											</div>
@@ -306,7 +427,7 @@
 											</div>
 											<div class="col col-stats ms-3 ms-sm-0">
 												<div class="numbers">
-													<p class="card-category">Orders Today</p>
+													<p class="card-category">Revenue this month</p>
 													<h4 class="card-title"><?php echo $result1['orders']?></h4>
 												</div>
 											</div>
@@ -315,172 +436,51 @@
 								</div>
 							</a>
 						</div>
-						
-						
-						<!-- FETCH -->
-						<?php
-							$sql = "SELECT item_name, stock, size_name FROM items JOIN sizes ON items.size_id = sizes.size_id WHERE items.branch_id = :branch_id";
-							$stmt = $conn->prepare($sql);
-							$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
-							$stmt->execute();
-							$items = $stmt->fetchAll(PDO::FETCH_ASSOC);
-							
-							$itemNames = [];
-							$itemStocks = [];
-							$colors = [];
-							
-							$lowStockThreshold = 10;
-							
-							foreach ($items as $item) {
-								$itemNames[] = $item['item_name'].' '.$item['size_name'];
-								$itemStocks[] = $item['stock'];
-								
-								if ($item['stock'] < $lowStockThreshold) {
-									$colors[] = 'rgb(255, 99, 71)'; 
-								} else {
-									$colors[] = 'rgb(34, 193, 34)';
-								}
-							}
-
-							$sql = "SELECT DATE(date) AS day, SUM(price) AS total_price
-							FROM purchases
-							WHERE branch_id = :branch_id
-							GROUP BY DATE(date)
-							ORDER BY day ASC
-							";
-							$stmt = $conn->prepare($sql);
-							$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
-							$stmt->execute();
-							$sales = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-							$labels = [];
-							$values = [];
-							foreach ($sales as $row) {
-								$labels[] = date("M d, Y", strtotime($row['day']));
-								$values[] = (float) $row['total_price'];
-							}
-						?>
-						<div class="row">
-							<div class="col-md-6 d-flex flex-column">
-								<div class="card h-100">
-									<div class="card-header">
-										<div class="card-title">Sales Overview</div>
-									</div>
-									<div class="card-body">
-										<div class="chart-container mb-5">
-											<canvas id="sales_chart"></canvas>
-										</div>
-										<div class="row mb-3">
-											<div class="col">
-												<label for="startDate">Start Date</label>
-												<input type="date" id="startDate" class="form-control">
-											</div>
-											<div class="col">
-												<label for="endDate">End Date</label>
-												<input type="date" id="endDate" class="form-control">
-											</div>
-										</div>
-									</div>
-								</div>
-								
+			<div class="row">
+				<div class="col-md-12">
+					<div class="card">
+						<div class="card-header">
+							<div class="d-flex align-items-center">
+								<h4 class="card-title">Pending</h4>
+								<?php if($_SESSION['role_id'] == 1 || $_SESSION['role_id'] == 2): ?>
+								<?php endif; ?>
 							</div>
+						</div>						
+						<div class="table-responsive">
+										<table id="categories" class="display table table-striped table-hover" >
+											<thead>
+												<tr>
+													<th style="width: 10%">Order ID</th>
+													<th>Date</th>
+													<?php if($_SESSION['role_id'] == 1 || $_SESSION['role_id'] == 2):?>
+													<th style="width: 10%">Status</th>
+													<th style="width: 10%">Total</th>
+													<?php endif;?>
+												</tr>
+											</thead>
+											<tbody>
+												<?php 
+													foreach($data as $row){
+														echo "<tr data-id=".htmlspecialchars($row['purchase_id']).">";
+														echo "<td>".htmlspecialchars($row['date'])."</td>";
+														echo "<td>₱".htmlspecialchars($row['price'])."</td>";
+														echo "<td>".htmlspecialchars($row['payment_method'])."</td>";
+														echo "<td>".htmlspecialchars($row['payment_method'])."</td>";
+														if($_SESSION['role_id'] == 1 || $_SESSION['role_id'] == 2){
 
-							<div class="col-md-6 d-flex flex-column">
-								<div class="card">
-									<div class="card-header">
-										<div class="card-title">Stock Overview</div>
-									</div>
-									<div class="card-body">
-										<div class="chart-container">
-											<canvas id="items_chart"></canvas>
-										</div>
-										<div class="dropdown mb-3">
-											<button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-												Filter Items
-											</button>
-											<ul class="dropdown-menu" id="itemFilterList">
-												<?php foreach ($itemNames as $index => $item): ?>
-													<li>
-														<label class="dropdown-item">
-															<input type="checkbox" class="form-check-input me-1 item-filter" value="<?= $index ?>" checked>
-															<?= htmlspecialchars($item) ?>
-														</label>
-													</li>
-												<?php endforeach; ?>
-											</ul>
-										</div>
-									</div>
-								</div>
-								<?php 
-									$sql = "SELECT purchase_id, price, date, payment_method 
-									FROM purchases p1 
-									JOIN payment_method p2 ON p1.pm_id = p2.pm_id
-									WHERE p1.branch_id = :branch_id
-									ORDER BY p1.date DESC 
-									LIMIT 1";
-									$stmt = $conn->prepare($sql);
-									$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
-									$stmt->execute();
-									$recent_order = $stmt->fetch(PDO::FETCH_ASSOC);
-
-									$sql = "SELECT * FROM notifications WHERE user_id = :user_id ORDER BY created_at DESC LIMIT 1";
-									$stmt = $conn->prepare($sql);
-									$stmt->bindParam(':user_id', $_SESSION['user_id']);
-									$stmt->execute();
-									$recent_notif = $stmt->fetch(PDO::FETCH_ASSOC);
-
-									$sql = "SELECT item_id, barcode, item_name, category_name, brand_name, supplier_name, size_name, price, stock
-											FROM items i 
-											JOIN categories c ON i.category_id = c.category_id
-											JOIN brands b ON b.brand_id = i.brand_id
-											JOIN suppliers s ON s.supplier_id = i.supplier_id
-											JOIN sizes ss ON i.size_id = ss.size_id
-											WHERE i.branch_id = :branch_id
-											ORDER BY stock ASC
-											LIMIT 1";
-									$stmt = $conn->prepare($sql);
-									$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
-									$stmt->execute();
-									$lowest_stock = $stmt->fetch(PDO::FETCH_ASSOC);
-								?>
-								<div class="card mt-auto">
-									<div class="card-body">
-										<h5 class="card-title mb-2">Recent Activity</h5>
-										<div class="row">
-											<div class="col-md-4">
-												<ul>
-													<li><strong>Last Login:</strong> <?php echo $_SESSION['last_login']?></li>
-													<li>
-														<strong>Recent Order:</strong>
-														<?php if ($recent_order): ?>
-															<span class="me-2">Order #<?php echo htmlspecialchars($recent_order['purchase_id']); ?>:</span>
-															₱<span class="text-muted"><?php echo number_format($recent_order['price'], 2); ?></span>
-														<?php else: ?>
-															None
-														<?php endif; ?>
-													</li>
-												</ul>
-											</div>
-											<div class="col-md-8">
-												<ul>
-													<?php if(!$_SESSION['user_id'] == 17): ?><li><strong>Recent Notification:</strong> <?php echo $recent_notif['message']?></li><?php endif; ?>
-													<li>
-														<strong>Lowest Stock Alert:</strong> 
-														<?php if ($lowest_stock && $lowest_stock['stock'] <= 100): ?>
-															<?php echo htmlspecialchars($lowest_stock['item_name']); ?>: 
-															<?php echo number_format($lowest_stock['stock']); ?> stock left
-														<?php else: echo 'None';?>
-														<?php endif; ?>
-													</li>
-												</ul>
-											</div>
-										</div>
+														}
+														
+                                                        echo "</tr>";
+													}
+												?>
+											</tbody>
+										</table>
+                                        </div>
 									</div>
 								</div>
 							</div>
 						</div>
-					</div>
-					
+					</div>	
 				</div>
 			</div>
 			

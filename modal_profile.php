@@ -10,7 +10,7 @@
             </div>
             <div class="modal-body">
                 <div class="mb-3 text-center">
-                    <img src="assets/img/profile.png" alt="Profile Picture" class="rounded-circle" style="width: 100px; height: 100px; object-fit: cover;">
+                    <img src="<?php echo $profile_photo?>" alt="Profile Picture" class="rounded-circle" style="width: 100px; height: 100px; object-fit: cover;">
                 </div>
                 <p><span class="fw-mediumbold">Username:</span> <?php echo $username?></p>
                 <p><span class="fw-mediumbold">Full Name:</span> <?php echo $fullname?></p>

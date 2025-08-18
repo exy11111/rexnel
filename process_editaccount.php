@@ -17,10 +17,38 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $destination = $_POST['destination'];
     $branch_id = $_POST['branch_id'];
     $verification_token = bin2hex(random_bytes(16));
+    $profile_photo_path = null;
+
+    if (isset($_FILES['profile_photo']) && $_FILES['profile_photo']['error'] === UPLOAD_ERR_OK) {
+        $uploadDir = 'uploads/profile_photos/';
+        if (!file_exists($uploadDir)) {
+            mkdir($uploadDir, 0777, true);
+        }
+
+        $fileTmpPath = $_FILES['profile_photo']['tmp_name'];
+        $fileName = $_FILES['profile_photo']['name'];
+        $fileSize = $_FILES['profile_photo']['size'];
+        $fileExt = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+        $allowedExts = ['jpg', 'jpeg', 'png'];
+        $maxSize = 2 * 1024 * 1024; // 2MB
+
+        if (in_array($fileExt, $allowedExts) && $fileSize <= $maxSize) {
+            $newFileName = 'profile_' . uniqid() . '.' . $fileExt;
+            $destPath = $uploadDir . $newFileName;
+
+            if (move_uploaded_file($fileTmpPath, $destPath)) {
+                $profile_photo_path = $destPath;
+            }
+        } else {
+            // You could add feedback for invalid image
+            error_log("Invalid image file uploaded.");
+        }
+    }
+
 
     try {
         // Check if username already exists for other users
-        $sql = "SELECT username, email FROM users WHERE user_id = :user_id";
+        $sql = "SELECT username, ud.email FROM users u LEFT JOIN userdetails ud ON u.user_id = ud.user_id WHERE u.user_id = :user_id";
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':user_id', $user_id);
         $stmt->execute();
@@ -47,10 +75,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $emailChanged = ($currentData['email'] !== $email);
 
         // Build update query
-        $sql = "UPDATE users SET username = :username, email = :email";
+        $sql = "UPDATE users SET username = :username";
         $params = [
             ':username' => $username,
-            ':email' => $email,
             ':user_id' => $user_id
         ];
 
@@ -63,6 +90,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (!empty($branch_id)) {
             $sql .= ", branch_id = :branch_id";
             $params[':branch_id'] = $branch_id;
+        }
+        if ($profile_photo_path !== null) {
+            $sql .= ", profile_photo = :profile_photo";
+            $params[':profile_photo'] = $profile_photo_path;
         }
 
         $sql .= " WHERE user_id = :user_id";
@@ -86,10 +117,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $mail->Host = 'smtp.hostinger.com';
                 $mail->SMTPAuth = true;
                 $mail->Username = 'support@houseoflocal.store';
-                $mail->Password = 'S8uN4#qPm2bV!rYx';
+                $mail->Password = 'pM&ka&M7';
                 $mail->SMTPSecure = 'ssl';
                 $mail->Port = 465;
-                $mail->SMTPDebug = 2;
 
                 // Email content
                 $mail->setFrom('support@houseoflocal.store', 'House of Local');

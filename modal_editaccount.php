@@ -9,7 +9,7 @@
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="process_editaccount.php" method="POST">
+            <form action="process_editaccount.php" method="POST" enctype="multipart/form-data">
                 <div class="modal-body">
                     <p class="small">Edit the account details below.</p>
                     <div class="row">
@@ -26,6 +26,27 @@
                             </div>
                         </div>
                         <?php endif; ?>
+                        <div class="col-sm-12">
+                            <div class="form-group form-group-default">
+                                <label>Profile Photo</label>
+                                <input type="file" class="form-control" name="profile_photo" accept="image/*">
+                                <small class="text-muted">Accepted formats: JPG, PNG, JPEG (Max: 2MB)</small>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 mb-2 text-center">
+                            <img id="previewProfilePhoto" src="assets/img/profile.png" alt="Current Photo" class="rounded-circle" width="100">
+                        </div>
+                        <script>
+                            // Preview the selected image
+                            document.querySelector("input[name='profile_photo']").addEventListener('change', function(e) {
+                                const reader = new FileReader();
+                                reader.onload = function(event) {
+                                    document.getElementById('previewProfilePhoto').src = event.target.result;
+                                }
+                                reader.readAsDataURL(e.target.files[0]);
+                            });
+                        </script>
+
                         <div class="col-md-6 pe-0">
                             <div class="form-group form-group-default">
                                 <label>First Name</label>
