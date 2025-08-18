@@ -42,6 +42,8 @@
 	<link rel="stylesheet" href="assets/css/plugins.min.css">
 	<link rel="stylesheet" href="assets/css/kaiadmin.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 	<!-- CSS Just for demo purpose, don't include it in your project -->
 	<link rel="stylesheet" href="assets/css/demo.css">
@@ -421,35 +423,38 @@
 							</li>
 						</ul>
 					</div>
-                    
-                    <div class="card p-3">
-                        <?php $totalPrice = 0;
-                        foreach($data as $row){$totalPrice+=$row['item_price'];}?>
-                        <h5 class="text-end" id="totalPrice">Total Price: ₱<?php echo number_format($totalPrice, 2); ?></h5>
-                        <h5 class="mt-2 text-center fw-bold">House of Local</h5>
-                        <div class="table-responsive">
-                        <table class="table table-bordered" id="receipt">
-                            <thead>
-                                <tr>
-                                    <th>Item Name</th>
-                                    <th>Quantity</th>
-                                    <th>Size</th>
-                                    <th>Price</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($data as $row): ?>
-                                    <tr>
-                                        <td><?php echo $row['item_name']; ?></td>
-                                        <td><?php echo $row['quantity']; ?></td>
-                                        <td><?php echo $row['size_name']; ?></td>
-                                        <td><?php echo $row['item_price']; ?></td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
-                    </div>
-                    
+                    <div id="receiptContent">
+						<div class="card p-3">
+							<?php $totalPrice = 0;
+							foreach($data as $row){$totalPrice+=$row['item_price'];}?>
+							<h5 class="text-end" id="totalPrice">Total Price: ₱<?php echo number_format($totalPrice, 2); ?></h5>
+							<h5 class="mt-2 text-center fw-bold">House of Local</h5>
+							<div class="table-responsive">
+							<table class="table table-bordered" id="receipt">
+								<thead>
+									<tr>
+										<th>Item Name</th>
+										<th>Quantity</th>
+										<th>Size</th>
+										<th>Price</th>
+									</tr>
+								</thead>
+								<tbody>
+									<?php foreach ($data as $row): ?>
+										<tr>
+											<td><?php echo $row['item_name']; ?></td>
+											<td><?php echo $row['quantity']; ?></td>
+											<td><?php echo $row['size_name']; ?></td>
+											<td><?php echo $row['item_price']; ?></td>
+										</tr>
+									<?php endforeach; ?>
+								</tbody>
+							</table>
+						</div>
+					</div>
+                    <div class="d-flex justify-content-center mb-5">
+						<button class="btn btn-primary" onclick="downloadPDF()">Download PDF</button>
+					</div>
                 </div>
 			</div>
 
@@ -506,5 +511,29 @@
             });
         });
     </script>
+	<script>
+    async function downloadPDF() {
+        const { jsPDF } = window.jspdf;
+
+        const element = document.getElementById('receiptContent');
+        const canvas = await html2canvas(element, { scale: 2 });
+
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new jsPDF({
+            orientation: 'portrait',
+            unit: 'px',
+            format: 'a4'
+        });
+
+        const pageWidth = pdf.internal.pageSize.getWidth();
+        const pageHeight = pdf.internal.pageSize.getHeight();
+        const imgProps = pdf.getImageProperties(imgData);
+        const pdfWidth = pageWidth;
+        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+        pdf.save("receipt.pdf");
+    }
+</script>
 </body>
 </html>
