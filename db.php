@@ -7,7 +7,7 @@ if ($_SERVER['HTTP_HOST'] === 'houseoflocal.store') {
 } else {
     $servername = "localhost";
     $username   = "root";
-    $password   = "";
+    $password   = "logic123";
     $dbname     = "houseoflocal_db";
 }
 

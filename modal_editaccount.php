@@ -26,15 +26,19 @@
                             </div>
                         </div>
                         <?php endif; ?>
+                        <div class="col-sm-12 mb-2 text-center">
+                            <img id="previewProfilePhoto" 
+                                src="<?php echo !empty($profile_photo) ? $profile_photo : 'assets/img/profile.png'; ?>" 
+                                alt="Current Photo" 
+                                class="rounded-circle" 
+                                width="100">
+                        </div>
                         <div class="col-sm-12">
                             <div class="form-group form-group-default">
                                 <label>Profile Photo</label>
                                 <input type="file" class="form-control" name="profile_photo" accept="image/*">
                                 <small class="text-muted">Accepted formats: JPG, PNG, JPEG (Max: 2MB)</small>
                             </div>
-                        </div>
-                        <div class="col-sm-12 mb-2 text-center">
-                            <img id="previewProfilePhoto" src="assets/img/profile.png" alt="Current Photo" class="rounded-circle" width="100">
                         </div>
                         <script>
                             // Preview the selected image
@@ -79,6 +83,9 @@
                     </div>
                         <input type="hidden" name="user_id" id="editUserId">
                         <input type="hidden" name="destination" id="editDestination">
+                        <script>
+                            document.getElementById("editDestination").value = window.location.href;
+                        </script>
                     </div>
                 </div>
                 <div class="modal-footer border-0">

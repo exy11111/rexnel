@@ -7,15 +7,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $lastname = $_POST['lastname'];
     $username = $_POST['username'];
     $password = $_POST['password'];
-    $branch_id = $_POST['branch_id'];
+    $supplier_id = $_POST['supplier_id'];
     $email = $_POST['email'];
-    if($_SESSION['role_id'] == 2){
-        header("Location: staff.php?status=error");
-        exit();//pansamantala
-    }
-    else{
-        $role_id = $_POST['role_id'];
-    }
+    $role_id = 3;
+    $branch_id = 0;
+
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
     try {
         $sql = "INSERT INTO users (username, password, branch_id, role_id) VALUES (:username, :password, :branch_id, :role_id)";
@@ -36,11 +32,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt2->bindParam(':email', $email);
         $stmt2->execute();
 
-        header("Location: staff.php?status=success");
+        $sql = "INSERT INTO users_supplier (user_id, supplier_id) VALUES (:user_id, :supplier_id)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':user_id', $userid);
+        $stmt->bindParam(':supplier_id', $supplier_id);
+        $stmt->execute();
+
+        header("Location: supplieraccount.php?status=success");
         exit();
 
     } catch (PDOException $e) {
-        header("Location: staff.php?status=error");
+        header("Location: supplieraccount.php?status=error");
         exit();
     }
 }

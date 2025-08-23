@@ -25,13 +25,24 @@
         $_SESSION['last_login'] = $todayDateTime;
         $_SESSION['role_id'] = $user['role_id'];
 
-        if($_SESSION['user_id'] == 17){
+        if($_SESSION['role_id'] == 1){
           header("Location: adminportal.php");
           exit();
         }
+        else if($_SESSION['role_id'] == 3){
+          $sql = "SELECT supplier_id FROM users_supplier WHERE user_id = :user_id";
+          $stmt = $conn->prepare($sql);
+          $stmt->bindParam(':user_id', $_SESSION['user_id']);
+          $stmt->execute();
+          $_SESSION['supplier_id'] = $stmt->fetchColumn();
+          header("Location: supplier.php");
+          exit();
+        }
+
         $_SESSION['branch_id'] = $user['branch_id'];
 
         header("Location: index.php");
+        exit();
       }
       else {
         $error_message = "Invalid password.";

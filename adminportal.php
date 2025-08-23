@@ -8,7 +8,7 @@
     }
     if(isset($_GET['id'])){
         $_SESSION['branch_id'] = $_GET['id'];
-        header('Location: index.php');
+        header('Location: adminpanel.php');
         exit();
     }
 
