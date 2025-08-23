@@ -1,6 +1,6 @@
 <?php
 if ($_SERVER['HTTP_HOST'] === 'houseoflocal.store') {
-    $servername = "auth-db457.hstgr.io";
+    $servername = "localhost";
     $username   = "u119634533_houseoflocal";
     $password   = "3;C9MX9jvq";
     $dbname     = "u119634533_houseoflocal";
