@@ -15,8 +15,14 @@
 		$supplier_info = $stmt->fetch();
 	}
 
-	$sql = "SELECT purchase_id, price, date, payment_method FROM purchases p1 JOIN payment_method p2 ON p1.pm_id = p2.pm_id ORDER BY p1.date DESC";
+	$sql = "SELECT so.order_id, b.branch_name, so.date, so.amount, so.status 
+	FROM supplier_orders so 
+	JOIN items i ON so.item_id = i.item_id 
+	JOIN branch b ON i.branch_id = b.branch_id
+	WHERE i.branch_id = :branch_id
+	ORDER BY so.date DESC";
     $stmt = $conn->prepare($sql);
+	$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
     $stmt->execute();
     $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -108,12 +114,12 @@
 											<tbody>
 												<?php 
 													foreach($data as $row){
-														echo "<tr data-id=".htmlspecialchars($row['purchase_id']).">";
-														echo "<td>".htmlspecialchars($row['date'])."</td>";
-														echo "<td>".htmlspecialchars($row['date'])."</td>";
-														echo "<td>".htmlspecialchars($row['date'])."</td>";
-														echo "<td>₱".htmlspecialchars($row['price'])."</td>";
-                                                        echo "<td>".htmlspecialchars($row['payment_method'])."</td>";
+														echo "<tr data-id=".htmlspecialchars($row['order_id']).">";
+														echo "<td>".htmlspecialchars($row['order_id'])."</td>";
+														echo "<td>".htmlspecialchars($row['branch_name'])."</td>";
+														echo "<td>" . date("F d, Y", strtotime($row['date'])) . "</td>";
+														echo "<td>₱".htmlspecialchars($row['amount'])."</td>";
+                                                        echo "<td>".htmlspecialchars($row['status'])."</td>";
 														echo "<td>
                                                                 <div class='form-button-action'>
 																	<button type='button' class='btn btn-link btn-primary btn-lg' data-bs-toggle='modal' data-bs-target='#editStatusModal' title='Edit Task'>
