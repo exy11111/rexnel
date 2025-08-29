@@ -15,7 +15,7 @@
 		$supplier_info = $stmt->fetch();
 	}
 
-	$sql = "SELECT so.order_id, b.branch_name, so.date, so.amount, so.status 
+	$sql = "SELECT so.order_id, so.item_id, b.branch_name, so.date, so.amount, so.status 
 	FROM supplier_orders so 
 	JOIN items i ON so.item_id = i.item_id 
 	JOIN branch b ON i.branch_id = b.branch_id
@@ -154,7 +154,7 @@
 																	<button type='button' class='btn btn-link btn-primary btn-lg' data-bs-toggle='modal' data-bs-target='#editStatusModal' data-id='".htmlspecialchars($row['order_id'])."' title='Edit Task'>
                                                                         <i class='fa fa-edit'></i>
                                                                     </button>
-                                                                    <a href='#' class='btn btn-link btn-primary btn-lg' data-bs-toggle='modal' data-bs-target='#viewItemModal' data-id='".htmlspecialchars($row['order_id'])."' title='Edit Task'>
+                                                                    <a href='#' class='btn btn-link btn-primary btn-lg' data-bs-toggle='modal' data-bs-target='#viewItemModal' data-id='".htmlspecialchars($row['item_id'])."' title='Edit Task'>
                                                                         <i class='bi bi-eye-fill'></i>
                                                                     </a>
                                                                 </div>
