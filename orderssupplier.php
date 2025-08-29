@@ -428,7 +428,7 @@
 						<p><strong>Size:</strong> ${data.size_name}</p>
 						<br>
 						<p><strong>Quantity:</strong> ${data.quantity}</p>
-						<p><strong>Amount:</strong> ${data.amount}</p>
+						<p><strong>Amount:</strong> ₱${data.amount}</p>
 					`;
 				})
 				.catch(error => {
