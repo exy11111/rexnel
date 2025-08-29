@@ -9,6 +9,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     try{
         $sql = "UPDATE supplier_orders SET status = :status WHERE order_id = :order_id";
         $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':status', $status);
         $stmt->bindParam(':order_id', $order_id);
         $stmt->execute();
 
