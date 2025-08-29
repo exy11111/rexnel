@@ -353,10 +353,10 @@
 																	$0.00
 																	</p>
 																</div>
-																</div>
+															</div>
 
 																<!-- Total Price (text only) -->
-																<div class="col-sm-12">
+															<div class="col-sm-12">
 																<div class="form-group form-group-default">
 																	<label>Total Price</label>
 																	<p id="total_price" style="padding: .375rem .75rem; background-color: #e9ecef; border-radius: 4px; margin-bottom: 0;">
