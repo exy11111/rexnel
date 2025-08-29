@@ -3,7 +3,7 @@
 	require ('db.php');
 
     if(!isset($_GET['purchase_id'])){
-        header('Location: supplier.php');
+        header('Location: purchase_viewsupplier.php');
     }
 
 	$sql = "SELECT i.item_name, pi.quantity, s.size_name, pi.quantity * i.price AS item_price FROM purchase_items pi
