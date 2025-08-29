@@ -312,7 +312,7 @@
 													</h5>
 													<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 												</div>
-												<form action="process_addstock.php" method="POST">
+												<form action="process_addsupplierorder.php" method="POST">
 													<div class="modal-body">
 														<p class="small">Add an order using this form.</p>
 														<div class="row">
