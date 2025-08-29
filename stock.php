@@ -347,21 +347,16 @@
 																</div>
 															</div>
 															<div class="col-sm-12">
-																<div class="form-group form-group-default">
-																	<label>Unit Cost</label>
-																	<p id="unit_cost_display" style="padding: .375rem .75rem; background-color: #e9ecef; border-radius: 4px; margin-bottom: 0;">
-																	$0.00
-																	</p>
+																<div class="d-flex justify-content-between align-items-center" style="padding: 8px 0;">
+																	<span>Unit Price</span>
+																	<span id="unit_cost_display" style="color: #333;">₱0.00</span>
 																</div>
 															</div>
 
-																<!-- Total Price (text only) -->
 															<div class="col-sm-12">
-																<div class="form-group form-group-default">
-																	<label>Total Price</label>
-																	<p id="total_price" style="padding: .375rem .75rem; background-color: #e9ecef; border-radius: 4px; margin-bottom: 0;">
-																	$0.00
-																	</p>
+																<div class="d-flex justify-content-between align-items-center" style="padding: 8px 0; font-weight: 700; font-size: 1.25rem; color: #E94E1B;">
+																	<span>Total Price</span>
+																	<span id="total_price">₱0.00</span>
 																</div>
 															</div>
 														</div>
