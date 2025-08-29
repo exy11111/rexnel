@@ -83,15 +83,17 @@
 								<div class="card-header">
 									<div class="d-flex align-items-center">
 										<h4 class="card-title">Suppliers</h4>
-										<?php if($_SESSION['role_id'] == 1 || $_SESSION['role_id'] == 2): ?>
-										<button class="btn btn-primary btn-round ms-auto" data-bs-toggle="modal" data-bs-target="#addRowModal">
-											<i class="fa fa-plus"></i>
-											Add Supplier
-										</button>
-										<a href="adminorderhistory.php" class="btn btn-success btn-round ms-auto">
-											Order History
-										</a>
-										<?php endif; ?>
+										<div class="ms-auto">
+											<?php if($_SESSION['role_id'] == 1 || $_SESSION['role_id'] == 2): ?>
+											<button class="btn btn-primary btn-round ms-auto" data-bs-toggle="modal" data-bs-target="#addRowModal">
+												<i class="fa fa-plus"></i>
+												Add Supplier
+											</button>
+											<a href="adminorderhistory.php" class="btn btn-success btn-round ms-auto">
+												Order History
+											</a>
+											<?php endif; ?>
+										</div>
 									</div>
 								</div>
 								<div class="card-body">

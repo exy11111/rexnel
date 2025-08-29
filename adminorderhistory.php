@@ -19,8 +19,10 @@
 	FROM supplier_orders so 
 	JOIN items i ON so.item_id = i.item_id 
 	JOIN branch b ON i.branch_id = b.branch_id
+	WHERE so.branch_id = :branch_id
 	ORDER BY so.date DESC";
     $stmt = $conn->prepare($sql);
+	$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
     $stmt->execute();
     $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -90,7 +92,7 @@
 								<i class="icon-arrow-right"></i>
 							</li>
 							<li class="nav-item">
-								<a href="supplieraccount.php">Supplier</a>
+								<a href="suppliers.php">Suppliers</a>
 							</li>
 							<li class="separator">
 								<i class="icon-arrow-right"></i>
@@ -114,7 +116,6 @@
 											<thead>
 												<tr>
 													<th>Order ID</th>
-													<th>Branch</th>
 													<th>Date</th>
 													<th>Total Amount</th>
                                                     <th>Status</th>
@@ -126,7 +127,6 @@
 													foreach($data as $row){
 														echo "<tr data-id=".htmlspecialchars($row['order_id']).">";
 														echo "<td>".htmlspecialchars($row['order_id'])."</td>";
-														echo "<td>".htmlspecialchars($row['branch_name'])."</td>";
 														echo "<td>".htmlspecialchars($row['date'])."</td>";
 														echo "<td>₱".htmlspecialchars($row['amount'])."</td>";
                                                         echo "<td>".htmlspecialchars($row['status'])."</td>";
