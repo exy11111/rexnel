@@ -733,6 +733,24 @@
             <?php endif; ?>
         </script>
     <?php endif; ?>
+	<?php if (isset($_GET['order'])): ?>
+        <script>
+            <?php if ($_GET['order'] == 'success'): ?>
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Order placed.',
+                    text: 'The order for the item has been successfully placed.',
+                }).then((result) => {
+                });
+            <?php elseif ($_GET['editstatus'] == 'error'): ?>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong while editing the item.',
+                });
+            <?php endif; ?>
+        </script>
+    <?php endif; ?>
 
 	<!-- Auto populate in edit modal -->
     <script>
