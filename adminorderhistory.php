@@ -53,7 +53,7 @@
 <body>
 	<div class="wrapper">
 		<!-- Sidebar -->
-		<?php $active = 'orders'?>
+		<?php $active = 'account'?>
 		<?php include 'include_sidebar.php'?>
 
 		<div class="main-panel">
