@@ -19,7 +19,7 @@
 	FROM supplier_orders so 
 	JOIN items i ON so.item_id = i.item_id 
 	JOIN branch b ON i.branch_id = b.branch_id
-	WHERE so.branch_id = :branch_id
+	WHERE i.branch_id = :branch_id
 	ORDER BY so.date DESC";
     $stmt = $conn->prepare($sql);
 	$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
