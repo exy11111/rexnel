@@ -226,9 +226,9 @@
 					<div class="row">		
 						<div class="col-sm-12">
 							<div class="form-group form-group-default">
-								<label for="category">Category</label>
+								<label for="category">Status</label>
 								<select class="form-select" id="editCategoryId" name="category_id" required>
-									<option value="">Select Category</option>
+									<option value="">Select Status</option>
 									<?php 
 										foreach ($data1 as $row){
 											echo "<option value='".$row['category_id']."'>".$row['category_name']."</option>";
