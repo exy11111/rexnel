@@ -262,7 +262,7 @@
 															<div class="col-sm-12">
 																<div class="form-group form-group-default">
 																	<label>Barcode</label>
-																	<input type="text" name="barcode" class="form-control stock_barcode" oninput="validatePhoneNumber(this)" placeholder="fill barcode">
+																	<input type="text" name="barcode" id="stock_barcode" class="form-control" oninput="validatePhoneNumber(this)" placeholder="fill barcode">
 																	<script>
 																		function validatePhoneNumber(input) {
 																			input.value = input.value.replace(/[^0-9]/g, '');
@@ -314,12 +314,12 @@
 												</div>
 												<form action="process_addstock.php" method="POST">
 													<div class="modal-body">
-														<p class="small">Add a order using this form.</p>
+														<p class="small">Add an order using this form.</p>
 														<div class="row">
 															<div class="col-sm-12">
 																<div class="form-group form-group-default">
 																	<label>Barcode</label>
-																	<input type="text" name="barcode" class="form-control stock_barcode" oninput="validatePhoneNumber(this)" placeholder="fill barcode">
+																	<input type="text" name="barcode" id="stock_barcode2" class="form-control" oninput="validatePhoneNumber(this)" placeholder="fill barcode">
 																	<script>
 																		function validatePhoneNumber(input) {
 																			input.value = input.value.replace(/[^0-9]/g, '');
@@ -330,7 +330,7 @@
 															<div class="col-sm-12">
 																<div class="form-group form-group-default">
 																	<label>Item Name</label>
-																	<select class="form-select" name="item_id" id="stock_itemId" required>
+																	<select class="form-select" name="item_id" id="order_itemId" required>
 																		<option value="">Select Item</option>
 																		<?php 
 																			foreach ($data as $row){
@@ -764,36 +764,61 @@
             });
         });
 
-		document.querySelectorAll('.stock_barcode').forEach(function(element) {
-			element.addEventListener('change', function() {
-				let barcode = this.value;
+		document.getElementById('stock_barcode').addEventListener('change', function() {
+			let barcode = this.value;
 
-				fetch('process_getbarcodedata.php', {
-					method: 'POST',
-					headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-					body: 'barcode=' + barcode
-				})
-				.then(response => response.json())
-				.then(data => {
-					if (data.error) {
-						Swal.fire({
-							icon: 'error',
-							title: 'Error',
-							text: data.error
-						});
-						console.log(data);
-						document.getElementById('stock_itemId').value = '';
-						document.getElementById('stock_quantity').value = '';
-					} else {
-						console.log(data);
-						document.getElementById('stock_itemId').value = data.item_id;
-						document.getElementById('stock_quantity').value = 1;
-					}
-				})
-				.catch(error => console.error('Error:', error));
-			});
+			fetch('process_getbarcodedata.php', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+				body: 'barcode=' + barcode
+			})
+			.then(response => response.json())
+			.then(data => {
+				if (data.error) {
+					Swal.fire({
+						icon: 'error',
+						title: 'Error',
+						text: data.error
+					});
+					console.log(data);
+					document.getElementById('stock_itemId').value = '';
+					document.getElementById('stock_quantity').value = '';
+				} else {
+					console.log(data);
+					document.getElementById('stock_itemId').value = data.item_id;
+					document.getElementById('stock_quantity').value = 1;
+				}
+			})
+			.catch(error => console.error('Error:', error));
 		});
 
+		document.getElementById('stock_barcode2').addEventListener('change', function() {
+			let barcode = this.value;
+
+			fetch('process_getbarcodedata.php', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+				body: 'barcode=' + barcode
+			})
+			.then(response => response.json())
+			.then(data => {
+				if (data.error) {
+					Swal.fire({
+						icon: 'error',
+						title: 'Error',
+						text: data.error
+					});
+					console.log(data);
+					document.getElementById('order_itemId').value = '';
+					document.getElementById('order_quantity').value = '';
+				} else {
+					console.log(data);
+					document.getElementById('order_itemId').value = data.item_id;
+					document.getElementById('order_quantity').value = 1;
+				}
+			})
+			.catch(error => console.error('Error:', error));
+		});
     </script>
 
 
