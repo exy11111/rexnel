@@ -57,7 +57,7 @@
 		<?php include 'include_sidebar.php'?>
 
 		<div class="main-panel">
-		<?php include 'include_navbar	.php'?>
+		<?php include 'include_navbar.php'?>
 			
 			<div class="container">
 				<div class="page-inner">
