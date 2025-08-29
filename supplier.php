@@ -48,7 +48,7 @@
 	$stmt->execute();
 	$branch_name = $stmt->fetchColumn();
 
-	$sql = "SELECT purchase_id, price, date, payment_method FROM purchases p1 JOIN payment_method p2 ON p1.pm_id = p2.pm_id WHERE p1.branch_id = :branch_id ORDER BY p1.date DESC";
+	$sql = "SELECT purchase_id, price, date, payment_method FROM purchases p1 JOIN payment_method p2 ON p1.pm_id = p2.pm_id ORDER BY p1.date DESC";
     $stmt = $conn->prepare($sql);
 	$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
     $stmt->execute();
@@ -204,6 +204,7 @@
 													<?php if($_SESSION['role_id'] == 1 || $_SESSION['role_id'] == 2):?>
 													<th style="width: 10%">Status</th>
 													<th style="width: 10%">Total</th>
+													<th style="width: 10%">Action</th>
 													<?php endif;?>
 												</tr>
 											</thead>
