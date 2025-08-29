@@ -3,7 +3,7 @@
         <!-- Logo Header -->
         <div class="logo-header" data-background-color="dark">
 
-            <a href="index.php" class="logo text-white fw-bold">
+            <a href="supplier.php" class="logo text-white fw-bold">
                 <img src="assets/img/holicon.png" alt="navbar brand" class="navbar-brand" height="40">&nbsp;House of Local
             </a>
             <div class="nav-toggle">
