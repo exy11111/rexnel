@@ -233,28 +233,25 @@
 				</h5>
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
-			<form action="process_editstatus.php" method="POST">
+			<form action="process_editstatus_supplier.php" method="POST">
 				<div class="modal-body">
 					<p class="small">Edit the Status below.</p>
 					<div class="row">		
 						<div class="col-sm-12">
 							<div class="form-group form-group-default">
 								<label for="category">Status</label>
-								<?php 
-									$stmt = $conn->prepare("SELECT * FROM ");
-								?>
-								<select class="form-select" id="editCategoryId" name="category_id" required>
+								<select class="form-select" id="editStatus" name="status" required>
 									<option value="">Select Status</option>
-									<?php 
-										foreach ($data1 as $row){
-											echo "<option value='".$row['category_id']."'>".$row['category_name']."</option>";
-										}
-									?>
+									<option value="Pending">Pending</option>
+									<option value="Accepted">Accepted</option>
+									<option value="Shipping">Shipping</option>
+									<option value="Delivered">Delivered</option>
+									<option value="Received">Received</option>
 								</select>
 							</div>
 						</div>
 					</div>
-					<input type="text" name="item_id" id="editItemId" hidden>
+					<input type="text" name="item_id" id="editOrderId" hidden>
 				</div>
 				<div class="modal-footer border-0">
 					<button type="submit" class="btn btn-primary">Save Changes</button>

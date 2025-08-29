@@ -125,7 +125,7 @@
 											</button>
 											<button class="btn btn-success btn-round" data-bs-toggle="modal" data-bs-target="#orderModal">
 												<i class="fa fa-plus"></i>
-												Add Stock
+												Add Order
 											</button>
 											<?php endif; ?>
 										</div>
@@ -338,7 +338,7 @@
 														</div>
 													</div>
 													<div class="modal-footer border-0">
-														<button type="submit" class="btn btn-primary">Add</button>
+														<button type="submit" class="btn btn-success">Order</button>
 														<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
 													</div>
 												</form>
