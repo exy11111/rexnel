@@ -69,7 +69,7 @@
 						$stmt->execute();
 						$branch_name = $stmt->fetchColumn();
 						?>
-						<h3 class="fw-bold mb-3"><?php echo $supplier_name; ?></h3>
+						<h3 class="fw-bold mb-3"><?php echo $supplier_info['supplier_name']; ?></h3>
 						<ul class="breadcrumbs mb-3">
 							<li class="nav-home">
 								<a href="supplier.php">
