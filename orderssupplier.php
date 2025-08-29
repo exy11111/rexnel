@@ -421,6 +421,7 @@
 			fetch('process_getitem1.php?id=' + itemId)
 				.then(response => response.json())
 				.then(data => {
+					console.log(data);
 					viewItemModal.querySelector('.modal-body .col-sm-12').innerHTML = `
 						<p><strong>Item Name:</strong> ${data.item_name}</p>
 						<p><strong>Category:</strong> ${data.category_name}</p>
