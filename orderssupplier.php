@@ -240,6 +240,9 @@
 						<div class="col-sm-12">
 							<div class="form-group form-group-default">
 								<label for="category">Status</label>
+								<?php 
+									$stmt = $conn->prepare("SELECT * FROM ");
+								?>
 								<select class="form-select" id="editCategoryId" name="category_id" required>
 									<option value="">Select Status</option>
 									<?php 

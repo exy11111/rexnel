@@ -119,7 +119,7 @@
 												<i class="fa fa-plus"></i>
 												Add Item
 											</button>
-											<button class="btn btn-secondary btn-round" data-bs-toggle="modal" data-bs-target="#addStockModal">
+											<button class="btn btn-secondary btn-round me-3" data-bs-toggle="modal" data-bs-target="#addStockModal">
 												<i class="fa fa-plus"></i>
 												Add Stock
 											</button>
@@ -270,6 +270,52 @@
 																	</script>
 																</div>
 															</div>
+															<div class="col-sm-12">
+																<div class="form-group form-group-default">
+																	<label>Item Name</label>
+																	<select class="form-select" name="item_id" id="stock_itemId" required>
+																		<option value="">Select Item</option>
+																		<?php 
+																			foreach ($data as $row){
+																				echo "<option value='".$row['item_id']."'>".$row['item_name']."</option>";
+																			}
+																		?>
+																	</select>
+																</div>
+															</div>
+															<div class="col-sm-12">
+																<div class="form-group form-group-default">
+																	<label for="category">Quantity</label>
+																	<input type="number" class="form-control" name="quantity">
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="modal-footer border-0">
+														<button type="submit" class="btn btn-primary">Add</button>
+														<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+													</div>
+												</form>
+											</div>
+										</div>
+									</div>
+									<div class="modal fade" id="orderModal" tabindex="-1" role="dialog" aria-hidden="true">
+										<div class="modal-dialog" role="document">
+											<div class="modal-content">
+												<div class="modal-header border-0">
+													<h5 class="modal-title">
+														<span class="fw-mediumbold">
+														Add</span> 
+														<span class="fw-light">
+															Order
+														</span>
+													</h5>
+													<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+												</div>
+												<form action="process_addstock.php" method="POST">
+													<div class="modal-body">
+														<p class="small">Add a order using this form.</p>
+														<div class="row">
 															<div class="col-sm-12">
 																<div class="form-group form-group-default">
 																	<label>Item Name</label>
