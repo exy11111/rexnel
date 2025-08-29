@@ -422,13 +422,19 @@
 				.then(data => {
 					console.log(data);
 					viewItemModal.querySelector('.modal-body .col-sm-12').innerHTML = `
-						<p><strong>Item Name:</strong> ${data.item_name}</p>
-						<p><strong>Category:</strong> ${data.category_name}</p>
-						<p><strong>Brand:</strong> ${data.brand_name}</p>
-						<p><strong>Size:</strong> ${data.size_name}</p>
-						<br>
-						<p><strong>Quantity:</strong> ${data.quantity}</p>
-						<p><strong>Amount:</strong> ₱${data.amount}</p>
+						<div class='row'>
+							<div class='col-6'>
+								<p><strong>Item Name:</strong> ${data.item_name}</p>
+								<p><strong>Category:</strong> ${data.category_name}</p>
+								<br>
+								<p><strong>Quantity:</strong> ${data.quantity}</p>
+								<p><strong>Amount:</strong> ₱${data.amount}</p>
+							</div>
+							<div class='col-6'>
+								<p><strong>Brand:</strong> ${data.brand_name}</p>
+								<p><strong>Size:</strong> ${data.size_name}</p>
+							</div>
+						</div>		
 					`;
 				})
 				.catch(error => {

@@ -346,6 +346,20 @@
 																	<input type="number" class="form-control" name="quantity">
 																</div>
 															</div>
+															<div class="col-sm-12">
+																<div class="form-group form-group-default">
+																	<label>Unit Cost</label>
+																	<input type="number" class="form-control" name="unit_cost" id="unit_cost" min="0" step="0.01" oninput="calculateTotal()" placeholder="Enter unit cost">
+																</div>
+															</div>
+
+															<!-- New Total Price Field -->
+															<div class="col-sm-12">
+																<div class="form-group form-group-default">
+																	<label>Total Price</label>
+																	<input type="number" class="form-control" id="total_price" readonly placeholder="Total price will be calculated">
+																</div>
+															</div>
 														</div>
 													</div>
 													<div class="modal-footer border-0">
@@ -615,6 +629,21 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.0/dist/sweetalert2.all.min.js"></script>
 	<?php include 'modal_profile.php'?>
 	<?php include 'modal_editaccount.php';?>
+
+	<script>
+		function calculateTotal() {
+			const quantity = document.getElementById('quantity').value;
+			const unitCost = document.getElementById('unit_cost').value;
+			const totalPriceField = document.getElementById('total_price');
+
+			let total = 0;
+			if(quantity && unitCost){
+			total = parseFloat(quantity) * parseFloat(unitCost);
+			}
+
+			totalPriceField.value = total.toFixed(2);
+		}
+	</script>
 	<!-- Auto populate in edit modal -->
     <script>
         $(document).ready(function() {
