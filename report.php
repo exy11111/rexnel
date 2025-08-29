@@ -360,52 +360,59 @@
 												break;
 										}
 									?>
-									<div class="dropdown">
-										<button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-											<?= htmlspecialchars($filterLabel) ?>
-										</button>
-										<?php
-											$queryParams = $_GET;
+									<div class="d-flex align-items-center">
+										<div class="dropdown">
+											<button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+												<?= htmlspecialchars($filterLabel) ?>
+											</button>
+											<?php
+												$queryParams = $_GET;
 
-											$productFilters = [
-												'today' => 'Today',
-												'month' => 'This Month',
-												'year'  => 'This Year',
-												'all'   => 'All Time'
-											];
-										?>
-										<ul class="dropdown-menu" aria-labelledby="filterDropdown">
-											<?php foreach ($productFilters as $key => $label): ?>
-												<?php
-													$params = $queryParams;
-													$params['top_product_filter'] = $key;
-													$url = basename($_SERVER['PHP_SELF']) . '?' . http_build_query($params);
-												?>
-												<li><a class="dropdown-item" href="<?= $url ?>"><?= $label ?></a></li>
-											<?php endforeach; ?>
-										</ul>
+												$productFilters = [
+													'today' => 'Today',
+													'month' => 'This Month',
+													'year'  => 'This Year',
+													'all'   => 'All Time'
+												];
+											?>
+											<ul class="dropdown-menu" aria-labelledby="filterDropdown">
+												<?php foreach ($productFilters as $key => $label): ?>
+													<?php
+														$params = $queryParams;
+														$params['top_product_filter'] = $key;
+														$url = basename($_SERVER['PHP_SELF']) . '?' . http_build_query($params);
+													?>
+													<li><a class="dropdown-item" href="<?= $url ?>"><?= $label ?></a></li>
+												<?php endforeach; ?>
+											</ul>
+										</div>
+										<button class="btn btn-sm btn-primary ms-2" data-bs-toggle="modal" data-bs-target="#viewAllModal">
+											View All
+										</button>
 									</div>
+									
 								</div>
 
 								<?php 
 									$topProductFilter = isset($_GET['top_product_filter']) ? $_GET['top_product_filter'] : 'all';
 
-									$where = '';
+									$where = "WHERE p.branch_id = :branch_id";
 									$params = [];
+									$params[':branch_id'] = $_SESSION['branch_id'];
 									
 									$today = date('Y-m-d');
 									$thisMonth = date('m');
 									$thisYear  = date('Y');
 
 									if ($topProductFilter === 'today') {
-										$where = "WHERE DATE(p.date) = :today";
+										$where .= " AND DATE(p.date) = :today";
 										$params[':today'] = $today;
 									} elseif ($topProductFilter === 'month') {
-										$where = "WHERE YEAR(p.date) = :year AND MONTH(p.date) = :month";
+										$where .= " AND YEAR(p.date) = :year AND MONTH(p.date) = :month";
 										$params[':year']  = $thisYear;
 										$params[':month'] = $thisMonth;
 									} elseif ($topProductFilter === 'year') {
-										$where = "WHERE YEAR(p.date) = :year";
+										$where .= " AND YEAR(p.date) = :year";
 										$params[':year'] = $thisYear;
 									}							
 
@@ -420,8 +427,7 @@
 											JOIN purchases p ON pi.purchase_id = p.purchase_id
 											$where
 											GROUP BY i.item_id, i.item_name, i.price
-											ORDER BY total_sold DESC
-											LIMIT 3";
+											ORDER BY total_sold DESC";
 
 									$stmt = $conn->prepare($sql);
 									$stmt->execute($params);
@@ -429,23 +435,33 @@
 
 								?>
 								<div class="card-body">
-									<?php foreach ($topProducts as $row): ?>
-									<div class="card mb-3">
-										<div class="card-body d-flex justify-content-between align-items-center">
-											<div>
-												<h5 class="card-title mb-1"><?php echo $row['item_name'];?></h5>
-												<p class="mb-1">Price: ₱<?php echo number_format($row['price'], 2);?></p>
+								<?php 
+									$counter = 0;
+									foreach ($topProducts as $row): 
+										if ($counter >= 3) break;
+									?>
+										<div class="card mb-3">
+											<div class="card-body d-flex justify-content-between align-items-center">
+												<div>
+													<h5 class="card-title mb-1"><?php echo $row['item_name'];?></h5>
+													<p class="mb-1">Price: ₱<?php echo number_format($row['price'], 2);?></p>
+												</div>
+												<div class="flex-grow-1 text-center">
+													<p class="mb-0 fw-bold">Sold: <?php echo $row['total_sold'];?></p>
+												</div>
+												<a href="stock.php" class="btn btn-primary btn-sm">View</a>
 											</div>
-											<div class="flex-grow-1 text-center">
-												<p class="mb-0 fw-bold">Sold: <?php echo $row['total_sold'];?></p>
-											</div>
-											<a href="stock.php" class="btn btn-primary btn-sm">View</a>
 										</div>
-									</div>
-									<?php endforeach; ?>
+									<?php 
+										$counter++;
+									endforeach; 
+									?>
 								</div>
 							</div>
 						</div>
+						<?php include 'modal_viewallproduct.php'?>
+
+
 						<div class="col-sm-12 col-md-6 d-flex">
 							<div class="card flex-fill">
 								<div class="card-header d-flex justify-content-between align-items-center">
@@ -468,68 +484,62 @@
 												break;
 										}
 									?>
-									<div class="dropdown">
-										<button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-											<?= htmlspecialchars($filterLabelBrand) ?>
+									<div class="d-flex align-items-center">
+										<div class="dropdown">
+											<button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="filterDropdownBrand" data-bs-toggle="dropdown" aria-expanded="false">
+												<?= htmlspecialchars($filterLabelBrand) ?>
+											</button>
+											<ul class="dropdown-menu" aria-labelledby="filterDropdownBrand">
+												<?php foreach ($brandFilters as $key => $label): ?>
+													<?php
+														$params = $queryParams;
+														$params['top_brand_filter'] = $key;
+														$url = basename($_SERVER['PHP_SELF']) . '?' . http_build_query($params);
+													?>
+													<li><a class="dropdown-item" href="<?= $url ?>"><?= $label ?></a></li>
+												<?php endforeach; ?>
+											</ul>
+										</div>
+										<button class="btn btn-sm btn-primary ms-2" data-bs-toggle="modal" data-bs-target="#viewAllBrandsModal">
+											View All
 										</button>
-										<?php
-											$queryParams = $_GET;
-
-											$brandFilters = [
-												'today' => 'Today',
-												'month' => 'This Month',
-												'year'  => 'This Year',
-												'all'   => 'All Time'
-											];
-										?>
-										<ul class="dropdown-menu" aria-labelledby="filterDropdown">
-											<?php foreach ($brandFilters as $key => $label): ?>
-												<?php
-													$params = $queryParams;
-													$params['top_brand_filter'] = $key;
-													$url = basename($_SERVER['PHP_SELF']) . '?' . http_build_query($params);
-												?>
-												<li><a class="dropdown-item" href="<?= $url ?>"><?= $label ?></a></li>
-											<?php endforeach; ?>
-										</ul>
 									</div>
 								</div>
 
 								<?php 
 									$topBrandFilter = isset($_GET['top_brand_filter']) ? $_GET['top_brand_filter'] : 'all';
 
-									$whereBrand = '';
-									$paramsBrand = [];
+									$whereBrand = "WHERE p.branch_id = :branch_id";
+									$paramsBrand = [':branch_id' => $_SESSION['branch_id']];
 									
 									$today = date('Y-m-d');
 									$thisMonth = date('m');
 									$thisYear  = date('Y');
-
+									
 									if ($topBrandFilter === 'today') {
-										$whereBrand = "WHERE DATE(p.date) = :today";
+										$whereBrand .= " AND DATE(p.date) = :today";
 										$paramsBrand[':today'] = $today;
 									} elseif ($topBrandFilter === 'month') {
-										$whereBrand = "WHERE YEAR(p.date) = :year AND MONTH(p.date) = :month";
+										$whereBrand .= " AND YEAR(p.date) = :year AND MONTH(p.date) = :month";
 										$paramsBrand[':year']  = $thisYear;
 										$paramsBrand[':month'] = $thisMonth;
 									} elseif ($topBrandFilter === 'year') {
-										$whereBrand = "WHERE YEAR(p.date) = :year";
+										$whereBrand .= " AND YEAR(p.date) = :year";
 										$paramsBrand[':year'] = $thisYear;
-									}							
+									}					
 
 									$sql = "SELECT 
-												b.brand_id,
-												b.brand_name,
-												SUM(pi.quantity) AS total_sold,
-												SUM(pi.quantity * i.price) AS total_revenue
-											FROM purchase_items pi
-											JOIN items i ON pi.item_id = i.item_id
-											JOIN purchases p ON pi.purchase_id = p.purchase_id
-											JOIN brands b ON i.brand_id = b.brand_id
-											$whereBrand
-											GROUP BY b.brand_id, b.brand_name
-											ORDER BY total_sold DESC
-											LIMIT 3";
+										b.brand_id,
+										b.brand_name,
+										SUM(pi.quantity) AS total_sold,
+										SUM(pi.quantity * i.price) AS total_revenue
+									FROM purchase_items pi
+									JOIN items i ON pi.item_id = i.item_id
+									JOIN purchases p ON pi.purchase_id = p.purchase_id
+									JOIN brands b ON i.brand_id = b.brand_id
+									$whereBrand
+									GROUP BY b.brand_id, b.brand_name
+									ORDER BY total_sold DESC";
 
 									$stmt = $conn->prepare($sql);
 									$stmt->execute($paramsBrand);
@@ -537,22 +547,30 @@
 
 								?>
 								<div class="card-body">
-									<?php foreach ($topBrands as $row): ?>
-									<div class="card mb-3">
-										<div class="card-body d-flex justify-content-between align-items-center">
-											<div>
-												<h5 class="card-title mb-1"><?php echo $row['brand_name'];?></h5>
+									<?php 
+									$counter = 0;
+									foreach ($topBrands as $row): 
+										if ($counter >= 3) break;
+									?>
+										<div class="card mb-3">
+											<div class="card-body d-flex justify-content-between align-items-center">
+												<div>
+													<h5 class="card-title mb-1"><?php echo $row['brand_name'];?></h5>
+												</div>
+												<div class="flex-grow-1 text-center">
+													<p class="mb-0 fw-bold">Sold: <?php echo $row['total_sold'];?></p>
+												</div>
+												<a href="brands.php" class="btn btn-primary btn-sm">View</a>
 											</div>
-											<div class="flex-grow-1 text-center">
-												<p class="mb-0 fw-bold">Sold: <?php echo $row['total_sold'];?></p>
-											</div>
-											<a href="brands.php" class="btn btn-primary btn-sm">View</a>
 										</div>
-									</div>
-									<?php endforeach; ?>
+									<?php 
+									$counter++;
+									endforeach; 
+									?>
 								</div>
 							</div>
 						</div>
+						<?php include 'modal_viewallbrand.php'?>
 					</div>
 
 					<div class="card">

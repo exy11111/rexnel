@@ -1,6 +1,18 @@
 <?php 
 	require ('session.php');
 	require ('db.php');
+	if($_SESSION['role_id'] != 3){
+		header("Location: index.php");
+        exit();
+	}
+	else{
+		$supplier_id = $_SESSION['supplier_id'];
+		$sql = "SELECT * FROM suppliers WHERE supplier_id = :id";
+		$stmt = $conn->prepare($sql);
+		$stmt->bindParam(':id', $supplier_id);
+		$stmt->execute();
+		$supplier_info = $stmt->fetch();
+	}
 
 	$sql = "SELECT sum(stock) as total_quantity FROM items WHERE branch_id = :branch_id";
 	$stmt = $conn->prepare($sql);
@@ -49,7 +61,7 @@
 <html lang="en">
 <head>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-	<title>Dashboard </title>
+	<title><?php echo $supplier_info['supplier_name'];?></title>
 	<meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
 	<link rel="icon" href="assets/img/holicon.png" type="image/x-icon"/>
 
@@ -88,7 +100,7 @@
 </head>
 <body>
 	<div class="wrapper">
-		<?php $active = 'supplier'?>
+		<?php $active = 'dashboard'?>
 		<?php include 'include_sidebar_supplier.php'?>
 
 		<div class="main-panel">
@@ -98,7 +110,7 @@
 				<div class="page-inner">
 					<div class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4">
 						<div>
-							<h3 class="fw-bold mb-3">Dashboard <?php if (isset($_SESSION['supplier_id'])): echo $_SESSION['supplier_id']; endif;?></h3>
+							<h3 class="fw-bold mb-3"><?php echo $supplier_info['supplier_name'];?></h3>
 						</div>
 						<!--
 						<div class="ms-md-auto py-2 py-md-0">
@@ -203,6 +215,14 @@
 														echo "<td>₱".htmlspecialchars($row['price'])."</td>";
 														echo "<td>".htmlspecialchars($row['payment_method'])."</td>";
 														echo "<td>".htmlspecialchars($row['payment_method'])."</td>";
+														echo "<td>
+                                                                <div class='form-button-action'>
+                                                                    <a href='purchase_view.php?purchase_id=".$row['purchase_id']."' class='btn btn-link btn-primary btn-lg' data-id='".htmlspecialchars($row['purchase_id'])."' title='Edit Task'>
+                                                                        <i class='bi bi-eye-fill'></i>
+                                                                    </a>
+                                                                </div>
+                                                            </td>";
+                                                        echo "</tr>";
 														if($_SESSION['role_id'] == 1 || $_SESSION['role_id'] == 2){
 
 														}
