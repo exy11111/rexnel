@@ -369,21 +369,15 @@
             <?php if ($_GET['status'] == 'success'): ?>
                 Swal.fire({
                     icon: 'success',
-                    title: 'Size Added!',
-                    text: 'The size has been successfully created.',
+                    title: 'Status Updated!',
+                    text: 'The status has been successfully updated.',
                 }).then((result) => {
                 });
             <?php elseif ($_GET['status'] == 'error'): ?>
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
-                    text: 'Something went wrong while creating the size.',
-                });
-            <?php elseif ($_GET['status'] == 'exist'): ?>
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Size already exists.',
+                    text: 'Something went wrong while updating the status.',
                 });
             <?php endif; ?>
         </script>
