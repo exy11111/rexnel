@@ -123,6 +123,10 @@
 												<i class="fa fa-plus"></i>
 												Add Stock
 											</button>
+											<button class="btn btn-success btn-round" data-bs-toggle="modal" data-bs-target="#orderModal">
+												<i class="fa fa-plus"></i>
+												Add Stock
+											</button>
 											<?php endif; ?>
 										</div>
 										
