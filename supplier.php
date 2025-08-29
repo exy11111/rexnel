@@ -215,14 +215,6 @@
 														echo "<td>₱".htmlspecialchars($row['price'])."</td>";
 														echo "<td>".htmlspecialchars($row['payment_method'])."</td>";
 														echo "<td>".htmlspecialchars($row['payment_method'])."</td>";
-														echo "<td>
-                                                                <div class='form-button-action'>
-                                                                    <a href='purchase_view.php?purchase_id=".$row['purchase_id']."' class='btn btn-link btn-primary btn-lg' data-id='".htmlspecialchars($row['purchase_id'])."' title='Edit Task'>
-                                                                        <i class='bi bi-eye-fill'></i>
-                                                                    </a>
-                                                                </div>
-                                                            </td>";
-                                                        echo "</tr>";
 														if($_SESSION['role_id'] == 1 || $_SESSION['role_id'] == 2){
 
 														}
