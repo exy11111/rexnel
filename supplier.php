@@ -202,11 +202,9 @@ ini_set('display_errors', 1);
 												<tr>
 													<th style="width: 10%">Order ID</th>
 													<th>Date</th>
-													<?php if($_SESSION['role_id'] == 1 || $_SESSION['role_id'] == 2):?>
 													<th style="width: 10%">Status</th>
 													<th style="width: 10%">Total</th>
 													<th style="width: 10%">Action</th>
-													<?php endif;?>
 												</tr>
 											</thead>
 											<tbody>
