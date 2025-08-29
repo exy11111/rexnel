@@ -736,12 +736,18 @@
 	<?php if (isset($_GET['order'])): ?>
         <script>
             <?php if ($_GET['order'] == 'success'): ?>
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Order placed.',
-                    text: 'The order for the item has been successfully placed.',
-                }).then((result) => {
-                });
+				Swal.fire({
+					icon: 'success',
+					title: 'Order placed.',
+					text: 'You have successfully placed an order.',
+					showCancelButton: true,
+					confirmButtonText: 'View in Orders',
+					cancelButtonText: 'OK',
+				}).then((result) => {
+					if (result.isConfirmed) {
+						window.location.href = 'adminorderhistory.php'; 
+					}
+				});
             <?php elseif ($_GET['editstatus'] == 'error'): ?>
                 Swal.fire({
                     icon: 'error',
