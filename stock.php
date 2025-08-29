@@ -630,30 +630,24 @@
 	<?php include 'modal_editaccount.php';?>
 
 	<script>
-		function validatePhoneNumber(input) {
-			input.value = input.value.replace(/[^0-9]/g, '');
-		}
-
-		// Update unit cost display when item changes
 		function updateUnitCost() {
-			const select = document.getElementById('order_itemId');
-			const selectedOption = select.options[select.selectedIndex];
-			const unitCost = selectedOption.getAttribute('data-unit-cost') || 0;
-			
-			const unitCostDisplay = document.getElementById('unit_cost_display');
-			unitCostDisplay.textContent = '$' + parseFloat(unitCost).toFixed(2);
+		const select = document.getElementById('order_itemId');
+		const selectedOption = select.options[select.selectedIndex];
+		const unitCost = selectedOption.getAttribute('data-unit-cost') || 0;
 
-			calculateTotal();  // recalculate total price on unit cost change
+		const unitCostDisplay = document.getElementById('unit_cost_display');
+		unitCostDisplay.textContent = '₱' + parseFloat(unitCost).toFixed(2);
+
+		calculateTotal();
 		}
 
-		// Calculate total price (quantity * unit cost)
 		function calculateTotal() {
-			const quantity = parseFloat(document.getElementById('quantity').value) || 0;
-			const unitCostText = document.getElementById('unit_cost_display').textContent.replace('$', '');
-			const unitCost = parseFloat(unitCostText) || 0;
+		const quantity = parseFloat(document.getElementById('quantity').value) || 0;
+		const unitCostText = document.getElementById('unit_cost_display').textContent.replace('₱', '');
+		const unitCost = parseFloat(unitCostText) || 0;
 
-			const total = quantity * unitCost;
-			document.getElementById('total_price').textContent = '$' + total.toFixed(2);
+		const total = quantity * unitCost;
+		document.getElementById('total_price').textContent = '₱' + total.toFixed(2);
 		}
 	</script>
 	<!-- Auto populate in edit modal -->
