@@ -19,7 +19,13 @@
 	FROM supplier_orders so 
 	JOIN items i ON so.item_id = i.item_id 
 	JOIN branch b ON i.branch_id = b.branch_id
-	ORDER BY so.date DESC";
+	ORDER BY 
+    CASE 
+        WHEN status = 'Pending' THEN 0 
+        WHEN status = 'Cancelled' THEN 2
+        ELSE 1
+    END,
+    date DESC;";
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -120,10 +126,10 @@
                                                         echo "<td>".htmlspecialchars($row['status'])."</td>";
 														echo "<td>
                                                                 <div class='form-button-action'>
-																	<button type='button' class='btn btn-link btn-primary btn-lg' data-bs-toggle='modal' data-bs-target='#editStatusModal' title='Edit Task'>
+																	<button type='button' class='btn btn-link btn-primary btn-lg' data-bs-toggle='modal' data-bs-target='#editStatusModal' data-id='".htmlspecialchars($row['order_id'])."' title='Edit Task'>
                                                                         <i class='fa fa-edit'></i>
                                                                     </button>
-                                                                    <a href='purchase_viewsupplier.php?purchase_id=".$row['order_id']."' class='btn btn-link btn-primary btn-lg' data-id='".htmlspecialchars($row['order_id'])."' title='Edit Task'>
+                                                                    <a href='#' class='btn btn-link btn-primary btn-lg' data-bs-toggle='modal' data-bs-target='#viewItemModal' data-id='".htmlspecialchars($row['order_id'])."' title='Edit Task'>
                                                                         <i class='bi bi-eye-fill'></i>
                                                                     </a>
                                                                 </div>
