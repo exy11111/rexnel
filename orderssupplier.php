@@ -426,6 +426,9 @@
 						<p><strong>Category:</strong> ${data.category_name}</p>
 						<p><strong>Brand:</strong> ${data.brand_name}</p>
 						<p><strong>Size:</strong> ${data.size_name}</p>
+						<br>
+						<p><strong>Quantity:</strong> ${data.quantity}</p>
+						<p><strong>Amount:</strong> ${data.amount}</p>
 					`;
 				})
 				.catch(error => {
