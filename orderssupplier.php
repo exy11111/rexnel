@@ -103,7 +103,7 @@
                                                         echo "<td>".htmlspecialchars($row['payment_method'])."</td>";
 														echo "<td>
                                                                 <div class='form-button-action'>
-																	<button type='button' class='btn btn-link btn-primary btn-lg' data-bs-toggle='modal' data-bs-target='#editItemModal' title='Edit Task'>
+																	<button type='button' class='btn btn-link btn-primary btn-lg' data-bs-toggle='modal' data-bs-target='#editStatusModal' title='Edit Task'>
                                                                         <i class='fa fa-edit'></i>
                                                                     </button>
                                                                     <a href='purchase_viewsupplier.php?purchase_id=".$row['purchase_id']."' class='btn btn-link btn-primary btn-lg' data-id='".htmlspecialchars($row['purchase_id'])."' title='Edit Task'>
@@ -205,6 +205,48 @@
 				</div>
 			</footer>
 		</div>
+	</div>
+	<!-- Modal -->
+	<div class="modal modal-lg fade" id="editStatusModal" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header border-0">
+				<h5 class="modal-title">
+					<span class="fw-mediumbold">
+					Edit</span> 
+					<span class="fw-light">
+						Status
+					</span>
+				</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<form action="process_editstatus.php" method="POST">
+				<div class="modal-body">
+					<p class="small">Edit the Status below.</p>
+					<div class="row">		
+						<div class="col-sm-12">
+							<div class="form-group form-group-default">
+								<label for="category">Category</label>
+								<select class="form-select" id="editCategoryId" name="category_id" required>
+									<option value="">Select Category</option>
+									<?php 
+										foreach ($data1 as $row){
+											echo "<option value='".$row['category_id']."'>".$row['category_name']."</option>";
+										}
+									?>
+								</select>
+							</div>
+						</div>
+					</div>
+					<input type="text" name="item_id" id="editItemId" hidden>
+				</div>
+				<div class="modal-footer border-0">
+					<button type="submit" class="btn btn-primary">Save Changes</button>
+					<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+				</div>
+			</form>
+		</div>
+	</div>
 	</div>
 	<!--   Core JS Files   -->
 	<script src="assets/js/core/jquery-3.7.1.min.js"></script>
