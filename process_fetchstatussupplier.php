@@ -12,7 +12,7 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
 $id = (int) $_GET['id'];
 
 try {
-    $stmt = $conn->prepare("SELECT status FROM supplier_orders WHERE so.order_id = :order_id LIMIT 1");
+    $stmt = $conn->prepare("SELECT status FROM supplier_orders WHERE order_id = :order_id LIMIT 1");
     $stmt->bindParam(':order_id', $id, PDO::PARAM_INT);
     $stmt->execute();
 
