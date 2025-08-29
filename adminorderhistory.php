@@ -2,7 +2,7 @@
 	require ('session.php');
 	require ('db.php');
 
-	if($_SESSION['role_id'] != 3){
+	if($_SESSION['role_id'] == 3){
 		header("Location: index.php");
         exit();
 	}
@@ -57,7 +57,7 @@
 		<?php include 'include_sidebar.php'?>
 
 		<div class="main-panel">
-		<?php include 'include_navbar.php'?>
+		<?php include 'include_navbar	.php'?>
 			
 			<div class="container">
 				<div class="page-inner">
