@@ -262,7 +262,7 @@
 															<div class="col-sm-12">
 																<div class="form-group form-group-default">
 																	<label>Barcode</label>
-																	<input type="text" name="barcode" id="stock_barcode" class="form-control" oninput="validatePhoneNumber(this)" placeholder="fill barcode">
+																	<input type="text" name="barcode" class="form-control stock_barcode" oninput="validatePhoneNumber(this)" placeholder="fill barcode">
 																	<script>
 																		function validatePhoneNumber(input) {
 																			input.value = input.value.replace(/[^0-9]/g, '');
@@ -319,7 +319,7 @@
 															<div class="col-sm-12">
 																<div class="form-group form-group-default">
 																	<label>Barcode</label>
-																	<input type="text" name="barcode" id="stock_barcode" class="form-control" oninput="validatePhoneNumber(this)" placeholder="fill barcode">
+																	<input type="text" name="barcode" class="form-control stock_barcode" oninput="validatePhoneNumber(this)" placeholder="fill barcode">
 																	<script>
 																		function validatePhoneNumber(input) {
 																			input.value = input.value.replace(/[^0-9]/g, '');
@@ -764,33 +764,36 @@
             });
         });
 
-		document.getElementById('stock_barcode').addEventListener('change', function() {
-			let barcode = this.value;
+		document.querySelectorAll('.stock_barcode').forEach(function(element) {
+			element.addEventListener('change', function() {
+				let barcode = this.value;
 
-			fetch('process_getbarcodedata.php', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-				body: 'barcode=' + barcode
-			})
-			.then(response => response.json())
-			.then(data => {
-				if (data.error) {
-					Swal.fire({
-						icon: 'error',
-						title: 'Error',
-						text: data.error
-					});
-					console.log(data);
-					document.getElementById('stock_itemId').value = '';
-					document.getElementById('stock_quantity').value = '';
-				} else {
-					console.log(data);
-					document.getElementById('stock_itemId').value = data.item_id;
-					document.getElementById('stock_quantity').value = 1;
-				}
-			})
-			.catch(error => console.error('Error:', error));
+				fetch('process_getbarcodedata.php', {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+					body: 'barcode=' + barcode
+				})
+				.then(response => response.json())
+				.then(data => {
+					if (data.error) {
+						Swal.fire({
+							icon: 'error',
+							title: 'Error',
+							text: data.error
+						});
+						console.log(data);
+						document.getElementById('stock_itemId').value = '';
+						document.getElementById('stock_quantity').value = '';
+					} else {
+						console.log(data);
+						document.getElementById('stock_itemId').value = data.item_id;
+						document.getElementById('stock_quantity').value = 1;
+					}
+				})
+				.catch(error => console.error('Error:', error));
+			});
 		});
+
     </script>
 
 
