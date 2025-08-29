@@ -312,7 +312,7 @@
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
 				<div class="modal-body">
-					<p class="large">Item Information</p>
+					<p class="large"><strong>Item Information</strong></p>
 					<div class="row">		
 						<div class="col-sm-12">
 							
