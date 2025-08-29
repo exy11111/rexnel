@@ -349,15 +349,19 @@
 															<div class="col-sm-12">
 																<div class="form-group form-group-default">
 																	<label>Unit Cost</label>
-																	<input type="number" class="form-control" name="unit_cost" id="unit_cost" min="0" step="0.01" oninput="calculateTotal()" placeholder="Enter unit cost">
+																	<p id="unit_cost_display" style="padding: .375rem .75rem; background-color: #e9ecef; border-radius: 4px; margin-bottom: 0;">
+																	$0.00
+																	</p>
 																</div>
-															</div>
+																</div>
 
-															<!-- New Total Price Field -->
-															<div class="col-sm-12">
+																<!-- Total Price (text only) -->
+																<div class="col-sm-12">
 																<div class="form-group form-group-default">
 																	<label>Total Price</label>
-																	<input type="number" class="form-control" id="total_price" readonly placeholder="Total price will be calculated">
+																	<p id="total_price" style="padding: .375rem .75rem; background-color: #e9ecef; border-radius: 4px; margin-bottom: 0;">
+																	$0.00
+																	</p>
 																</div>
 															</div>
 														</div>
@@ -631,17 +635,30 @@
 	<?php include 'modal_editaccount.php';?>
 
 	<script>
+		function validatePhoneNumber(input) {
+			input.value = input.value.replace(/[^0-9]/g, '');
+		}
+
+		// Update unit cost display when item changes
+		function updateUnitCost() {
+			const select = document.getElementById('order_itemId');
+			const selectedOption = select.options[select.selectedIndex];
+			const unitCost = selectedOption.getAttribute('data-unit-cost') || 0;
+			
+			const unitCostDisplay = document.getElementById('unit_cost_display');
+			unitCostDisplay.textContent = '$' + parseFloat(unitCost).toFixed(2);
+
+			calculateTotal();  // recalculate total price on unit cost change
+		}
+
+		// Calculate total price (quantity * unit cost)
 		function calculateTotal() {
-			const quantity = document.getElementById('quantity').value;
-			const unitCost = document.getElementById('unit_cost').value;
-			const totalPriceField = document.getElementById('total_price');
+			const quantity = parseFloat(document.getElementById('quantity').value) || 0;
+			const unitCostText = document.getElementById('unit_cost_display').textContent.replace('$', '');
+			const unitCost = parseFloat(unitCostText) || 0;
 
-			let total = 0;
-			if(quantity && unitCost){
-			total = parseFloat(quantity) * parseFloat(unitCost);
-			}
-
-			totalPriceField.value = total.toFixed(2);
+			const total = quantity * unitCost;
+			document.getElementById('total_price').textContent = '$' + total.toFixed(2);
 		}
 	</script>
 	<!-- Auto populate in edit modal -->

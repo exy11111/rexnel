@@ -286,7 +286,7 @@
 								</div>
 							</div>
 						</div>
-						<input type="text" name="item_id" id="editOrderId" hidden>
+						<input type="text" name="order_id" id="editOrderId" hidden>
 					</div>
 					<div class="modal-footer border-0">
 						<button type="submit" class="btn btn-primary">Save Changes</button>
@@ -410,6 +410,7 @@
 
 	<script>
 		var viewItemModal = document.getElementById('viewItemModal');
+		var editStatusModal = document.getElementById('editStatusModal');
 
 		viewItemModal.addEventListener('show.bs.modal', function (event) {
 			var button = event.relatedTarget; 
@@ -441,6 +442,23 @@
 					console.error('Error:', error);
 					viewItemModal.querySelector('.modal-body .col-sm-12').innerHTML = `<p class="text-danger">Failed to load item data.</p>`;
 				});
+		});
+
+		editStatusModal.addEventListener('show.bs.modal', function (event) {
+			var button = event.relatedTarget; 
+			var orderId = button.getAttribute('data-id'); 
+			document.getElementById("editOrderId").value = orderId;
+
+			fetch('process_fetchstatussupplier.php?id=' + orderId)
+				.then(response => response.json())
+				.then(data => {
+					console.log(data);
+					document.getElementById("editStatus").value = data.status;
+				})
+				.catch(error => {
+					console.error('Error:', error);
+			});
+
 		});
 	</script>
 </body>
