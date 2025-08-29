@@ -98,15 +98,17 @@
 								<div class="card-header">
 									<div class="d-flex align-items-center">
 										<h4 class="card-title">Supplier Accounts</h4>
-										<?php if($_SESSION['role_id'] != 3):?>
-										<button class="btn btn-primary btn-round me-3" data-bs-toggle="modal" data-bs-target="#addAccountModal">
-											<i class="fa fa-plus"></i>
-											Add Account
-										</button>
-                                        <a href="orderhistory.php" class="btn btn-success btn-round ms-auto">
-											Order History
-                                        </a>
-										<?php endif; ?>
+                                        <div class="ms-auto">
+                                            <?php if($_SESSION['role_id'] != 3):?>
+                                            <button class="btn btn-primary btn-round me-3" data-bs-toggle="modal" data-bs-target="#addAccountModal">
+                                                <i class="fa fa-plus"></i>
+                                                Add Account
+                                            </button>
+                                            <a href="orderhistory.php" class="btn btn-success btn-round ms-auto">
+                                                Order History
+                                            </a>
+                                            <?php endif; ?>
+                                        </div>
 									</div>
 								</div>
 								<div class="card-body">

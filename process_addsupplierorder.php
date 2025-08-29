@@ -8,10 +8,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
 
     try {
-        $sql = "SELECT branch_id FROM items WHERE item_id = :item_id";
+        $sql = "SELECT supplier_price FROM items WHERE item_id = :item_id";
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':item_id', $item_id);
         $stmt->execute();
+
+        $supplier_price = $stmt->fetchColumn();
+        $amount = $quantity * $supplier_price;
+
+        $stmt = $conn->prepare("");
+
 
         if ($stmt->rowCount() > 0) {
             header("Location: suppliers.php?status=exist");
