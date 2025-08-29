@@ -154,7 +154,7 @@
 																	<button type='button' class='btn btn-link btn-primary btn-lg' data-bs-toggle='modal' data-bs-target='#editStatusModal' data-id='".htmlspecialchars($row['order_id'])."' title='Edit Task'>
                                                                         <i class='fa fa-edit'></i>
                                                                     </button>
-                                                                    <a href='#' class='btn btn-link btn-primary btn-lg' data-bs-toggle='modal' data-bs-target='#viewItemModal' data-id='".htmlspecialchars($row['item_id'])."' title='Edit Task'>
+                                                                    <a href='#' class='btn btn-link btn-primary btn-lg' data-bs-toggle='modal' data-bs-target='#viewItemModal' data-id='".htmlspecialchars($row['order_id'])."' title='Edit Task'>
                                                                         <i class='bi bi-eye-fill'></i>
                                                                     </a>
                                                                 </div>
@@ -306,13 +306,12 @@
 						<span class="fw-mediumbold">
 						View</span> 
 						<span class="fw-light">
-							Item
+							Item Information
 						</span>
 					</h5>
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
 				<div class="modal-body">
-					<p class="large"><strong>Item Information</strong></p>
 					<div class="row">		
 						<div class="col-sm-12">
 							
