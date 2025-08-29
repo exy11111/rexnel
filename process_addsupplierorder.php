@@ -5,6 +5,8 @@ require('db.php');
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $item_id = $_POST['item_id'];
     $quantity = $_POST['quantity'];
+    $date = date("Y-m-d");
+    $status = 'Pending';
     
 
     try {
@@ -16,30 +18,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $supplier_price = $stmt->fetchColumn();
         $amount = $quantity * $supplier_price;
 
-        $stmt = $conn->prepare("");
+        $stmt = $conn->prepare("INSERT INTO supplier_orders (quantity, item_id, amount, date, status) VALUES (:quantity, :item_id, :amount, :date, :status)");
+        $stmt->bindParam(':quantity', $quantity);
+        $stmt->bindParam(':item_id', $item_id);
+        $stmt->bindParam(':amount', $amount);
+        $stmt->bindParam(':date', $date);
+        $stmt->bindParam(':status', $status);
+        $stmt->execute();
 
-
-        if ($stmt->rowCount() > 0) {
-            header("Location: suppliers.php?status=exist");
-            exit();
-        }
-        else{
-            $sql = "INSERT INTO suppliers (supplier_name, contact_name, email, phone, address, branch_id) VALUES (:supplier_name, :contact_name, :email, :phone, :address, :branch_id)";
-            $stmt = $conn->prepare($sql);
-            $stmt->bindParam(':supplier_name', $supplier_name);
-            $stmt->bindParam(':contact_name', $contact_name);
-            $stmt->bindParam(':email', $email);
-            $stmt->bindParam(':phone', $phone);
-            $stmt->bindParam(':address', $address);
-            $stmt->bindParam(':branch_id', $branch_id);
-            $stmt->execute();
-
-            header("Location: suppliers.php?status=success");
-            exit();
-        }
+        header("Location: stock.php?status=success");
+        exit();
     }
     catch (PDOException $e) {
-        header("Location: suppliers.php?status=error");
+        header("Location: stock.php?status=error");
         exit();
     }
 
