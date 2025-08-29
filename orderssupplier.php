@@ -86,6 +86,7 @@
 											<thead>
 												<tr>
 													<th>Order ID</th>
+													<th>Branch</th>
 													<th>Date</th>
 													<th>Total Amount</th>
                                                     <th>Status</th>
@@ -96,6 +97,7 @@
 												<?php 
 													foreach($data as $row){
 														echo "<tr data-id=".htmlspecialchars($row['purchase_id']).">";
+														echo "<td>".htmlspecialchars($row['date'])."</td>";
 														echo "<td>".htmlspecialchars($row['date'])."</td>";
 														echo "<td>".htmlspecialchars($row['date'])."</td>";
 														echo "<td>₱".htmlspecialchars($row['price'])."</td>";
