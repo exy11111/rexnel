@@ -318,6 +318,17 @@
 														<div class="row">
 															<div class="col-sm-12">
 																<div class="form-group form-group-default">
+																	<label>Barcode</label>
+																	<input type="text" name="barcode" id="stock_barcode" class="form-control" oninput="validatePhoneNumber(this)" placeholder="fill barcode">
+																	<script>
+																		function validatePhoneNumber(input) {
+																			input.value = input.value.replace(/[^0-9]/g, '');
+																		}
+																	</script>
+																</div>
+															</div>
+															<div class="col-sm-12">
+																<div class="form-group form-group-default">
 																	<label>Item Name</label>
 																	<select class="form-select" name="item_id" id="stock_itemId" required>
 																		<option value="">Select Item</option>
