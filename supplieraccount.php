@@ -103,8 +103,7 @@
 											<i class="fa fa-plus"></i>
 											Add Account
 										</button>
-                                        <a href="orderhistory.php" class="btn btn-primary btn-round ms-auto">
-											<i class="fa fa-plus"></i>
+                                        <a href="orderhistory.php" class="btn btn-success btn-round ms-auto">
 											Order History
                                         </a>
 										<?php endif; ?>
