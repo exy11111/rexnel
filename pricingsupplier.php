@@ -19,7 +19,7 @@ ini_set('display_errors', 1);
 
 	$sql = "SELECT item_id, item_name, supplier_id, i.branch_id, b.branch_name, supplier_price
 	FROM items i
-    JOIN branch b ON b.branch_id = i.item_id
+    JOIN branch b ON b.branch_id = i.branch_id
     WHERE supplier_id = :supplier_id
     ;";
     $stmt = $conn->prepare($sql);
