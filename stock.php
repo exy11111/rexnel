@@ -343,7 +343,7 @@
 															<div class="col-sm-12">
 																<div class="form-group form-group-default">
 																	<label for="category">Quantity</label>
-																	<input type="number" class="form-control" name="quantity">
+																	<input type="number" class="form-control" name="quantity" id="order_quantity">
 																</div>
 															</div>
 															<div class="col-sm-12">
@@ -370,7 +370,7 @@
 													const itemSelect = document.getElementById("order_itemId");
 													const unitCostDisplay = document.getElementById("unit_cost_display");
 													const totalPriceDisplay = document.getElementById("total_price");
-													const quantityInput = document.querySelector("input[name='quantity']");
+													const quantityInput = document.getElementById("order_quantity");
 
 													function updatePrices() {
 														const selectedOption = itemSelect.options[itemSelect.selectedIndex];
@@ -383,7 +383,7 @@
 													}
 
 													itemSelect.addEventListener("change", updatePrices);
-													quantityInput.addEventListener("change", updatePrices);
+													quantityInput.addEventListener("input", updatePrices);
 												</script>
 											</div>
 										</div>
