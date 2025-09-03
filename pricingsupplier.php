@@ -17,7 +17,7 @@ ini_set('display_errors', 1);
 		$supplier_info = $stmt->fetch();
 	}
 
-	$sql = "SELECT item_id, item_name, supplier_id, branch_id, b.branch_name, supplier_price
+	$sql = "SELECT item_id, item_name, supplier_id, i.branch_id, b.branch_name, supplier_price
 	FROM items i
     JOIN branch b ON b.branch_id = i.item_id
     WHERE supplier_id = :supplier_id
