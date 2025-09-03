@@ -2,7 +2,7 @@
 	require ('session.php');
 	require ('db.php');
 
-	$sql = "SELECT item_id, barcode, item_name, category_name, brand_name, supplier_name, size_name, price, stock
+	$sql = "SELECT item_id, barcode, item_name, category_name, brand_name, supplier_name, size_name, price, stock, supplier_price
 	FROM items i 
 	JOIN categories c ON i.category_id = c.category_id
 	JOIN brands b ON b.brand_id = i.brand_id
@@ -334,7 +334,7 @@
 																		<option value="">Select Item</option>
 																		<?php 
 																			foreach ($data as $row){
-																				echo "<option value='".$row['item_id']."'>".$row['item_name']."</option>";
+																				echo "<option value='".$row['item_id']."' data-price='".$row['supplier_price']."'>".$row['item_name']."</option>";
 																			}
 																		?>
 																	</select>
@@ -366,6 +366,25 @@
 														<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
 													</div>
 												</form>
+												<script>
+													const itemSelect = document.getElementById("order_itemId");
+													const unitCostDisplay = document.getElementById("unit_cost_display");
+													const totalPriceDisplay = document.getElementById("total_price");
+													const quantityInput = document.querySelector("input[name='quantity']");
+
+													function updatePrices() {
+														const selectedOption = itemSelect.options[itemSelect.selectedIndex];
+														const unitPrice = parseFloat(selectedOption.getAttribute("data-price")) || 0;
+														const quantity = parseInt(quantityInput.value) || 0;
+														const total = unitPrice * quantity;
+
+														unitCostDisplay.textContent = "₱" + unitPrice.toLocaleString(undefined, {minimumFractionDigits: 2});
+														totalPriceDisplay.textContent = "₱" + total.toLocaleString(undefined, {minimumFractionDigits: 2});
+													}
+
+													itemSelect.addEventListener("change", updatePrices);
+													quantityInput.addEventListener("input", updatePrices);
+												</script>
 											</div>
 										</div>
 									</div>
@@ -879,6 +898,7 @@
 			.catch(error => console.error('Error:', error));
 		});
     </script>
+
 
 
 </body>

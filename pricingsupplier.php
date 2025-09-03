@@ -116,7 +116,7 @@ ini_set('display_errors', 1);
 													foreach($data as $row){
 														echo "<tr data-id=".htmlspecialchars($row['item_id']).">";
 														echo "<td>".htmlspecialchars($row['item_id'])."</td>";
-														echo "<td>".htmlspecialchars($row['item_name'])."(".htmlspecialchars($row['size_name']).")</td>";
+														echo "<td>".htmlspecialchars($row['item_name'])." (".htmlspecialchars($row['size_name']).")</td>";
 														echo "<td>".htmlspecialchars($row['branch_name'])."</td>";
 														echo "<td>₱".htmlspecialchars($row['supplier_price'])."</td>";
 														echo "<td>
