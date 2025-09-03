@@ -32,7 +32,7 @@ ini_set('display_errors', 1);
 		$quantity = number_format($result['total_quantity']);
 	}
 
-	$dateNow = date("Y-m-d"); // today's date in Y-m-d format
+	$dateNow = date("Y-m-d");
 
 	$sql1 = "SELECT SUM(price) AS total_sales, COUNT(purchase_id) AS orders 
 			FROM purchases 
