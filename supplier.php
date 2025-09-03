@@ -207,6 +207,7 @@ ini_set('display_errors', 1);
 											<thead>
 												<tr>
 													<th style="width: 10%">Order ID</th>
+													<th>Branch</th><!-- -->
 													<th>Date</th>
 													<th style="width: 10%">Status</th>
 													<th style="width: 10%">Total</th>
