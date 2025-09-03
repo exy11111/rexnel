@@ -16,39 +16,15 @@ ini_set('display_errors', 1);
 		$supplier_info = $stmt->fetch();
 	}
 
-	$sql = "SELECT sum(stock) as total_quantity FROM items WHERE branch_id = :branch_id";
-	$stmt = $conn->prepare($sql);
-	$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
-    $stmt->execute();
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
-
-	if ($result['total_quantity'] === null) {
-        $quantity = 0;
-    }
-	else if($result['total_quantity'] > 999999){
-		$quantity = number_format(999999) . "+";
-	}
-	else{
-		$quantity = number_format($result['total_quantity']);
-	}
-
-	$dateNow = date("Y-m-d");
-
-	$sql1 = "SELECT SUM(price) AS total_sales, COUNT(purchase_id) AS orders 
-			FROM purchases 
-			WHERE DATE(date) = :date AND branch_id = :branch_id";
-	$stmt1 = $conn->prepare($sql1);
-	$stmt1->bindParam(":branch_id", $_SESSION['branch_id']);
-	$stmt1->bindParam(":date", $dateNow);
-	$stmt1->execute();
-
-	$result1 = $stmt1->fetch(PDO::FETCH_ASSOC);
-
-	$sql = "SELECT branch_name FROM branch WHERE branch_id = :branch_id";
-	$stmt = $conn->prepare($sql);
-	$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
+	$sql = "SELECT COUNT(*) FROM supplier_orders";
+	$stmt = $conn->prepare();
 	$stmt->execute();
-	$branch_name = $stmt->fetchColumn();
+	$total_orders = $stmt->fetchColumn();
+
+	$sql = "SELECT COUNT(*) FROM supplier_orders WHERE status = 'Pending';";
+	$stmt = $conn->prepare();
+	$stmt->execute();
+	$pending_orders = $stmt->fetchColumn();
 
 	$sql = "SELECT so.order_id, so.item_id, b.branch_name, so.date, so.amount, so.status 
     FROM supplier_orders so 
@@ -140,7 +116,7 @@ ini_set('display_errors', 1);
 											<div class="col col-stats ms-3 ms-sm-0">
 												<div class="numbers w-100">
 													<p class="card-category">Total Orders</p>
-													<h4 class="card-title">0</h4>
+													<h4 class="card-title"><?php echo $total_orders?></h4>
 													
 												</div>
 												<span id="percentageText" class="text-muted float-end"></span>
@@ -163,7 +139,7 @@ ini_set('display_errors', 1);
 											<div class="col col-stats ms-3 ms-sm-0">
 												<div class="numbers">
 													<p class="card-category">Pending Orders</p>
-													<h4 class="card-title"><?php echo $quantity?></h4>
+													<h4 class="card-title"><?php echo $pending_orders?></h4>
 												</div>
 											</div>
 										</div>
