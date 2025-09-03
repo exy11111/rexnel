@@ -191,52 +191,52 @@ ini_set('display_errors', 1);
 												</tr>
 											</thead>
 											<tbody>
-											<?php 
-												foreach($data as $row){
-													echo "<tr data-id=".htmlspecialchars($row['order_id']).">";
-													echo "<td>".htmlspecialchars($row['order_id'])."</td>";
-													echo "<td>".htmlspecialchars($row['branch_name'])."</td>";
-													echo "<td>" . date("F d, Y", strtotime($row['date'])) . "</td>";
-													echo "<td>₱".htmlspecialchars($row['amount'])."</td>";
-													$status = htmlspecialchars($row['status']);
-													$badgeClass = '';
-													
-													switch ($status) {
-														case 'Pending':
-															$badgeClass = 'bg-warning text-dark';
-															break;
-														case 'Accepted':
-															$badgeClass = 'bg-primary';
-															break;
-														case 'Shipping':
-															$badgeClass = 'bg-info text-dark';
-															break;
-														case 'Delivered':
-															$badgeClass = 'bg-success';
-															break;
-														case 'Received':
-															$badgeClass = 'bg-secondary';
-															break;
-														case 'Cancelled':
-															$badgeClass = 'bg-danger';
-															break;
-														default:
-															$badgeClass = 'bg-light text-dark';
+												<?php 
+													if (!empty($data)) {
+														foreach($data as $row){
+															echo "<tr data-id=".htmlspecialchars($row['order_id']).">";
+															echo "<td>".htmlspecialchars($row['order_id'])."</td>";
+															echo "<td>".htmlspecialchars($row['branch_name'])."</td>";
+															echo "<td>" . date("F d, Y", strtotime($row['date'])) . "</td>";
+															echo "<td>₱".htmlspecialchars($row['amount'])."</td>";
+															
+															$status = htmlspecialchars($row['status']);
+															$badgeClass = '';
+															switch ($status) {
+																case 'Pending':   $badgeClass = 'bg-warning text-dark'; break;
+																case 'Accepted':  $badgeClass = 'bg-primary'; break;
+																case 'Shipping':  $badgeClass = 'bg-info text-dark'; break;
+																case 'Delivered': $badgeClass = 'bg-success'; break;
+																case 'Received':  $badgeClass = 'bg-secondary'; break;
+																case 'Cancelled': $badgeClass = 'bg-danger'; break;
+																default:          $badgeClass = 'bg-light text-dark';
+															}
+
+															echo "<td><span class='badge $badgeClass'>$status</span></td>";
+															echo "<td>
+																	<div class='form-button-action'>
+																		<button type='button' class='btn btn-link btn-primary btn-lg' 
+																			data-bs-toggle='modal' 
+																			data-bs-target='#editStatusModal' 
+																			data-id='".htmlspecialchars($row['order_id'])."' 
+																			title='Edit Task'>
+																			<i class='fa fa-edit'></i>
+																		</button>
+																		<a href='#' class='btn btn-link btn-primary btn-lg' 
+																			data-bs-toggle='modal' 
+																			data-bs-target='#viewItemModal' 
+																			data-id='".htmlspecialchars($row['order_id'])."' 
+																			title='View Order'>
+																			<i class='bi bi-eye-fill'></i>
+																		</a>
+																	</div>
+																</td>";
+															echo "</tr>";
+														}
+													} else {
+														echo "<tr><td colspan='6' class='text-center text-muted'>No orders found.</td></tr>";
 													}
-													echo "<td><span class='badge $badgeClass'>$status</span></td>";
-													echo "<td>
-															<div class='form-button-action'>
-																<button type='button' class='btn btn-link btn-primary btn-lg' data-bs-toggle='modal' data-bs-target='#editStatusModal' data-id='".htmlspecialchars($row['order_id'])."' title='Edit Task'>
-																	<i class='fa fa-edit'></i>
-																</button>
-																<a href='#' class='btn btn-link btn-primary btn-lg' data-bs-toggle='modal' data-bs-target='#viewItemModal' data-id='".htmlspecialchars($row['order_id'])."' title='Edit Task'>
-																	<i class='bi bi-eye-fill'></i>
-																</a>
-															</div>
-														</td>";
-													echo "</tr>";
-												}
-											?>
+												?>
 											</tbody>
 										</table>
                                         </div>
