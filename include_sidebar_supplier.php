@@ -45,6 +45,13 @@
                         <p>Orders</p>
                     </a>
                 </li>
+
+                <li class="nav-item <?php echo ($active === 'pricing') ? 'active' : ''; ?>">
+                    <a href="pricingsupplier.php" class="text-white">
+                        <i class="fas fa-layer-group"></i>
+                        <p>Pricing</p>
+                    </a>
+                </li>
             </ul>
         </div>
     </div>
