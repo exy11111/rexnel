@@ -218,7 +218,7 @@ ini_set('display_errors', 1);
 													foreach($data as $row){
 														echo "<tr data-id=".htmlspecialchars($row['order_id']).">";
 														echo "<td>".htmlspecialchars($row['order_id'])."</td>";
-														echo "<td>" . date("F j, Y - g:iA", strtotime($row['date'])) . "</td>";
+														echo "<td>" . date("F j, Y", strtotime($row['date'])) . "</td>";
 														echo "<td>".htmlspecialchars($row['status'])."</td>";
 														echo "<td>".htmlspecialchars($row['amount'])."</td>";
 														echo "<td>
