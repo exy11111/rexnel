@@ -17,12 +17,12 @@ ini_set('display_errors', 1);
 	}
 
 	$sql = "SELECT COUNT(*) FROM supplier_orders";
-	$stmt = $conn->prepare();
+	$stmt = $conn->prepare($sql);
 	$stmt->execute();
 	$total_orders = $stmt->fetchColumn();
 
 	$sql = "SELECT COUNT(*) FROM supplier_orders WHERE status = 'Pending';";
-	$stmt = $conn->prepare();
+	$stmt = $conn->prepare($sql);
 	$stmt->execute();
 	$pending_orders = $stmt->fetchColumn();
 
