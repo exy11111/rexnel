@@ -35,3 +35,25 @@
         </div>
     </div>
 </div>
+
+<script>
+    var editPriceModal = document.getElementById('editPriceModal');
+
+    editPriceModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget; 
+        var itemId = button.getAttribute('data-id'); 
+        document.getElementById("editItemId").value = itemId;
+
+        fetch('process_fetchpricingsupplier.php?id=' + itemId)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                document.getElementById("price").value = data.supplier_price;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+        });
+
+    });
+
+</script>
