@@ -26,7 +26,6 @@ ini_set('display_errors', 1);
     $stmt->bindParam(':supplier_id', $_SESSION['supplier_id']);
     $stmt->execute();
     $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
 ?>
 
 <!DOCTYPE html>
@@ -121,7 +120,7 @@ ini_set('display_errors', 1);
 														echo "<td>₱".htmlspecialchars($row['supplier_price'])."</td>";
 														echo "<td>
                                                                 <div class='form-button-action'>
-																	<button type='button' class='btn btn-link btn-primary btn-lg' data-bs-toggle='modal' data-bs-target='#editStatusModal' data-id='".htmlspecialchars($row['item_id'])."' title='Edit Task'>
+																	<button type='button' class='btn btn-link btn-primary btn-lg' data-bs-toggle='modal' data-bs-target='#editPriceModal' data-id='".htmlspecialchars($row['item_id'])."' title='Edit Task'>
                                                                         <i class='fa fa-edit'></i>
                                                                     </button>
                                                                 </div>
