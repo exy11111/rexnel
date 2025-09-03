@@ -140,7 +140,7 @@ ini_set('display_errors', 1);
 											<div class="col col-stats ms-3 ms-sm-0">
 												<div class="numbers w-100">
 													<p class="card-category">Total Orders</p>
-													<h4 class="card-title">₱<?php echo number_format($result1['total_sales'], 2) ?></h4>
+													<h4 class="card-title">0</h4>
 													
 												</div>
 												<span id="percentageText" class="text-muted float-end"></span>
@@ -220,7 +220,7 @@ ini_set('display_errors', 1);
 														echo "<td>".htmlspecialchars($row['order_id'])."</td>";
 														echo "<td>" . date("F j, Y", strtotime($row['date'])) . "</td>";
 														echo "<td>".htmlspecialchars($row['status'])."</td>";
-														echo "<td>".htmlspecialchars($row['amount'])."</td>";
+														echo "<td>₱".htmlspecialchars($row['amount'])."</td>";
 														echo "<td>
                                                                 <div class='form-button-action'>
                                                                     <a href='purchase_viewsupplier.php?purchase_id=".$row['order_id']."' class='btn btn-link btn-primary btn-lg' data-id='".htmlspecialchars($row['order_id'])."' title='Edit Task'>

@@ -125,6 +125,78 @@
 									</div>
 								</div>
 							</a>
+						</div>	
+						<div class="col-sm-6 col-md-4">
+							<a href="purchase.php">
+								<div class="card card1 card-stats card-round">
+									<div class="card-body">
+										<div class="row align-items-center">
+											<div class="col-icon">
+												<div class="icon-big text-center icon-success bubble-shadow-small">
+													<i class="fas fa-luggage-cart"></i>
+												</div>
+											</div>
+											<div class="col col-stats ms-3 ms-sm-0">
+												<div class="numbers w-100">
+													<p class="card-category">Sales Today</p>
+													<h4 class="card-title">₱<?php echo number_format($result1['total_sales'], 2) ?></h4>
+													
+												</div>
+												<span id="percentageText" class="text-muted float-end"></span>
+											</div>
+										</div>
+									</div>
+								</div>
+							</a>
+						</div>	
+						<div class="col-sm-6 col-md-4">
+							<a href="purchase.php">
+								<div class="card card1 card-stats card-round">
+									<div class="card-body">
+										<div class="row align-items-center">
+											<div class="col-icon">
+												<div class="icon-big text-center icon-success bubble-shadow-small">
+													<i class="fas fa-luggage-cart"></i>
+												</div>
+											</div>
+											<div class="col col-stats ms-3 ms-sm-0">
+												<div class="numbers w-100">
+													<p class="card-category">Sales Today</p>
+													<h4 class="card-title">₱<?php echo number_format($result1['total_sales'], 2) ?></h4>
+													
+												</div>
+												<span id="percentageText" class="text-muted float-end"></span>
+											</div>
+										</div>
+									</div>
+								</div>
+							</a>
+						</div>	
+					</div>
+
+					<div class="row">
+						<div class="col-sm-6 col-md-4">
+							<a href="purchase.php">
+								<div class="card card1 card-stats card-round">
+									<div class="card-body">
+										<div class="row align-items-center">
+											<div class="col-icon">
+												<div class="icon-big text-center icon-success bubble-shadow-small">
+													<i class="fas fa-luggage-cart"></i>
+												</div>
+											</div>
+											<div class="col col-stats ms-3 ms-sm-0">
+												<div class="numbers w-100">
+													<p class="card-category">Sales Today</p>
+													<h4 class="card-title">₱<?php echo number_format($result1['total_sales'], 2) ?></h4>
+													
+												</div>
+												<span id="percentageText" class="text-muted float-end"></span>
+											</div>
+										</div>
+									</div>
+								</div>
+							</a>
 						</div>
 						<div class="col-sm-6 col-md-4">
 							<a href="stock.php">
