@@ -18,9 +18,8 @@
                     <div class="row">		
                         <div class="col-sm-12">
                             <div class="d-flex align-items-center">
-                                <span class="me-2 fs-5">₱</span>
                                 <div class="form-group form-group-default flex-grow-1">
-                                    <label for="price" class="form-label">Price</label>
+                                    <label for="price" class="form-label">Price (₱)</label>
                                     <input type="number" class="form-control" id="price" name="price" placeholder="Enter amount" min="0">
                                 </div>
                             </div>
