@@ -223,7 +223,7 @@ ini_set('display_errors', 1);
 														echo "<td>".htmlspecialchars($row['amount'])."</td>";
 														echo "<td>
                                                                 <div class='form-button-action'>
-                                                                    <a href='purchase_viewsupplier.php?purchase_id=".$row['purchase_id']."' class='btn btn-link btn-primary btn-lg' data-id='".htmlspecialchars($row['purchase_id'])."' title='Edit Task'>
+                                                                    <a href='purchase_viewsupplier.php?purchase_id=".$row['order_id']."' class='btn btn-link btn-primary btn-lg' data-id='".htmlspecialchars($row['order_id'])."' title='Edit Task'>
                                                                         <i class='bi bi-eye-fill'></i>
                                                                     </a>
                                                                 </div>
