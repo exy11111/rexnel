@@ -266,15 +266,15 @@ ini_set('display_errors', 1);
             <?php if ($_GET['status'] == 'success'): ?>
                 Swal.fire({
                     icon: 'success',
-                    title: 'Status Updated!',
-                    text: 'The status has been successfully updated.',
+                    title: 'Price Updated!',
+                    text: 'The price has been successfully updated.',
                 }).then((result) => {
                 });
             <?php elseif ($_GET['status'] == 'error'): ?>
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
-                    text: 'Something went wrong while updating the status.',
+                    text: 'Something went wrong while updating the price.',
                 });
             <?php endif; ?>
         </script>
