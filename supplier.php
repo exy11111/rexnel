@@ -26,6 +26,21 @@ ini_set('display_errors', 1);
 	$stmt->execute();
 	$pending_orders = $stmt->fetchColumn();
 
+	$currentMonth = date('m');
+	$currentYear  = date('Y');
+
+	$sql = "SELECT SUM(amount) AS total_amount 
+        FROM supplier_orders 
+        WHERE MONTH(date) = :month 
+          AND YEAR(date) = :year 
+          AND status NOT IN ('Pending', 'Cancelled')";
+	$stmt = $conn->prepare($sql);
+	$stmt->bindParam(':month', $currentMonth, PDO::PARAM_INT);
+	$stmt->bindParam(':year', $currentYear, PDO::PARAM_INT);
+	$stmt->execute();
+	$revenue_month = $stmt->fetchColumn();
+	
+
 	$sql = "SELECT so.order_id, so.item_id, b.branch_name, so.date, so.amount, so.status 
     FROM supplier_orders so 
     JOIN items i ON so.item_id = i.item_id 
@@ -160,7 +175,7 @@ ini_set('display_errors', 1);
 											<div class="col col-stats ms-3 ms-sm-0">
 												<div class="numbers">
 													<p class="card-category">Revenue this month</p>
-													<h4 class="card-title">₱0.00</h4>
+													<h4 class="card-title">₱<?php echo number_format($revenue_month, 2); ?></h4>
 												</div>
 											</div>
 										</div>
