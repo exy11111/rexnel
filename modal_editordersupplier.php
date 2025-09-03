@@ -26,6 +26,49 @@
     </div>
 </div>
 
+<!-- Modal -->
+<div class="modal modal-lg fade" id="editStatusModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header border-0">
+                <h5 class="modal-title">
+                    <span class="fw-mediumbold">
+                    Edit</span> 
+                    <span class="fw-light">
+                        Status
+                    </span>
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="process_editstatus_supplier.php" method="POST">
+                <div class="modal-body">
+                    <p class="small">Edit the Status below.</p>
+                    <div class="row">		
+                        <div class="col-sm-12">
+                            <div class="form-group form-group-default">
+                                <label for="category">Status</label>
+                                <select class="form-select" id="editStatus" name="status" required>
+                                    <option value="">Select Status</option>
+                                    <option value="Pending">Pending</option>
+                                    <option value="Accepted">Accepted</option>
+                                    <option value="Shipping">Shipping</option>
+                                    <option value="Delivered">Delivered</option>
+                                    <option value="Received">Received</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="text" name="order_id" id="editOrderId" hidden>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <script>
     var viewItemModal = document.getElementById('viewItemModal');
     var editStatusModal = document.getElementById('editStatusModal');
