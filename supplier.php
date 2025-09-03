@@ -50,10 +50,16 @@ ini_set('display_errors', 1);
 	$stmt->execute();
 	$branch_name = $stmt->fetchColumn();
 
-	$sql = "SELECT purchase_id, price, date, payment_method FROM purchases p1 JOIN payment_method p2 ON p1.pm_id = p2.pm_id ORDER BY p1.date DESC";
-    $stmt = $conn->prepare($sql);
-    $stmt->execute();
-    $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+	$sql = "SELECT so.order_id, so.item_id, b.branch_name, so.date, so.amount, so.status 
+    FROM supplier_orders so 
+    JOIN items i ON so.item_id = i.item_id 
+    JOIN branch b ON i.branch_id = b.branch_id
+    WHERE so.status = 'Pending'
+    ORDER BY so.date DESC";
+
+	$stmt = $conn->prepare($sql);
+	$stmt->execute();
+	$data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
 
