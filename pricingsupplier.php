@@ -17,9 +17,10 @@ ini_set('display_errors', 1);
 		$supplier_info = $stmt->fetch();
 	}
 
-	$sql = "SELECT item_id, item_name, supplier_id, i.branch_id, b.branch_name, supplier_price
+	$sql = "SELECT item_id, item_name, supplier_id, i.branch_id, b.branch_name, supplier_price, s.size_name
 	FROM items i
     JOIN branch b ON b.branch_id = i.branch_id
+    JOIN sizes s ON s.size_id = i.size_id
     WHERE supplier_id = :supplier_id
     ;";
     $stmt = $conn->prepare($sql);
@@ -115,7 +116,7 @@ ini_set('display_errors', 1);
 													foreach($data as $row){
 														echo "<tr data-id=".htmlspecialchars($row['item_id']).">";
 														echo "<td>".htmlspecialchars($row['item_id'])."</td>";
-														echo "<td>".htmlspecialchars($row['item_name'])."</td>";
+														echo "<td>".htmlspecialchars($row['item_name'])."(".htmlspecialchars($row['size_name']).")</td>";
 														echo "<td>".htmlspecialchars($row['branch_name'])."</td>";
 														echo "<td>₱".htmlspecialchars($row['supplier_price'])."</td>";
 														echo "<td>
