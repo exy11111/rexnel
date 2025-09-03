@@ -298,6 +298,8 @@ ini_set('display_errors', 1);
             <?php endif; ?>
         </script>
     <?php endif; ?>
+
+    <?php include ('modal_editpricesupplier.php');?>
 	
 </body>
 </html>
