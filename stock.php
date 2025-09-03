@@ -383,7 +383,7 @@
 													}
 
 													itemSelect.addEventListener("change", updatePrices);
-													quantityInput.addEventListener("input", updatePrices);
+													quantityInput.addEventListener("change", updatePrices);
 												</script>
 											</div>
 										</div>
