@@ -53,7 +53,7 @@
                                     <option value="Accepted">Accepted</option>
                                     <option value="Shipping">Shipping</option>
                                     <option value="Delivered">Delivered</option>
-                                    <option value="Received">Received</option>
+                                    <option value="Received">Cancelled</option>
                                 </select>
                             </div>
                         </div>
