@@ -163,9 +163,13 @@
 														echo "<td><span class='badge $badgeClass'>$status</span></td>";
 														echo "<td>
                                                                 <div class='form-button-action'>
-                                                                    <a href='purchase_viewsupplier.php?purchase_id=".$row['order_id']."' class='btn btn-link btn-primary btn-lg' data-id='".htmlspecialchars($row['order_id'])."' title='Edit Task'>
-                                                                        <i class='bi bi-eye-fill'></i>
-                                                                    </a>
+                                                                    <a href='#' class='btn btn-link btn-primary btn-lg' 
+																		data-bs-toggle='modal' 
+																		data-bs-target='#viewItemModal' 
+																		data-id='".htmlspecialchars($row['order_id'])."' 
+																		title='View Order'>
+																		<i class='bi bi-eye-fill'></i>
+																	</a>
                                                                 </div>
                                                             </td>";
                                                         echo "</tr>";
