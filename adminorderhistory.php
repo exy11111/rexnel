@@ -170,6 +170,11 @@
 																		title='View Order'>
 																		<i class='bi bi-eye-fill'></i>
 																	</a>
+																	<a href='#' class='btn btn-link btn-success btn-lg check-btn' 
+																		data-id='".htmlspecialchars($row['order_id'])."' 
+																		title='Mark as Received'>
+																		<i class='bi bi-check-lg'></i>
+																	</a>
                                                                 </div>
                                                             </td>";
                                                         echo "</tr>";
@@ -498,5 +503,69 @@
             <?php endif; ?>
         </script>
     <?php endif; ?>
+	<script>
+	document.addEventListener('DOMContentLoaded', function() {
+	const checkButtons = document.querySelectorAll('.check-btn');
+
+	checkButtons.forEach(button => {
+		button.addEventListener('click', function(event) {
+		event.preventDefault();
+		const orderId = this.getAttribute('data-id');
+
+		Swal.fire({
+			title: 'Mark order as received?',
+			text: "Are you sure you want to mark order #" + orderId + " as received?",
+			icon: 'question',
+			showCancelButton: true,
+			confirmButtonText: 'Yes, mark as received!',
+			cancelButtonText: 'Cancel',
+			confirmButtonColor: '#28a745',
+			cancelButtonColor: '#d33',
+		}).then((result) => {
+			if (result.isConfirmed) {
+			fetch('mark_received.php', {  
+				method: 'POST',
+				headers: {
+				'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({ order_id: orderId })
+			})
+			.then(response => response.json())
+			.then(data => {
+				if (data.success) {
+				Swal.fire(
+					'Marked!',
+					'Order #' + orderId + ' has been marked as received.',
+					'success'
+				);
+
+				const row = document.querySelector(`tr[data-id='${orderId}']`);
+				if (row) {
+					const statusCell = row.querySelector('td:nth-child(4) span.badge');
+					statusCell.textContent = 'Received';
+					statusCell.className = 'badge bg-secondary'; 
+				}
+				} else {
+				Swal.fire(
+					'Error!',
+					data.message || 'Failed to update order status.',
+					'error'
+				);
+				}
+			})
+			.catch(error => {
+				Swal.fire(
+				'Error!',
+				'Something went wrong.',
+				'error'
+				);
+				console.error('Error:', error);
+			});
+			}
+		});
+		});
+	});
+	});
+	</script>
 </body>
 </html>
