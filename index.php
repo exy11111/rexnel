@@ -110,6 +110,12 @@
 						$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
 						$stmt->execute();
 						$total_revenue = $stmt->fetchColumn();
+
+						$sql = "SELECT SUM(amount) FROM supplier_orders so JOIN items i WHERE so.item_id = i.item_id WHERE branch_id = :branch_id";
+						$stmt = $conn->prepare($sql);
+						$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
+						$stmt->execute();
+						$total_expenses = $stmt->fetchColumn();
 					?>
 					<div class="row">
 						<div class="col-sm-6 col-md-4">
@@ -146,11 +152,10 @@
 											</div>
 											<div class="col col-stats ms-3 ms-sm-0">
 												<div class="numbers w-100">
-													<p class="card-category">Expenses</p>
-													<h4 class="card-title">₱<?php echo number_format($result1['total_sales'], 2) ?></h4>
+													<p class="card-category">Total Expenses</p>
+													<h4 class="card-title">₱<?php echo number_format($total_expenses, 2) ?></h4>
 													
 												</div>
-												<span id="percentageText" class="text-muted float-end"></span>
 											</div>
 										</div>
 									</div>
