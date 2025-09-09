@@ -31,10 +31,8 @@ ini_set('display_errors', 1);
 	$stmt1->execute();
 
 	$result1 = $stmt1->fetch(PDO::FETCH_ASSOC);
-	if ($result1 === false || $result1 === null) {
-		$result1['total_sales'] = 0;
-		$result1['orders'] = 0;
-	}
+	$result1['total_sales'] = $result1['total_sales'] ?? 0;
+	$result1['orders']      = $result1['orders'] ?? 0;
 
 	$sql = "SELECT branch_name FROM branch WHERE branch_id = :branch_id";
 	$stmt = $conn->prepare($sql);
