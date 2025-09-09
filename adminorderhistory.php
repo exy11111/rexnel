@@ -170,7 +170,7 @@
 																		title='View Order'>
 																		<i class='bi bi-eye-fill'></i>
 																	</a>
-																	<a href='#' class='btn btn-link btn-success btn-lg check-btn' 
+																	<a href='#' class='btn btn-link btn-outline-success btn-lg check-btn' 
 																		data-id='".htmlspecialchars($row['order_id'])."' 
 																		title='Mark as Received'>
 																		<i class='bi bi-check-lg'></i>
