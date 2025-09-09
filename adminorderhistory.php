@@ -263,6 +263,21 @@
 			</footer>
 		</div>
 	</div>
+	<?php 
+	
+	$sql = "SELECT item_id, barcode, item_name, category_name, brand_name, supplier_name, size_name, price, stock, supplier_price
+	FROM items i 
+	JOIN categories c ON i.category_id = c.category_id
+	JOIN brands b ON b.brand_id = i.brand_id
+	JOIN suppliers s ON s.supplier_id = i.supplier_id
+	JOIN sizes ss ON i.size_id = ss.size_id
+	WHERE i.branch_id = :branch_id";
+    $stmt = $conn->prepare($sql);
+	$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
+    $stmt->execute();
+    $itemdata = $stmt->fetchAll(PDO::FETCH_ASSOC);
+	
+	?>
 	<div class="modal fade" id="orderModal" tabindex="-1" role="dialog" aria-hidden="true">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
@@ -297,7 +312,7 @@
 									<select class="form-select" name="item_id" id="order_itemId" required>
 										<option value="">Select Item</option>
 										<?php 
-											foreach ($data as $row){
+											foreach ($itemdata as $row){
 												echo "<option value='".$row['item_id']."' data-price='".$row['supplier_price']."'>".$row['item_name']."</option>";
 											}
 										?>
