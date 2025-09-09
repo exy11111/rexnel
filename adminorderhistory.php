@@ -108,6 +108,12 @@
 								<div class="card-header">
                                     <div class="d-flex align-items-center">
 										<h4 class="card-title">Orders</h4>
+										<div class="ms-auto">
+											<button class="btn btn-success btn-round" data-bs-toggle="modal" data-bs-target="#orderModal">
+												<i class="fa fa-plus"></i>
+												Add Order
+											</button>
+										</div>
 									</div>
 								</div>
 								<div class="card-body">
