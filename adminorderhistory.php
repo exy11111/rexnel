@@ -59,7 +59,7 @@
 <body>
 	<div class="wrapper">
 		<!-- Sidebar -->
-		<?php $active = 'account'?>
+		<?php $active = 'expenses'?>
 		<?php include 'include_sidebar.php'?>
 
 		<div class="main-panel">

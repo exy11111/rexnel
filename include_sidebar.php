@@ -131,6 +131,23 @@
                         </ul>
                     </div>
                 </li>
+
+                <li class="nav-item <?php echo ($active === 'expenses') ? 'active' : ''; ?>">
+                    <a data-bs-toggle="collapse" href="#sales"  class="text-white">
+                        <i class="fas fa-layer-group"></i>
+                        <p>Expenses Management</p>
+                        <span class="caret"></span>
+                    </a>
+                    <div class="collapse" id="sales">
+                        <ul class="nav nav-collapse">
+                            <li>
+                                <a href="adminorderhistory.php">
+                                    <span class="sub-item text-white">Order History</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
             </ul>
         </div>
     </div>
