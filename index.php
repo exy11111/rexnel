@@ -111,13 +111,15 @@ ini_set('display_errors', 1);
 						$stmt = $conn->prepare($sql);
 						$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
 						$stmt->execute();
-						$total_revenue = $stmt->fetchColumn();
+						$all_revenue = $stmt->fetchColumn();
 
 						$sql = "SELECT SUM(amount) FROM supplier_orders so JOIN items i ON so.item_id = i.item_id WHERE i.branch_id = :branch_id";
 						$stmt = $conn->prepare($sql);
 						$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
 						$stmt->execute();
-						$total_expenses = $stmt->fetchColumn();
+						$all_expenses = $stmt->fetchColumn();
+
+						$all_profit = $all_revenue - $all_expenses;
 					?>
 					<div class="row">
 						<div class="col-sm-6 col-md-4">
@@ -133,7 +135,7 @@ ini_set('display_errors', 1);
 											<div class="col col-stats ms-3 ms-sm-0">
 												<div class="numbers w-100">
 													<p class="card-category">Total Revenue</p>
-													<h4 class="card-title">₱<?php echo number_format($total_revenue, 2) ?></h4>
+													<h4 class="card-title">₱<?php echo number_format($all_revenue, 2) ?></h4>
 													
 												</div>
 											</div>
@@ -155,7 +157,7 @@ ini_set('display_errors', 1);
 											<div class="col col-stats ms-3 ms-sm-0">
 												<div class="numbers w-100">
 													<p class="card-category">Total Expenses</p>
-													<h4 class="card-title">₱<?php echo number_format($total_expenses, 2) ?></h4>
+													<h4 class="card-title">₱<?php echo number_format($all_expenses, 2) ?></h4>
 													
 												</div>
 											</div>
@@ -176,8 +178,8 @@ ini_set('display_errors', 1);
 											</div>
 											<div class="col col-stats ms-3 ms-sm-0">
 												<div class="numbers w-100">
-													<p class="card-category">Profit</p>
-													<h4 class="card-title">₱<?php echo number_format($result1['total_sales'], 2) ?></h4>
+													<p class="card-category">Total Profit</p>
+													<h4 class="card-title">₱<?php echo number_format($all_profit, 2) ?></h4>
 													
 												</div>
 												<span id="percentageText" class="text-muted float-end"></span>
