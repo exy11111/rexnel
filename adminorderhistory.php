@@ -267,6 +267,8 @@
 			</footer>
 		</div>
 	</div>
+
+	<?php include ('modal_editordersupplier.php'); ?>
 	<?php 
 	
 	$sql = "SELECT item_id, barcode, item_name, category_name, brand_name, supplier_name, size_name, price, stock, supplier_price
