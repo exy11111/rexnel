@@ -133,12 +133,12 @@
                 </li>
 
                 <li class="nav-item <?php echo ($active === 'expenses') ? 'active' : ''; ?>">
-                    <a data-bs-toggle="collapse" href="#sales"  class="text-white">
+                    <a data-bs-toggle="collapse" href="#expenses"  class="text-white">
                         <i class="fas fa-layer-group"></i>
                         <p>Expenses Management</p>
                         <span class="caret"></span>
                     </a>
-                    <div class="collapse" id="sales">
+                    <div class="collapse" id="expenses">
                         <ul class="nav nav-collapse">
                             <li>
                                 <a href="adminorderhistory.php">
