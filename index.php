@@ -111,7 +111,7 @@
 						$stmt->execute();
 						$total_revenue = $stmt->fetchColumn();
 
-						$sql = "SELECT SUM(amount) FROM supplier_orders so JOIN items i WHERE so.item_id = i.item_id WHERE branch_id = :branch_id";
+						$sql = "SELECT SUM(amount) FROM supplier_orders so JOIN items i WHERE so.item_id = i.item_id WHERE i.branch_id = :branch_id";
 						$stmt = $conn->prepare($sql);
 						$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
 						$stmt->execute();
