@@ -135,7 +135,7 @@
 														echo "<td>".htmlspecialchars($row['order_id'])."</td>";
 														echo "<td>" . date("F d, Y", strtotime($row['date'])) . "</td>";
 														echo "<td>₱".htmlspecialchars($row['amount'])."</td>";
-                                                        $status = htmlspecialchars($row['status']);
+														$status = htmlspecialchars($row['status']);
 														$badgeClass = '';
 														
 														switch ($status) {
@@ -162,22 +162,26 @@
 														}
 														echo "<td><span class='badge $badgeClass'>$status</span></td>";
 														echo "<td>
-                                                                <div class='form-button-action'>
-                                                                    <a href='#' class='btn btn-link btn-primary btn-lg' 
+																<div class='form-button-action'>
+																	<a href='#' class='btn btn-link btn-primary btn-lg' 
 																		data-bs-toggle='modal' 
 																		data-bs-target='#viewItemModal' 
 																		data-id='".htmlspecialchars($row['order_id'])."' 
 																		title='View Order'>
 																		<i class='bi bi-eye-fill'></i>
-																	</a>
-																	<a href='#' class='btn btn-link btn-success btn-lg check-btn' 
-																		data-id='".htmlspecialchars($row['order_id'])."' 
-																		title='Mark as Received'>
-																		<i class='bi bi-check-lg'></i>
-																	</a>
-                                                                </div>
-                                                            </td>";
-                                                        echo "</tr>";
+																	</a>";
+																	
+														if ($status === 'Delivered') {
+															echo "<a href='#' class='btn btn-link btn-success btn-lg check-btn' 
+																	data-id='".htmlspecialchars($row['order_id'])."' 
+																	title='Mark as Received'>
+																	<i class='bi bi-check-lg'></i>
+																</a>";
+														}
+
+														echo "  </div>
+															</td>";
+														echo "</tr>";
 													}
 												?>
 											</tbody>
