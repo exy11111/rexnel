@@ -263,6 +263,95 @@
 			</footer>
 		</div>
 	</div>
+	<div class="modal fade" id="orderModal" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header border-0">
+					<h5 class="modal-title">
+						<span class="fw-mediumbold">
+						Add</span> 
+						<span class="fw-light">
+							Order
+						</span>
+					</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<form action="process_addsupplierorder.php" method="POST">
+					<div class="modal-body">
+						<p class="small">Add an order using this form.</p>
+						<div class="row">
+							<div class="col-sm-12">
+								<div class="form-group form-group-default">
+									<label>Barcode</label>
+									<input type="text" name="barcode" id="stock_barcode2" class="form-control" oninput="validatePhoneNumber(this)" placeholder="fill barcode">
+									<script>
+										function validatePhoneNumber(input) {
+											input.value = input.value.replace(/[^0-9]/g, '');
+										}
+									</script>
+								</div>
+							</div>
+							<div class="col-sm-12">
+								<div class="form-group form-group-default">
+									<label>Item Name</label>
+									<select class="form-select" name="item_id" id="order_itemId" required>
+										<option value="">Select Item</option>
+										<?php 
+											foreach ($data as $row){
+												echo "<option value='".$row['item_id']."' data-price='".$row['supplier_price']."'>".$row['item_name']."</option>";
+											}
+										?>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm-12">
+								<div class="form-group form-group-default">
+									<label for="category">Quantity</label>
+									<input type="number" class="form-control" name="quantity" id="order_quantity">
+								</div>
+							</div>
+							<div class="col-sm-12">
+								<div class="d-flex justify-content-between align-items-center" style="padding: 8px 0;">
+									<span>Unit Price</span>
+									<span id="unit_cost_display" style="color: #333;">₱0.00</span>
+								</div>
+							</div>
+
+							<div class="col-sm-12">
+								<div class="d-flex justify-content-between align-items-center" style="padding: 8px 0; font-weight: 700; font-size: 1.25rem; color: #E94E1B;">
+									<span>Total Price</span>
+									<span id="total_price">₱0.00</span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer border-0">
+						<button type="submit" class="btn btn-success">Order</button>
+						<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+					</div>
+				</form>
+				<script>
+					const itemSelect = document.getElementById("order_itemId");
+					const unitCostDisplay = document.getElementById("unit_cost_display");
+					const totalPriceDisplay = document.getElementById("total_price");
+					const quantityInput = document.getElementById("order_quantity");
+
+					function updatePrices() {
+						const selectedOption = itemSelect.options[itemSelect.selectedIndex];
+						const unitPrice = parseFloat(selectedOption.getAttribute("data-price")) || 0;
+						const quantity = parseInt(quantityInput.value) || 0;
+						const total = unitPrice * quantity;
+
+						unitCostDisplay.textContent = "₱" + unitPrice.toLocaleString(undefined, {minimumFractionDigits: 2});
+						totalPriceDisplay.textContent = "₱" + total.toLocaleString(undefined, {minimumFractionDigits: 2});
+					}
+
+					itemSelect.addEventListener("change", updatePrices);
+					quantityInput.addEventListener("input", updatePrices);
+				</script>
+			</div>
+		</div>
+	</div>
 	<!-- Modal -->
 	<div class="modal modal-lg fade" id="editStatusModal" tabindex="-1" role="dialog" aria-hidden="true">
 	<div class="modal-dialog" role="document">
