@@ -26,11 +26,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bindParam(':status', $status);
         $stmt->execute();
 
-        header("Location: stock.php?order=success");
+        header("Location: adminorderhistory.php?order=success");
         exit();
     }
     catch (PDOException $e) {
-        header("Location: stock.php?order=error");
+        header("Location: adminorderhistory.php?order=error");
         exit();
     }
 

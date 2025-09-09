@@ -322,7 +322,7 @@
 							<div class="col-sm-12">
 								<div class="form-group form-group-default">
 									<label for="category">Quantity</label>
-									<input type="number" class="form-control" name="quantity" id="order_quantity">
+									<input type="number" class="form-control" name="quantity" id="order_quantity" required>
 								</div>
 							</div>
 							<div class="col-sm-12">
