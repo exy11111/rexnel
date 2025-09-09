@@ -106,7 +106,7 @@
 					<!-- -->
 					<?php 
 						$sql = "SELECT SUM(price) FROM purchases WHERE branch_id = :branch_id";
-						$stmt = $conn->prepare();
+						$stmt = $conn->prepare($sql);
 						$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
 						$stmt->execute();
 						$total_revenue = $stmt->fetchColumn();
