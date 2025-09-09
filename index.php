@@ -102,6 +102,15 @@
 						</div> 
 						-->
 					</div>
+
+					<!-- -->
+					<?php 
+						$sql = "SELECT SUM(price) FROM purchases WHERE branch_id = :branch_id";
+						$stmt = $conn->prepare();
+						$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
+						$stmt->execute();
+						$total_revenue = $stmt->fetchColumn();
+					?>
 					<div class="row">
 						<div class="col-sm-6 col-md-4">
 							<a href="purchase.php">
@@ -115,11 +124,10 @@
 											</div>
 											<div class="col col-stats ms-3 ms-sm-0">
 												<div class="numbers w-100">
-													<p class="card-category">Revenue</p>
-													<h4 class="card-title">₱<?php echo number_format($result1['total_sales'], 2) ?></h4>
+													<p class="card-category">Total Revenue</p>
+													<h4 class="card-title">₱<?php echo number_format($total_revenue, 2) ?></h4>
 													
 												</div>
-												<span id="percentageText" class="text-muted float-end"></span>
 											</div>
 										</div>
 									</div>
