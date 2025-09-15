@@ -184,7 +184,6 @@ ini_set('display_errors', 1);
 													<h4 class="card-title">₱<?php echo number_format($all_profit, 2) ?></h4>
 													
 												</div>
-												<span id="percentageText" class="text-muted float-end"></span>
 											</div>
 										</div>
 									</div>
