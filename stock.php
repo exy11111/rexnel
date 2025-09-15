@@ -401,12 +401,26 @@
 													<th>Size</th>
 													<th>Price</th>
 													<th>Stock</th>
+													<th>Status</th>
 													<?php if($_SESSION['role_id'] == 1 || $_SESSION['role_id'] == 2):?> <th style="width: 10%">Action</th> <?php endif; ?>
 												</tr>
 											</thead>
 											<tbody>
 												<?php 
 													foreach($data as $row){
+														if($row['stock'] < 5){
+															$status = "Low Stock";
+															$class = "badge badge-warning";
+														}
+														else if($row['stock'] == 0){
+															$status = "No Stock";
+															$class = "badge badge-danger";
+														}
+														else{
+															$status = "In Stock";
+															$class = "badge badge-success";
+														}
+
 														echo "<tr data-id=".htmlspecialchars($row['item_id']).">";
 														echo "<td>".htmlspecialchars($row['barcode'])."</td>";
 														echo "<td>".htmlspecialchars($row['item_name'])."</td>";
@@ -416,6 +430,7 @@
 														echo "<td>".htmlspecialchars($row['size_name'])."</td>";
 														echo "<td>₱" . number_format($row['price'], 2) . "</td>";
 														echo "<td>" . number_format($row['stock']) . "</td>";
+														echo "<td> <span class='" . $class. "'>".$status."</span></td>";
 														if($_SESSION['role_id'] == 1 || $_SESSION['role_id'] == 2){
 															echo "<td>
                                                                 <div class='form-button-action'>

@@ -542,10 +542,16 @@
 		document.getElementById("downloadPDF").addEventListener("click", function () {
 			const { jsPDF } = window.jspdf;
 			const doc = new jsPDF();
+			const centerX = doc.internal.pageSize.getWidth() / 2;
 
 			doc.setFontSize(16);
 			doc.setFont("helvetica", "bold");
-			doc.text("House of Local", 105, 20, { align: "center" });
+			doc.text("House of Local", centerX, 30, { align: "center" });
+
+			doc.setFontSize(10);
+			doc.setFont("helvetica", "normal");
+			doc.text("<?php echo $branch_name; ?>", centerX, 45, { align: "center" });
+			doc.text("<?php echo $branch_address; ?>", centerX, 58, { align: "center" });
 
 			doc.setFontSize(10);
 			doc.setFont("helvetica", "normal");
