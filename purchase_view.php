@@ -432,7 +432,7 @@
 							</li>
 						</ul>
 					</div>
-                    <div id="receiptContent">
+                    <div id="receiptContent" class="card p-3" style="max-width: 600px; margin: auto; font-family: Arial, sans-serif; font-size: 14px;">
 						<div class="card p-3">
 							<?php
 							$totalPrice = 0;
@@ -506,6 +506,8 @@
 	<!-- Kaiadmin JS -->
 	<script src="assets/js/kaiadmin.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.0/dist/sweetalert2.all.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 	<?php include 'modal_profile.php'?>
 	<?php include 'modal_editaccount.php';?>
 	<!-- Auto populate in edit modal -->
@@ -534,29 +536,35 @@
             });
         });
     </script>
+
 	<script>
-    async function downloadPDF() {
-        const { jsPDF } = window.jspdf;
+		async function downloadPDF() {
+			const { jsPDF } = window.jspdf;
 
-        const element = document.getElementById('receiptContent');
-        const canvas = await html2canvas(element, { scale: 2 });
+			const element = document.getElementById('receiptContent');
+			const canvas = await html2canvas(element, {
+				scale: 2,
+				useCORS: true,
+				allowTaint: true,
+			});
 
-        const imgData = canvas.toDataURL('image/png');
-        const pdf = new jsPDF({
-            orientation: 'portrait',
-            unit: 'px',
-            format: 'a4'
-        });
+			const imgData = canvas.toDataURL('image/png');
+			const pdf = new jsPDF({
+				orientation: 'portrait',
+				unit: 'px',
+				format: 'a4'
+			});
 
-        const pageWidth = pdf.internal.pageSize.getWidth();
-        const pageHeight = pdf.internal.pageSize.getHeight();
-        const imgProps = pdf.getImageProperties(imgData);
-        const pdfWidth = pageWidth;
-        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+			const pageWidth = pdf.internal.pageSize.getWidth();
+			const imgProps = pdf.getImageProperties(imgData);
+			const pdfWidth = pageWidth;
+			const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
 
-        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-        pdf.save("receipt.pdf");
-    }
-</script>
+			let y = 10; // Top margin
+			pdf.addImage(imgData, 'PNG', 10, y, pdfWidth - 20, pdfHeight);
+			pdf.save("receipt.pdf");
+		}
+	</script>
+
 </body>
 </html>
