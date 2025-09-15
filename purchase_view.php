@@ -476,7 +476,7 @@
 						</div>
 					</div>
                     <div class="d-flex justify-content-center mb-5">
-						<button class="btn btn-primary" onclick="downloadPDF()">Download PDF</button>
+						<button id="downloadPDF" class="btn btn-primary">Download Receipt PDF</button>
 					</div>
                 </div>
 			</div>
@@ -538,63 +538,58 @@
     </script>
 
 	<script>
-    async function downloadPDF() {
-        const { jsPDF } = window.jspdf;
+		document.getElementById("downloadPDF").addEventListener("click", function () {
+			const { jsPDF } = window.jspdf;
+			const pdf = new jsPDF({ unit: 'pt' });
 
-        const element = document.getElementById('receiptContent');
+			pdf.setFontSize(16);
+			pdf.setFont("helvetica", "bold");
+			pdf.text("House of Local", 300, 40, { align: "center" });
 
-        // Save original styles
-        const originalClass = element.className;
-        const originalTableClass = document.getElementById('receipt').className;
+			pdf.setFontSize(12);
+			pdf.setFont("helvetica", "normal");
+			pdf.text("Date: <?php echo date("F j, Y - h:i A"); ?>", 40, 60);
 
-        // Add temporary print styles
-        element.classList.add('pdf-mode');
-        document.getElementById('receipt').classList.remove('table', 'table-bordered');
-        document.getElementById('receipt').style.border = "1px solid #000";
-        document.getElementById('receipt').style.borderCollapse = "collapse";
+			let startY = 90;
 
-        const tds = document.querySelectorAll('#receipt td, #receipt th');
-        tds.forEach(td => {
-            td.style.border = "1px solid #000";
-            td.style.padding = "4px";
-            td.style.fontSize = "12px";
-        });
+			// Table Header
+			pdf.setFont("helvetica", "bold");
+			pdf.text("Item", 40, startY);
+			pdf.text("Qty", 200, startY);
+			pdf.text("Size", 250, startY);
+			pdf.text("Price", 350, startY, { align: "right" });
 
-        // Render to canvas
-        const canvas = await html2canvas(element, {
-            scale: 2,
-            useCORS: true
-        });
+			startY += 15;
+			pdf.setFont("helvetica", "normal");
 
-        // Create PDF
-        const imgData = canvas.toDataURL('image/png');
-        const pdf = new jsPDF({
-            orientation: 'portrait',
-            unit: 'px',
-            format: 'a4'
-        });
+			<?php
+			$totalPrice = 0;
+			foreach ($data as $row):
+				$linePrice = $row['item_price'];
+				$totalPrice += $linePrice;
+			?>
+				pdf.text("<?php echo $row['item_name']; ?>", 40, startY);
+				pdf.text("<?php echo $row['quantity']; ?>", 200, startY);
+				pdf.text("<?php echo $row['size_name']; ?>", 250, startY);
+				pdf.text("₱<?php echo number_format($linePrice, 2); ?>", 350, startY, { align: "right" });
+				startY += 15;
+			<?php endforeach; ?>
 
-        const pageWidth = pdf.internal.pageSize.getWidth();
-        const imgProps = pdf.getImageProperties(imgData);
-        const pdfWidth = pageWidth;
-        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+			// Total
+			startY += 10;
+			pdf.setFont("helvetica", "bold");
+			pdf.text("Total: ₱<?php echo number_format($totalPrice, 2); ?>", 350, startY, { align: "right" });
 
-        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-        pdf.save("receipt.pdf");
+			// Optional Thank You Message
+			startY += 40;
+			pdf.setFont("helvetica", "italic");
+			pdf.setFontSize(12);
+			pdf.text("Thank you for your purchase!", 300, startY, { align: "center" });
 
-        // Revert styles back to original
-        element.className = originalClass;
-        document.getElementById('receipt').className = originalTableClass;
-        document.getElementById('receipt').style.border = "";
-        document.getElementById('receipt').style.borderCollapse = "";
-
-        tds.forEach(td => {
-            td.style.border = "";
-            td.style.padding = "";
-            td.style.fontSize = "";
-        });
-    }
-</script>
+			// Save PDF
+			pdf.save("HouseOfLocal_Receipt_<?php echo date('Ymd_His'); ?>.pdf");
+		});
+	</script>
 
 
 </body>
