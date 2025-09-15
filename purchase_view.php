@@ -432,7 +432,7 @@
 							</li>
 						</ul>
 					</div>
-                    <div id="receiptContent" class="card p-3" style="max-width: 600px; margin: auto; font-family: Arial, sans-serif; font-size: 14px;">
+                    <div id="receiptContent">
 						<div class="card p-3">
 							<?php
 							$totalPrice = 0;
