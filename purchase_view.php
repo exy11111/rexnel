@@ -550,7 +550,7 @@
 
 			doc.setFontSize(10);
 			doc.setFont("helvetica", "normal");
-			doc.text("<?php echo $branch_name; ?>", centerX,topMargin + 45, { align: "center" });
+			doc.text("<?php echo $branch_name; ?>", centerX, 45, { align: "center" });
 			doc.text("<?php echo $branch_address; ?>", centerX, 58, { align: "center" });
 
 			doc.setFontSize(10);

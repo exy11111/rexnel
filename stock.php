@@ -408,13 +408,13 @@
 											<tbody>
 												<?php 
 													foreach($data as $row){
-														if($row['stock'] <= 5){
-															$status = "Low Stock";
-															$class = "badge badge-warning";
-														}
-														else if($row['stock'] < 1){
+														if($row['stock'] < 1){
 															$status = "No Stock";
 															$class = "badge badge-danger";
+														}
+														else if($row['stock'] <= 5){
+															$status = "Low Stock";
+															$class = "badge badge-warning";
 														}
 														else{
 															$status = "In Stock";
