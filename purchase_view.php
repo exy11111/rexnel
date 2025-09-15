@@ -250,7 +250,7 @@
 					<?php endforeach; ?>
 				],
 				theme: 'grid',
-				headStyles: { fillColor: [220, 220, 220] },
+				headStyles: { fillColor: [0, 0, 0], textColor: [255, 255, 255] }
 				styles: {
 					fontSize: 10,
 					cellPadding: 4
