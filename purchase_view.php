@@ -538,33 +538,64 @@
     </script>
 
 	<script>
-		async function downloadPDF() {
-			const { jsPDF } = window.jspdf;
+    async function downloadPDF() {
+        const { jsPDF } = window.jspdf;
 
-			const element = document.getElementById('receiptContent');
-			const canvas = await html2canvas(element, {
-				scale: 2,
-				useCORS: true,
-				allowTaint: true,
-			});
+        const element = document.getElementById('receiptContent');
 
-			const imgData = canvas.toDataURL('image/png');
-			const pdf = new jsPDF({
-				orientation: 'portrait',
-				unit: 'px',
-				format: 'a4'
-			});
+        // Save original styles
+        const originalClass = element.className;
+        const originalTableClass = document.getElementById('receipt').className;
 
-			const pageWidth = pdf.internal.pageSize.getWidth();
-			const imgProps = pdf.getImageProperties(imgData);
-			const pdfWidth = pageWidth;
-			const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+        // Add temporary print styles
+        element.classList.add('pdf-mode');
+        document.getElementById('receipt').classList.remove('table', 'table-bordered');
+        document.getElementById('receipt').style.border = "1px solid #000";
+        document.getElementById('receipt').style.borderCollapse = "collapse";
 
-			let y = 10; // Top margin
-			pdf.addImage(imgData, 'PNG', 10, y, pdfWidth - 20, pdfHeight);
-			pdf.save("receipt.pdf");
-		}
-	</script>
+        const tds = document.querySelectorAll('#receipt td, #receipt th');
+        tds.forEach(td => {
+            td.style.border = "1px solid #000";
+            td.style.padding = "4px";
+            td.style.fontSize = "12px";
+        });
+
+        // Render to canvas
+        const canvas = await html2canvas(element, {
+            scale: 2,
+            useCORS: true
+        });
+
+        // Create PDF
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new jsPDF({
+            orientation: 'portrait',
+            unit: 'px',
+            format: 'a4'
+        });
+
+        const pageWidth = pdf.internal.pageSize.getWidth();
+        const imgProps = pdf.getImageProperties(imgData);
+        const pdfWidth = pageWidth;
+        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+        pdf.save("receipt.pdf");
+
+        // Revert styles back to original
+        element.className = originalClass;
+        document.getElementById('receipt').className = originalTableClass;
+        document.getElementById('receipt').style.border = "";
+        document.getElementById('receipt').style.borderCollapse = "";
+
+        tds.forEach(td => {
+            td.style.border = "";
+            td.style.padding = "";
+            td.style.fontSize = "";
+        });
+    }
+</script>
+
 
 </body>
 </html>
