@@ -237,25 +237,25 @@
 			const tableStartY = topMargin + 50;
 
 			doc.autoTable({
-				startY: tableStartY,
-				head: [["Item Name", "Quantity", "Size", "Price"]],
-				body: [
-					<?php foreach ($data as $row): ?>
-						[
-							"<?php echo addslashes($row['item_name']); ?>",
-							"<?php echo $row['quantity']; ?>",
-							"<?php echo $row['size_name']; ?>",
-							"Php <?php echo number_format($row['item_price'], 2); ?>"
-						],
-					<?php endforeach; ?>
-				],
-				theme: 'grid',
-				headStyles: { fillColor: [0, 0, 0], textColor: [255, 255, 255] }
-				styles: {
-					fontSize: 10,
-					cellPadding: 4
-				}
-			});
+			startY: tableStartY,
+			head: [["Item Name", "Quantity", "Size", "Price"]],
+			body: [
+				<?php foreach ($data as $row): ?>
+					[
+						"<?php echo addslashes($row['item_name']); ?>",
+						"<?php echo $row['quantity']; ?>",
+						"<?php echo $row['size_name']; ?>",
+						"Php <?php echo number_format($row['item_price'], 2); ?>"
+					],
+				<?php endforeach; ?>
+			],
+			theme: 'grid',
+			headStyles: { fillColor: [0, 0, 0], textColor: [255, 255, 255] },
+			styles: {
+				fontSize: 10,
+				cellPadding: 4
+			}
+		});
 
 			// TOTAL BELOW TABLE
 			const finalY = doc.lastAutoTable.finalY + 20;
