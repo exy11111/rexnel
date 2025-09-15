@@ -519,6 +519,7 @@
 											<option value="<?php echo $row['pm_id']?>"><?php echo $row['payment_method']?></option>
 										<?php endforeach; ?>
 									</select>
+									<input type="date" id="startDate" class="form-control">
 								</div>
 							</div>
                         </div>
