@@ -755,7 +755,7 @@
 			let table = document.getElementById("receipt");
 			let rows = table.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
 			let receiptData = [];
-			let dateSelected = document.getElementById('startDate').value || new Date().toISOString().slice(0, 19).replace('T', ' ');
+			let dateSelected = document.getElementById('startDate').value;
 
 			let paymentMethod = document.querySelector("select[name='pm_id']").value;
 			if (paymentMethod === "Choose Payment Method") {
