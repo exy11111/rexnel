@@ -215,6 +215,8 @@
 			const doc = new jsPDF({ unit: 'pt' });
 
 			const centerX = doc.internal.pageSize.getWidth() / 2;
+			const pageWidth = doc.internal.pageSize.getWidth();
+			const marginRight = 40; // right margin for total amount
 			const topMargin = 40;
 
 			// TITLE
@@ -240,10 +242,10 @@
 				body: [
 					<?php foreach ($data as $row): ?>
 						[
-							"<?php echo $row['item_name']; ?>",
+							"<?php echo addslashes($row['item_name']); ?>",
 							"<?php echo $row['quantity']; ?>",
 							"<?php echo $row['size_name']; ?>",
-							"₱<?php echo number_format($row['item_price'], 2); ?>"
+							"Php <?php echo number_format($row['item_price'], 2); ?>"
 						],
 					<?php endforeach; ?>
 				],
@@ -260,17 +262,18 @@
 
 			doc.setFont("helvetica", "bold");
 			doc.setFontSize(11);
-			doc.text("Total: ₱<?php echo number_format($totalPrice, 2); ?>", 550, finalY, { align: "right" });
+			// Align total amount right with marginRight
+			doc.text("Total: Php <?php echo number_format($totalPrice, 2); ?>", pageWidth - marginRight, finalY, { align: "right" });
 
-			// THANK YOU MESSAGE
+			// THANK YOU MESSAGE (centered)
 			doc.setFont("helvetica", "italic");
 			doc.setFontSize(11);
 			doc.text("Thank you for your purchase!", centerX, finalY + 30, { align: "center" });
 
-			// DOWNLOAD
 			doc.save("HouseOfLocal_Receipt_<?php echo date('Ymd_His'); ?>.pdf");
 		});
-	</script>
+		</script>
+
 
 </body>
 </html>
