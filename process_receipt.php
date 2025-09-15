@@ -15,6 +15,12 @@ $total_price = $data['total_price'];
 $payment_method = $data['payment_method'];
 $branch_id = $data['branch_id'];
 $date = $data['dateSel'];
+$randomHour   = rand(0, 23);
+$randomMinute = rand(0, 59);
+$randomSecond = rand(0, 59);
+
+$dateTime = $data['dateSel'] . ' ' . sprintf('%02d:%02d:%02d', $randomHour, $randomMinute, $randomSecond);
+$timestamp = strtotime($dateTime);
 
 $proofImagePath = null;
 
@@ -63,7 +69,7 @@ try {
         ':price' => $total_price,
         ':pm_id' => $payment_method,
         ':branch_id' => $branch_id,
-        ':date' => $date,
+        ':date' => $timestamp,
         ':proof_image' => $proofImagePath
     ]);
     $purchase_id = $conn->lastInsertId();
