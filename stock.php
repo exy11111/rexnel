@@ -412,7 +412,7 @@
 															$status = "Low Stock";
 															$class = "badge badge-warning";
 														}
-														else if($row['stock'] == 0){
+														else if($row['stock'] < 1){
 															$status = "No Stock";
 															$class = "badge badge-danger";
 														}

@@ -564,7 +564,7 @@
 						"<?php echo $row['item_name']; ?>",
 						"<?php echo $row['quantity']; ?>",
 						"<?php echo $row['size_name']; ?>",
-						"₱<?php echo number_format($row['item_price'], 2); ?>"
+						"Php <?php echo number_format($row['item_price'], 2); ?>"
 					],
 				<?php endforeach; ?>
 			];
@@ -585,7 +585,7 @@
 			// Total Price
 			const finalY = doc.lastAutoTable.finalY + 10;
 			doc.setFont("helvetica", "bold");
-			doc.text("Total: ₱<?php echo number_format($totalPrice, 2); ?>", 170, finalY, { align: "right" });
+			doc.text("Total: Php <?php echo number_format($totalPrice, 2); ?>", 170, finalY, { align: "right" });
 
 			// Thank you note
 			doc.setFont("helvetica", "italic");
