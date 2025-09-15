@@ -571,14 +571,14 @@
 				pdf.text("<?php echo $row['item_name']; ?>", 40, startY);
 				pdf.text("<?php echo $row['quantity']; ?>", 200, startY);
 				pdf.text("<?php echo $row['size_name']; ?>", 250, startY);
-				pdf.text("₱<?php echo number_format($linePrice, 2); ?>", 350, startY, { align: "right" });
+				pdf.text("Php <?php echo number_format($linePrice, 2); ?>", 350, startY, { align: "right" });
 				startY += 15;
 			<?php endforeach; ?>
 
 			// Total
 			startY += 10;
 			pdf.setFont("helvetica", "bold");
-			pdf.text("Total: ₱<?php echo number_format($totalPrice, 2); ?>", 350, startY, { align: "right" });
+			pdf.text("Total: Php <?php echo number_format($totalPrice, 2); ?>", 350, startY, { align: "right" });
 
 			// Optional Thank You Message
 			startY += 40;
