@@ -520,7 +520,7 @@
 										<?php endforeach; ?>
 									</select>
 								</div>
-								<input type="date" id="startDate" class="form-control">
+								<input type="date" id="startDate" class="form-control" value="<?php echo date('Y-m-d'); ?>">
 							</div>
                         </div>
                     </div>
@@ -755,6 +755,7 @@
 			let table = document.getElementById("receipt");
 			let rows = table.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
 			let receiptData = [];
+			let dateSelected = document.getElementById('startDate').value || new Date().toISOString().slice(0, 19).replace('T', ' ');
 
 			let paymentMethod = document.querySelector("select[name='pm_id']").value;
 			if (paymentMethod === "Choose Payment Method") {
@@ -831,7 +832,8 @@
 										total_price: totalPrice,
 										payment_method: paymentMethod,
 										branch_id: <?php echo $_SESSION['branch_id']; ?>,
-										proof_image: qrResult.value.image
+										proof_image: qrResult.value.image,
+										dateSel: dateSelected
 									})
 								})
 								.then(response => response.json())

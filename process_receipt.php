@@ -14,7 +14,9 @@ $receipt = $data['receipt'];
 $total_price = $data['total_price'];
 $payment_method = $data['payment_method'];
 $branch_id = $data['branch_id'];
-$date = date('Y-m-d H:i:s');
+$date = isset($data['dateSel']) && !empty($data['dateSel']) 
+    ? $data['dateSel'] 
+    : date('Y-m-d H:i:s');
 
 $proofImagePath = null;
 
