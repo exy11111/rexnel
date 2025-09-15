@@ -508,6 +508,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.0/dist/sweetalert2.all.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
 	<?php include 'modal_profile.php'?>
 	<?php include 'modal_editaccount.php';?>
 	<!-- Auto populate in edit modal -->
@@ -540,57 +541,54 @@
 	<script>
 		document.getElementById("downloadPDF").addEventListener("click", function () {
 			const { jsPDF } = window.jspdf;
-			const pdf = new jsPDF({ unit: 'pt' });
+			const doc = new jsPDF();
 
-			pdf.setFontSize(16);
-			pdf.setFont("helvetica", "bold");
-			pdf.text("House of Local", 300, 40, { align: "center" });
+			doc.setFontSize(16);
+			doc.setFont("helvetica", "bold");
+			doc.text("House of Local", 105, 20, { align: "center" });
 
-			pdf.setFontSize(12);
-			pdf.setFont("helvetica", "normal");
-			pdf.text("Date: <?php echo date("F j, Y - h:i A"); ?>", 40, 60);
+			doc.setFontSize(10);
+			doc.setFont("helvetica", "normal");
+			doc.text("Date: <?php echo date("F j, Y - h:i A"); ?>", 14, 35);
 
-			let startY = 90;
+			const headers = [["Item Name", "Quantity", "Size", "Price"]];
+			const data = [
+				<?php foreach ($data as $row): ?>
+					[
+						"<?php echo $row['item_name']; ?>",
+						"<?php echo $row['quantity']; ?>",
+						"<?php echo $row['size_name']; ?>",
+						"₱<?php echo number_format($row['item_price'], 2); ?>"
+					],
+				<?php endforeach; ?>
+			];
 
-			// Table Header
-			pdf.setFont("helvetica", "bold");
-			pdf.text("Item", 40, startY);
-			pdf.text("Qty", 200, startY);
-			pdf.text("Size", 250, startY);
-			pdf.text("Price", 350, startY, { align: "right" });
+			// Table
+			doc.autoTable({
+				startY: 45,
+				head: headers,
+				body: data,
+				theme: 'grid',
+				headStyles: { fillColor: [200, 200, 200] },
+				styles: {
+					fontSize: 10,
+					cellPadding: 4
+				}
+			});
 
-			startY += 15;
-			pdf.setFont("helvetica", "normal");
+			// Total Price
+			const finalY = doc.lastAutoTable.finalY + 10;
+			doc.setFont("helvetica", "bold");
+			doc.text("Total: ₱<?php echo number_format($totalPrice, 2); ?>", 170, finalY, { align: "right" });
 
-			<?php
-			$totalPrice = 0;
-			foreach ($data as $row):
-				$linePrice = $row['item_price'];
-				$totalPrice += $linePrice;
-			?>
-				pdf.text("<?php echo $row['item_name']; ?>", 40, startY);
-				pdf.text("<?php echo $row['quantity']; ?>", 200, startY);
-				pdf.text("<?php echo $row['size_name']; ?>", 250, startY);
-				pdf.text("Php <?php echo number_format($linePrice, 2); ?>", 350, startY, { align: "right" });
-				startY += 15;
-			<?php endforeach; ?>
+			// Thank you note
+			doc.setFont("helvetica", "italic");
+			doc.setFontSize(11);
+			doc.text("Thank you for your purchase!", 105, finalY + 30, { align: "center" });
 
-			// Total
-			startY += 10;
-			pdf.setFont("helvetica", "bold");
-			pdf.text("Total: Php <?php echo number_format($totalPrice, 2); ?>", 350, startY, { align: "right" });
-
-			// Optional Thank You Message
-			startY += 40;
-			pdf.setFont("helvetica", "italic");
-			pdf.setFontSize(12);
-			pdf.text("Thank you for your purchase!", 300, startY, { align: "center" });
-
-			// Save PDF
-			pdf.save("HouseOfLocal_Receipt_<?php echo date('Ymd_His'); ?>.pdf");
+			doc.save("HouseOfLocal_Receipt_<?php echo date('Ymd_His'); ?>.pdf");
 		});
 	</script>
-
 
 </body>
 </html>

@@ -489,6 +489,27 @@
         </script>
     <?php endif; ?>
 
+
+	<?php if (isset($_GET['order'])): ?>
+        <script>
+            <?php if ($_GET['order'] == 'success'): ?>
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Order placed successfully!',
+                    text: 'The order has been successfully placed.',
+                }).then((result) => {
+                });
+            <?php elseif ($_GET['order'] == 'error'): ?>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong while placing the order.',
+                });
+            <?php endif; ?>
+        </script>
+    <?php endif; ?>
+
+
     <?php if (isset($_GET['editstatus'])): ?>
         <script>
             <?php if ($_GET['editstatus'] == 'success'): ?>
