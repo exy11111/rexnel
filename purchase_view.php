@@ -213,57 +213,61 @@
 		document.getElementById("downloadPDF").addEventListener("click", function () {
 			const { jsPDF } = window.jspdf;
 			const doc = new jsPDF({ unit: 'pt' });
+
 			const centerX = doc.internal.pageSize.getWidth() / 2;
 			const topMargin = 40;
 
+			// TITLE
 			doc.setFontSize(16);
 			doc.setFont("helvetica", "bold");
 			doc.text("House of Local", centerX, topMargin, { align: "center" });
 
+			// BRANCH NAME (small, under title)
 			doc.setFontSize(11);
 			doc.setFont("helvetica", "normal");
 			doc.text("<?php echo $branch_name; ?>", centerX, topMargin + 15, { align: "center" });
 
+			// DATE (above table)
 			doc.setFontSize(10);
 			doc.text("Date: <?php echo date('F j, Y - h:i A'); ?>", 40, topMargin + 35);
 
+			// TABLE START
 			const tableStartY = topMargin + 50;
 
-			const headers = [["Item Name", "Quantity", "Size", "Price"]];
-			const data = [
-				<?php foreach ($data as $row): ?>
-					[
-						"<?php echo $row['item_name']; ?>",
-						"<?php echo $row['quantity']; ?>",
-						"<?php echo $row['size_name']; ?>",
-						"Php <?php echo number_format($row['item_price'], 2); ?>"
-					],
-				<?php endforeach; ?>
-			];
-
-			// Table
 			doc.autoTable({
-				startY: 45,
-				head: headers,
-				body: data,
+				startY: tableStartY,
+				head: [["Item Name", "Quantity", "Size", "Price"]],
+				body: [
+					<?php foreach ($data as $row): ?>
+						[
+							"<?php echo $row['item_name']; ?>",
+							"<?php echo $row['quantity']; ?>",
+							"<?php echo $row['size_name']; ?>",
+							"₱<?php echo number_format($row['item_price'], 2); ?>"
+						],
+					<?php endforeach; ?>
+				],
 				theme: 'grid',
-				headStyles: { fillColor: [200, 200, 200] },
+				headStyles: { fillColor: [220, 220, 220] },
 				styles: {
 					fontSize: 10,
 					cellPadding: 4
 				}
 			});
 
-			// Total Price
-			const finalY = doc.lastAutoTable.finalY + 10;
-			doc.setFont("helvetica", "bold");
-			doc.text("Total: Php <?php echo number_format($totalPrice, 2); ?>", 170, finalY, { align: "right" });
+			// TOTAL BELOW TABLE
+			const finalY = doc.lastAutoTable.finalY + 20;
 
-			// Thank you note
+			doc.setFont("helvetica", "bold");
+			doc.setFontSize(11);
+			doc.text("Total: ₱<?php echo number_format($totalPrice, 2); ?>", 550, finalY, { align: "right" });
+
+			// THANK YOU MESSAGE
 			doc.setFont("helvetica", "italic");
 			doc.setFontSize(11);
-			doc.text("Thank you for your purchase!", 105, finalY + 30, { align: "center" });
+			doc.text("Thank you for your purchase!", centerX, finalY + 30, { align: "center" });
 
+			// DOWNLOAD
 			doc.save("HouseOfLocal_Receipt_<?php echo date('Ymd_His'); ?>.pdf");
 		});
 	</script>
