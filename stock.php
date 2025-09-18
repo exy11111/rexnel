@@ -494,7 +494,7 @@
 																						if (xhr1.status === 200) {
 																							if (xhr1.responseText === 'success') {
 																								Swal.fire('Deleted!', 'The item has been deleted.', 'success').then(() => {
-																									window.location.href = 'items.php';
+																									window.location.href = 'stock.php';
 																								});
 																							}
 																						}
