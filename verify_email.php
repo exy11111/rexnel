@@ -8,7 +8,7 @@ if (isset($_GET['token'])) {
 
     try {
         // Find user by token
-        $sql = "SELECT user_id FROM users WHERE verification_token = :token AND is_verified = 0 LIMIT 1";
+        $sql = "SELECT user_id FROM users WHERE vtoken = :token AND is_verified = 0 LIMIT 1";
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':token', $token);
         $stmt->execute();
@@ -17,7 +17,7 @@ if (isset($_GET['token'])) {
         if ($user) {
             // Mark as verified
             $sql = "UPDATE users 
-                    SET is_verified = 1, verification_token = NULL 
+                    SET is_verified = 1, vtoken = NULL 
                     WHERE user_id = :user_id";
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':user_id', $user['user_id']);
