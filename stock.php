@@ -114,7 +114,7 @@
 									<div class="d-flex align-items-center">
 										<h4 class="card-title">Items</h4>
 										<div class="ms-auto">
-											<?php if($_SESSION['role_id'] == 1 || $_SESSION['role_id'] == 2):?>
+											<?php if($_SESSION['role_id'] == 1):?>
 											<button class="btn btn-primary btn-round me-3" data-bs-toggle="modal" data-bs-target="#addRowModal">
 												<i class="fa fa-plus"></i>
 												Add Item

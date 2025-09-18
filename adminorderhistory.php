@@ -109,10 +109,12 @@
                                     <div class="d-flex align-items-center">
 										<h4 class="card-title">Orders</h4>
 										<div class="ms-auto">
+											<?php if($_SESSION['role_id'] == 1):?>
 											<button class="btn btn-success btn-round" data-bs-toggle="modal" data-bs-target="#orderModal">
 												<i class="fa fa-plus"></i>
 												Add Order
 											</button>
+											<?php endif; ?>
 										</div>
 									</div>
 								</div>
