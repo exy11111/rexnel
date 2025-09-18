@@ -560,18 +560,14 @@
 			.then(response => response.json())
 			.then(data => {
 				if (data.success) {
-				Swal.fire(
+					Swal.fire(
 					'Marked!',
 					'Order #' + orderId + ' has been marked as received.',
 					'success'
-				);
-
-				const row = document.querySelector(`tr[data-id='${orderId}']`);
-				if (row) {
-					const statusCell = row.querySelector('td:nth-child(4) span.badge');
-					statusCell.textContent = 'Received';
-					statusCell.className = 'badge bg-secondary'; 
-				}
+				).then(() => {
+					// Refresh the page after the user clicks "OK"
+					location.reload();
+				});
 				} else {
 				Swal.fire(
 					'Error!',
