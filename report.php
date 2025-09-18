@@ -573,6 +573,14 @@
 											<button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="filterDropdownBrand" data-bs-toggle="dropdown" aria-expanded="false">
 												<?= htmlspecialchars($filterLabelBrand) ?>
 											</button>
+											<?php
+											$brandFilters = [
+												'all'   => 'All Time',
+												'today' => 'Today',
+												'month' => 'This Month',
+												'year'  => 'This Year'
+											];
+											?>
 											<ul class="dropdown-menu" aria-labelledby="filterDropdownBrand">
 												<?php foreach ($brandFilters as $key => $label): ?>
 													<?php
