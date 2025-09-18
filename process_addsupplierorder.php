@@ -26,6 +26,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bindParam(':status', $status);
         $stmt->execute();
 
+        $stmt = $conn->prepare("SELECT item_name FROM items WHERE item_id = :item_id");
+        $stmt->bindParam(':item_id', $item_id);
+        $stmt->execute();
+        $item_name = $stmt->fetchColumn();
+
+        $added_by = $_SESSION['username'];
+        $formatted_price = number_format($amount, 2, '.', '');
+        $message = "$added_by placed an order: {$item_name}, {$quantity} pcs, ₱{$formatted_price}";
+        $icon = "bi-plus-circle";
+        $target_url = "orderssupplier.php";
+        $timestamp = date('Y-m-d H:i:s');
+
+        $sql = "SELECT user_id FROM users WHERE role_id = 3";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+        $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        foreach ($users as $user) {
+            $sql = "INSERT INTO notifications (user_id, message, icon, target_url, created_at) 
+                    VALUES (:user_id, :message, :icon, :target_url, :created_at)";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':user_id', $user['user_id']);
+            $stmt->bindParam(':message', $message);
+            $stmt->bindParam(':icon', $icon);
+            $stmt->bindParam(':target_url', $target_url);
+            $stmt->bindParam(':created_at', $timestamp);
+            $stmt->execute();
+        }
+
         header("Location: adminorderhistory.php?order=success");
         exit();
     }
