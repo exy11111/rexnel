@@ -124,6 +124,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $mail->Password = 'pM&ka&M7';
                 $mail->SMTPSecure = 'ssl';
                 $mail->Port = 465;
+                $mail->isHTML(true);
 
                 // Email content
                 $mail->setFrom('support@houseoflocal.store', 'House of Local');
