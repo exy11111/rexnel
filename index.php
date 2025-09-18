@@ -450,7 +450,7 @@ ini_set('display_errors', 1);
                 Swal.fire({
                     icon: 'success',
                     title: 'Account Edited!',
-                    text: 'The account has been successfully edited.',
+                    text: 'The account has been successfully edited. If you edited your email, please check your inbox.',
                 }).then((result) => {
                 });
             <?php elseif ($_GET['editstatus'] == 'error'): ?>
