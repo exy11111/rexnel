@@ -25,7 +25,7 @@
     <div class="sidebar-wrapper scrollbar scrollbar-inner">
         <div class="sidebar-content">
             <ul class="nav nav-secondary">
-                <?php if($_SESSION['role_id'] == 1):?>
+                <?php if($_SESSION['role_id'] == 1): ?>
                 <li class="nav-item <?php echo ($active === 'admin') ? 'active' : ''; ?>">
                     <a href="adminpanel.php" class="text-white">
                         <i class="fas fa-home"></i>
@@ -45,6 +45,7 @@
                     </span>
                     <h4 class="text-section">Menu</h4>
                 </li>
+                <?php if($_SESSION['role_id'] == 1): ?>
                 <li class="nav-item <?php echo ($active === 'inventory') ? 'active' : ''; ?>">
                     <a data-bs-toggle="collapse" href="#base" class="text-white">
                         <i class="fas fa-layer-group"></i>
@@ -127,6 +128,7 @@
                         </ul>
                     </div>
                 </li>
+                <?php endif; ?>
                 
                 <li class="nav-item <?php echo ($active === 'sales') ? 'active' : ''; ?>">
                     <a data-bs-toggle="collapse" href="#sales"  class="text-white">

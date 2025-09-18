@@ -41,7 +41,7 @@
 
         $_SESSION['branch_id'] = $user['branch_id'];
 
-        header("Location: index.php");
+        header("Location: purchase.php");
         exit();
       }
       else {
