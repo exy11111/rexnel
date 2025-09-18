@@ -26,7 +26,6 @@
 
         <div class="container-fluid">
             <ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
-                <?php if($_SESSION['role_id'] == 1): ?>
                 <!-- notif area -->
                 <?php 
                     if(isset($_SESSION['user_id'])){
@@ -109,6 +108,7 @@
                     }
                     
                 ?>
+                <!-- 
                 <li class="nav-item topbar-icon dropdown hidden-caret">
                     <a
                         class="nav-link dropdown-toggle"
@@ -150,8 +150,7 @@
                             </a>
                         </li>
                     </ul>
-                    <?php endif; ?>
-                </li>
+                </li> -->
                 <li class="nav-item topbar-user dropdown hidden-caret">
                     <a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#" aria-expanded="false">
                         <div class="avatar-sm">
