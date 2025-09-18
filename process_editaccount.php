@@ -116,10 +116,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($emailChanged) {
             // 1. Update users table: set is_verified = 0 and save the verification token
             $sql3 = "UPDATE users 
-                    SET is_verified = 0, verification_token = :verification_token 
+                    SET is_verified = 0, vtoken = :vtoken 
                     WHERE user_id = :user_id";
             $stmt3 = $conn->prepare($sql3);
-            $stmt3->bindParam(':verification_token', $verification_token);
+            $stmt3->bindParam(':vtoken', $verification_token);
             $stmt3->bindParam(':user_id', $user_id);
             $stmt3->execute();
 
