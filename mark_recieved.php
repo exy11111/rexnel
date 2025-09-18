@@ -14,7 +14,7 @@ $order_id = $data['order_id'];
 
 try {
     $stmt = $conn->prepare("UPDATE supplier_orders SET status = 'Received' WHERE order_id = :order_id");
-    $stmt->execute(['order_id' => $order_id]);
+    $stmt->execute([':order_id' => $order_id]);
 
     if ($stmt->rowCount() > 0) {
         echo json_encode(['success' => true]);
