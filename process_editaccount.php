@@ -114,9 +114,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Send verification email if email changed
         if ($emailChanged) {
+            // 1. Update users table: set is_verified = 0 and save the verification token
+            $sql3 = "UPDATE users 
+                    SET is_verified = 0, verification_token = :verification_token 
+                    WHERE user_id = :user_id";
+            $stmt3 = $conn->prepare($sql3);
+            $stmt3->bindParam(':verification_token', $verification_token);
+            $stmt3->bindParam(':user_id', $user_id);
+            $stmt3->execute();
+
+            // 2. Update userdetails table with new email
+            $sql4 = "UPDATE userdetails 
+                    SET email = :email 
+                    WHERE user_id = :user_id";
+            $stmt4 = $conn->prepare($sql4);
+            $stmt4->bindParam(':email', $email);
+            $stmt4->bindParam(':user_id', $user_id);
+            $stmt4->execute();
+
+            // 3. Send verification email
             $mail = new PHPMailer(true);
             try {
-                // SMTP config
                 $mail->isSMTP();
                 $mail->Host = 'smtp.hostinger.com';
                 $mail->SMTPAuth = true;
@@ -126,25 +144,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $mail->Port = 465;
                 $mail->isHTML(true);
 
-                // Email content
                 $mail->setFrom('support@houseoflocal.store', 'House of Local');
                 $mail->addAddress($email, $firstname . ' ' . $lastname);
                 $mail->Subject = 'Email Verification Required';
                 $mail->Body = "
-                        <div style='font-family: Arial, sans-serif; padding: 20px; background-color: #f8f9fa;'>
-                            <h2 style='color: #343a40;'>Hi,</h2>
-                            <p>Click the link below to verify your email address:</p>
-                            <a href='http://houseoflocal.store/verify_email.php?token=$verification_token' 
-                            style='display: inline-block; padding: 10px 20px; color: #fff; background-color: #0d6efd; 
-                                    text-decoration: none; border-radius: 5px;'>
-                            Verify Email
-                            </a>
-                            <p style='margin-top: 20px;'>Thank you.</p>
-                        </div>
-                        ";
+                    <div style='font-family: Arial, sans-serif; padding: 20px; background-color: #f8f9fa;'>
+                        <h2 style='color: #343a40;'>Hi, $firstname</h2>
+                        <p>Click the link below to verify your email address:</p>
+                        <a href='http://houseoflocal.store/verify_email.php?token=$verification_token' 
+                        style='display: inline-block; padding: 10px 20px; color: #fff; background-color: #0d6efd; 
+                                text-decoration: none; border-radius: 5px;'>
+                        Verify Email
+                        </a>
+                        <p style='margin-top: 20px;'>Thank you.</p>
+                    </div>
+                ";
 
+                $mail->AltBody = "Hi $firstname,\n\nClick this link to verify your email:\nhttp://houseoflocal.store/verify_email.php?token=$verification_token\n\nThank you.";
                 $mail->send();
-                // Optional: Set a flag in DB for unverified email
             } catch (Exception $e) {
                 error_log("Mail error: " . $mail->ErrorInfo);
             }
