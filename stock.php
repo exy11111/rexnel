@@ -473,7 +473,7 @@
                                                                     if (xhr.status === 200) {
                                                                         if (xhr.responseText === 'success') {
                                                                             Swal.fire('Deleted!', 'The item has been deleted.', 'success').then(() => {
-                                                                                window.location.href = 'items.php';
+                                                                                window.location.href = 'stock.php';
                                                                             });
                                                                         } else if(xhr.responseText === 'exist'){
 																			Swal.fire({
