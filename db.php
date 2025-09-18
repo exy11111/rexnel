@@ -2,7 +2,7 @@
 if ($_SERVER['HTTP_HOST'] === 'houseoflocal.store') {
     $servername = "localhost";
     $username   = "u119634533_houseoflocal";
-    $password   = "3;C9MX9jvq";
+    $password   = "Logic123131!";
     $dbname     = "u119634533_houseoflocal";
 } else {
     $servername = "localhost";
