@@ -108,7 +108,7 @@
                     }
                     
                 ?>
-                <!-- 
+                 
                 <li class="nav-item topbar-icon dropdown hidden-caret">
                     <a
                         class="nav-link dropdown-toggle"
@@ -150,7 +150,7 @@
                             </a>
                         </li>
                     </ul>
-                </li> -->
+                </li>
                 <li class="nav-item topbar-user dropdown hidden-caret">
                     <a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#" aria-expanded="false">
                         <div class="avatar-sm">
