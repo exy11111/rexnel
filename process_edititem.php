@@ -86,6 +86,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $stmt->bindParam(':created_at', $timestamp);
                     $stmt->execute();
                 }
+                $sql = "INSERT INTO notifications (user_id, message, icon, target_url, created_at) 
+                            VALUES (:user_id, :message, :icon, :target_url, :created_at)";
+                $stmt = $conn->prepare($sql);
+                $stmt->bindParam(':user_id', $_SESSION['user_id']);
+                $stmt->bindParam(':message', $message);
+                $stmt->bindParam(':icon', $icon);
+                $stmt->bindParam(':target_url', $target_url);
+                $stmt->bindParam(':created_at', $timestamp);
+                $stmt->execute();
             }
     
             header("Location: stock.php?editstatus=success");
