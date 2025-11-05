@@ -58,6 +58,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt->bindParam(':price', $price);
             
             $stmt->execute();
+
+            if($stock <= 10){
+                // Create the notification message for low stock
+                $added_by = $_SESSION['username'];
+                $message = "Low stock alert: {$item_name} (only {$stock} pcs left)";
+                $icon = "bi-exclamation-circle";  // Icon for low stock alert
+                $target_url = "stock.php";  // Redirect to stock management page
+                $timestamp = date('Y-m-d H:i:s');  // Current timestamp
+
+                // Fetch users to notify
+                $sql = "SELECT user_id FROM users WHERE branch_id = :branch_id";
+                $stmt = $conn->prepare($sql);
+                $stmt->bindParam(':branch_id', $_SESSION['branch_id']);
+                $stmt->execute();
+                $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                // Insert notification for each user
+                foreach ($users as $user) {
+                    $sql = "INSERT INTO notifications (user_id, message, icon, target_url, created_at) 
+                            VALUES (:user_id, :message, :icon, :target_url, :created_at)";
+                    $stmt = $conn->prepare($sql);
+                    $stmt->bindParam(':user_id', $user['user_id']);
+                    $stmt->bindParam(':message', $message);
+                    $stmt->bindParam(':icon', $icon);
+                    $stmt->bindParam(':target_url', $target_url);
+                    $stmt->bindParam(':created_at', $timestamp);
+                    $stmt->execute();
+                }
+            }
     
             header("Location: stock.php?editstatus=success");
             exit();
