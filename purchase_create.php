@@ -521,6 +521,7 @@
 									</select>
 								</div>
 								<input type="date" id="startDate" class="form-control" value="<?php echo date('Y-m-d'); ?>">
+								<input type="time" id="startTime" class="form-control" value="<?php echo date('H:i'); ?>">
 							</div>
                         </div>
                     </div>
@@ -756,6 +757,7 @@
 			let rows = table.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
 			let receiptData = [];
 			let dateSelected = document.getElementById('startDate').value;
+			let timeSelected = document.getElementById('startTime').value;
 
 			let paymentMethod = document.querySelector("select[name='pm_id']").value;
 			if (paymentMethod === "Choose Payment Method") {
@@ -833,7 +835,8 @@
 										payment_method: paymentMethod,
 										branch_id: <?php echo $_SESSION['branch_id']; ?>,
 										proof_image: qrResult.value.image,
-										dateSel: dateSelected
+										dateSel: dateSelected,
+										timeSel: timeSelected
 									})
 								})
 								.then(response => response.json())
@@ -864,7 +867,8 @@
 								total_price: totalPrice,
 								payment_method: paymentMethod,
 								branch_id: <?php echo $_SESSION['branch_id'];?>,
-								dateSel: dateSelected
+								dateSel: dateSelected,
+								timeSel: timeSelected
 							})
 						})
 						.then(response => response.json())
