@@ -15,6 +15,8 @@ $total_price = $data['total_price'];
 $payment_method = $data['payment_method'];
 $branch_id = $data['branch_id'];
 $date = $data['dateSel'];
+$time = $data['timeSel'];
+$dateTime = $date . ' ' . $time;
 
 $proofImagePath = null;
 
@@ -63,7 +65,7 @@ try {
         ':price' => $total_price,
         ':pm_id' => $payment_method,
         ':branch_id' => $branch_id,
-        ':date' => $date,
+        ':date' => $dateTime,
         ':proof_image' => $proofImagePath
     ]);
     $purchase_id = $conn->lastInsertId();
