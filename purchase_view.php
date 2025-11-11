@@ -113,6 +113,8 @@
 							?>
 
 							<h5 class="text-end" id="totalPrice">Total Price: ₱<?php echo number_format($totalPrice, 2); ?></h5>
+							<h5 class="text-end" id="totalPaid">Paid: ₱<?php echo number_format($totalPrice, 2); ?></h5>
+							<h5 class="text-end" id="totalChange">Change: ₱<?php echo number_format($totalPrice, 2); ?></h5>
 							<h5 class="mt-2 text-center fw-bold">House of Local</h5>
 
 							<div class="table-responsive">
