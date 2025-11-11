@@ -218,33 +218,33 @@
     </script>
 
 	<script>
-		document.getElementById("downloadPDF").addEventListener("click", function () {
-			const { jsPDF } = window.jspdf;
-			const doc = new jsPDF({ unit: 'pt' });
+	document.getElementById("downloadPDF").addEventListener("click", function () {
+		const { jsPDF } = window.jspdf;
+		const doc = new jsPDF({ unit: 'pt' });
 
-			const centerX = doc.internal.pageSize.getWidth() / 2;
-			const pageWidth = doc.internal.pageSize.getWidth();
-			const marginRight = 40; // right margin for total amount
-			const topMargin = 40;
+		const centerX = doc.internal.pageSize.getWidth() / 2;
+		const pageWidth = doc.internal.pageSize.getWidth();
+		const marginRight = 40; // right margin for total amount
+		const topMargin = 40;
 
-			// TITLE
-			doc.setFontSize(16);
-			doc.setFont("helvetica", "bold");
-			doc.text("House of Local", centerX, topMargin, { align: "center" });
+		// TITLE
+		doc.setFontSize(16);
+		doc.setFont("helvetica", "bold");
+		doc.text("House of Local", centerX, topMargin, { align: "center" });
 
-			// BRANCH NAME (small, under title)
-			doc.setFontSize(11);
-			doc.setFont("helvetica", "normal");
-			doc.text("<?php echo $branch_name; ?>", centerX, topMargin + 15, { align: "center" });
+		// BRANCH NAME
+		doc.setFontSize(11);
+		doc.setFont("helvetica", "normal");
+		doc.text("<?php echo $branch_name; ?>", centerX, topMargin + 15, { align: "center" });
 
-			// DATE (above table)
-			doc.setFontSize(10);
-			doc.text("Date: <?php echo date('F j, Y - h:i A'); ?>", 40, topMargin + 35);
+		// DATE
+		doc.setFontSize(10);
+		doc.text("Date: <?php echo date('F j, Y - h:i A'); ?>", 40, topMargin + 35);
 
-			// TABLE START
-			const tableStartY = topMargin + 50;
+		// TABLE
+		const tableStartY = topMargin + 50;
 
-			doc.autoTable({
+		doc.autoTable({
 			startY: tableStartY,
 			head: [["Item Name", "Quantity", "Size", "Price"]],
 			body: [
@@ -265,22 +265,27 @@
 			}
 		});
 
-			// TOTAL BELOW TABLE
-			const finalY = doc.lastAutoTable.finalY + 20;
+		// TOTALS
+		let finalY = doc.lastAutoTable.finalY + 20;
 
-			doc.setFont("helvetica", "bold");
-			doc.setFontSize(11);
-			// Align total amount right with marginRight
-			doc.text("Total: Php <?php echo number_format($totalPrice, 2); ?>", pageWidth - marginRight, finalY, { align: "right" });
+		doc.setFont("helvetica", "bold");
+		doc.setFontSize(11);
+		doc.text("Total: Php <?php echo number_format($totalPrice, 2); ?>", pageWidth - marginRight, finalY, { align: "right" });
 
-			// THANK YOU MESSAGE (centered)
-			doc.setFont("helvetica", "italic");
-			doc.setFontSize(11);
-			doc.text("Thank you for your purchase!", centerX, finalY + 30, { align: "center" });
+		finalY += 15;
+		doc.text("Paid: Php <?php echo number_format($cash['cash'], 2); ?>", pageWidth - marginRight, finalY, { align: "right" });
 
-			doc.save("HouseOfLocal_Receipt_<?php echo date('Ymd_His'); ?>.pdf");
-		});
-		</script>
+		finalY += 15;
+		doc.text("Change: Php <?php echo number_format($cash['change_cash'], 2); ?>", pageWidth - marginRight, finalY, { align: "right" });
+
+		// THANK YOU MESSAGE
+		doc.setFont("helvetica", "italic");
+		doc.setFontSize(11);
+		doc.text("Thank you for your purchase!", centerX, finalY + 30, { align: "center" });
+
+		doc.save("HouseOfLocal_Receipt_<?php echo date('Ymd_His'); ?>.pdf");
+	});
+	</script>
 
 
 </body>
