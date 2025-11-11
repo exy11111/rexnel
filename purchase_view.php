@@ -19,6 +19,12 @@
     $stmt->execute();
     $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+	$sql = "SELECT cash, change_cash FROM purchases WHERE purchase_id = :purchase_id";
+	$stmt = $conn->prepare($sql);
+    $stmt->bindParam(':purchase_id', $_GET['purchase_id']);
+    $stmt->execute();
+    $cash = $stmt->fetch(PDO::FETCH_ASSOC);
+
 	$stmt = $conn->prepare("SELECT proof_image FROM purchases WHERE purchase_id = :id");
 	$stmt->execute([':id' => $purchase_id]);
 	$proofImagePath = $stmt->fetchColumn();
@@ -113,8 +119,8 @@
 							?>
 
 							<h5 class="text-end" id="totalPrice">Total Price: ₱<?php echo number_format($totalPrice, 2); ?></h5>
-							<h5 class="text-end" id="totalPaid">Paid: ₱<?php echo number_format($totalPrice, 2); ?></h5>
-							<h5 class="text-end" id="totalChange">Change: ₱<?php echo number_format($totalPrice, 2); ?></h5>
+							<h5 class="text-end" id="totalPaid">Paid: ₱<?php echo number_format($cash['cash'], 2); ?></h5>
+							<h5 class="text-end" id="totalChange">Change: ₱<?php echo number_format($cash['change_cash'], 2); ?></h5>
 							<h5 class="mt-2 text-center fw-bold">House of Local</h5>
 
 							<div class="table-responsive">
