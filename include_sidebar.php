@@ -45,7 +45,6 @@
                     </span>
                     <h4 class="text-section">Menu</h4>
                 </li>
-                <?php if($_SESSION['role_id'] == 1): ?>
                 <li class="nav-item <?php echo ($active === 'inventory') ? 'active' : ''; ?>">
                     <a data-bs-toggle="collapse" href="#base" class="text-white">
                         <i class="fas fa-layer-group"></i>
@@ -83,6 +82,7 @@
                         </ul>
                     </div>
                 </li>
+                <?php if($_SESSION['role_id'] == 1): ?>
                 <li class="nav-item <?php echo ($active === 'account') ? 'active' : ''; ?>">
                     <a data-bs-toggle="collapse" href="#acc"  class="text-white">
                         <i class="fas fa-layer-group"></i>
