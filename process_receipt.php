@@ -18,9 +18,23 @@ $date = $data['dateSel'];
 $time = $data['timeSel'];
 $dateTime = $date . ' ' . $time;
 
-$proofImagePath = null;
+// Default values
+$cash = 0;
+$change_cash = 0;
 
-// ✅ Handle base64 proof image if provided
+// 🧮 Handle payment method logic
+if ($payment_method == 1) {
+    // CASH payment
+    $cash = isset($data['cash_provided']) ? (float)$data['cash_provided'] : 0;
+    $change_cash = isset($data['change']) ? (float)$data['change'] : 0;
+} elseif ($payment_method == 2) {
+    // GCASH payment
+    $cash = isset($data['cash_provided']) ? (float)$data['cash_provided'] : $total_price;
+    $change_cash = 0;
+}
+
+// 🖼️ Handle proof of payment (for GCash)
+$proofImagePath = null;
 if (isset($data['proof_image']) && !empty($data['proof_image'])) {
     $base64Image = $data['proof_image'];
 
@@ -56,20 +70,24 @@ if (isset($data['proof_image']) && !empty($data['proof_image'])) {
 try {
     $conn->beginTransaction();
 
-    // 👇 Add proof_image to the insert if it's available
+    // ✅ Insert into purchases table (added cash & change_cash)
     $stmt = $conn->prepare("
-        INSERT INTO purchases (price, pm_id, date, branch_id, proof_image) 
-        VALUES (:price, :pm_id, :date, :branch_id, :proof_image)
+        INSERT INTO purchases (price, pm_id, date, branch_id, proof_image, cash, change_cash) 
+        VALUES (:price, :pm_id, :date, :branch_id, :proof_image, :cash, :change_cash)
     ");
     $stmt->execute([
         ':price' => $total_price,
         ':pm_id' => $payment_method,
         ':branch_id' => $branch_id,
         ':date' => $dateTime,
-        ':proof_image' => $proofImagePath
+        ':proof_image' => $proofImagePath,
+        ':cash' => $cash,
+        ':change_cash' => $change_cash
     ]);
+
     $purchase_id = $conn->lastInsertId();
 
+    // Insert purchased items
     $stmt = $conn->prepare("
         INSERT INTO purchase_items (purchase_id, item_id, quantity) 
         VALUES (:purchase_id, :item_id, :quantity)
@@ -80,12 +98,19 @@ try {
             throw new Exception("Missing item details.");
         }
 
-        $stmt1 = $conn->prepare("SELECT stock FROM items WHERE item_id = :item_id");
+        $stmt1 = $conn->prepare("SELECT stock, item_name FROM items WHERE item_id = :item_id");
         $stmt1->execute([':item_id' => $item['item_id']]);
-        $quantity = $stmt1->fetchColumn();
+        $row = $stmt1->fetch(PDO::FETCH_ASSOC);
+
+        if (!$row) {
+            throw new Exception("Item not found.");
+        }
+
+        $quantity = $row['stock'];
+        $item_name = $row['item_name'];
 
         if ($quantity < $item['quantity']) {
-            throw new Exception("Item out of stock.");
+            throw new Exception("Item '{$item_name}' is out of stock.");
         }
 
         $stmt->execute([
@@ -102,44 +127,42 @@ try {
             ':item_id' => $item['item_id']
         ]);
 
+        // 🔔 Low stock notification
         if ($newQuantity <= 10) {
-            // Create the notification message for low stock
             $added_by = $_SESSION['username'];
             $message = "Low stock alert: {$item_name} (only {$newQuantity} pcs left)";
-            $icon = "bi-exclamation-circle";  // Icon for low stock alert
-            $target_url = "stock.php";  // Redirect to stock management page
-            $timestamp = date('Y-m-d H:i:s');  // Current timestamp
+            $icon = "bi-exclamation-circle";
+            $target_url = "stock.php";
+            $timestamp = date('Y-m-d H:i:s');
 
-            // Fetch users to notify
             $sql = "SELECT user_id FROM users WHERE branch_id = :branch_id";
-            $stmt = $conn->prepare($sql);
-            $stmt->bindParam(':branch_id', $_SESSION['branch_id']);
-            $stmt->execute();
-            $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $stmtNotify = $conn->prepare($sql);
+            $stmtNotify->bindParam(':branch_id', $_SESSION['branch_id']);
+            $stmtNotify->execute();
+            $users = $stmtNotify->fetchAll(PDO::FETCH_ASSOC);
 
-            // Insert notification for each user
             foreach ($users as $user) {
-                $sql = "INSERT INTO notifications (user_id, message, icon, target_url, created_at) 
-                        VALUES (:user_id, :message, :icon, :target_url, :created_at)";
-                $stmt = $conn->prepare($sql);
-                $stmt->bindParam(':user_id', $user['user_id']);
-                $stmt->bindParam(':message', $message);
-                $stmt->bindParam(':icon', $icon);
-                $stmt->bindParam(':target_url', $target_url);
-                $stmt->bindParam(':created_at', $timestamp);
-                $stmt->execute();
+                $sqlInsert = "INSERT INTO notifications (user_id, message, icon, target_url, created_at)
+                              VALUES (:user_id, :message, :icon, :target_url, :created_at)";
+                $stmtInsert = $conn->prepare($sqlInsert);
+                $stmtInsert->bindParam(':user_id', $user['user_id']);
+                $stmtInsert->bindParam(':message', $message);
+                $stmtInsert->bindParam(':icon', $icon);
+                $stmtInsert->bindParam(':target_url', $target_url);
+                $stmtInsert->bindParam(':created_at', $timestamp);
+                $stmtInsert->execute();
             }
 
-            // Insert notification for the admin (current user)
-            $sql = "INSERT INTO notifications (user_id, message, icon, target_url, created_at) 
-                    VALUES (:user_id, :message, :icon, :target_url, :created_at)";
-            $stmt = $conn->prepare($sql);
-            $stmt->bindParam(':user_id', $_SESSION['user_id']);
-            $stmt->bindParam(':message', $message);
-            $stmt->bindParam(':icon', $icon);
-            $stmt->bindParam(':target_url', $target_url);
-            $stmt->bindParam(':created_at', $timestamp);
-            $stmt->execute();
+            // Also notify the admin
+            $sqlInsert = "INSERT INTO notifications (user_id, message, icon, target_url, created_at)
+                          VALUES (:user_id, :message, :icon, :target_url, :created_at)";
+            $stmtInsert = $conn->prepare($sqlInsert);
+            $stmtInsert->bindParam(':user_id', $_SESSION['user_id']);
+            $stmtInsert->bindParam(':message', $message);
+            $stmtInsert->bindParam(':icon', $icon);
+            $stmtInsert->bindParam(':target_url', $target_url);
+            $stmtInsert->bindParam(':created_at', $timestamp);
+            $stmtInsert->execute();
         }
     }
 
@@ -149,4 +172,5 @@ try {
 } catch (Exception $e) {
     $conn->rollBack();
     echo json_encode(["success" => false, "error" => "Failed to process receipt. " . $e->getMessage()]);
-}?>
+}
+?>
