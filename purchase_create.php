@@ -858,6 +858,73 @@
 							}
 						});
 					}
+					else if (paymentMethod === "1") { // For Cash Payment
+						Swal.fire({
+							title: "Cash Payment",
+							html: `
+								<p>Please enter the cash amount provided by the customer.</p>
+								<input type="number" id="cashProvided" class="swal2-input" placeholder="Enter amount" min="0" step="any">
+							`,
+							showCancelButton: true,
+							confirmButtonText: "Submit",
+							cancelButtonText: "Cancel",
+							preConfirm: () => {
+								const cashInput = document.getElementById("cashProvided");
+								const cashProvided = parseFloat(cashInput.value);
+								if (isNaN(cashProvided) || cashProvided <= 0) {
+									Swal.showValidationMessage("Please enter a valid cash amount.");
+									return false;
+								}
+
+								const change = cashProvided - totalPrice;
+								if (change < 0) {
+									Swal.showValidationMessage("Cash provided is less than the total amount.");
+									return false;
+								}
+
+								return new Promise((resolve) => {
+									resolve({
+										cashProvided: cashProvided,
+										change: change
+									});
+								});
+							}
+						}).then((cashResult) => {
+							if (cashResult.isConfirmed) {
+								fetch("process_receipt.php", {
+									method: "POST",
+									headers: { "Content-Type": "application/json" },
+									body: JSON.stringify({
+										receipt: receiptData,
+										total_price: totalPrice,
+										payment_method: paymentMethod,
+										branch_id: <?php echo $_SESSION['branch_id']; ?>,
+										dateSel: dateSelected,
+										timeSel: timeSelected,
+										cash_provided: cashResult.value.cashProvided,
+										change: cashResult.value.change
+									})
+								})
+								.then(response => response.json())
+								.then(data => {
+									if (data.success) {
+										Swal.fire({
+											title: "Success!",
+											text: `Purchase submitted successfully! Your change is ₱${cashResult.value.change.toFixed(2)}.`,
+											icon: "success",
+											confirmButtonText: "OK"
+										}).then(() => {
+											window.location.href = "purchase.php";
+										});
+									} else {
+										Swal.fire("Error!", data.error, "error");
+									}
+								})
+								.catch(error => console.error("Error:", error));
+							}
+						});
+
+					}
 					else{
 						fetch("process_receipt.php", {
 							method: "POST",
