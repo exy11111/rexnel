@@ -910,7 +910,7 @@
 									if (data.success) {
 										Swal.fire({
 											title: "Success!",
-											text: `Purchase submitted successfully! Your change is ₱${cashResult.value.change.toFixed(2)}.`,
+											text: `Purchase submitted successfully! Your total payment was ₱${cashResult.value.cashProvided.toFixed(2)} and your change is ₱${cashResult.value.change.toFixed(2)}.`,
 											icon: "success",
 											confirmButtonText: "OK"
 										}).then(() => {
