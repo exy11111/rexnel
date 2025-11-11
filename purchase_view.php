@@ -118,9 +118,6 @@
 							}
 							?>
 
-							<h5 class="text-end" id="totalPrice">Total Price: ₱<?php echo number_format($totalPrice, 2); ?></h5>
-							<h5 class="text-end" id="totalPaid">Paid: ₱<?php echo number_format($cash['cash'], 2); ?></h5>
-							<h5 class="text-end" id="totalChange">Change: ₱<?php echo number_format($cash['change_cash'], 2); ?></h5>
 							<h5 class="mt-2 text-center fw-bold">House of Local</h5>
 
 							<div class="table-responsive">
@@ -145,6 +142,9 @@
 									</tbody>
 								</table>
 							</div>
+							<h5 class="text-end" id="totalPrice">Total Price: ₱<?php echo number_format($totalPrice, 2); ?></h5>
+							<h5 class="text-end" id="totalPaid">Paid: ₱<?php echo number_format($cash['cash'], 2); ?></h5>
+							<h5 class="text-end" id="totalChange">Change: ₱<?php echo number_format($cash['change_cash'], 2); ?></h5>
 
 							<?php if (!empty($proofImagePath) && file_exists($proofImagePath)): ?>
 								<div class="text-center mt-4">
