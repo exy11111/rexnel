@@ -224,7 +224,7 @@
 
 		const centerX = doc.internal.pageSize.getWidth() / 2;
 		const pageWidth = doc.internal.pageSize.getWidth();
-		const marginRight = 40; // right margin for total amount
+		const marginRight = 40;
 		const topMargin = 40;
 
 		// TITLE
@@ -278,12 +278,39 @@
 		finalY += 15;
 		doc.text("Change: Php <?php echo number_format($cash['change_cash'], 2); ?>", pageWidth - marginRight, finalY, { align: "right" });
 
-		// THANK YOU MESSAGE
-		doc.setFont("helvetica", "italic");
-		doc.setFontSize(11);
-		doc.text("Thank you for your purchase!", centerX, finalY + 30, { align: "center" });
+		// PROOF OF PAYMENT (if exists)
+		<?php if (!empty($proofImagePath) && file_exists($proofImagePath)): ?>
+			const img = new Image();
+			img.src = "<?php echo $proofImagePath; ?>";
+			img.onload = function () {
+				let imgWidth = 200; // max width
+				let imgHeight = (img.height / img.width) * imgWidth;
+				let posY = finalY + 40;
 
-		doc.save("HouseOfLocal_Receipt_<?php echo date('Ymd_His'); ?>.pdf");
+				// Add caption
+				doc.setFont("helvetica", "bold");
+				doc.setFontSize(11);
+				doc.text("Proof of Payment:", centerX, posY, { align: "center" });
+
+				// Add image
+				doc.addImage(img, "JPEG", centerX - (imgWidth / 2), posY + 10, imgWidth, imgHeight);
+
+				// THANK YOU message after image
+				doc.setFont("helvetica", "italic");
+				doc.setFontSize(11);
+				doc.text("Thank you for your purchase!", centerX, posY + imgHeight + 40, { align: "center" });
+
+				// Save PDF after image loads
+				doc.save("HouseOfLocal_Receipt_<?php echo date('Ymd_His'); ?>.pdf");
+			};
+		<?php else: ?>
+			// THANK YOU message if no proof image
+			doc.setFont("helvetica", "italic");
+			doc.setFontSize(11);
+			doc.text("Thank you for your purchase!", centerX, finalY + 30, { align: "center" });
+
+			doc.save("HouseOfLocal_Receipt_<?php echo date('Ymd_His'); ?>.pdf");
+		<?php endif; ?>
 	});
 	</script>
 
