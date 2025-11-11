@@ -170,7 +170,7 @@
 							$branch_data = $stmt->fetchAll();
 						?>
 						<?php foreach($branch_data as $row): ?>
-							<div class="col-md-4 col-12">
+							<div class="col-md-12 col-12">
 								<div class="card">
 									<div class="card-header">
 										<div class="card-title"><?php echo $row['branch_name'];?> Stock</div>
