@@ -311,11 +311,6 @@
 
 			doc.save("HouseOfLocal_Receipt_<?php echo date('Ymd_His'); ?>.pdf");
 		<?php endif; ?>
-
-		const pdfDataUri = doc.output('datauristring');
-		const printWindow = window.open();
-		printWindow.document.write(`<iframe width='100%' height='100%' src='${pdfDataUri}'></iframe>`);
-		printWindow.document.close();
 	});
 	</script>
 
