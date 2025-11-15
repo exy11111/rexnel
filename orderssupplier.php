@@ -150,11 +150,13 @@
 														}
 														echo "<td><span class='badge $badgeClass'>$status</span></td>";
 														echo "<td>
-                                                                <div class='form-button-action'>
-																	<button type='button' class='btn btn-link btn-primary btn-lg' data-bs-toggle='modal' data-bs-target='#editStatusModal' data-id='".htmlspecialchars($row['order_id'])."' title='Edit Task'>
+                                                                <div class='form-button-action'>";
+														if($row['status'] != "Received"){
+															echo "<button type='button' class='btn btn-link btn-primary btn-lg' data-bs-toggle='modal' data-bs-target='#editStatusModal' data-id='".htmlspecialchars($row['order_id'])."' title='Edit Task'>
                                                                         <i class='fa fa-edit'></i>
-                                                                    </button>
-                                                                    <a href='#' class='btn btn-link btn-primary btn-lg' data-bs-toggle='modal' data-bs-target='#viewItemModal' data-id='".htmlspecialchars($row['order_id'])."' title='Edit Task'>
+                                                                    </button>";
+														}
+                                                        	echo "<a href='#' class='btn btn-link btn-primary btn-lg' data-bs-toggle='modal' data-bs-target='#viewItemModal' data-id='".htmlspecialchars($row['order_id'])."' title='Edit Task'>
                                                                         <i class='bi bi-eye-fill'></i>
                                                                     </a>
                                                                 </div>
