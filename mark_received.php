@@ -14,7 +14,7 @@ $order_id = $data['order_id'];
 
 try {
     $stmt = $conn->prepare("SELECT 
-        item_id, quantity, amount, i.item_name 
+        so.item_id, so.quantity, so.amount, i.item_name 
         FROM supplier_orders so
         LEFT JOIN items i ON i.item_id = so.item_id
         WHERE order_id = :order_id");
