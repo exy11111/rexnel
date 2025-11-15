@@ -30,7 +30,8 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         }
     }
     catch (PDOException $e) {
-        echo $branch_id;
+        echo "Error: " . $e->getMessage();
+        exit();
     }
 }
 
