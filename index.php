@@ -137,7 +137,7 @@ ini_set('display_errors', 1);
 											<div class="col col-stats ms-3 ms-sm-0">
 												<div class="numbers w-100">
 													<p class="card-category">Total Revenue</p>
-													<h4 class="card-title">₱<?php echo number_format($all_revenue, 2) ?? 0.00 ?></h4>
+													<h4 class="card-title">₱<?php echo number_format($all_revenue ?? 0.00, 2) ?></h4>
 													
 												</div>
 											</div>
@@ -159,7 +159,7 @@ ini_set('display_errors', 1);
 											<div class="col col-stats ms-3 ms-sm-0">
 												<div class="numbers w-100">
 													<p class="card-category">Total Expenses</p>
-													<h4 class="card-title">₱<?php echo number_format($all_expenses, 2) ?? 0.00 ?></h4>
+													<h4 class="card-title">₱<?php echo number_format($all_expenses ?? 0.00, 2)  ?></h4>
 													
 												</div>
 											</div>
