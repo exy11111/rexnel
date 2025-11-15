@@ -111,6 +111,7 @@
                         </ul>
                     </div>
                 </li>
+                <?php endif; ?>
 
                 <li class="nav-item ">
                     <a data-bs-toggle="collapse" href="#expenses"  class="text-white">
@@ -128,7 +129,7 @@
                         </ul>
                     </div>
                 </li>
-                <?php endif; ?>
+                
                 
                 <li class="nav-item ">
                     <a data-bs-toggle="collapse" href="#sales"  class="text-white">
