@@ -1,8 +1,8 @@
 <!-- Sidebar -->
-<div class="sidebar" style="background-color: #000 !important;">
+<div class="sidebar" style="background-color: #d1ecf1 !important;">
     <div class="sidebar-logo">
         <!-- Logo Header -->
-        <div class="logo-header" style="background-color: #000 !important;">
+        <div class="logo-header" style="background-color: #d1ecf1 !important;">
 
             <a href="supplier.php" class="logo text-white fw-bold">
                 <img src="assets/img/holicon.png" alt="navbar brand" class="navbar-brand" height="40">&nbsp;House of Local
