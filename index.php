@@ -341,7 +341,7 @@ ini_set('display_errors', 1);
 											<button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
 												Filter Items
 											</button>
-											<ul class="dropdown-menu" id="itemFilterList">
+											<ul class="dropdown-menu overflow-auto" id="itemFilterList" style="max-height: 200px;">
 												<?php foreach ($itemNames as $index => $item): ?>
 													<li>
 														<label class="dropdown-item">
