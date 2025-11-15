@@ -4,7 +4,7 @@
         <!-- Logo Header -->
         <div class="logo-header" style="background-color: #29b9d6 !important;">
 
-            <a href="supplier.php" class="logo text-white fw-bold">
+            <a href="supplier.php" class="logo text-dark fw-bold">
                 <img src="assets/img/holicon.png" alt="navbar brand" class="navbar-brand" height="40">&nbsp;House of Local
             </a>
             <div class="nav-toggle">
@@ -28,7 +28,7 @@
                 <?php if($_SESSION['role_id'] == 1):?>
                 <?php endif; ?>
                 <li class="nav-item <?php echo ($active === 'dashboard') ? 'active' : ''; ?>">
-                    <a href="supplier.php" class="text-white">
+                    <a href="supplier.php" class="text-dark">
                         <i class="fas fa-home"></i>
                         <p>Dashboard</p>
                     </a>
@@ -40,7 +40,7 @@
                     <h4 class="text-section">Menu</h4>
                 </li>
                 <li class="nav-item <?php echo ($active === 'orders') ? 'active' : ''; ?>">
-                    <a href="orderssupplier.php" class="text-white">
+                    <a href="orderssupplier.php" class="text-dark">
                         <i class="fas fa-layer-group"></i>
                         <p>Orders</p>
                     </a>
