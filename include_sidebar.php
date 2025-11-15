@@ -1,5 +1,5 @@
 <!-- Sidebar -->
-<div class="sidebar" style="background-color: #000 !important;">
+<div class="sidebar" style="background-color: <?php if($_SESSION['role_id'] == 1) echo "#000"; else if ($_SESSION['role_id'] == 2) echo "#0d6efd";?> !important;">
     <div class="sidebar-logo">
         <!-- Logo Header -->
         <div class="logo-header" style="background-color: <?php if($_SESSION['role_id'] == 1) echo "#000"; else if ($_SESSION['role_id'] == 2) echo "#0d6efd";?> !important;">
