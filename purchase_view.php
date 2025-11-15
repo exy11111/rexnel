@@ -19,6 +19,12 @@
     $stmt->execute();
     $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+	$sql = "SELECT cash, change_cash FROM purchases WHERE purchase_id = :purchase_id";
+	$stmt = $conn->prepare($sql);
+    $stmt->bindParam(':purchase_id', $_GET['purchase_id']);
+    $stmt->execute();
+    $cash = $stmt->fetch(PDO::FETCH_ASSOC);
+
 	$stmt = $conn->prepare("SELECT proof_image FROM purchases WHERE purchase_id = :id");
 	$stmt->execute([':id' => $purchase_id]);
 	$proofImagePath = $stmt->fetchColumn();
@@ -112,7 +118,6 @@
 							}
 							?>
 
-							<h5 class="text-end" id="totalPrice">Total Price: ₱<?php echo number_format($totalPrice, 2); ?></h5>
 							<h5 class="mt-2 text-center fw-bold">House of Local</h5>
 
 							<div class="table-responsive">
@@ -137,6 +142,9 @@
 									</tbody>
 								</table>
 							</div>
+							<h5 class="text-end" id="totalPrice">Total Price: ₱<?php echo number_format($totalPrice, 2); ?></h5>
+							<h5 class="text-end" id="totalPaid">Paid: ₱<?php echo number_format($cash['cash'], 2); ?></h5>
+							<h5 class="text-end" id="totalChange">Change: ₱<?php echo number_format($cash['change_cash'], 2); ?></h5>
 
 							<?php if (!empty($proofImagePath) && file_exists($proofImagePath)): ?>
 								<div class="text-center mt-4">
@@ -210,33 +218,33 @@
     </script>
 
 	<script>
-		document.getElementById("downloadPDF").addEventListener("click", function () {
-			const { jsPDF } = window.jspdf;
-			const doc = new jsPDF({ unit: 'pt' });
+	document.getElementById("downloadPDF").addEventListener("click", function () {
+		const { jsPDF } = window.jspdf;
+		const doc = new jsPDF({ unit: 'pt' });
 
-			const centerX = doc.internal.pageSize.getWidth() / 2;
-			const pageWidth = doc.internal.pageSize.getWidth();
-			const marginRight = 40; // right margin for total amount
-			const topMargin = 40;
+		const centerX = doc.internal.pageSize.getWidth() / 2;
+		const pageWidth = doc.internal.pageSize.getWidth();
+		const marginRight = 40;
+		const topMargin = 40;
 
-			// TITLE
-			doc.setFontSize(16);
-			doc.setFont("helvetica", "bold");
-			doc.text("House of Local", centerX, topMargin, { align: "center" });
+		// TITLE
+		doc.setFontSize(16);
+		doc.setFont("helvetica", "bold");
+		doc.text("House of Local", centerX, topMargin, { align: "center" });
 
-			// BRANCH NAME (small, under title)
-			doc.setFontSize(11);
-			doc.setFont("helvetica", "normal");
-			doc.text("<?php echo $branch_name; ?>", centerX, topMargin + 15, { align: "center" });
+		// BRANCH NAME
+		doc.setFontSize(11);
+		doc.setFont("helvetica", "normal");
+		doc.text("<?php echo $branch_name; ?>", centerX, topMargin + 15, { align: "center" });
 
-			// DATE (above table)
-			doc.setFontSize(10);
-			doc.text("Date: <?php echo date('F j, Y - h:i A'); ?>", 40, topMargin + 35);
+		// DATE
+		doc.setFontSize(10);
+		doc.text("Date: <?php echo date('F j, Y - h:i A'); ?>", 40, topMargin + 35);
 
-			// TABLE START
-			const tableStartY = topMargin + 50;
+		// TABLE
+		const tableStartY = topMargin + 50;
 
-			doc.autoTable({
+		doc.autoTable({
 			startY: tableStartY,
 			head: [["Item Name", "Quantity", "Size", "Price"]],
 			body: [
@@ -257,22 +265,54 @@
 			}
 		});
 
-			// TOTAL BELOW TABLE
-			const finalY = doc.lastAutoTable.finalY + 20;
+		// TOTALS
+		let finalY = doc.lastAutoTable.finalY + 20;
 
-			doc.setFont("helvetica", "bold");
-			doc.setFontSize(11);
-			// Align total amount right with marginRight
-			doc.text("Total: Php <?php echo number_format($totalPrice, 2); ?>", pageWidth - marginRight, finalY, { align: "right" });
+		doc.setFont("helvetica", "bold");
+		doc.setFontSize(11);
+		doc.text("Total: Php <?php echo number_format($totalPrice, 2); ?>", pageWidth - marginRight, finalY, { align: "right" });
 
-			// THANK YOU MESSAGE (centered)
+		finalY += 15;
+		doc.text("Paid: Php <?php echo number_format($cash['cash'], 2); ?>", pageWidth - marginRight, finalY, { align: "right" });
+
+		finalY += 15;
+		doc.text("Change: Php <?php echo number_format($cash['change_cash'], 2); ?>", pageWidth - marginRight, finalY, { align: "right" });
+
+		// PROOF OF PAYMENT (if exists)
+		<?php if (!empty($proofImagePath) && file_exists($proofImagePath)): ?>
+			const img = new Image();
+			img.src = "<?php echo $proofImagePath; ?>";
+			img.onload = function () {
+				let imgWidth = 200; // max width
+				let imgHeight = (img.height / img.width) * imgWidth;
+				let posY = finalY + 40;
+
+				// Add caption
+				doc.setFont("helvetica", "bold");
+				doc.setFontSize(11);
+				doc.text("Proof of Payment:", centerX, posY, { align: "center" });
+
+				// Add image
+				doc.addImage(img, "JPEG", centerX - (imgWidth / 2), posY + 10, imgWidth, imgHeight);
+
+				// THANK YOU message after image
+				doc.setFont("helvetica", "italic");
+				doc.setFontSize(11);
+				doc.text("Thank you for your purchase!", centerX, posY + imgHeight + 40, { align: "center" });
+
+				// Save PDF after image loads
+				doc.save("HouseOfLocal_Receipt_<?php echo date('Ymd_His'); ?>.pdf");
+			};
+		<?php else: ?>
+			// THANK YOU message if no proof image
 			doc.setFont("helvetica", "italic");
 			doc.setFontSize(11);
 			doc.text("Thank you for your purchase!", centerX, finalY + 30, { align: "center" });
 
 			doc.save("HouseOfLocal_Receipt_<?php echo date('Ymd_His'); ?>.pdf");
-		});
-		</script>
+		<?php endif; ?>
+	});
+	</script>
 
 
 </body>

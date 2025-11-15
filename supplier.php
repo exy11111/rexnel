@@ -175,7 +175,7 @@ ini_set('display_errors', 1);
 											<div class="col col-stats ms-3 ms-sm-0">
 												<div class="numbers">
 													<p class="card-category">Revenue this month</p>
-													<h4 class="card-title">₱<?php echo number_format($revenue_month, 2); ?></h4>
+													<h4 class="card-title">₱<?php echo number_format($revenue_month ?? 0.00, 2); ?></h4>
 												</div>
 											</div>
 										</div>
