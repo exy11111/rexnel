@@ -30,8 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         }
     }
     catch (PDOException $e) {
-        header("Location: categories.php?status=error");
-        exit();
+        echo $branch_id;
     }
 }
 
