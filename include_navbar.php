@@ -159,7 +159,7 @@
                             class="avatar-img rounded-circle">
                         </div>
                         <span class="profile-username">
-                            <span class="op-7">Hi,</span> <span class="fw-bold"><?php echo $username?></span>
+                            <span class="op-7 text-white">Hi,</span> <span class="fw-bold text-white"><?php echo $username?></span>
                         </span>
                     </a>
                     <ul class="dropdown-menu dropdown-user animated fadeIn">
