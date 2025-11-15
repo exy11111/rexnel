@@ -26,14 +26,14 @@
         <div class="sidebar-content">
             <ul class="nav nav-secondary">
                 <?php if($_SESSION['role_id'] == 1): ?>
-                <li class="nav-item <?php echo ($active === 'admin') ? 'active' : ''; ?>">
+                <li class="nav-item ">
                     <a href="adminpanel.php" class="text-white">
                         <i class="fas fa-home"></i>
                         <p>Admin Panel</p>
                     </a>
                 </li>
                 <?php endif; ?>
-                <li class="nav-item <?php echo ($active === 'index') ? 'active' : ''; ?>">
+                <li class="nav-item ">
                     <a href="index.php" class="text-white">
                         <i class="fas fa-home"></i>
                         <p>Dashboard</p>
@@ -45,7 +45,7 @@
                     </span>
                     <h4 class="text-section">Menu</h4>
                 </li>
-                <li class="nav-item <?php echo ($active === 'inventory') ? 'active' : ''; ?>">
+                <li class="nav-item ">
                     <a data-bs-toggle="collapse" href="#base" class="text-white">
                         <i class="fas fa-layer-group"></i>
                         <p>Inventory Management</p>
@@ -83,7 +83,7 @@
                     </div>
                 </li>
                 <?php if($_SESSION['role_id'] == 1): ?>
-                <li class="nav-item <?php echo ($active === 'account') ? 'active' : ''; ?>">
+                <li class="nav-item">
                     <a data-bs-toggle="collapse" href="#acc"  class="text-white">
                         <i class="fas fa-layer-group"></i>
                         <p>Account Management</p>
@@ -112,7 +112,7 @@
                     </div>
                 </li>
 
-                <li class="nav-item <?php echo ($active === 'expenses') ? 'active' : ''; ?>">
+                <li class="nav-item ">
                     <a data-bs-toggle="collapse" href="#expenses"  class="text-white">
                         <i class="fas fa-layer-group"></i>
                         <p>Expenses Management</p>
@@ -130,7 +130,7 @@
                 </li>
                 <?php endif; ?>
                 
-                <li class="nav-item <?php echo ($active === 'sales') ? 'active' : ''; ?>">
+                <li class="nav-item ">
                     <a data-bs-toggle="collapse" href="#sales"  class="text-white">
                         <i class="fas fa-layer-group"></i>
                         <p>Sales Management</p>
