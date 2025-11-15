@@ -13,6 +13,13 @@ if (!isset($data['order_id'])) {
 $order_id = $data['order_id'];
 
 try {
+    $stmt = $conn->prepare("SELECT item_id, quantity FROM supplier_orders WHERE order_id = :order_id");
+    $stmt->execute([':order_id' => $order_id]);
+    $item = $stmt->fetch();
+
+    $stmt = $conn->prepare("UPDATE items SET stock = stock + :q WHERE item_id = :item_id");
+    $stmt->execute([':q' => $item['quantity'], ':item_id' => $item['item_id']]);
+
     $stmt = $conn->prepare("UPDATE supplier_orders SET status = 'Received' WHERE order_id = :order_id");
     $stmt->execute([':order_id' => $order_id]);
 
