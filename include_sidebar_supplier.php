@@ -47,7 +47,7 @@
                 </li>
 
                 <li class="nav-item <?php echo ($active === 'pricing') ? 'active' : ''; ?>">
-                    <a href="pricingsupplier.php" class="text-white">
+                    <a href="pricingsupplier.php" class="text-dark">
                         <i class="fas fa-layer-group"></i>
                         <p>Pricing</p>
                     </a>
