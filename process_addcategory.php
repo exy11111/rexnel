@@ -2,9 +2,9 @@
 require('session.php');
 require('db.php');
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if ($_SERVER["REQUEST_METHOD"] == "GET") {
 
-    $category_name = $_POST['category_name'];
+    $category_name = $_GET['category_name'];
     $branch_id = $_SESSION['branch_id'];
 
     try {
