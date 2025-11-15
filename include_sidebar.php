@@ -116,7 +116,7 @@
                 <li class="nav-item ">
                     <a data-bs-toggle="collapse" href="#expenses"  class="text-white">
                         <i class="fas fa-layer-group"></i>
-                        <p>Expenses Management</p>
+                        <p>Supply Management</p>
                         <span class="caret"></span>
                     </a>
                     <div class="collapse" id="expenses">
