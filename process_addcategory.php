@@ -2,9 +2,9 @@
 require('session.php');
 require('db.php');
 
-if ($_SERVER["REQUEST_METHOD"] == "GET") {
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $category_name = $_GET['category_name'];
+    $category_name = $_POST['category_name'];
     $branch_id = $_SESSION['branch_id'];
 
     try {
@@ -30,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         }
     }
     catch (PDOException $e) {
-        echo "Error: " . $e->getMessage();
+        header("Location: categories.php?status=error");
         exit();
     }
 }
