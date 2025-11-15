@@ -37,7 +37,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $icon = "bi-plus-circle";
         $timestamp = date('Y-m-d H:i:s');
 
-        $sql = "SELECT user_id FROM users WHERE role_id IN (2, 3)";
+        $sql = "SELECT user_id, role_id FROM users WHERE role_id IN (2, 3)";
         $stmt = $conn->prepare($sql);
         $stmt->execute();
         $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
