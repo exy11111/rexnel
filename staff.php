@@ -176,13 +176,18 @@
                                                                 </div>
                                                             </div>
                                                             <div class="col-sm-12">
-                                                                <div class="form-group form-group-default position-relative">
+                                                                <div class="form-group form-group-default">
                                                                     <label>Password</label>
-                                                                    <input type="password" class="form-control password-field" name="password" placeholder="fill password" required>
-
-                                                                    <!-- Toggle Icon -->
-                                                                    <i class="bi bi-eye-slash-fill toggle-password" 
-                                                                    style="position:absolute; cursor:pointer; font-size:18px;"></i>
+                                                                    <div class="input-group">
+                                                                        <input type="password" 
+                                                                            class="form-control password-field" 
+                                                                            name="password" 
+                                                                            placeholder="fill password" 
+                                                                            required>
+                                                                        <span class="input-group-text toggle-password" style="cursor:pointer;">
+                                                                            <i class="bi bi-eye-slash-fill"></i>
+                                                                        </span>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
