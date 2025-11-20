@@ -68,7 +68,10 @@
   <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
   <link rel="icon" href="assets/img/holicon.png" type="image/x-icon"/>
 </head>
-<body style="background-image: url(assets/img/bg.png)">
+<body style="background-image: url('bg.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;">
 
   <div class="container d-flex justify-content-center align-items-center vh-100">
     <div class="card p-3" style="width: 100%; max-width: 400px;">
