@@ -88,12 +88,23 @@
 						$branch_name = $stmt->fetchColumn();
 						?>
 						<h3 class="fw-bold mb-3">
-							<?php echo $branch_name; ?>
+							<style>
+							.gear-icon {
+								cursor: pointer;
+								transition: color 0.2s, background-color 0.2s;
+								padding: 3px;
+								border-radius: 4px;
+							}
+
+							.gear-icon:hover {
+								background-color: #0d6efd;
+								color: white;
+							}
+							</style>
 							<i class="bi bi-gear-fill ms-2" 
-							style="cursor:pointer;" 
 							data-bs-toggle="modal" 
 							data-bs-target="#editBranchModal"></i>
-
+							 <?php echo $branch_name; ?>
 						</h3>
 						<ul class="breadcrumbs mb-3">
 							<li class="nav-home">
