@@ -388,7 +388,16 @@
                             <div class="col-sm-12">
                                 <div class="form-group form-group-default">
                                     <label>Password</label>
-                                    <input type="password" class="form-control" name="password" placeholder="fill password">
+                                    <div class="input-group">
+                                        <input type="password" 
+                                            class="form-control password-field" 
+                                            name="password" 
+                                            placeholder="fill password" 
+                                            required>
+                                            <span class="input-group-text toggle-password mb-3" style="cursor:pointer;">
+                                                <i class="bi bi-eye-slash-fill"></i>
+                                            </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
