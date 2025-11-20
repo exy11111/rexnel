@@ -454,34 +454,7 @@
 		});
 	</script>
 
-	<!-- Auto populate in edit modal -->
-    <script>
-        $(document).ready(function() {
-            $('#accounts').on('click', '.btn-link.btn-primary', function() {
-                var row = $(this).closest('tr');
-                var id = row.data('id');
-                $.ajax({
-                    url: 'process_getaccountdata.php',
-                    type: 'GET',
-                    data: { id: id },
-                    dataType: 'json',
-                    success: function(data) {
-                        $('#editFirstName').val(data.firstname);
-                        $('#editLastName').val(data.lastname);
-                        $('#editUsername').val(data.username);
-                        $('#editUserId').val(data.user_id);
-						$('#editEmail').val(data.email);
-						$('#editBranchId').val(data.branch_id);
-						$('#editDestination').val('staff.php');
-                        $('#editAccountModal').modal('show');
-                    },
-                    error: function(xhr, status, error) {
-                        console.error("Error fetching data: " + error);
-                    }
-                });
-            });
-        });
-    </script>
+
 
     <?php if (isset($_GET['status'])): ?>
         <script>
