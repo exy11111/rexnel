@@ -45,6 +45,36 @@
                     </span>
                     <h4 class="text-section">Menu</h4>
                 </li>
+                <?php if($_SESSION['role_id'] == 1): ?>
+                <li class="nav-item">
+                    <a data-bs-toggle="collapse" href="#acc"  class="text-white">
+                        <i class="fas fa-layer-group"></i>
+                        <p>Account Management</p>
+                        <span class="caret"></span>
+                    </a>
+                    <div class="collapse" id="acc">
+                        <ul class="nav nav-collapse">
+                            <li>
+                                <a href="staff.php">
+                                    <span class="sub-item text-white">Staff</span>
+                                </a>
+                            </li>
+                            <?php if($_SESSION['role_id'] == 1):?>
+                            <li>
+                                <a href="supplieraccount.php">
+                                    <span class="sub-item text-white">Supplier</span>
+                                </a>
+                            </li>
+                            <?php endif; ?>
+                            <li>
+                                <a href="branches.php">
+                                    <span class="sub-item text-white">Branches</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <?php endif; ?>
                 <li class="nav-item ">
                     <a data-bs-toggle="collapse" href="#base" class="text-white">
                         <i class="fas fa-layer-group"></i>
@@ -82,36 +112,7 @@
                         </ul>
                     </div>
                 </li>
-                <?php if($_SESSION['role_id'] == 1): ?>
-                <li class="nav-item">
-                    <a data-bs-toggle="collapse" href="#acc"  class="text-white">
-                        <i class="fas fa-layer-group"></i>
-                        <p>Account Management</p>
-                        <span class="caret"></span>
-                    </a>
-                    <div class="collapse" id="acc">
-                        <ul class="nav nav-collapse">
-                            <li>
-                                <a href="staff.php">
-                                    <span class="sub-item text-white">Staff</span>
-                                </a>
-                            </li>
-                            <?php if($_SESSION['role_id'] == 1):?>
-                            <li>
-                                <a href="supplieraccount.php">
-                                    <span class="sub-item text-white">Supplier</span>
-                                </a>
-                            </li>
-                            <?php endif; ?>
-                            <li>
-                                <a href="branches.php">
-                                    <span class="sub-item text-white">Branches</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-                <?php endif; ?>
+                
 
                 <li class="nav-item ">
                     <a data-bs-toggle="collapse" href="#expenses"  class="text-white">
