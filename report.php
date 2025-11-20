@@ -230,9 +230,10 @@
 							$sql = "SELECT SUM(pi.quantity) AS total_quantity
 								FROM purchase_items pi
 								INNER JOIN purchases p ON pi.purchase_id = p.purchase_id
-								WHERE DATE(p.date) = :today";
+								WHERE DATE(p.date) = :today AND p.branch_id = :branch_id";
 							$stmt = $conn->prepare($sql);
 							$stmt->bindParam(':today', $today);
+							$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
 							$stmt->execute();
 
 							$total_quantity_today = $stmt->fetchColumn() ?? 0;
@@ -241,9 +242,11 @@
 							$sql = "SELECT SUM(pi.quantity) AS total_quantity
 								FROM purchase_items pi
 								INNER JOIN purchases p ON pi.purchase_id = p.purchase_id
-								WHERE DATE_FORMAT(p.date, '%Y-%m') = :thisMonth";
+								WHERE DATE_FORMAT(p.date, '%Y-%m') = :thisMonth
+								AND p.branch_id = :branch_id";
 							$stmt = $conn->prepare($sql);
 							$stmt->bindParam(':thisMonth', $thisMonth);
+							$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
 							$stmt->execute();
 
 							$total_quantity_month = $stmt->fetchColumn() ?? 0;
@@ -252,16 +255,18 @@
 							$sql = "SELECT SUM(pi.quantity) AS total_quantity
 								FROM purchase_items pi
 								INNER JOIN purchases p ON pi.purchase_id = p.purchase_id
-								WHERE YEAR(p.date) = :thisYear";
+								WHERE YEAR(p.date) = :thisYear AND p.branch_id = :branch_id";
 							$stmt = $conn->prepare($sql);
 							$stmt->bindParam(':thisYear', $thisYear);
+							$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
 							$stmt->execute();
 							$total_quantity_year = $stmt->fetchColumn() ?? 0;
 
 							$sql = "SELECT SUM(pi.quantity) AS total_quantity
 								FROM purchase_items pi
-								INNER JOIN purchases p ON pi.purchase_id = p.purchase_id";
+								INNER JOIN purchases p ON pi.purchase_id = p.purchase_id AND p.branch_id = :branch_id";
 							$stmt = $conn->prepare($sql);
+							$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
 							$stmt->execute();
 							
 							$total_quantity_alltime = $stmt->fetchColumn() ?? 0;
@@ -358,9 +363,10 @@
 							$today = date("Y-m-d");
 							$sql = "SELECT SUM(price) AS daily_sales
 								FROM purchases
-								WHERE DATE(date) = :today";
+								WHERE DATE(date) = :today AND branch_id = :branch_id";
 							$stmt = $conn->prepare($sql);
 							$stmt->bindParam(':today', $today);
+							$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
 							$stmt->execute();
 
 							$daily_sales = $stmt->fetchColumn();
@@ -368,9 +374,10 @@
 							$thisMonth = date("Y-m");
 							$sql = "SELECT SUM(price) AS monthly_sales
 								FROM purchases
-								WHERE DATE_FORMAT(`date`, '%Y-%m') = :thisMonth";
+								WHERE DATE_FORMAT(`date`, '%Y-%m') = :thisMonth AND branch_id = :branch_id";
 							$stmt = $conn->prepare($sql);
 							$stmt->bindParam(':thisMonth', $thisMonth);
+							$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
 							$stmt->execute();
 
 							$monthly_sales = $stmt->fetchColumn();
@@ -378,9 +385,10 @@
 							$thisYear = date("Y");
 							$sql = "SELECT SUM(price) AS yearly_sales
 							FROM purchases
-							WHERE YEAR(`date`) = :thisYear";
+							WHERE YEAR(`date`) = :thisYear AND branch_id = :branch_id";
 							$stmt = $conn->prepare($sql);
 							$stmt->bindParam(':thisYear', $thisYear);
+							$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
 							$stmt->execute();
 							$yearly_sales = $stmt->fetchColumn();
 
