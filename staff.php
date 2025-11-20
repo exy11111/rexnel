@@ -182,7 +182,7 @@
 
                                                                     <!-- Toggle Icon -->
                                                                     <i class="bi bi-eye-slash-fill toggle-password" 
-                                                                    style="position:absolute; right:15px; top:38px; cursor:pointer; font-size:18px;"></i>
+                                                                    style="position:absolute; cursor:pointer; font-size:18px;"></i>
                                                                 </div>
                                                             </div>
                                                         </div>
