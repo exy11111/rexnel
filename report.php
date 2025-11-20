@@ -802,7 +802,7 @@
 		const branchId = select.value;
 
 		if(branchId) {
-			window.location.href = 'stock.php?b=' + encodeURIComponent(branchId);
+			window.location.href = 'report.php?b=' + encodeURIComponent(branchId);
 		} else {
 			Swal.fire({
 				icon: 'warning',
