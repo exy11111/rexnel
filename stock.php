@@ -101,6 +101,13 @@
 								color: black;
 							}
 							</style>
+
+							<?php 
+								$sql = "SELECT * from branch";
+								$stmt = $conn->prepare($sql);
+								$stmt->execute();
+								$branches = $stmt->fetchAll();
+							?>
 							<i class="bi bi-gear-fill gear-icon me-2" 
 							data-bs-toggle="modal" 
 							data-bs-target="#editBranchModal"></i>
@@ -664,6 +671,7 @@
 			</footer>
 		</div>
 	</div>
+	
 	<!--   Core JS Files   -->
 	<script src="assets/js/core/jquery-3.7.1.min.js"></script>
 	<script src="assets/js/core/popper.min.js"></script>
@@ -677,6 +685,48 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.0/dist/sweetalert2.all.min.js"></script>
 	<?php include 'modal_profile.php'?>
 	<?php include 'modal_editaccount.php';?>
+
+	<!-- Edit Branch Modal -->
+	<div class="modal fade" id="editBranchModal" tabindex="-1" aria-hidden="true">
+		<div class="modal-dialog modal-sm modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header border-0">
+					<h5 class="modal-title">Select Branch</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<select id="branchSelect" class="form-select">
+						<option value="">-- Select Branch --</option>
+						<?php foreach($branches as $branch): ?>
+							<option value="<?php echo htmlspecialchars($branch['branch_id']); ?>">
+								<?php echo htmlspecialchars($branch['branch_name']); ?>
+							</option>
+						<?php endforeach; ?>
+					</select>
+				</div>
+				<div class="modal-footer border-0">
+					<button type="button" id="confirmBranchBtn" class="btn btn-primary">Confirm</button>
+					<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+	document.getElementById('confirmBranchBtn').addEventListener('click', function() {
+		const select = document.getElementById('branchSelect');
+		const branchId = select.value;
+
+		if(branchId) {
+			window.location.href = 'stock.php?b=' + encodeURIComponent(branchId);
+		} else {
+			Swal.fire({
+				icon: 'warning',
+				title: 'Oops...',
+				text: 'Please select a branch!'
+			});
+		}
+	});
+	</script>
 
 	<script>
 		function updateUnitCost() {
