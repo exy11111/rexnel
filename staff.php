@@ -10,10 +10,8 @@
     $sql = "SELECT u.user_id, u.username, ud.firstname, ud.lastname, ud.email, b.branch_name, u.role_id, u.branch_id
         FROM users u
         JOIN userdetails ud ON u.user_id = ud.user_id
-        JOIN branch b ON u.branch_id = b.branch_id
-		WHERE u.branch_id = :branch_id";
+        JOIN branch b ON u.branch_id = b.branch_id";
     $stmt = $conn->prepare($sql);
-	$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
     $stmt->execute();
     $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -67,13 +65,6 @@
 			<div class="container">
 				<div class="page-inner">
 					<div class="page-header">
-						<?php 
-						$sql = "SELECT branch_name FROM branch WHERE branch_id = :branch_id";
-						$stmt = $conn->prepare($sql);
-						$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
-						$stmt->execute();
-						$branch_name = $stmt->fetchColumn();
-						?>
 						<ul class="breadcrumbs mb-3">
 							<li class="nav-home">
 								<a href="index.php">
