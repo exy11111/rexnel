@@ -182,7 +182,7 @@
 													<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 												</div>
 												<form action="process_additem.php" method="POST">
-													<input type="hidden" name="branch_id">
+													<input type="hidden" name="branch_id" value="<?php echo $branch_id?>">
 													<div class="modal-body">
 														<p class="small">Create a new item using this form, make sure you fill them all</p>
 														<div class="row">
