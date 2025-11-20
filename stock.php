@@ -3,13 +3,10 @@
 	require ('db.php');
 
 	if(isset($_GET['b'])){
-		$branch_id = $_GET['b'];
+		$_SESSION['branch_id'] = $_GET['b'];
 	}
 	else if($_SESSION['branch_id'] == 0){
-		$branch_id = 1;
-	}
-	else{
-		$branch_id = $_SESSION['branch_id'];
+		$_SESSION['branch_id'] = 1;
 	}
 
 	$sql = "SELECT item_id, barcode, item_name, category_name, brand_name, supplier_name, size_name, price, stock, supplier_price
@@ -20,31 +17,27 @@
 	JOIN sizes ss ON i.size_id = ss.size_id
 	WHERE i.branch_id = :branch_id";
     $stmt = $conn->prepare($sql);
-	$stmt->bindParam(':branch_id', $branch_id);
+	$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
     $stmt->execute();
     $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-	$sql1 = "SELECT category_id, category_name FROM categories WHERE branch_id = :branch_id";
+	$sql1 = "SELECT category_id, category_name FROM categories";
 	$stmt1 = $conn->prepare($sql1);
-	$stmt1->bindParam(':branch_id', $_SESSION['branch_id']);
     $stmt1->execute();
     $data1 = $stmt1->fetchAll(PDO::FETCH_ASSOC);
 
-	$sql2 = "SELECT * FROM brands WHERE branch_id = :branch_id";
+	$sql2 = "SELECT * FROM brands";
 	$stmt2 = $conn->prepare($sql2);
-	$stmt2->bindParam(':branch_id', $_SESSION['branch_id']);
     $stmt2->execute();
     $data2 = $stmt2->fetchAll(PDO::FETCH_ASSOC);
 
-	$sql3 = "SELECT * FROM suppliers WHERE branch_id = :branch_id";
+	$sql3 = "SELECT * FROM suppliers";
 	$stmt3 = $conn->prepare($sql3);
-	$stmt3->bindParam(':branch_id', $_SESSION['branch_id']);
     $stmt3->execute();
     $data3 = $stmt3->fetchAll(PDO::FETCH_ASSOC);
 
-	$sql4 = "SELECT * FROM sizes WHERE branch_id = :branch_id";
+	$sql4 = "SELECT * FROM sizes";
 	$stmt4 = $conn->prepare($sql4);
-	$stmt4->bindParam(':branch_id', $_SESSION['branch_id']);
     $stmt4->execute();
     $data4 = $stmt4->fetchAll(PDO::FETCH_ASSOC);
 
@@ -93,7 +86,7 @@
 						<?php 
 						$sql = "SELECT branch_name FROM branch WHERE branch_id = :branch_id";
 						$stmt = $conn->prepare($sql);
-						$stmt->bindParam(':branch_id', $branch_id);
+						$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
 						$stmt->execute();
 						$branch_name = $stmt->fetchColumn();
 						?>

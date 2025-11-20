@@ -8,9 +8,6 @@
 	else if($_SESSION['branch_id'] == 0){
 		$_SESSION['branch_id'] = 1;
 	}
-	else{
-		$_SESSION['branch_id'] = 1;
-	}
 
 	$sql = "SELECT purchase_id, price, date, payment_method FROM purchases p1 JOIN payment_method p2 ON p1.pm_id = p2.pm_id WHERE p1.branch_id = :branch_id ORDER BY p1.date DESC";
     $stmt = $conn->prepare($sql);
