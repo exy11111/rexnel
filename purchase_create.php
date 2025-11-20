@@ -107,7 +107,7 @@
                                     </div>
                                     <div class="mb-3">
 										<label for="item_name" class="form-label">Item</label>
-										<select name="" id="item_id" class="form-select" required readonly>
+										<select name="" id="item_id" class="form-select" readonly>
 											<option>Select Item</option>
 											<?php foreach($data1 as $row):?>
 												<option value="<?php echo $row['item_id']?>"><?php echo $row['item_name']?></option>
@@ -140,7 +140,7 @@
                                         </div>
                                         <div class="col-4 mb-3">
                                             <label class="form-label">Quantity</label>
-                                            <input type="number" class="form-control" id="quantity" required>
+                                            <input type="number" class="form-control" id="quantity">
                                         </div>
                                         <div class="col-4 mb-3">
                                             <label class="form-label">Available Quantity</label>
@@ -260,6 +260,17 @@
 					document.getElementById('size').value = data.size_name;
 					document.getElementById('price').value = data.price;
 					document.getElementById('available_stock').value = data.stock;
+
+					const enterEvent = new KeyboardEvent('keydown', {
+						key: 'Enter',
+						code: 'Enter',
+						keyCode: 13,
+						which: 13,
+						bubbles: true,
+						cancelable: true
+					});
+
+					this.dispatchEvent(enterEvent);
 				}
 			})
 			.catch(error => console.error('Error:', error));
@@ -304,7 +315,7 @@
 
 		function addRow() {
 			let item_id = document.getElementById("item_id").value;
-			let quantity = parseFloat(document.getElementById("quantity").value);
+			let quantity = parseFloat(document.getElementById("quantity").value) || 1;
 			let available = parseFloat(document.getElementById('available_stock').value);
 
 			if (!item_id) {
