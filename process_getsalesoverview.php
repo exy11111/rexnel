@@ -12,7 +12,7 @@ error_reporting(E_ALL);
     if ($start && $end) {
         $where = "WHERE DATE(p.`date`) BETWEEN :start AND :end";
     }
-    $dateQuery = $conn->prepare("SELECT DISTINCT DATE(`date`) as day FROM purchases $where ORDER BY day ASC");
+    $dateQuery = $conn->prepare("SELECT DISTINCT DATE(`date`) as day FROM purchases p $where ORDER BY day ASC");
     if ($start && $end) $dateQuery->execute(['start'=>$start, 'end'=>$end]);
     else $dateQuery->execute();
     $dates = $dateQuery->fetchAll(PDO::FETCH_COLUMN);
