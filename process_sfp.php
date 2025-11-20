@@ -11,21 +11,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email'])) {
     $email = $_POST['email'];
 
     // Check if email exists
-    $stmt = $conn->prepare("SELECT users.user_id, ftoken FROM users JOIN userdetails ON users.user_id = userdetails.user_id WHERE userdetails.email = :email");
+    $stmt = $conn->prepare("SELECT users.user_id, vtoken FROM users JOIN userdetails ON users.user_id = userdetails.user_id WHERE userdetails.email = :email");
     $stmt->bindParam(':email', $email);
     $stmt->execute();
 
     if ($stmt->rowCount() === 1) {
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         $user_id = $row['user_id'];
-        $ftoken = $row['ftoken'];
+        $ftoken = $row['vtoken'];
 
         // Generate token if it doesn't exist
         if (empty($ftoken)) {
             $ftoken = bin2hex(random_bytes(16));
-            $update = $conn->prepare("UPDATE users SET ftoken = :ftoken WHERE user_id = :user_id");
+            $update = $conn->prepare("UPDATE users SET vtoken = :vtoken WHERE user_id = :user_id");
             $update->execute([
-                ':ftoken' => $ftoken,
+                ':vtoken' => $ftoken,
                 ':user_id' => $user_id
             ]);
         }
