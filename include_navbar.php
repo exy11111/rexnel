@@ -1,4 +1,4 @@
-<div class="main-header" style="background-color: <?php if($_SESSION['role_id'] == 1) echo "#000"; else if ($_SESSION['role_id'] == 2) echo "#0d6efd";?> !important;">
+<div class="main-header" style="background-color: <?php if($_SESSION['role_id'] == 1) echo "#000"; else if ($_SESSION['role_id'] == 2) echo "#919191";?> !important;">
     <div class="main-header-logo">
         <!-- Logo Header -->
         <div class="logo-header" data-background-color="dark">
