@@ -561,5 +561,32 @@ $(document).on('click', '.toggle-password', function () {
     }
 });
 </script>
+
+<script>
+    $('#editAccountForm').on('submit', function(e) {
+        const password = $(this).find('input[name="password"]').val();
+        const confirmPassword = $(this).find('input[name="confirm_password"]').val();
+
+        if(password !== confirmPassword) {
+            e.preventDefault(); // stop form submission
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Passwords do not match!'
+            });
+            return false;
+        }
+
+        if(password.length < 6) {
+            e.preventDefault();
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Password must be at least 6 characters long!'
+            });
+            return false;
+        }
+    });
+</script>
 </body>
 </html>

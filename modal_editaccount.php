@@ -9,7 +9,7 @@
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="process_editaccount.php" method="POST" enctype="multipart/form-data">
+            <form id="editAccountForm" action="process_editaccount.php" method="POST" enctype="multipart/form-data">
                 <div class="modal-body">
                     <p class="small">Edit the account details below.</p>
                     <div class="row">
@@ -90,6 +90,21 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="col-sm-12">
+                            <div class="form-group form-group-default">
+                                <label>Confirm Password</label>
+                                <div class="input-group">
+                                    <input type="password" 
+                                        class="form-control password-field" 
+                                        name="confirm_password" 
+                                        placeholder="fill password" 
+                                        required>
+                                        <span class="input-group-text toggle-password mb-3" style="cursor:pointer;">
+                                            <i class="bi bi-eye-slash-fill"></i>
+                                        </span>
+                                </div>
+                            </div>
+                        </div>
                         <input type="hidden" name="user_id" id="editUserId">
                         <input type="hidden" name="destination" id="editDestination">
                         <script>
@@ -105,3 +120,4 @@
         </div>
     </div>
 </div>
+
