@@ -175,9 +175,13 @@
                                                                 </div>
                                                             </div>
                                                             <div class="col-sm-12">
-                                                                <div class="form-group form-group-default">
+                                                                <div class="form-group form-group-default position-relative">
                                                                     <label>Password</label>
-                                                                    <input type="password" class="form-control" name="password" placeholder="fill password" required>
+                                                                    <input type="password" class="form-control password-field" name="password" placeholder="fill password" required>
+
+                                                                    <!-- Toggle Icon -->
+                                                                    <i class="bi bi-eye-slash-fill toggle-password" 
+                                                                    style="position:absolute; right:15px; top:38px; cursor:pointer; font-size:18px;"></i>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -527,5 +531,19 @@
            
         });
     </script>
+
+<script>
+$(document).on('click', '.toggle-password', function() {
+    const input = $(this).siblings('.password-field');
+
+    if (input.attr('type') === 'password') {
+        input.attr('type', 'text');
+        $(this).removeClass('bi-eye-slash-fill').addClass('bi-eye-fill');
+    } else {
+        input.attr('type', 'password');
+        $(this).removeClass('bi-eye-fill').addClass('bi-eye-slash-fill');
+    }
+});
+</script>
 </body>
 </html>
