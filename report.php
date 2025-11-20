@@ -2,6 +2,13 @@
 	require ('session.php');
 	require ('db.php');
 
+	if(isset($_GET['b'])){
+		$_SESSION['branch_id'] = $_GET['b'];
+	}
+	else if($_SESSION['branch_id'] == 0){
+		$_SESSION['branch_id'] = 1;
+	}
+
 	$sql = "SELECT category_id, category_name FROM categories WHERE branch_id = :branch_id";
     $stmt = $conn->prepare($sql);
 	$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
@@ -78,7 +85,34 @@
 							$stmt->execute();
 							$branch_name = $stmt->fetchColumn();
 							?>
-							<h3 class="fw-bold mb-0"><?php echo $branch_name; ?></h3>
+							<h3 class="fw-bold mb-0">
+							<?php if ($_SESSION['role_id'] == 1):?>
+								<style>
+								.gear-icon {
+									cursor: pointer;
+									transition: color 0.2s, background-color 0.2s;
+									padding: 3px;
+									border-radius: 4px;
+								}
+
+								.gear-icon:hover {
+									background-color:rgb(192, 192, 192);
+									color: black;
+								}
+								</style>
+
+								<?php 
+									$sql = "SELECT * from branch";
+									$stmt = $conn->prepare($sql);
+									$stmt->execute();
+									$branches = $stmt->fetchAll();
+								?>
+								<i class="bi bi-gear-fill gear-icon me-2" 
+								data-bs-toggle="modal" 
+								data-bs-target="#editBranchModal"></i>
+							<?php endif; ?>
+								<?php echo $branch_name; ?>
+							</h3>
 							<ul class="breadcrumbs mb-0 d-flex align-items-center">
 								<li class="nav-home">
 									<a href="index.php">
