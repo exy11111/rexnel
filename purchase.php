@@ -364,5 +364,22 @@
 			});
 		});
 	</script>
+
+<script>
+	document.getElementById('confirmBranchBtn').addEventListener('click', function() {
+		const select = document.getElementById('branchSelect');
+		const branchId = select.value;
+
+		if(branchId) {
+			window.location.href = 'stock.php?b=' + encodeURIComponent(branchId);
+		} else {
+			Swal.fire({
+				icon: 'warning',
+				title: 'Oops...',
+				text: 'Please select a branch!'
+			});
+		}
+	});
+	</script>
 </body>
 </html>
