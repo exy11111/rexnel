@@ -184,7 +184,7 @@
                                                                             name="password" 
                                                                             placeholder="fill password" 
                                                                             required>
-                                                                            <span class="input-group-text toggle-password" style="cursor:pointer;">
+                                                                            <span class="input-group-text toggle-password mb-3" style="cursor:pointer;">
                                                                                 <i class="bi bi-eye-slash-fill"></i>
                                                                             </span>
                                                                     </div>
