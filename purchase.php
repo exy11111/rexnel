@@ -104,7 +104,8 @@
 												<?php 
 													foreach($data as $row){
 														echo "<tr data-id=".htmlspecialchars($row['purchase_id']).">";
-														echo "<td>".htmlspecialchars($row['date'])."</td>";
+														$formatted = date("F j, Y g:ia", (int)$row['date']);
+														echo "<td>" . htmlspecialchars($formatted) . "</td>";
 														echo "<td>₱".htmlspecialchars($row['price'])."</td>";
                                                         echo "<td>".htmlspecialchars($row['payment_method'])."</td>";
 														echo "<td>
