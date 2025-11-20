@@ -101,7 +101,7 @@
 								color: white;
 							}
 							</style>
-							<i class="bi bi-gear-fill ms-2" 
+							<i class="bi bi-gear-fill gear-icon ms-2" 
 							data-bs-toggle="modal" 
 							data-bs-target="#editBranchModal"></i>
 							 <?php echo $branch_name; ?>
