@@ -86,7 +86,14 @@
 						$stmt->execute();
 						$branch_name = $stmt->fetchColumn();
 						?>
-						<h3 class="fw-bold mb-3"><?php echo $branch_name; ?></h3>
+						<h3 class="fw-bold mb-3">
+							<?php echo $branch_name; ?>
+							<i class="bi bi-gear-fill ms-2" 
+							style="cursor:pointer;" 
+							data-bs-toggle="modal" 
+							data-bs-target="#editBranchModal"></i>
+
+						</h3>
 						<ul class="breadcrumbs mb-3">
 							<li class="nav-home">
 								<a href="index.php">
