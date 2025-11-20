@@ -169,56 +169,69 @@
 							$stmt->execute();
 							$branch_data = $stmt->fetchAll();
 						?>
-						<?php foreach($branch_data as $row): ?>
-							<div class="col-2">
 
-							</div>
-							<div class="col-md-8 col-12">
-								<div class="card">
-									<div class="card-header">
-										<div class="card-title"><?php echo $row['branch_name'];?> Stock</div>
-									</div>
-									<div class="card-body">
-										<div class="chart-container mb-1">
-											<canvas id="stock_chart_<?php echo $row['branch_id']; ?>"></canvas>
-										</div>
+						<div class="col-2">
+
+						</div>
+						<div class="col-md-8 col-12">
+							<div class="card">
+								<div class="card-header d-flex justify-content-between align-items-center">
+									<div class="card-title">Stock Overview</div>
+									<select id="branchSelectChart" class="form-select w-auto">
+										<option value="">-- Select Branch --</option>
+										<?php foreach($branch_data as $branch): ?>
+											<option value="<?php echo htmlspecialchars($branch['branch_id']); ?>">
+												<?php echo htmlspecialchars($branch['branch_name']); ?>
+											</option>
+										<?php endforeach; ?>
+									</select>
+								</div>
+								<div class="card-body">
+									<div class="chart-container mb-1">
+										<canvas id="stockChart"></canvas>
 									</div>
 								</div>
 							</div>
-							<div class="col-2">
-								
-							</div>
-							<script>
-								const branchId<?php echo $row['branch_id'];?> = <?php echo $row['branch_id']; ?>;
-								fetch(`process_getstockoverview.php?branch_id=${ branchId<?php echo $row['branch_id'];?>}`)
+						</div>
+						<div class="col-2">
+							
+						</div>
+						<script>
+							let stockChart; // global chart reference
+
+							function loadStockChart(branchId) {
+								if (!branchId) return;
+
+								fetch(`process_getstockoverview.php?branch_id=${encodeURIComponent(branchId)}`)
 									.then(response => {
-										if (!response.ok) {
-											throw new Error('Network response was not ok');
-										}
+										if (!response.ok) throw new Error('Network response was not ok');
 										return response.json();
 									})
-									.then(chartData<?php echo $row['branch_id'];?> => {
-										const ctx<?php echo $row['branch_id'];?> = document.getElementById('stock_chart_<?php echo $row['branch_id']; ?>').getContext('2d');
-										new Chart(ctx<?php echo $row['branch_id'];?>, {
+									.then(chartData => {
+										const ctx = document.getElementById('stockChart').getContext('2d');
+
+										if(stockChart) {
+											stockChart.destroy(); // remove previous chart
+										}
+
+										stockChart = new Chart(ctx, {
 											type: 'bar',
-											data: chartData<?php echo $row['branch_id'];?>,
+											data: chartData,
 											options: {
 												responsive: true,
 												scales: {
-													yAxes: [{
+													y: {
+														beginAtZero: true,
 														ticks: {
-															beginAtZero: true,
-															callback: function(value) {
-																return value + ' units'; 
-															}
+															callback: value => value + ' units'
 														}
-													}],
-													xAxes: [{
+													},
+													x: {
 														ticks: {
 															autoSkip: true,
 															maxTicksLimit: 10
 														}
-													}]
+													}
 												}
 											}
 										});
@@ -226,8 +239,14 @@
 									.catch(error => {
 										console.error('Fetch/Parsing Error:', error);
 									});
+							}
+
+							// Load chart when branch is selected
+							document.getElementById('branchSelectChart').addEventListener('change', function() {
+								const branchId = this.value;
+								loadStockChart(branchId);
+							});
 							</script>
-						<?php endforeach; ?>
 					</div>
 
 
