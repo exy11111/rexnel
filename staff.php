@@ -7,7 +7,7 @@
 		exit();
 	}
 
-    $sql = "SELECT u.user_id, u.username, ud.firstname, ud.lastname, ud.email, b.branch_name
+    $sql = "SELECT u.user_id, u.username, ud.firstname, ud.lastname, ud.email, b.branch_name, u.role_id, u.branch_id
         FROM users u
         JOIN userdetails ud ON u.user_id = ud.user_id
         JOIN branch b ON u.branch_id = b.branch_id
@@ -215,7 +215,19 @@
 														if($_SESSION['user_id'] == 17){
 															echo "<td>
                                                                 <div class='form-button-action'>
-                                                                    <button type='button' class='btn btn-link btn-primary btn-lg' data-bs-toggle='modal' data-bs-target='#editAccountModal' title='Edit Task'>
+                                                                    <button 
+                                                                        type='button' 
+                                                                        class='btn btn-link btn-primary btn-lg edit-btn'
+                                                                        data-id='" . htmlspecialchars($row['user_id']) . "'
+                                                                        data-firstname='" . htmlspecialchars($row['firstname']) . "'
+                                                                        data-lastname='" . htmlspecialchars($row['lastname']) . "'
+                                                                        data-email='" . htmlspecialchars($row['email']) . "'
+                                                                        data-username='" . htmlspecialchars($row['username']) . "'
+                                                                        data-role='" . htmlspecialchars($row['role_id']) . "'
+                                                                        data-branch='" . htmlspecialchars($row['branch_id']) . "'
+                                                                        data-bs-toggle='modal' 
+                                                                        data-bs-target='#editAccountModal2'
+                                                                    >
                                                                         <i class='fa fa-edit'></i>
                                                                     </button>
                                                                     <button type='button' class='btn btn-link btn-danger remove-btn' data-id='".htmlspecialchars($row['user_id'])."' title='Remove'>
@@ -295,6 +307,90 @@
 			</footer>
 		</div>
 	</div>
+    <!-- Edit Account Modal -->
+    <div class="modal fade" id="editAccountModal2" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title">
+                        <span class="fw-mediumbold">
+                        Edit</span> 
+                        <span class="fw-light">
+                            Account
+                        </span>
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="process_editaccount.php" method="POST">
+                    <input type="hidden" name="user_id">
+                    <div class="modal-body">
+                        <p class="small">Edit an account using this form, make sure you fill them all</p>
+                        <div class="row">
+                            <div class="col-sm-12 <?php if($_SESSION['role_id'] != 1): echo 'd-none'; endif; ?>">
+                                <div class="form-group form-group-default">
+                                    <label>Branch</label>
+                                    <select name="branch_id" class="form-select" value="<?php if($_SESSION['role_id'] != 1): echo $_SESSION['branch_id']; endif; ?>">
+                                        <option value="">Select Branch</option>
+                                        <?php foreach($branch_data as $row):?>
+                                            <option value="<?php echo $row['branch_id']?>"><?php echo $row['branch_name']?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 <?php if($_SESSION['role_id'] != 1): echo 'd-none'; endif; ?>">
+                                <div class="form-group form-group-default">
+                                    <label class="<?php if($_SESSION['role_id'] != 1): echo 'd-none'; endif; ?>">Role</label>
+                                    <select name="role_id" class="form-select <?php if($_SESSION['role_id'] != 1): echo 'd-none'; endif; ?>" value="<?php if($_SESSION['role_id'] != 1): echo '3'; endif; ?>">
+                                        <option value="">Select Role</option>
+                                        <?php foreach($roles_data as $row):?>
+                                            <?php if($row['role_id'] != 3):?>
+                                                <option value="<?php echo $row['role_id']?>"><?php echo $row['role_name']?></option>
+                                            <?php endif; ?>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6 pe-0">
+                                <div class="form-group form-group-default">
+                                    <label>First Name</label>
+                                    <input type="text" class="form-control" name="firstname" placeholder="fill first name" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group form-group-default">
+                                    <label>Last Name</label>
+                                    <input type="text" class="form-control" name="lastname" placeholder="fill last name" required>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="form-group form-group-default">
+                                    <label>Email</label>
+                                    <input type="email" class="form-control" name="email" placeholder="fill email" required>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="form-group form-group-default">
+                                    <label>Username</label>
+                                    <input type="text" class="form-control" name="username" placeholder="fill username" required>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="form-group form-group-default">
+                                    <label>Password</label>
+                                    <input type="password" class="form-control" name="password" placeholder="fill password" required>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="modal-footer border-0">
+                        <button type="submit" class="btn btn-primary">Add</button>	
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 	<!--   Core JS Files   -->
 	<script src="assets/js/core/jquery-3.7.1.min.js"></script>
 	<script src="assets/js/core/popper.min.js"></script>
@@ -430,5 +526,33 @@
             <?php endif; ?>
         </script>
     <?php endif; ?>
+    <script>
+        $('#editAccountModal2').on('show.bs.modal', function (event) {
+            let button = $(event.relatedTarget);
+
+            let id = button.data('id');
+            let firstname = button.data('firstname');
+            let lastname = button.data('lastname');
+            let email = button.data('email');
+            let username = button.data('username');
+            let role = button.data('role');
+            let branch = button.data('branch');
+
+            let modal = $(this);
+
+            // Populate inputs
+            modal.find('input[name="firstname"]').val(firstname);
+            modal.find('input[name="lastname"]').val(lastname);
+            modal.find('input[name="email"]').val(email);
+            modal.find('input[name="username"]').val(username);
+            modal.find('input[name="user_id"]').val(id);
+
+            // Optional fields
+            modal.find('select[name="role_id"]').val(role);
+            modal.find('select[name="branch_id"]').val(branch);
+
+           
+        });
+    </script>
 </body>
 </html>
