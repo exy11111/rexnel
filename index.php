@@ -3,6 +3,12 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 	require ('session.php');
 	require ('db.php');
+	if(isset($_GET['b'])){
+		$_SESSION['branch_id'] = $_GET['b'];
+	}
+	else if($_SESSION['branch_id'] == 0){
+		$_SESSION['branch_id'] = 1;
+	}
 
 	$sql = "SELECT sum(stock) as total_quantity FROM items WHERE branch_id = :branch_id";
 	$stmt = $conn->prepare($sql);
@@ -97,7 +103,34 @@ ini_set('display_errors', 1);
 				<div class="page-inner">
 					<div class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4">
 						<div>
-							<h3 class="fw-bold mb-3"><?php echo $branch_name; ?></h3>
+							<h3 class="fw-bold mb-3">
+								<?php if ($_SESSION['role_id'] == 1):?>
+									<style>
+									.gear-icon {
+										cursor: pointer;
+										transition: color 0.2s, background-color 0.2s;
+										padding: 3px;
+										border-radius: 4px;
+									}
+
+									.gear-icon:hover {
+										background-color:rgb(192, 192, 192);
+										color: black;
+									}
+									</style>
+
+									<?php 
+										$sql = "SELECT * from branch";
+										$stmt = $conn->prepare($sql);
+										$stmt->execute();
+										$branches = $stmt->fetchAll();
+									?>
+									<i class="bi bi-gear-fill gear-icon me-2" 
+									data-bs-toggle="modal" 
+									data-bs-target="#editBranchModal"></i>
+								<?php endif; ?>
+								<?php echo $branch_name; ?>
+							</h3>
 						</div>
 						<!--
 						<div class="ms-md-auto py-2 py-md-0">
@@ -507,6 +540,48 @@ ini_set('display_errors', 1);
 
 	<?php include 'modal_profile.php'?>
 	<?php include 'modal_editaccount.php';?>
+
+	<!-- Edit Branch Modal -->
+	<div class="modal fade" id="editBranchModal" tabindex="-1" aria-hidden="true">
+		<div class="modal-dialog modal-sm modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header border-0">
+					<h5 class="modal-title">Select Branch</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<select id="branchSelect" class="form-select">
+						<option value="">-- Select Branch --</option>
+						<?php foreach($branches as $branch): ?>
+							<option value="<?php echo htmlspecialchars($branch['branch_id']); ?>">
+								<?php echo htmlspecialchars($branch['branch_name']); ?>
+							</option>
+						<?php endforeach; ?>
+					</select>
+				</div>
+				<div class="modal-footer border-0">
+					<button type="button" id="confirmBranchBtn" class="btn btn-primary">Confirm</button>
+					<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+	document.getElementById('confirmBranchBtn').addEventListener('click', function() {
+		const select = document.getElementById('branchSelect');
+		const branchId = select.value;
+
+		if(branchId) {
+			window.location.href = 'index.php?b=' + encodeURIComponent(branchId);
+		} else {
+			Swal.fire({
+				icon: 'warning',
+				title: 'Oops...',
+				text: 'Please select a branch!'
+			});
+		}
+	});
+	</script>
 
 	<?php
 		$sql = "SELECT item_name, stock, size_name FROM items JOIN sizes ON items.size_id = sizes.size_id WHERE items.branch_id = :branch_id";
