@@ -5,13 +5,11 @@ require('db.php');
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $category_name = $_POST['category_name'];
-    $branch_id = $_SESSION['branch_id'];
 
     try {
-        $sql = "SELECT * FROM categories WHERE category_name = :category_name AND branch_id = :branch_id";
+        $sql = "SELECT * FROM categories WHERE category_name = :category_name";
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':category_name', $category_name);
-        $stmt->bindParam(':branch_id', $branch_id);
         $stmt->execute();
 
         if ($stmt->rowCount() > 0) {
@@ -19,10 +17,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
         }
         else{
-            $sql = "INSERT INTO categories (category_name, branch_id) VALUES (:category_name, :branch_id)";
+            $sql = "INSERT INTO categories (category_name) VALUES (:category_name)";
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':category_name', $category_name);
-            $stmt->bindParam(':branch_id', $branch_id);
             $stmt->execute();
 
             header("Location: categories.php?status=success");

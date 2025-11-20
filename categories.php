@@ -2,7 +2,7 @@
 	require ('session.php');
 	require ('db.php');
 
-	$sql = "SELECT category_id, category_name FROM categories WHERE branch_id = :branch_id";
+	$sql = "SELECT category_id, category_name FROM categories";
     $stmt = $conn->prepare($sql);
 	$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
     $stmt->execute();
@@ -49,14 +49,6 @@
 			<div class="container">
 				<div class="page-inner">
 					<div class="page-header">
-						<?php 
-						$sql = "SELECT branch_name FROM branch WHERE branch_id = :branch_id";
-						$stmt = $conn->prepare($sql);
-						$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
-						$stmt->execute();
-						$branch_name = $stmt->fetchColumn();
-						?>
-						<h3 class="fw-bold mb-3"><?php echo $branch_name; ?></h3>
 						<ul class="breadcrumbs mb-3">
 							<li class="nav-home">
 								<a href="index.php">
