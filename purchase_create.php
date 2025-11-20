@@ -107,7 +107,7 @@
                                     </div>
                                     <div class="mb-3">
 										<label for="item_name" class="form-label">Item</label>
-										<select name="" id="item_id" class="form-select" required>
+										<select name="" id="item_id" class="form-select" required readonly>
 											<option>Select Item</option>
 											<?php foreach($data1 as $row):?>
 												<option value="<?php echo $row['item_id']?>"><?php echo $row['item_name']?></option>
@@ -260,7 +260,6 @@
 					document.getElementById('size').value = data.size_name;
 					document.getElementById('price').value = data.price;
 					document.getElementById('available_stock').value = data.stock;
-					document.getElementById('quantity').value = 1;
 				}
 			})
 			.catch(error => console.error('Error:', error));
@@ -298,7 +297,6 @@
 					document.getElementById('size').value = data.size_name;
 					document.getElementById('price').value = data.price;
 					document.getElementById('available_stock').value = data.stock;
-					document.getElementById('quantity').value = 1;
 				}
 			})
 			.catch(error => console.error('Error:', error));
