@@ -519,7 +519,7 @@
 											icon: "success",
 											confirmButtonText: "OK"
 										}).then(() => {
-											window.location.href = "purchase.php";
+											window.location.href = "purchase_create.php";
 										});
 									} else {
 										Swal.fire("Error!", data.error, "error");
@@ -585,7 +585,7 @@
 											icon: "success",
 											confirmButtonText: "OK"
 										}).then(() => {
-											window.location.href = "purchase.php";
+											window.location.href = "purchase_create.php";
 										});
 									} else {
 										Swal.fire("Error!", data.error, "error");
@@ -618,7 +618,7 @@
 									icon: "success",
 									confirmButtonText: "OK"
 								}).then(() => {
-									window.location.href = "purchase.php";
+									window.location.href = "purchase_create.php";
 								});
 							} else {
 								Swal.fire("Error!", data.error, "error");
