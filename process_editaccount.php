@@ -18,7 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $password = $_POST['password'];
     $user_id = $_POST['user_id'];
-    $destination = $_POST['destination'];
+    $destination = $_POST['destination'] || "staff.php";
     $branch_id = $_POST['branch_id'];
     $verification_token = bin2hex(random_bytes(16));
     $profile_photo_path = null;
