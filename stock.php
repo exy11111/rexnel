@@ -10,7 +10,16 @@
 	JOIN sizes ss ON i.size_id = ss.size_id
 	WHERE i.branch_id = :branch_id";
     $stmt = $conn->prepare($sql);
-	$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
+	if(isset($_GET['b'])){
+		$stmt->bindParam(':branch_id', $_GET['b']);
+	}
+	else if($_SESSION['branch_id'] == 0){
+		$branch_id = 1;
+		$stmt->bindParam(':branch_id', $branch_id);
+	}
+	else{
+		$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
+	}
     $stmt->execute();
     $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
