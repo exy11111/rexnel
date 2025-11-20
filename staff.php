@@ -7,9 +7,10 @@
 		exit();
 	}
 
-    $sql = "SELECT u.user_id, u.username, ud.firstname, ud.lastname, ud.email
+    $sql = "SELECT u.user_id, u.username, ud.firstname, ud.lastname, ud.email, b.branch_name
         FROM users u
         JOIN userdetails ud ON u.user_id = ud.user_id
+        JOIN branch b ON u.branch_id = b.branch_id
 		WHERE u.branch_id = :branch_id";
     $stmt = $conn->prepare($sql);
 	$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
@@ -197,6 +198,7 @@
 													<th>Full Name</th>
 													<th>Email</th>
 													<th>Username</th>
+                                                    <th>Branch</th>
 													<?php if($_SESSION['user_id'] == 17): ?>
 													<th style="width: 10%">Action</th>
 													<?php endif; ?>
@@ -209,6 +211,7 @@
                                                         echo "<td>". htmlspecialchars($row['firstname']) ." ". htmlspecialchars($row['lastname']) ."</td>";
 														echo "<td>" . htmlspecialchars($row['email']) . "</td>";
                                                         echo "<td>" . htmlspecialchars($row['username']) . "</td>";
+                                                        echo "<td>" . htmlspecialchars($row['branch_name']) . "</td>";
 														if($_SESSION['user_id'] == 17){
 															echo "<td>
                                                                 <div class='form-button-action'>
