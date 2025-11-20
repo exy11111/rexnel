@@ -72,12 +72,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $stmt->execute();
             }
 
-            header("Location: stock.php?status=success");
+            header("Location: stock.php?b=".$branch_id."&status=success");
             exit();
         }
     }
     catch (PDOException $e) {
-        header("Location: stock.php?status=error");
+        header("Location: stock.php?b=".$branch_id."&status=error");
         exit();
     }
 
