@@ -1,16 +1,32 @@
 <?php
     require ('db.php');
     require ('session.php');
-    $dateQuery = $conn->query("SELECT DISTINCT DATE(date) as day FROM purchases ORDER BY day ASC");
+
+    $start = $_GET['start'] ?? null;
+    $end = $_GET['end'] ?? null;
+    $where = '';
+
+    if ($start && $end) {
+        $where = "WHERE DATE(p.date) BETWEEN :start AND :end";
+    }
+    $dateQuery = $conn->prepare("SELECT DISTINCT DATE(date) as day FROM purchases $where ORDER BY day ASC");
+    if ($start && $end) $dateQuery->execute(['start'=>$start, 'end'=>$end]);
+    else $dateQuery->execute();
     $dates = $dateQuery->fetchAll(PDO::FETCH_COLUMN);
 
-    $salesQuery = $conn->query("
+    // Sales
+    $salesQuery = $conn->prepare("
         SELECT p.branch_id, b.branch_name, DATE(p.date) AS day, SUM(p.price) AS total_price
         FROM purchases p
         JOIN branch b ON p.branch_id = b.branch_id
+        $where
         GROUP BY p.branch_id, day
         ORDER BY day ASC
     ");
+
+    if ($start && $end) $salesQuery->execute(['start'=>$start, 'end'=>$end]);
+    else $salesQuery->execute();
+
     $salesData = $salesQuery->fetchAll(PDO::FETCH_ASSOC);
 
     $branches = [];

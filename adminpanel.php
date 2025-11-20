@@ -98,64 +98,77 @@
                             </div>
                         </div>
 						<script>
-							fetch('process_getsalesoverview.php')
-								.then(response => {
-									if (!response.ok) {
-										throw new Error('Network response was not ok');
+							const startDateInput = document.getElementById('startDate');
+							const endDateInput = document.getElementById('endDate');
+
+							[startDateInput, endDateInput].forEach(input => {
+								input.addEventListener('change', () => {
+									const startDate = startDateInput.value;
+									const endDate = endDateInput.value;
+
+									// Only fetch if both dates are selected (optional)
+									if(startDate && endDate) {
+										loadSalesChart(startDate, endDate);
 									}
-									return response.text();
-								})
-								.then(text => {
-									if (text.trim() === "") {
-										throw new Error('Empty response from server');
-									}
-									try {
-										return JSON.parse(text);
-									} catch (e) {
-										console.error('JSON parse error:', e, text);
-										throw e;
-									}
-								})
-								.then(chartData => {
-									const ctx = document.getElementById('sales_chart').getContext('2d');
-									new Chart(ctx, {
-										type: 'line',
-										data: chartData,
-										options: {
-											responsive: true,
-											scales: {
-												yAxes: [{
-													ticks: {
-														beginAtZero: true,
-														userCallback: function(value) {
-															if (typeof value === 'number') {
-																return '₱' + value.toLocaleString();
-															}
-															return value;
-														}
-													}
-												}],
-												xAxes: [{
-													ticks: {
-														autoSkip: true,
-														maxTicksLimit: 10,
-														userCallback: function(label) {
-															var date = new Date(label);
-															if (!isNaN(date.getTime())) {
-																var options = { year: 'numeric', month: 'short', day: 'numeric' };
-																return date.toLocaleDateString('en-US', options);
-															}
-															return label;
-														}
-													}
-												}]
-											}
-										}
-									});
-								})
-								.catch(error => {
-									console.error('Fetch/Parsing Error:', error);
 								});
+							});
+
+							let salesChart; // to destroy previous chart
+
+							function loadSalesChart(startDate = '', endDate = '') {
+								// Build query string
+								let url = 'process_getsalesoverview.php';
+								if(startDate && endDate) {
+									url += `?start=${encodeURIComponent(startDate)}&end=${encodeURIComponent(endDate)}`;
+								}
+
+								fetch(url)
+									.then(response => {
+										if(!response.ok) throw new Error('Network response was not ok');
+										return response.text();
+									})
+									.then(text => {
+										if(text.trim() === "") throw new Error('Empty response from server');
+										return JSON.parse(text);
+									})
+									.then(chartData => {
+										const ctx = document.getElementById('sales_chart').getContext('2d');
+
+										// Destroy previous chart if exists
+										if(salesChart) salesChart.destroy();
+
+										salesChart = new Chart(ctx, {
+											type: 'line',
+											data: chartData,
+											options: {
+												responsive: true,
+												scales: {
+													y: {
+														beginAtZero: true,
+														ticks: {
+															callback: value => '₱' + value.toLocaleString()
+														}
+													},
+													x: {
+														ticks: {
+															autoSkip: true,
+															maxTicksLimit: 10,
+															callback: label => {
+																const date = new Date(label);
+																if(!isNaN(date.getTime())) {
+																	return date.toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' });
+																}
+																return label;
+															}
+														}
+													}
+												}
+											}
+										});
+									})
+									.catch(error => console.error('Fetch/Parsing Error:', error));
+							}
+							loadSalesChart();
 						</script>
 						<div class="col-md-2">
 							
