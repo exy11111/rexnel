@@ -4,7 +4,6 @@
 
 	$sql = "SELECT category_id, category_name FROM categories";
     $stmt = $conn->prepare($sql);
-	$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
     $stmt->execute();
     $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
