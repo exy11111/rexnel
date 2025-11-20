@@ -106,6 +106,7 @@
 						$branch_name = $stmt->fetchColumn();
 						?>
 						<h3 class="fw-bold mb-3">
+							<?php if ($_SESSION['role_id'] == 1):?>
 							<style>
 							.gear-icon {
 								cursor: pointer;
@@ -129,6 +130,7 @@
 							<i class="bi bi-gear-fill gear-icon me-2" 
 							data-bs-toggle="modal" 
 							data-bs-target="#editBranchModal"></i>
+							<?php endif; ?>
 							 <?php echo $branch_name; ?>
 						</h3>
 						<ul class="breadcrumbs mb-3">
