@@ -184,11 +184,12 @@
                                                                             name="password" 
                                                                             placeholder="fill password" 
                                                                             required>
-                                                                        <span class="input-group-text toggle-password" style="cursor:pointer;">
-                                                                            <i class="bi bi-eye-slash-fill"></i>
-                                                                        </span>
+                                                                        
                                                                     </div>
                                                                 </div>
+                                                                <span class="input-group-text toggle-password" style="cursor:pointer;">
+                                                                            <i class="bi bi-eye-slash-fill"></i>
+                                                                        </span>
                                                             </div>
                                                         </div>
                                                         
