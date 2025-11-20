@@ -12,7 +12,7 @@
 <html lang="en">
 <head>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-	<title>Dashboard </title>
+	<title>Admin Panel </title>
 	<meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
 	<link rel="icon" href="assets/img/holicon.png" type="image/x-icon"/>
 
@@ -62,7 +62,7 @@
 				<div class="page-inner">
 					<div class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4">
 						<div>
-							<h3 class="fw-bold mb-3">Dashboard</h3>
+							<h3 class="fw-bold mb-3">Admin Panel</h3>
 						</div>
 						<!--
 						<div class="ms-md-auto py-2 py-md-0">
