@@ -97,8 +97,8 @@
 							}
 
 							.gear-icon:hover {
-								background-color: #0d6efd;
-								color: white;
+								background-color:rgb(192, 192, 192);
+								color: black;
 							}
 							</style>
 							<i class="bi bi-gear-fill gear-icon me-2" 
