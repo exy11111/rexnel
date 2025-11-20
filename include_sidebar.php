@@ -122,11 +122,24 @@
                     </a>
                     <div class="collapse" id="expenses">
                         <ul class="nav nav-collapse">
+                            <?php if($_SESSION['role_id'] == 1):?>
+                            <li>
+                                <a href="#">
+                                    <span class="sub-item text-white">Main Stock</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <span class="sub-item text-white">Stock Requests</span>
+                                </a>
+                            </li>
+                            <?php endif; ?>
                             <li>
                                 <a href="adminorderhistory.php">
                                     <span class="sub-item text-white">Order History</span>
                                 </a>
                             </li>
+                            
                         </ul>
                     </div>
                 </li>
