@@ -260,17 +260,7 @@
 					document.getElementById('size').value = data.size_name;
 					document.getElementById('price').value = data.price;
 					document.getElementById('available_stock').value = data.stock;
-
-					const enterEvent = new KeyboardEvent('keydown', {
-						key: 'Enter',
-						code: 'Enter',
-						keyCode: 13,
-						which: 13,
-						bubbles: true,
-						cancelable: true
-					});
-
-					this.dispatchEvent(enterEvent);
+					addRow();
 				}
 			})
 			.catch(error => console.error('Error:', error));
