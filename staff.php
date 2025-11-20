@@ -184,12 +184,12 @@
                                                                             name="password" 
                                                                             placeholder="fill password" 
                                                                             required>
-                                                                        
+                                                                            <span class="input-group-text toggle-password" style="cursor:pointer;">
+                                                                                <i class="bi bi-eye-slash-fill"></i>
+                                                                            </span>
                                                                     </div>
                                                                 </div>
-                                                                <span class="input-group-text toggle-password" style="cursor:pointer;">
-                                                                            <i class="bi bi-eye-slash-fill"></i>
-                                                                        </span>
+                                                                
                                                             </div>
                                                         </div>
                                                         
@@ -540,15 +540,15 @@
     </script>
 
 <script>
-$(document).on('click', '.toggle-password', function() {
-    const input = $(this).siblings('.password-field');
+$(document).on('click', '.toggle-password', function () {
+    const input = $(this).siblings('input.password-field');
 
     if (input.attr('type') === 'password') {
         input.attr('type', 'text');
-        $(this).removeClass('bi-eye-slash-fill').addClass('bi-eye-fill');
+        $(this).find('i').removeClass('bi-eye-slash-fill').addClass('bi-eye-fill');
     } else {
         input.attr('type', 'password');
-        $(this).removeClass('bi-eye-fill').addClass('bi-eye-slash-fill');
+        $(this).find('i').removeClass('bi-eye-fill').addClass('bi-eye-slash-fill');
     }
 });
 </script>
