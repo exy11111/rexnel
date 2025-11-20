@@ -105,7 +105,7 @@
           </div> -->
 
           <!-- Submit button -->
-          <button type="submit" class="btn btn-primary w-100 mt-3">Login</button>
+          <button type="submit" class="btn btn-dark w-100 mt-3">Login</button>
         </form>
         <div class="text-center mt-3">
           <a href="#" data-bs-toggle="modal" data-bs-target="#forgot">Forgot password?</a>
