@@ -90,9 +90,6 @@
 												Add Supplier
 											</button>
 											<?php endif; ?>
-											<a href="adminorderhistory.php" class="btn btn-success btn-round ms-auto">
-												Order History
-											</a>
 											
 										</div>
 									</div>
