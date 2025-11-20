@@ -109,6 +109,11 @@
                                     <span class="sub-item text-white">Brands</span>
                                 </a>
                             </li>
+                            <li>
+                                <a href="#">
+                                    <span class="sub-item text-white">Archive</span>
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </li>
