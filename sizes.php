@@ -84,7 +84,7 @@
 								<div class="card-header">
 									<div class="d-flex align-items-center">
 										<h4 class="card-title">Sizes</h4>
-										<?php if($_SESSION['role_id'] == 1 || $_SESSION['role_id'] == 2): ?>
+										<?php if($_SESSION['role_id'] == 1): ?>
 										<button class="btn btn-primary btn-round ms-auto" data-bs-toggle="modal" data-bs-target="#addRowModal">
 											<i class="fa fa-plus"></i>
 											Add Size
@@ -141,7 +141,7 @@
 													<th style="width: 10%; display: none;">ID</th>
 													<th style="width: 20%">Size Name</th>
 													<th>Size Description</th>
-													<?php if($_SESSION['role_id'] == 1 || $_SESSION['role_id'] == 2): ?><th style="width: 10%">Action</th><?php endif; ?>
+													<?php if($_SESSION['role_id'] == 1): ?><th style="width: 10%">Action</th><?php endif; ?>
 												</tr>
 											</thead>
 											<tbody>
@@ -151,7 +151,7 @@
 														echo "<td style='display: none'>".htmlspecialchars($row['size_id'])."</td>";
 														echo "<td>".htmlspecialchars($row['size_name'])."</td>";
 														echo "<td>".htmlspecialchars($row['size_description'])."</td>";
-														if($_SESSION['role_id'] == 1 || $_SESSION['role_id'] == 2){
+														if($_SESSION['role_id'] == 1){
 															echo "<td>
                                                                 <div class='form-button-action'>
                                                                     <button type='button' class='btn btn-link btn-primary btn-lg' data-bs-toggle='modal' data-bs-target='#editSizeModal' title='Edit Task'>
