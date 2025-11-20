@@ -178,7 +178,6 @@
 								<div class="card-header d-flex justify-content-between align-items-center">
 									<div class="card-title">Stock Overview</div>
 									<select id="branchSelectChart" class="form-select w-auto">
-										<option value="">-- Select Branch --</option>
 										<?php foreach($branch_data as $branch): ?>
 											<option value="<?php echo htmlspecialchars($branch['branch_id']); ?>">
 												<?php echo htmlspecialchars($branch['branch_name']); ?>
@@ -242,10 +241,17 @@
 							}
 
 							// Load chart when branch is selected
-							document.getElementById('branchSelectChart').addEventListener('change', function() {
+							const branchSelect = document.getElementById('branchSelectChart');
+
+							branchSelect.addEventListener('change', function() {
 								const branchId = this.value;
 								loadStockChart(branchId);
 							});
+
+							// Run initially with the first selected branch
+							if(branchSelect.value) {
+								loadStockChart(branchSelect.value);
+							}
 							</script>
 					</div>
 
