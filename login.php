@@ -68,7 +68,7 @@
   <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
   <link rel="icon" href="assets/img/holicon.png" type="image/x-icon"/>
 </head>
-<body style="background-image: url('assets/img/bg.png');
+<body style="background-image: url('assets/img/bg.jpg');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;">
