@@ -292,5 +292,14 @@
             <?php endif; ?>
         </script>
     <?php endif; ?>
+
+	<script>
+		$(document).ready(function() {
+			$('#sizes').DataTable({
+				"pageLength": 10,      // rows per page
+				"lengthMenu": [5, 10, 25, 50, 100]
+			});
+		});
+	</script>
 </body>
 </html>
