@@ -2,6 +2,16 @@
 	require ('session.php');
 	require ('db.php');
 
+	if(isset($_GET['b'])){
+		$branch_id = $_GET['b'];
+	}
+	else if($_SESSION['branch_id'] == 0){
+		$branch_id = 1;
+	}
+	else{
+		$branch_id = $_SESSION['branch_id'];
+	}
+
 	$sql = "SELECT item_id, barcode, item_name, category_name, brand_name, supplier_name, size_name, price, stock, supplier_price
 	FROM items i 
 	JOIN categories c ON i.category_id = c.category_id
@@ -10,16 +20,7 @@
 	JOIN sizes ss ON i.size_id = ss.size_id
 	WHERE i.branch_id = :branch_id";
     $stmt = $conn->prepare($sql);
-	if(isset($_GET['b'])){
-		$stmt->bindParam(':branch_id', $_GET['b']);
-	}
-	else if($_SESSION['branch_id'] == 0){
-		$branch_id = 1;
-		$stmt->bindParam(':branch_id', $branch_id);
-	}
-	else{
-		$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
-	}
+	$stmt->bindParam(':branch_id', $branch_id);
     $stmt->execute();
     $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -92,16 +93,7 @@
 						<?php 
 						$sql = "SELECT branch_name FROM branch WHERE branch_id = :branch_id";
 						$stmt = $conn->prepare($sql);
-						if(isset($_GET['b'])){
-							$stmt->bindParam(':branch_id', $_GET['b']);
-						}
-						else if($_SESSION['branch_id'] == 0){
-							$branch_id = 1;
-							$stmt->bindParam(':branch_id', $branch_id);
-						}
-						else{
-							$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
-						}
+						$stmt->bindParam(':branch_id', $branch_id);
 						$stmt->execute();
 						$branch_name = $stmt->fetchColumn();
 						?>
@@ -190,6 +182,7 @@
 													<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 												</div>
 												<form action="process_additem.php" method="POST">
+													<input type="hidden" name="branch_id">
 													<div class="modal-body">
 														<p class="small">Create a new item using this form, make sure you fill them all</p>
 														<div class="row">

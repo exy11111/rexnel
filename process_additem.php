@@ -11,6 +11,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $size_id = $_POST['size_id'];
     $price = $_POST['price'];
     $stock = $_POST['stock'];
+    $branch_id = $_POST['branch_id'];
 
     try {
         $sql = "SELECT * FROM items WHERE (barcode = :barcode AND branch_id = :branch_id)
@@ -23,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bindParam(':supplier_id', $supplier_id);
         $stmt->bindParam(':brand_id', $brand_id);
         $stmt->bindParam(':category_id', $category_id);
-        $stmt->bindParam(':branch_id', $_SESSION['branch_id']);
+        $stmt->bindParam(':branch_id', $branch_id);
         $stmt->execute();
 
         if ($stmt->rowCount() > 0) {
@@ -42,7 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt->bindParam(':size_id', $size_id);
             $stmt->bindParam(':price', $price);
             $stmt->bindParam(':stock', $stock);
-            $stmt->bindParam(':branch_id', $_SESSION['branch_id']);
+            $stmt->bindParam(':branch_id', $branch_id);
             $stmt->execute();
             
             $added_by = $_SESSION['username'];
@@ -54,7 +55,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             $sql = "SELECT user_id FROM users WHERE branch_id = :branch_id";
             $stmt = $conn->prepare($sql);
-            $stmt->bindParam(':branch_id', $_SESSION['branch_id']);
+            $stmt->bindParam(':branch_id', $branch_id);
             $stmt->execute();
             $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
