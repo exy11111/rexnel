@@ -377,14 +377,14 @@
                             <div class="col-sm-12">
                                 <div class="form-group form-group-default">
                                     <label>Password</label>
-                                    <input type="password" class="form-control" name="password" placeholder="fill password" required>
+                                    <input type="password" class="form-control" name="password" placeholder="fill password">
                                 </div>
                             </div>
                         </div>
                         
                     </div>
                     <div class="modal-footer border-0">
-                        <button type="submit" class="btn btn-primary">Add</button>	
+                        <button type="submit" class="btn btn-primary">Submit</button>	
                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
                     </div>
                 </form>
