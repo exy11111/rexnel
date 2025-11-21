@@ -131,7 +131,7 @@
                         <ul class="nav nav-collapse">
                             <?php if($_SESSION['role_id'] == 1):?>
                             <li>
-                                <a href="#">
+                                <a href="stock_admin.php">
                                     <span class="sub-item text-white">Main Stock</span>
                                 </a>
                             </li>
