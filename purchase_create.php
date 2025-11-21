@@ -148,7 +148,7 @@
                                         </div>
                                     </div>
     								<div class="d-flex justify-content-end">
-										<button type="submit" class="btn btn-primary mb-2">Submit</button>
+										<button type="button" id="sbtn" class="btn btn-primary mb-2">Submit</button>
 									</div>
                                 </form>
                             </div>
@@ -398,7 +398,7 @@
 		}
 
 
-		document.getElementById("purchaseForm").addEventListener("click", function(event) {
+		document.getElementById("sbtn").addEventListener("click", function(event) {
 			event.preventDefault();
 			addRow();
 		});
