@@ -217,43 +217,41 @@
                                                         const itemId = this.getAttribute('data-id');
                                                         Swal.fire({
                                                             title: 'Are you sure?',
-                                                            text: "This action cannot be undone!",
+                                                            text: "Are you sure you want to restore the item?",
                                                             icon: 'warning',
                                                             showCancelButton: true,
-                                                            confirmButtonColor: '#d33',
                                                             cancelButtonColor: '#3085d6',
-                                                            confirmButtonText: 'Yes, delete it!',
+                                                            confirmButtonText: 'Yes, restore it!',
                                                             cancelButtonText: 'Cancel'
                                                         }).then((result) => {
                                                             if (result.isConfirmed) {
                                                                 const xhr = new XMLHttpRequest();
-                                                                xhr.open('POST', 'process_deleteitem.php', true);
+                                                                xhr.open('POST', 'process_restoreitem.php', true);
                                                                 xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
                                                                 xhr.onload = function() {
                                                                     if (xhr.status === 200) {
                                                                         if (xhr.responseText === 'success') {
-                                                                            Swal.fire('Deleted!', 'The item has been deleted.', 'success').then(() => {
+                                                                            Swal.fire('Restored!', 'The item has been restored.', 'success').then(() => {
                                                                                 window.location.href = 'stock.php';
                                                                             });
                                                                         } else if(xhr.responseText === 'exist'){
 																			Swal.fire({
-																				title: 'Stock in this item will also be deleted.',
-																				text: "Are you sure? This action cannot be undone!",
+																				title: 'Are you sure?',
+																				text: "Are you sure you want to restore the item?",
 																				icon: 'warning',
 																				showCancelButton: true,
-																				confirmButtonColor: '#d33',
 																				cancelButtonColor: '#3085d6',
-																				confirmButtonText: 'Yes, delete it!',
+																				confirmButtonText: 'Yes, restore it!',
 																				cancelButtonText: 'Cancel'
 																			}).then((result) => {
 																				if (result.isConfirmed) {
 																					const xhr1 = new XMLHttpRequest();
-																					xhr1.open('POST', 'process_confirmdeleteitem.php', true);
+																					xhr1.open('POST', 'process_restoreitem.php', true);
 																					xhr1.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 																					xhr1.onload = function() {
 																						if (xhr1.status === 200) {
 																							if (xhr1.responseText === 'success') {
-																								Swal.fire('Deleted!', 'The item has been deleted.', 'success').then(() => {
+																								Swal.fire('Restored!', 'The item has been restored.', 'success').then(() => {
 																									window.location.href = 'stock.php';
 																								});
 																							}
@@ -264,7 +262,7 @@
 																			});
 																		}
 																		else {
-                                                                            Swal.fire('Error!', 'There was an error deleting the item.', 'error');
+                                                                            Swal.fire('Error!', 'There was an error restoring the item.', 'error');
                                                                         }
                                                                     }
                                                                 };
@@ -276,117 +274,6 @@
                                             });
 
                                         </script>
-										<!-- Modal -->
-										<div class="modal modal-lg fade" id="editItemModal" tabindex="-1" role="dialog" aria-hidden="true">
-											<div class="modal-dialog" role="document">
-												<div class="modal-content">
-													<div class="modal-header border-0">
-														<h5 class="modal-title">
-															<span class="fw-mediumbold">
-															Edit</span> 
-															<span class="fw-light">
-																Item
-															</span>
-														</h5>
-														<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-													</div>
-													<form action="process_edititem.php" method="POST">
-														<div class="modal-body">
-															<p class="small">Edit the item details below.</p>
-															<div class="row">
-																<div class="col-sm-12">
-																	<div class="form-group form-group-default">
-																		<label>Barcode</label>
-																		<input type="text" name="barcode" id="editBarcode" class="form-control" oninput="validatePhoneNumber(this)" placeholder="fill barcode" required>
-																		<script>
-																			function validatePhoneNumber(input) {
-																				input.value = input.value.replace(/[^0-9]/g, '');
-																			}
-																		</script>
-																	</div>
-																</div>
-																<div class="col-sm-12">
-																	<div class="form-group form-group-default">
-																		<label>Item Name</label>
-																		<input type="text" name="item_name" id="editItemName" class="form-control" placeholder="fill name" required>
-																	</div>
-																</div>
-																
-																<div class="col-sm-12">
-																	<div class="form-group form-group-default">
-																		<label for="category">Category</label>
-																		<select class="form-select" id="editCategoryId" name="category_id" required>
-																			<option value="">Select Category</option>
-																			<?php 
-																				foreach ($data1 as $row){
-																					echo "<option value='".$row['category_id']."'>".$row['category_name']."</option>";
-																				}
-																			?>
-																		</select>
-																	</div>
-																</div>
-																<div class="col-sm-12">
-																	<div class="form-group form-group-default">
-																		<label for="category">Brand</label>
-																		<select class="form-select" id="editBrandId" name="brand_id" required>
-																		<option value="">Select Brand</option>
-																			<?php 
-																				foreach ($data2 as $row){
-																					echo "<option value='".$row['brand_id']."'>".$row['brand_name']."</option>";
-																				}
-																			?>
-																		</select>
-																	</div>
-																</div>
-																<div class="col-sm-12">
-																	<div class="form-group form-group-default">
-																		<label for="category">Supplier</label>
-																		<select class="form-select" id="editSupplierId" name="supplier_id" required>
-																			<option value="">Select Supplier</option>
-																			<?php 
-																				foreach ($data3 as $row){
-																					echo "<option value='".$row['supplier_id']."'>".$row['supplier_name']."</option>";
-																				}
-																			?>
-																		</select>
-																	</div>
-																</div>
-																<div class="col-sm-4">
-																	<div class="form-group form-group-default">
-																		<label for="category">Size</label>
-																		<select class="form-select" name="size_id" id="editSizeId" required>
-																			<option value="">Select Size</option>
-																			<?php 
-																				foreach ($data4 as $row){
-																					echo "<option value='".$row['size_id']."'>".$row['size_name']."</option>";
-																				}
-																			?>
-																		</select>
-																	</div>
-																</div>
-																<div class="col-sm-4">
-																	<div class="form-group form-group-default">
-																		<label>Price</label>
-																		<input type="number" name="price" step=0.01 id="editPrice" class="form-control" placeholder="fill price" required>
-																	</div>
-																</div>
-																<div class="col-sm-4">
-																	<div class="form-group form-group-default">
-																		<label>Stock</label>
-																		<input type="number" name="stock" id="editStock" class="form-control" placeholder="fill stock" required>
-																	</div>
-																</div>
-															</div>
-															<input type="text" name="item_id" id="editItemId" hidden>
-														</div>
-														<div class="modal-footer border-0">
-															<button type="submit" class="btn btn-primary">Save Changes</button>
-															<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-														</div>
-													</form>
-												</div>
-											</div>
-										</div>
 									</div>
 								</div>
 							</div>
@@ -455,7 +342,7 @@
 		const branchId = select.value;
 
 		if(branchId) {
-			window.location.href = 'stock.php?b=' + encodeURIComponent(branchId);
+			window.location.href = 'archive.php?b=' + encodeURIComponent(branchId);
 		} else {
 			Swal.fire({
 				icon: 'warning',
