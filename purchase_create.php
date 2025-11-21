@@ -540,7 +540,15 @@
 							confirmButtonText: "Submit",
 							cancelButtonText: "Cancel",
 							didOpen: () => {
-								document.getElementById("cashProvided").focus();
+								const input = document.getElementById("cashProvided");
+								input.focus();
+
+								// Trigger confirm on Enter
+								input.addEventListener("keydown", (e) => {
+									if (e.key === "Enter") {
+										Swal.clickConfirm();
+									}
+								});
 							},
 							preConfirm: () => {
 								const cashInput = document.getElementById("cashProvided");
