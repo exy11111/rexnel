@@ -200,9 +200,6 @@
                                                                     <button type='button' class='btn btn-link btn-primary btn-lg' data-bs-toggle='modal' data-bs-target='#editItemModal' title='Edit Task'>
                                                                         <i class='fa fa-edit'></i>
                                                                     </button>
-                                                                    <button type='button' class='btn btn-link btn-danger remove-btn' data-id='".htmlspecialchars($row['item_id'])."' title='Remove'>
-                                                                        <i class='fa fa-times'></i>
-                                                                    </button>
                                                                 </div>
                                                             </td>";
 														}
@@ -211,74 +208,6 @@
 												?>
 											</tbody>
 										</table>
-										<script>
-                                            document.addEventListener('DOMContentLoaded', function() {
-                                                const removeButtons = document.querySelectorAll('.remove-btn');
-                                                
-                                                removeButtons.forEach(button => {
-                                                    button.addEventListener('click', function() {
-                                                        const itemId = this.getAttribute('data-id');
-                                                        Swal.fire({
-                                                            title: 'Are you sure?',
-                                                            text: "This action cannot be undone!",
-                                                            icon: 'warning',
-                                                            showCancelButton: true,
-                                                            confirmButtonColor: '#d33',
-                                                            cancelButtonColor: '#3085d6',
-                                                            confirmButtonText: 'Yes, delete it!',
-                                                            cancelButtonText: 'Cancel'
-                                                        }).then((result) => {
-                                                            if (result.isConfirmed) {
-                                                                const xhr = new XMLHttpRequest();
-                                                                xhr.open('POST', 'process_deleteitem.php', true);
-                                                                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-                                                                xhr.onload = function() {
-                                                                    if (xhr.status === 200) {
-                                                                        if (xhr.responseText === 'success') {
-                                                                            Swal.fire('Deleted!', 'The item has been deleted.', 'success').then(() => {
-                                                                                window.location.href = 'stock.php';
-                                                                            });
-                                                                        } else if(xhr.responseText === 'exist'){
-																			Swal.fire({
-																				title: 'Stock in this item will also be deleted.',
-																				text: "Are you sure? This action cannot be undone!",
-																				icon: 'warning',
-																				showCancelButton: true,
-																				confirmButtonColor: '#d33',
-																				cancelButtonColor: '#3085d6',
-																				confirmButtonText: 'Yes, delete it!',
-																				cancelButtonText: 'Cancel'
-																			}).then((result) => {
-																				if (result.isConfirmed) {
-																					const xhr1 = new XMLHttpRequest();
-																					xhr1.open('POST', 'process_confirmdeleteitem.php', true);
-																					xhr1.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-																					xhr1.onload = function() {
-																						if (xhr1.status === 200) {
-																							if (xhr1.responseText === 'success') {
-																								Swal.fire('Deleted!', 'The item has been deleted.', 'success').then(() => {
-																									window.location.href = 'stock.php';
-																								});
-																							}
-																						}
-																					}
-																					xhr1.send('brand_id=' + brandId);
-																				}
-																			});
-																		}
-																		else {
-                                                                            Swal.fire('Error!', 'There was an error deleting the item.', 'error');
-                                                                        }
-                                                                    }
-                                                                };
-                                                                xhr.send('item_id=' + itemId);
-                                                            }
-                                                        });
-                                                    });
-                                                });
-                                            });
-
-                                        </script>
 										<!-- Modal -->
 										<div class="modal modal-lg fade" id="editItemModal" tabindex="-1" role="dialog" aria-hidden="true">
 											<div class="modal-dialog" role="document">
@@ -293,14 +222,14 @@
 														</h5>
 														<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 													</div>
-													<form action="process_edititem.php" method="POST">
+													<form action="process_edititemadmin.php" method="POST">
 														<div class="modal-body">
 															<p class="small">Edit the item details below.</p>
 															<div class="row">
 																<div class="col-sm-12">
 																	<div class="form-group form-group-default">
 																		<label>Barcode</label>
-																		<input type="text" name="barcode" id="editBarcode" class="form-control" oninput="validatePhoneNumber(this)" placeholder="fill barcode" required>
+																		<input type="text" name="barcode" id="editBarcode" class="form-control" oninput="validatePhoneNumber(this)" placeholder="fill barcode" disabled>
 																		<script>
 																			function validatePhoneNumber(input) {
 																				input.value = input.value.replace(/[^0-9]/g, '');
@@ -311,68 +240,10 @@
 																<div class="col-sm-12">
 																	<div class="form-group form-group-default">
 																		<label>Item Name</label>
-																		<input type="text" name="item_name" id="editItemName" class="form-control" placeholder="fill name" required>
+																		<input type="text" name="item_name" id="editItemName" class="form-control" placeholder="fill name" disabled>
 																	</div>
 																</div>
 																
-																<div class="col-sm-12">
-																	<div class="form-group form-group-default">
-																		<label for="category">Category</label>
-																		<select class="form-select" id="editCategoryId" name="category_id" required>
-																			<option value="">Select Category</option>
-																			<?php 
-																				foreach ($data1 as $row){
-																					echo "<option value='".$row['category_id']."'>".$row['category_name']."</option>";
-																				}
-																			?>
-																		</select>
-																	</div>
-																</div>
-																<div class="col-sm-12">
-																	<div class="form-group form-group-default">
-																		<label for="category">Brand</label>
-																		<select class="form-select" id="editBrandId" name="brand_id" required>
-																		<option value="">Select Brand</option>
-																			<?php 
-																				foreach ($data2 as $row){
-																					echo "<option value='".$row['brand_id']."'>".$row['brand_name']."</option>";
-																				}
-																			?>
-																		</select>
-																	</div>
-																</div>
-																<div class="col-sm-12">
-																	<div class="form-group form-group-default">
-																		<label for="category">Supplier</label>
-																		<select class="form-select" id="editSupplierId" name="supplier_id" required>
-																			<option value="">Select Supplier</option>
-																			<?php 
-																				foreach ($data3 as $row){
-																					echo "<option value='".$row['supplier_id']."'>".$row['supplier_name']."</option>";
-																				}
-																			?>
-																		</select>
-																	</div>
-																</div>
-																<div class="col-sm-4">
-																	<div class="form-group form-group-default">
-																		<label for="category">Size</label>
-																		<select class="form-select" name="size_id" id="editSizeId" required>
-																			<option value="">Select Size</option>
-																			<?php 
-																				foreach ($data4 as $row){
-																					echo "<option value='".$row['size_id']."'>".$row['size_name']."</option>";
-																				}
-																			?>
-																		</select>
-																	</div>
-																</div>
-																<div class="col-sm-4">
-																	<div class="form-group form-group-default">
-																		<label>Price</label>
-																		<input type="number" name="price" step=0.01 id="editPrice" class="form-control" placeholder="fill price" required>
-																	</div>
-																</div>
 																<div class="col-sm-4">
 																	<div class="form-group form-group-default">
 																		<label>Stock</label>
@@ -653,7 +524,7 @@
                         $('#editSupplierId').val(data.supplier_id);
 						$('#editSizeId').val(data.size_id);
 						$('#editPrice').val(data.price);
-						$('#editStock').val(data.stock);
+						$('#editStock').val(data.stock_admin);
 						
                     },
                     error: function(xhr, status, error) {
