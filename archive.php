@@ -198,7 +198,7 @@
 															echo "<td>
                                                                 <div class='form-button-action'>
                                                                     <button type='button' class='btn btn-link btn-primary remove-btn' data-id='".htmlspecialchars($row['item_id'])."' title='Remove'>
-                                                                        <i class='bi bi-arrow-counterclockwise'></i>
+                                                                        <i class='bi bi-arrow-counterclockwise fw-bold'></i>
                                                                     </button>
                                                                 </div>
                                                             </td>";
