@@ -398,7 +398,7 @@
 		}
 
 
-		document.getElementById("purchaseForm").addEventListener("submit", function(event) {
+		document.getElementById("purchaseForm").addEventListener("click", function(event) {
 			event.preventDefault();
 			addRow();
 		});
