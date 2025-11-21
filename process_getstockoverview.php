@@ -8,7 +8,7 @@ $branchId = isset($_GET['branch_id']) ? $_GET['branch_id'] : 1; // Default to 1 
 $query = "
     SELECT i.item_name, i.stock
     FROM items i
-    WHERE i.branch_id = :branch_id
+    WHERE i.branch_id = :branch_id AND is_disabled = 0
 ";
 
 $stmt = $conn->prepare($query);

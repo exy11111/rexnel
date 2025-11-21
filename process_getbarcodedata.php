@@ -5,13 +5,12 @@
 
     if (isset($_POST['barcode'])) {
         $barcode = $_POST['barcode'];
-
         $sql = "SELECT i.item_id, c.category_name, b.brand_name, s.supplier_name, ss.size_name, i.stock, i.price FROM items i
         JOIN categories c ON i.category_id = c.category_id
         JOIN brands b ON i.brand_id = b.brand_id
         JOIN suppliers s ON i.supplier_id = s.supplier_id 
         JOIN sizes ss ON i.size_id = ss.size_id
-        WHERE barcode = :barcode AND i.branch_id = :branch_id";
+        WHERE barcode = :barcode AND i.branch_id = :branch_id AND is_disabled = 0";
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':barcode', $barcode);
         $stmt->bindParam(':branch_id', $branch_id);

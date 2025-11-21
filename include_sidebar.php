@@ -109,11 +109,13 @@
                                     <span class="sub-item text-white">Brands</span>
                                 </a>
                             </li>
+                            <?php if($_SESSION['role_id'] == 1):?>
                             <li>
                                 <a href="archive.php">
                                     <span class="sub-item text-white">Archive</span>
                                 </a>
                             </li>
+                            <?php endif; ?>
                         </ul>
                     </div>
                 </li>

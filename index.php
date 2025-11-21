@@ -584,7 +584,7 @@ ini_set('display_errors', 1);
 	</script>
 
 	<?php
-		$sql = "SELECT item_name, stock, size_name FROM items JOIN sizes ON items.size_id = sizes.size_id WHERE items.branch_id = :branch_id";
+		$sql = "SELECT item_name, stock, size_name FROM items JOIN sizes ON items.size_id = sizes.size_id WHERE items.branch_id = :branch_id AND is_disabled = 0";
 		$stmt = $conn->prepare($sql);
 		$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
 		$stmt->execute();

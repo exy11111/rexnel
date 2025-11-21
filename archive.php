@@ -1,6 +1,10 @@
 <?php 
 	require ('session.php');
 	require ('db.php');
+    if($_SESSION['role_id'] != 1){
+        header('Location: stock.php');
+        exit();
+    }
 
 	if(isset($_GET['b'])){
 		$_SESSION['branch_id'] = $_GET['b'];
