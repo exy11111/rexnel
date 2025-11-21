@@ -148,7 +148,7 @@
                                         </div>
                                     </div>
     								<div class="d-flex justify-content-end">
-										<button type="button" id="sbtn" class="btn btn-primary mb-2">Submit</button>
+										<button type="button" id="sbtn" class="btn btn-primary mb-2 d-none">Submit</button>
 									</div>
                                 </form>
                             </div>
