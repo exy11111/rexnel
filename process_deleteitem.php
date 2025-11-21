@@ -16,7 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
         else{
             try {
-                $sql1 = "DELETE FROM items WHERE item_id = :item_id";
+                $sql1 = "UPDATE items SET is_disabled = 1 WHERE item_id = :item_id";
                 $stmt1 = $conn->prepare($sql1);
                 $stmt1->bindParam(':item_id', $item_id);
                 $stmt1->execute();

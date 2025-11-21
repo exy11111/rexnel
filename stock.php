@@ -15,7 +15,7 @@
 	JOIN brands b ON b.brand_id = i.brand_id
 	JOIN suppliers s ON s.supplier_id = i.supplier_id
 	JOIN sizes ss ON i.size_id = ss.size_id
-	WHERE i.branch_id = :branch_id";
+	WHERE i.branch_id = :branch_id AND is_disabled = 0";
     $stmt = $conn->prepare($sql);
 	$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
     $stmt->execute();

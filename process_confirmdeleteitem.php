@@ -12,7 +12,7 @@
                 $stmt->bindParam(':item_id', $item_id);
                 $stmt->execute();
 
-                $sql1 = "DELETE FROM items WHERE item_id = :item_id";
+                $sql1 = "UPDATE items SET is_disabled = 1 WHERE item_id = :item_id";
                 $stmt1 = $conn->prepare($sql1);
                 $stmt1->bindParam(':item_id', $item_id);
                 $stmt1->execute();
