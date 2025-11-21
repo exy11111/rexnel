@@ -197,7 +197,7 @@
 														if($_SESSION['role_id'] == 1){
 															echo "<td>
                                                                 <div class='form-button-action'>
-                                                                    <button type='button' class='btn btn-link btn-outline-primary remove-btn' data-id='".htmlspecialchars($row['item_id'])."' title='Remove'>
+                                                                    <button type='button' class='btn btn-outline-primary remove-btn' data-id='".htmlspecialchars($row['item_id'])."' title='Remove'>
                                                                         <i class='bi bi-arrow-counterclockwise fw-bold'></i>
                                                                     </button>
                                                                 </div>
