@@ -539,6 +539,9 @@
 							showCancelButton: true,
 							confirmButtonText: "Submit",
 							cancelButtonText: "Cancel",
+							didOpen: () => {
+								document.getElementById("cashProvided").focus();
+							},
 							preConfirm: () => {
 								const cashInput = document.getElementById("cashProvided");
 								const cashProvided = parseFloat(cashInput.value);
