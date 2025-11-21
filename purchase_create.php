@@ -547,7 +547,6 @@
 								input.addEventListener("keydown", (e) => {
 									if (e.key === "Enter") {
 										Swal.clickConfirm();
-										console.log("hi2");
 									}
 								});
 							},
