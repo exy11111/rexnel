@@ -162,7 +162,6 @@
 													<th>Brand</th>
 													<th>Supplier</th>
 													<th>Size</th>
-													<th>Price</th>
 													<th>Stock</th>
 													<th>Status</th>
 													<?php if($_SESSION['role_id'] == 1):?> <th style="width: 10%">Action</th> <?php endif; ?>
@@ -191,7 +190,6 @@
 														echo "<td>".htmlspecialchars($row['brand_name'])."</td>";
 														echo "<td>".htmlspecialchars($row['supplier_name'])."</td>";
 														echo "<td>".htmlspecialchars($row['size_name'])."</td>";
-														echo "<td>₱" . number_format($row['price'], 2) . "</td>";
 														echo "<td>" . number_format($row['stock']) . "</td>";
 														echo "<td> <span class='" . $class. "'>".$status."</span></td>";
 														if($_SESSION['role_id'] == 1){
