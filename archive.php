@@ -232,7 +232,7 @@
                                                                     if (xhr.status === 200) {
                                                                         if (xhr.responseText === 'success') {
                                                                             Swal.fire('Restored!', 'The item has been restored.', 'success').then(() => {
-                                                                                window.location.href = 'stock.php';
+                                                                                window.location.href = 'archive.php';
                                                                             });
                                                                         } else if(xhr.responseText === 'exist'){
 																			Swal.fire({
@@ -252,7 +252,7 @@
 																						if (xhr1.status === 200) {
 																							if (xhr1.responseText === 'success') {
 																								Swal.fire('Restored!', 'The item has been restored.', 'success').then(() => {
-																									window.location.href = 'stock.php';
+																									window.location.href = 'archive.php';
 																								});
 																							}
 																						}

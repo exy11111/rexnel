@@ -2,7 +2,7 @@
 	require ('session.php');
 	require ('db.php');
 
-	$sql1 = "SELECT * FROM items WHERE branch_id = :branch_id";
+	$sql1 = "SELECT * FROM items WHERE branch_id = :branch_id AND is_disabled = 0";
 	$stmt1 = $conn->prepare($sql1);
 	$stmt1->bindParam('branch_id', $_SESSION['branch_id']);
 	$stmt1->execute();
