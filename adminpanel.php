@@ -468,7 +468,7 @@ ini_set('display_errors', 1);
 										<div class="chart-container">
 											<canvas id="items_chart2"></canvas>
 										</div>
-										<div class="row">
+										<div class="row mt-3">
 											<div class="col-3">
 												<div class="dropdown mb-3">
 													<button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
