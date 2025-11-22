@@ -772,7 +772,7 @@ ini_set('display_errors', 1);
 
 		document.querySelectorAll(".branch-filter2").forEach(function (checkbox) {
 			checkbox.addEventListener("change", function () {
-				const selectedBranch = Array.from(document.querySelectorAll(".item-filter2:checked"))
+				const selectedBranch = Array.from(document.querySelectorAll(".branch-filter2:checked"))
 												.map(cb => cb.value);
 
 				const filteredData = itemData2.filter(item => selectedBranch.includes(item.branch));
