@@ -61,19 +61,13 @@
 			<div class="container">
 				<div class="page-inner">
 					<div class="page-header">
-						<ul class="breadcrumbs mb-3">
-							<li class="nav-home">
-								<a href="index.php">
-									<i class="icon-home"></i>
-								</a>
-							</li>
-							<li class="separator">
-								<i class="icon-arrow-right"></i>
-							</li>
-							<li class="nav-item">
-								<a href="#">Branches</a>
-							</li>
-						</ul>
+						<div class="row">
+                            <div class="col-12">
+                                <h1>
+                                    Branches
+                                </h1>
+                            </div>
+                        </div>
 					</div>
 					<div class="row">
 						<div class="col-md-12">
