@@ -151,7 +151,15 @@ ini_set('display_errors', 1);
 						$stmt = $conn->prepare($sql);
 						$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
 						$stmt->execute();
-						$all_expenses = $stmt->fetchColumn();
+						$supplier_expenses = $stmt->fetchColumn();
+
+						$sql = "SELECT SUM(amount) FROM expenses WHERE branch_id = :branch_id";
+						$stmt = $conn->prepare($sql);
+						$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
+						$stmt->execute();
+						$expenses = $stmt->fetchColumn();
+
+						$all_expenses = $supplier_expenses + $expenses;
 
 						$all_profit = $all_revenue - $all_expenses;
 					?>
