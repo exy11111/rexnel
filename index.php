@@ -684,40 +684,41 @@ ini_set('display_errors', 1);
 
 		<?php if ($_SESSION['role_id'] == 2): ?>
 
-		var mySalesChart = new Chart(sales_chart, {
-			type: 'line',
-			data: {
-				labels: labels,
-				datasets: [{
-					label: 'Total Purchases',
-					data: values,
-					borderColor: 'rgb(255, 99, 132)',
-					backgroundColor: 'rgba(255, 99, 132, 0.2)',
-					lineTension: 0.1
-				}]
-			},
-			options: {
-				responsive: true,
-				scales: {
-					x: {
-						title: {
-							display: true,
-							text: 'Date'
+			var mySalesChart = new Chart(sales_chart, {
+				type: 'line',
+				data: {
+					labels: labels,
+					datasets: [{
+						label: 'Total Purchases',
+						data: values,
+						borderColor: 'rgb(255, 99, 132)',
+						backgroundColor: 'rgba(255, 99, 132, 0.2)',
+						lineTension: 0.1
+					}]
+				},
+				options: {
+					responsive: true,
+					scales: {
+						x: {
+							title: {
+								display: true,
+								text: 'Date'
+							}
+						},
+						y: {
+							title: {
+								display: true,
+								text: 'Total Price'
+							},
+							beginAtZero: true
 						}
 					},
-					y: {
-						title: {
-							display: true,
-							text: 'Total Price'
-						},
-						beginAtZero: true
+					legend: {
+						display: false 
 					}
-				},
-				legend: {
-					display: false 
 				}
-			}
-		});
+			});
+
 		<?php else if($_SESSION['role_id'] == 1): ?>
 			let salesChart;
 
