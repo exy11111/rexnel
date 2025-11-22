@@ -311,14 +311,16 @@ ini_set('display_errors', 1);
 							$itemStocks = [];
 							$colors = [];
 
-							$sql = "SELECT item_name, stock, size_name FROM items JOIN sizes ON items.size_id = sizes.size_id WHERE is_disabled = 0";
+							$sql = "SELECT items.item_name, items.stock, sizes.size_name, branch.branch_name, category.category_name 
+							FROM items
+							JOIN sizes ON items.size_id = sizes.size_id
+							JOIN branch ON items.branch_id = branch.branch_id
+							JOIN category ON items.category_id = category.category_id
+							WHERE is_disabled = 0";
 							$stmt = $conn->prepare($sql);
 							$stmt->execute();
 							$items2 = $stmt->fetchAll(PDO::FETCH_ASSOC);
-							
-							$itemNames2 = [];
-							$itemStocks2 = [];
-							$colors2 = [];
+							$itemData2 = [];
 							
 							$lowStockThreshold = 10;
 							
@@ -334,15 +336,19 @@ ini_set('display_errors', 1);
 							}
 
 							foreach ($items2 as $item) {
-								$itemNames2[] = $item['item_name'].' '.$item['size_name'];
-								$itemStocks2[] = $item['stock'];
-								
-								if ($item['stock'] < $lowStockThreshold) {
-									$colors2[] = 'rgb(255, 99, 71)'; 
-								} else {
-									$colors2[] = 'rgb(34, 193, 34)';
-								}
+								$itemData2[] = [
+									'label' => $item['branch_name'].' '.$item['item_name'].' '.$item['size_name'],
+									'stock' => $item['stock'],
+									'color' => ($item['stock'] < $lowStockThreshold) ? 'rgb(255, 99, 71)' : 'rgb(34, 193, 34)',
+									'category' => $item['category_name']
+								];
 							}
+
+							$categories = [];
+							foreach ($items2 as $item) {
+								$categories[$item['category_name']] = true;
+							}
+							$categories = array_keys($categories);
 
 							$sql = "SELECT DATE(date) AS day, SUM(price) AS total_price
 							FROM purchases
@@ -437,11 +443,11 @@ ini_set('display_errors', 1);
 												Filter Items
 											</button>
 											<ul class="dropdown-menu overflow-auto" id="itemFilterList2" style="max-height: 200px;">
-												<?php foreach ($itemNames2 as $index => $item): ?>
+												<?php foreach ($categories as $category): ?>
 													<li>
 														<label class="dropdown-item">
-															<input type="checkbox" class="form-check-input me-1 item-filter2" value="<?= $index ?>" checked>
-															<?= htmlspecialchars($item) ?>
+															<input type="checkbox" class="form-check-input me-1 item-filter2" value="<?= htmlspecialchars($category) ?>" checked>
+															<?= htmlspecialchars($category) ?>
 														</label>
 													</li>
 												<?php endforeach; ?>
@@ -589,18 +595,6 @@ ini_set('display_errors', 1);
 		$itemNames = [];
 		$itemStocks = [];
 		$colors = [];
-
-		$sql = "SELECT item_name, stock, size_name, branch_name FROM items 
-		JOIN sizes ON items.size_id = sizes.size_id 
-		JOIN branch ON items.branch_id = branch.branch_id
-		WHERE is_disabled = 0";
-		$stmt = $conn->prepare($sql);
-		$stmt->execute();
-		$items2 = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		
-		$itemNames2 = [];
-		$itemStocks2 = [];
-		$colors2 = [];
 		
 		$lowStockThreshold = 10;
 		
@@ -612,17 +606,6 @@ ini_set('display_errors', 1);
 				$colors[] = 'rgb(255, 99, 71)'; 
 			} else {
 				$colors[] = 'rgb(34, 193, 34)';
-			}
-		}
-
-		foreach ($items2 as $item) {
-			$itemNames2[] = $item['branch_name'].' '.$item['item_name'].' '.$item['size_name'];
-			$itemStocks2[] = $item['stock'];
-			
-			if ($item['stock'] < $lowStockThreshold) {
-				$colors2[] = 'rgb(255, 99, 71)'; 
-			} else {
-				$colors2[] = 'rgb(34, 193, 34)';
 			}
 		}
 
@@ -649,9 +632,7 @@ ini_set('display_errors', 1);
 		var itemStocks = <?php echo json_encode($itemStocks); ?>;
 		var colors = <?php echo json_encode($colors); ?>;
 
-		var itemNames2 = <?php echo json_encode($itemNames2); ?>;
-		var itemStocks2 = <?php echo json_encode($itemStocks2); ?>;
-		var colors2 = <?php echo json_encode($colors2); ?>;
+		var itemData2 = <?php echo json_encode($itemData2); ?>;
 
 		var labels = <?php echo json_encode($labels); ?>;
     	var values = <?php echo json_encode($values); ?>;
@@ -736,19 +717,15 @@ ini_set('display_errors', 1);
 
 		document.querySelectorAll(".item-filter2").forEach(function (checkbox) {
 			checkbox.addEventListener("change", function () {
-				let selectedIndices = [];
-				document.querySelectorAll(".item-filter2:checked").forEach(cb => {
-				selectedIndices.push(parseInt(cb.value));
-				});
+				const selectedCategories = Array.from(document.querySelectorAll(".item-filter2:checked"))
+												.map(cb => cb.value);
 
-				const filteredLabels = selectedIndices.map(i => itemNames2[i]);
-				const filteredStocks = selectedIndices.map(i => itemStocks2[i]);
-				const filteredColors = selectedIndices.map(i => colors2[i]);
+				const filteredData = itemData2.filter(item => selectedCategories.includes(item.category));
 
-				myItemsChart2.data.labels = filteredLabels;
-				myItemsChart2.data.datasets[0].data = filteredStocks;
-				myItemsChart2.data.datasets[0].backgroundColor = filteredColors;
-				myItemsChart2.data.datasets[0].borderColor = filteredColors;
+				myItemsChart2.data.labels = filteredData.map(d => d.label);
+				myItemsChart2.data.datasets[0].data = filteredData.map(d => d.stock);
+				myItemsChart2.data.datasets[0].backgroundColor = filteredData.map(d => d.color);
+				myItemsChart2.data.datasets[0].borderColor = filteredData.map(d => d.color);
 
 				myItemsChart2.update();
 			});
