@@ -126,9 +126,7 @@ ini_set('display_errors', 1);
 										$stmt->execute();
 										$branches = $stmt->fetchAll();
 									?>
-									<i class="bi bi-gear-fill gear-icon me-2" 
-									data-bs-toggle="modal" 
-									data-bs-target="#editBranchModal"></i>
+									<a href="branches.php"><i class="bi bi-arrow-left gear-icon"></i></a>
 								<?php endif; ?>
 								<?php echo $branch_name; ?>
 							</h3>
