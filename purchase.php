@@ -138,7 +138,7 @@
 												<?php 
 													foreach($data as $row){
 														echo "<tr data-id=".htmlspecialchars($row['purchase_id']).">";
-														echo "<td>".htmlspecialchars($row['date'])."</td>";
+														echo "<td>" . date("F j, Y g:iA", strtotime($row['date'])) . "</td>";
 														echo "<td>₱".htmlspecialchars($row['price'])."</td>";
                                                         echo "<td>".htmlspecialchars($row['payment_method'])."</td>";
 														echo "<td>
