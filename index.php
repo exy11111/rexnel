@@ -362,7 +362,7 @@ ini_set('display_errors', 1);
 							</div>
 
 							<div class="col-md-6 d-flex flex-column">
-								<div class="card h-50">
+								<div class="card <?php if($_SESSION['role_id'] == 1):?>h-50<?php endif; ?>">
 									<div class="card-header">
 										<div class="card-title">Stock Overview</div>
 									</div>
@@ -387,6 +387,42 @@ ini_set('display_errors', 1);
 										</div>
 									</div>
 								</div>
+								<?php if($_SESSION['role_id'] == 2): ?>
+								<div class="card mt-auto">
+									<div class="card-body">
+										<h5 class="card-title mb-2">Recent Activity</h5>
+										<div class="row">
+											<div class="col-md-4">
+												<ul>
+													<li><strong>Last Login:</strong> <?php echo $_SESSION['last_login']?></li>
+													<li>
+														<strong>Recent Order:</strong>
+														<?php if ($recent_order): ?>
+															<span class="me-2">Order #<?php echo htmlspecialchars($recent_order['purchase_id']); ?>:</span>
+															₱<span class="text-muted"><?php echo number_format($recent_order['price'], 2); ?></span>
+														<?php else: ?>
+															None
+														<?php endif; ?>
+													</li>
+												</ul>
+											</div>
+											<div class="col-md-8">
+												<ul>
+													<?php if(!$_SESSION['user_id'] == 17): ?><li><strong>Recent Notification:</strong> <?php echo $recent_notif['message']?></li><?php endif; ?>
+													<li>
+														<strong>Lowest Stock Alert:</strong> 
+														<?php if ($lowest_stock && $lowest_stock['stock'] <= 100): ?>
+															<?php echo htmlspecialchars($lowest_stock['item_name']); ?>: 
+															<?php echo number_format($lowest_stock['stock']); ?> stock left
+														<?php else: echo 'None';?>
+														<?php endif; ?>
+													</li>
+												</ul>
+											</div>
+										</div>
+									</div>
+								</div>
+								<?php endif; ?>
 							</div>
 						</div>
 					</div>
