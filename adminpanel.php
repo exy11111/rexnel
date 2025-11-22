@@ -159,7 +159,7 @@ ini_set('display_errors', 1);
 							</a>
 						</div>	
 						<div class="col-sm-6 col-md-4">
-							<a href="purchase.php">
+							<a href="adminorderhistory.php">
 								<div class="card card1 card-stats card-round">
 									<div class="card-body">
 										<div class="row align-items-center">
