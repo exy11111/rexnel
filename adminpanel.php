@@ -321,6 +321,12 @@ ini_set('display_errors', 1);
 							$stmt->execute();
 							$items2 = $stmt->fetchAll(PDO::FETCH_ASSOC);
 							$itemData2 = [];
+
+							$sql = "SELECT * FROM categories";
+							$stmt = $conn->prepare($sql);
+							$stmt->execute();
+							$cat = $stmt->fetchAll();
+							
 							
 							$lowStockThreshold = 10;
 							
@@ -467,11 +473,11 @@ ini_set('display_errors', 1);
 												Filter Items
 											</button>
 											<ul class="dropdown-menu overflow-auto" id="itemFilterList2" style="max-height: 200px;">
-												<?php foreach ($categories as $category): ?>
+												<?php foreach ($cat as $category): ?>
 													<li>
 														<label class="dropdown-item">
-															<input type="checkbox" class="form-check-input me-1 item-filter2" value="<?= htmlspecialchars($category) ?>" checked>
-															<?= htmlspecialchars($category) ?>
+															<input type="checkbox" class="form-check-input me-1 item-filter2" value="<?= htmlspecialchars($category['category_name']) ?>" checked>
+															<?= htmlspecialchars($category['category_name']) ?>
 														</label>
 													</li>
 												<?php endforeach; ?>
