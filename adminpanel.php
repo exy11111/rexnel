@@ -508,6 +508,130 @@ ini_set('display_errors', 1);
 								</div>
 							</div>
 						</div>
+
+						<div class="row">
+							<div class="col-sm-12 col-md-6 d-flex">
+								<div class="card flex-fill">
+									<div class="card-header d-flex justify-content-between align-items-center">
+										<h4 class="card-title mb-0">Top Product Sales</h4>
+										<?php
+											$selectedFilter = isset($_GET['top_product_filter']) ? $_GET['top_product_filter'] : 'all';
+
+											switch ($selectedFilter) {
+												case 'today':
+													$filterLabel = "Today";
+													break;
+												case 'month':
+													$filterLabel = "This Month";
+													break;
+												case 'year':
+													$filterLabel = "This Year";
+													break;
+												default:
+													$filterLabel = "All Time";
+													break;
+											}
+										?>
+										<div class="d-flex align-items-center">
+											<div class="dropdown">
+												<button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+													<?= htmlspecialchars($filterLabel) ?>
+												</button>
+												<?php
+													$queryParams = $_GET;
+
+													$productFilters = [
+														'today' => 'Today',
+														'month' => 'This Month',
+														'year'  => 'This Year',
+														'all'   => 'All Time'
+													];
+												?>
+												<ul class="dropdown-menu" aria-labelledby="filterDropdown">
+													<?php foreach ($productFilters as $key => $label): ?>
+														<?php
+															$params = $queryParams;
+															$params['top_product_filter'] = $key;
+															$url = basename($_SERVER['PHP_SELF']) . '?' . http_build_query($params);
+														?>
+														<li><a class="dropdown-item" href="<?= $url ?>"><?= $label ?></a></li>
+													<?php endforeach; ?>
+												</ul>
+											</div>
+											<button class="btn btn-sm btn-primary ms-2" data-bs-toggle="modal" data-bs-target="#viewAllModal">
+												View All
+											</button>
+										</div>
+										
+									</div>
+
+									<?php 
+										$topProductFilter = isset($_GET['top_product_filter']) ? $_GET['top_product_filter'] : 'all';
+
+										$where = "WHERE 1";
+										$params = [];
+										
+										$today = date('Y-m-d');
+										$thisMonth = date('m');
+										$thisYear  = date('Y');
+
+										if ($topProductFilter === 'today') {
+											$where .= " AND DATE(p.date) = :today";
+											$params[':today'] = $today;
+										} elseif ($topProductFilter === 'month') {
+											$where .= " AND YEAR(p.date) = :year AND MONTH(p.date) = :month";
+											$params[':year']  = $thisYear;
+											$params[':month'] = $thisMonth;
+										} elseif ($topProductFilter === 'year') {
+											$where .= " AND YEAR(p.date) = :year";
+											$params[':year'] = $thisYear;
+										}							
+
+										$sql = "SELECT 
+													i.item_id,
+													i.item_name,
+													i.price,
+													SUM(pi.quantity) AS total_sold,
+													SUM(pi.quantity * i.price) AS total_revenue
+												FROM purchase_items pi
+												JOIN items i ON pi.item_id = i.item_id
+												JOIN purchases p ON pi.purchase_id = p.purchase_id
+												$where
+												GROUP BY i.item_id, i.item_name, i.price
+												ORDER BY total_sold DESC";
+
+										$stmt = $conn->prepare($sql);
+										$stmt->execute($params);
+										$topProducts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+									?>
+									<div class="card-body">
+									<?php 
+										$counter = 0;
+										foreach ($topProducts as $row): 
+											if ($counter >= 3) break;
+										?>
+											<div class="card mb-3">
+												<div class="card-body d-flex justify-content-between align-items-center">
+													<div>
+														<h5 class="card-title mb-1"><?php echo $row['item_name'];?></h5>
+														<p class="mb-1">Price: ₱<?php echo number_format($row['price'], 2);?></p>
+													</div>
+													<div class="flex-grow-1 text-center">
+														<p class="mb-0 fw-bold">Sold: <?php echo $row['total_sold'];?></p>
+													</div>
+													<a href="stock.php" class="btn btn-primary btn-sm">View</a>
+												</div>
+											</div>
+										<?php 
+											$counter++;
+										endforeach; 
+										?>
+									</div>
+								</div>
+							</div>
+							<?php include 'modal_viewallproduct.php'?>
+						</div>
 					</div>
 					
 				</div>
