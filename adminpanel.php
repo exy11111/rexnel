@@ -110,32 +110,7 @@ ini_set('display_errors', 1);
 					<div class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4">
 						<div>
 							<h3 class="fw-bold mb-3">
-								<?php if ($_SESSION['role_id'] == 1):?>
-									<style>
-									.gear-icon {
-										cursor: pointer;
-										transition: color 0.2s, background-color 0.2s;
-										padding: 3px;
-										border-radius: 4px;
-									}
-
-									.gear-icon:hover {
-										background-color:rgb(192, 192, 192);
-										color: black;
-									}
-									</style>
-
-									<?php 
-										$sql = "SELECT * from branch";
-										$stmt = $conn->prepare($sql);
-										$stmt->execute();
-										$branches = $stmt->fetchAll();
-									?>
-									<i class="bi bi-gear-fill gear-icon me-2" 
-									data-bs-toggle="modal" 
-									data-bs-target="#editBranchModal"></i>
-								<?php endif; ?>
-								<?php echo $branch_name; ?>
+								Dashboard
 							</h3>
 						</div>
 						<!--
@@ -148,15 +123,13 @@ ini_set('display_errors', 1);
 
 					<!-- -->
 					<?php 
-						$sql = "SELECT SUM(price) FROM purchases WHERE branch_id = :branch_id";
+						$sql = "SELECT SUM(price) FROM purchases";
 						$stmt = $conn->prepare($sql);
-						$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
 						$stmt->execute();
 						$all_revenue = $stmt->fetchColumn();
 
-						$sql = "SELECT SUM(amount) FROM supplier_orders so JOIN items i ON so.item_id = i.item_id WHERE i.branch_id = :branch_id";
+						$sql = "SELECT SUM(amount) FROM supplier_orders so JOIN items i ON so.item_id = i.item_id";
 						$stmt = $conn->prepare($sql);
-						$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
 						$stmt->execute();
 						$all_expenses = $stmt->fetchColumn();
 
@@ -232,71 +205,6 @@ ini_set('display_errors', 1);
 					</div>
 
 					<div class="row">
-						<div class="col-sm-6 col-md-4">
-							<a href="purchase.php">
-								<div class="card card1 card-stats card-round">
-									<div class="card-body">
-										<div class="row align-items-center">
-											<div class="col-icon">
-												<div class="icon-big text-center icon-success bubble-shadow-small">
-													<i class="fas fa-luggage-cart"></i>
-												</div>
-											</div>
-											<div class="col col-stats ms-3 ms-sm-0">
-												<div class="numbers w-100">
-													<p class="card-category">Sales Today</p>
-													<h4 class="card-title">₱<?php echo number_format($result1['total_sales'], 2) ?></h4>
-													
-												</div>
-												<span id="percentageText" class="text-muted float-end"></span>
-											</div>
-										</div>
-									</div>
-								</div>
-							</a>
-						</div>
-						<div class="col-sm-6 col-md-4">
-							<a href="stock.php">
-								<div class="card card1 card-stats card-round">
-									<div class="card-body ">
-										<div class="row align-items-center">
-											<div class="col-icon">
-												<div class="icon-big text-center icon-primary bubble-shadow-small">
-													<i class="bi bi-box-fill"></i>
-												</div>
-											</div>
-											<div class="col col-stats ms-3 ms-sm-0">
-												<div class="numbers">
-													<p class="card-category">Stock</p>
-													<h4 class="card-title"><?php echo $quantity?></h4>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</a>
-						</div>
-						<div class="col-sm-6 col-md-4">
-							<a href="purchase.php">
-								<div class="card card1 card-stats card-round">
-									<div class="card-body">
-										<div class="row align-items-center">
-											<div class="col-icon">
-												<div class="icon-big text-center icon-secondary bubble-shadow-small">
-													<i class="fa fa-book"></i>
-												</div>
-											</div>
-											<div class="col col-stats ms-3 ms-sm-0">
-												<div class="numbers">
-													<p class="card-category">Orders Today</p>
-													<h4 class="card-title"><?php echo $result1['orders']?></h4>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</a>
-						</div>
 						
 						
 						<!-- FETCH -->
