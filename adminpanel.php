@@ -688,7 +688,7 @@ ini_set('display_errors', 1);
 		});
 
 		var myItemsChart2 = new Chart(items_chart2, {
-			type: 'bar',
+			type: 'pie',
 			data: {
 				labels: itemNames2,
 				datasets: [{
