@@ -443,7 +443,7 @@
 									<div class="card-body">
 										<div class="row align-items-center">
 											<div class="col-icon">
-												<div class="icon-big text-center icon-success bubble-shadow-small">
+												<div class="icon-big text-center icon-info bubble-shadow-small">
 													<i class="fas fa-luggage-cart"></i>
 												</div>
 											</div>
