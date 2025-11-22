@@ -568,7 +568,7 @@ ini_set('display_errors', 1);
 		const branchId = select.value;
 
 		if(branchId) {
-			window.location.href = 'index.php?b=' + encodeURIComponent(branchId);
+			window.location.href = 'adminpanel.php?b=' + encodeURIComponent(branchId);
 		} else {
 			Swal.fire({
 				icon: 'warning',
