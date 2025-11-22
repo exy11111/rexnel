@@ -675,6 +675,162 @@ ini_set('display_errors', 1);
 								</div>
 							</div>
 							<?php include 'modal_viewallproduct.php'?>
+
+							<div class="col-sm-12 col-md-6 d-flex">
+								<div class="card flex-fill">
+									<div class="card-header d-flex justify-content-between align-items-center">
+										<h4 class="card-title mb-0">Top Brand Sales</h4>
+										<?php
+											$selectedFilterBrand = isset($_GET['top_brand_filter']) ? $_GET['top_brand_filter'] : 'all';
+											$selectedBranchBrand = isset($_GET['top_brand_branch']) ? $_GET['top_brand_branch'] : 'all';
+
+											switch ($selectedFilterBrand) {
+												case 'today':
+													$filterLabelBrand = "Today";
+													break;
+												case 'month':
+													$filterLabelBrand = "This Month";
+													break;
+												case 'year':
+													$filterLabelBrand = "This Year";
+													break;
+												default:
+													$filterLabelBrand = "All Time";
+													break;
+											}
+										?>
+										<div class="d-flex align-items-center">
+											<div class="dropdown ms-2">
+												<button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="branchFilterDropdownBrand" data-bs-toggle="dropdown" aria-expanded="false">
+													<?php 
+														$branchLabel = 'All Branches';
+														if ($selectedBranchBrand !== 'all') {
+															foreach ($br as $branch) {
+																if ($branch['branch_id'] == $selectedBranchBrand) {
+																	$branchLabel = $branch['branch_name'];
+																	break;
+																}
+															}
+														}
+														echo htmlspecialchars($branchLabel);
+													?>
+												</button>
+												<ul class="dropdown-menu" aria-labelledby="branchFilterDropdownBrand">
+													<?php
+													// “All Branches” option
+													$params = $_GET;
+													$params['top_brand_branch'] = 'all';
+													$url = basename($_SERVER['PHP_SELF']) . '?' . http_build_query($params);
+													?>
+													<li><a class="dropdown-item" href="<?= $url ?>">All Branches</a></li>
+
+													<?php foreach ($branches as $branch): 
+														$params = $_GET;
+														$params['top_brand_branch'] = $branch['branch_id'];
+														$url = basename($_SERVER['PHP_SELF']) . '?' . http_build_query($params);
+													?>
+														<li><a class="dropdown-item" href="<?= $url ?>"><?= htmlspecialchars($branch['branch_name']) ?></a></li>
+													<?php endforeach; ?>
+												</ul>
+											</div>
+											<div class="dropdown ms-2">
+												<button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="filterDropdownBrand" data-bs-toggle="dropdown" aria-expanded="false">
+													<?= htmlspecialchars($filterLabelBrand) ?>
+												</button>
+												<?php
+												$brandFilters = [
+													'all'   => 'All Time',
+													'today' => 'Today',
+													'month' => 'This Month',
+													'year'  => 'This Year'
+												];
+												?>
+												<ul class="dropdown-menu" aria-labelledby="filterDropdownBrand">
+													<?php foreach ($brandFilters as $key => $label): ?>
+														<?php
+															$params = $queryParams;
+															$params['top_brand_filter'] = $key;
+															$url = basename($_SERVER['PHP_SELF']) . '?' . http_build_query($params);
+														?>
+														<li><a class="dropdown-item" href="<?= $url ?>"><?= $label ?></a></li>
+													<?php endforeach; ?>
+												</ul>
+											</div>
+											<button class="btn btn-sm btn-primary ms-2" data-bs-toggle="modal" data-bs-target="#viewAllBrandsModal">
+												View All
+											</button>
+										</div>
+									</div>
+
+									<?php 
+										$topBrandFilter = isset($_GET['top_brand_filter']) ? $_GET['top_brand_filter'] : 'all';
+
+										$whereBrand = "WHERE 1";
+										$paramsBrand = [];
+										
+										$today = date('Y-m-d');
+										$thisMonth = date('m');
+										$thisYear  = date('Y');
+										
+										if ($topBrandFilter === 'today') {
+											$whereBrand .= " AND DATE(p.date) = :today";
+											$paramsBrand[':today'] = $today;
+										} elseif ($topBrandFilter === 'month') {
+											$whereBrand .= " AND YEAR(p.date) = :year AND MONTH(p.date) = :month";
+											$paramsBrand[':year']  = $thisYear;
+											$paramsBrand[':month'] = $thisMonth;
+										} elseif ($topBrandFilter === 'year') {
+											$whereBrand .= " AND YEAR(p.date) = :year";
+											$paramsBrand[':year'] = $thisYear;
+										}	
+										if ($selectedBranchBrand !== 'all') {
+											$whereBrand .= " AND p.branch_id = :branch_id";
+											$paramsBrand[':branch_id'] = $selectedBranchBrand;
+										}				
+
+										$sql = "SELECT 
+											b.brand_id,
+											b.brand_name,
+											SUM(pi.quantity) AS total_sold,
+											SUM(pi.quantity * i.price) AS total_revenue
+										FROM purchase_items pi
+										JOIN items i ON pi.item_id = i.item_id
+										JOIN purchases p ON pi.purchase_id = p.purchase_id
+										JOIN brands b ON i.brand_id = b.brand_id
+										$whereBrand
+										GROUP BY b.brand_id, b.brand_name
+										ORDER BY total_sold DESC";
+
+										$stmt = $conn->prepare($sql);
+										$stmt->execute($paramsBrand);
+										$topBrands = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+									?>
+									<div class="card-body">
+										<?php 
+										$counter = 0;
+										foreach ($topBrands as $row): 
+											if ($counter >= 3) break;
+										?>
+											<div class="card mb-3">
+												<div class="card-body d-flex justify-content-between align-items-center">
+													<div>
+														<h5 class="card-title mb-1"><?php echo $row['brand_name'];?></h5>
+													</div>
+													<div class="flex-grow-1 text-center">
+														<p class="mb-0 fw-bold">Sold: <?php echo $row['total_sold'];?></p>
+													</div>
+													<a href="brands.php" class="btn btn-primary btn-sm">View</a>
+												</div>
+											</div>
+										<?php 
+										$counter++;
+										endforeach; 
+										?>
+									</div>
+								</div>
+							</div>
+							<?php include 'modal_viewallbrand.php'?>
 						</div>
 					</div>
 					
