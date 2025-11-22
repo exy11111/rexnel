@@ -66,7 +66,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="#">
+                                <a href="loginhistory.php">
                                     <span class="sub-item text-white">Login History</span>
                                 </a>
                             </li>
