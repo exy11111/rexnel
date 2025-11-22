@@ -357,7 +357,7 @@
 			$('#sizes').DataTable({
 				"pageLength": 10,      // rows per page
 				"lengthMenu": [5, 10, 25, 50, 100],
-				"order": [[0, "desc"]]
+				"order": []
 			});
 		});
 	</script>
