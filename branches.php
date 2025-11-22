@@ -67,97 +67,92 @@
 					</div>
 					<div class="row">
 						<div class="col-md-12">
-                                                      <div class="row">
-                                        <?php foreach ($branch_data1 as $row): ?>
-                                            <div class="col-md-4 mb-3">
-                                                <div class="card shadow-sm" data-id="<?= htmlspecialchars($row['branch_id']) ?>">
-                                                    
-                                                    <div class="card-body">
-                                                        <h5 class="card-title mb-2">
-                                                            <?= htmlspecialchars($row['branch_name']) ?>
-                                                        </h5>
-
-                                                        <p class="mb-1">
-                                                            <strong>ID:</strong> <?= htmlspecialchars($row['branch_id']) ?>
-                                                        </p>
-
-                                                        <p class="mb-1">
-                                                            <strong>Location:</strong> <?= htmlspecialchars($row['location']) ?>
-                                                        </p>
-
-                                                        <p class="mb-3">
-                                                            <strong>Operating Hours:</strong> 
-                                                            <?= date("g:iA", strtotime($row['opening_time'])) ?> 
-                                                            to 
-                                                            <?= date("g:iA", strtotime($row['closing_time'])) ?>
-                                                        </p>
-
-                                                        <?php if ($_SESSION['user_id'] == 17): ?>
-                                                            <div class="d-flex justify-content-between">
-                                                                <button type="button" 
-                                                                    class="btn btn-link btn-primary btn-lg" 
-                                                                    data-bs-toggle="modal" 
-                                                                    data-bs-target="#editBranchModal" 
-                                                                    title="Edit Task">
-                                                                    <i class="fa fa-edit"></i>
-                                                                </button>
-
-                                                                <button type="button" 
-                                                                    class="btn btn-link btn-danger remove-btn" 
-                                                                    data-id="<?= htmlspecialchars($row['branch_id']) ?>" 
-                                                                    title="Remove">
-                                                                    <i class="fa fa-times"></i>
-                                                                </button>
-                                                            </div>
-                                                        <?php endif; ?>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        <?php endforeach; ?>
-                                    </div>
-
-                                    <script>
-                                        document.addEventListener('DOMContentLoaded', function() {
-                                            const removeButtons = document.querySelectorAll('.remove-btn');
+                            <div class="row">
+                                <?php foreach ($branch_data1 as $row): ?>
+                                    <div class="col-md-4 mb-3">
+                                        <div class="card shadow-sm" data-id="<?= htmlspecialchars($row['branch_id']) ?>">
                                             
-                                            removeButtons.forEach(button => {
-                                                button.addEventListener('click', function() {
-                                                    const branchId = this.getAttribute('data-id');
-                                                    Swal.fire({
-                                                        title: 'Are you sure?',
-                                                        text: "This action cannot be undone!",
-                                                        icon: 'warning',
-                                                        showCancelButton: true,
-                                                        confirmButtonColor: '#d33',
-                                                        cancelButtonColor: '#3085d6',
-                                                        confirmButtonText: 'Yes, delete it!',
-                                                        cancelButtonText: 'Cancel'
-                                                    }).then((result) => {
-                                                        if (result.isConfirmed) {
-                                                            const xhr = new XMLHttpRequest();
-                                                            xhr.open('POST', 'process_deletebranch.php', true);
-                                                            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-                                                            xhr.onload = function() {
-                                                                if (xhr.status === 200) {
-                                                                    if (xhr.responseText === 'success') {
-                                                                        Swal.fire('Deleted!', 'The branch has been deleted.', 'success').then(() => {
-                                                                            window.location.href = 'branches.php';
-                                                                        });
-                                                                    } else {
-                                                                        Swal.fire('Error!', 'There was an error deleting the branch.', 'error');
-                                                                    }
-                                                                }
-                                                            };
-                                                            xhr.send('branch_id=' + branchId);
+                                            <div class="card-body text-center">
+                                                <h5 class="card-title mb-2">
+                                                    <?= htmlspecialchars($row['branch_name']) ?>
+                                                </h5>
+
+                                                <p class="mb-1">
+                                                   <?= htmlspecialchars($row['location']) ?>
+                                                </p>
+
+                                                <p class="mb-3">
+                                                    <?= date("g:iA", strtotime($row['opening_time'])) ?> 
+                                                    to 
+                                                    <?= date("g:iA", strtotime($row['closing_time'])) ?>
+                                                </p>
+
+                                                <?php if ($_SESSION['user_id'] == 17): ?>
+                                                    <div class="d-flex justify-content-between">
+                                                        <button type="button" 
+                                                            class="btn btn-link btn-primary btn-lg" 
+                                                            data-bs-toggle="modal" 
+                                                            data-bs-target="#editBranchModal" 
+                                                            title="Edit Task">
+                                                            <i class="fa fa-edit"></i>
+                                                        </button>
+
+                                                        <button type="button" 
+                                                            class="btn btn-link btn-danger remove-btn" 
+                                                            data-id="<?= htmlspecialchars($row['branch_id']) ?>" 
+                                                            title="Remove">
+                                                            <i class="fa fa-times"></i>
+                                                        </button>
+                                                    </div>
+                                                <?php endif; ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
+
+                            <script>
+                                document.addEventListener('DOMContentLoaded', function() {
+                                    const removeButtons = document.querySelectorAll('.remove-btn');
+                                    
+                                    removeButtons.forEach(button => {
+                                        button.addEventListener('click', function() {
+                                            const branchId = this.getAttribute('data-id');
+                                            Swal.fire({
+                                                title: 'Are you sure?',
+                                                text: "This action cannot be undone!",
+                                                icon: 'warning',
+                                                showCancelButton: true,
+                                                confirmButtonColor: '#d33',
+                                                cancelButtonColor: '#3085d6',
+                                                confirmButtonText: 'Yes, delete it!',
+                                                cancelButtonText: 'Cancel'
+                                            }).then((result) => {
+                                                if (result.isConfirmed) {
+                                                    const xhr = new XMLHttpRequest();
+                                                    xhr.open('POST', 'process_deletebranch.php', true);
+                                                    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                                                    xhr.onload = function() {
+                                                        if (xhr.status === 200) {
+                                                            if (xhr.responseText === 'success') {
+                                                                Swal.fire('Deleted!', 'The branch has been deleted.', 'success').then(() => {
+                                                                    window.location.href = 'branches.php';
+                                                                });
+                                                            } else {
+                                                                Swal.fire('Error!', 'There was an error deleting the branch.', 'error');
+                                                            }
                                                         }
-                                                    });
-                                                });
+                                                    };
+                                                    xhr.send('branch_id=' + branchId);
+                                                }
                                             });
                                         });
+                                    });
+                                });
 
-                                    </script>
-                                    <?php include 'modal_editbranch.php'; ?>
-                                </div>
+                            </script>
+                            <?php include 'modal_editbranch.php'; ?>
+                        </div>
                         <!--
 							<div class="card">
 								<div class="card-header">
