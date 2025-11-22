@@ -32,7 +32,7 @@
         $sql = "INSERT INTO login_history (user_id, date) VALUES (:user_id, :date)";
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(":user_id", $user['user_id']);
-        $stmt->bindParam(":date", $user['timestamp']);
+        $stmt->bindParam(":date", $timestamp);
         $stmt->execute();
 
         if($_SESSION['role_id'] == 1){
