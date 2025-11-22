@@ -781,6 +781,7 @@ ini_set('display_errors', 1);
 		document.querySelectorAll(".item-filter2, .branch-filter2").forEach(function (checkbox) {
 			checkbox.addEventListener("change", updateChart2);
 		});
+		updateChart2();
 
 		const startDateInput = document.getElementById('startDate');
 		const endDateInput = document.getElementById('endDate');
