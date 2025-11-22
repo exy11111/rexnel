@@ -448,15 +448,15 @@ ini_set('display_errors', 1);
             <?php if ($_GET['editstatus'] == 'success'): ?>
                 Swal.fire({
                     icon: 'success',
-                    title: 'Size Edited!',
-                    text: 'The size has been successfully edited.',
+                    title: 'Expense Edited!',
+                    text: 'The expense has been successfully edited.',
                 }).then((result) => {
                 });
             <?php elseif ($_GET['editstatus'] == 'error'): ?>
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
-                    text: 'Something went wrong while editing the size.',
+                    text: 'Something went wrong while editing the expense.',
                 });
             <?php endif; ?>
         </script>
