@@ -3,7 +3,17 @@
 	require ('db.php');
 	$branch_id = $_SESSION['branch_id'];
 
-	$sql = "SELECT lh.id, ud.firstname, ud.lastname, b.branch_name, lh.date FROM login_history lh
+	$sql = "SELECT 
+    lh.id, 
+    ud.firstname, 
+    ud.lastname, 
+        CASE 
+            WHEN u.branch_id = 0 OR b.branch_name IS NULL OR b.branch_name = '' 
+                THEN 'Owner'
+            ELSE b.branch_name
+        END AS branch_name,
+        lh.date
+    FROM login_history lh
     LEFT JOIN users u ON u.user_id = lh.user_id
     LEFT JOIN userdetails ud ON u.user_id = ud.user_id
     LEFT JOIN branch b ON u.branch_id = b.branch_id";
