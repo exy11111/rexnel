@@ -21,7 +21,8 @@ ini_set('display_errors', 1);
     FROM expenses e
     LEFT JOIN expensetype et ON e.expensetype_id = et.expensetype_id
     LEFT JOIN branch b ON b.branch_id = e.branch_id
-    WHERE e.branch_id = :branch_id";
+    WHERE e.branch_id = :branch_id
+    ORDER BY e.created_at DESC";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':branch_id', $_SESSION['branch_id']);
     $stmt->execute();
@@ -146,8 +147,13 @@ ini_set('display_errors', 1);
 																		data-bs-toggle='modal' 
 																		data-bs-target='#viewItemModal' 
 																		data-id='".htmlspecialchars($row['expense_id'])."' 
-																		title='View Order'>
+																		title='Edit Expense'>
 																		<i class='bi bi-pencil-square'></i>
+																	</a>
+                                                                    <a href='#' class='btn btn-link btn-danger btn-lg remove-btn' 
+																		data-id='".htmlspecialchars($row['expense_id'])."' 
+																		title='Remove Expense'>
+																		<i class='bi bi-trash'></i>
 																	</a>
                                                                 </div>
 															</td>";
@@ -156,7 +162,6 @@ ini_set('display_errors', 1);
 												?>
 											</tbody>
 										</table>
-                                        <!--
                                         <script>
                                             document.addEventListener('DOMContentLoaded', function() {
                                                 const removeButtons = document.querySelectorAll('.remove-btn');
@@ -176,13 +181,13 @@ ini_set('display_errors', 1);
                                                         }).then((result) => {
                                                             if (result.isConfirmed) {
                                                                 const xhr = new XMLHttpRequest();
-                                                                xhr.open('POST', 'process_deletesize.php', true);
+                                                                xhr.open('POST', 'process_deleteexpense.php', true);
                                                                 xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
                                                                 xhr.onload = function() {
                                                                     if (xhr.status === 200) {
                                                                         if (xhr.responseText === 'success') {
-                                                                            Swal.fire('Deleted!', 'The size has been deleted.', 'success').then(() => {
-                                                                                window.location.href = 'sizes.php';
+                                                                            Swal.fire('Deleted!', 'The expense has been deleted.', 'success').then(() => {
+                                                                                window.location.href = 'expenses.php';
                                                                             });
                                                                         } else if(xhr.responseText === 'exist'){
 																			Swal.fire({
@@ -197,13 +202,13 @@ ini_set('display_errors', 1);
 																			}).then((result) => {
 																				if (result.isConfirmed) {
 																					const xhr1 = new XMLHttpRequest();
-																					xhr1.open('POST', 'process_confirmdeletesize.php', true);
+																					xhr1.open('POST', 'process_deleteexpense.php', true);
 																					xhr1.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 																					xhr1.onload = function() {
 																						if (xhr1.status === 200) {
 																							if (xhr1.responseText === 'success') {
-																								Swal.fire('Deleted!', 'The size has been deleted.', 'success').then(() => {
-																									window.location.href = 'sizes.php';
+																								Swal.fire('Deleted!', 'The expense has been deleted.', 'success').then(() => {
+																									window.location.href = 'expenses.php';
 																								});
 																							}
 																						}
@@ -212,7 +217,7 @@ ini_set('display_errors', 1);
 																				}
 																			});
 																		}else {
-                                                                            Swal.fire('Error!', 'There was an error deleting the size.', 'error');
+                                                                            Swal.fire('Error!', 'There was an error deleting the expense.', 'error');
                                                                         }
                                                                     }
                                                                 };
@@ -224,7 +229,6 @@ ini_set('display_errors', 1);
                                             });
 
                                         </script>
-                                        -->
 									</div>
 								</div>
 							</div>
