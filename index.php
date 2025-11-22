@@ -637,7 +637,7 @@ ini_set('display_errors', 1);
 		var sales_chart = document.getElementById("sales_chart").getContext("2d");
 		
 		var myItemsChart = new Chart(items_chart, {
-			type: 'bar',
+			type: 'pie',
 			data: {
 				labels: itemNames,
 				datasets: [{
