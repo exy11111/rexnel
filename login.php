@@ -1,6 +1,7 @@
 <?php 
   session_start();
   date_default_timezone_set('Asia/Manila');
+  $timestamp = date('Y-m-d H:i:s');
   $fp_status = $_GET['fp'] ?? null;
 
   if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -27,6 +28,13 @@
         $_SESSION['role_id'] = $user['role_id'];
 
         $_SESSION['branch_id'] = $user['branch_id'];
+
+        $sql = "INSERT INTO login_history (user_id, date) VALUES (:user_id, :date)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(":user_id", $user['user_id']);
+        $stmt->bindParam(":date", $user['timestamp']);
+        $stmt->execute();
+
         if($_SESSION['role_id'] == 1){
           header("Location: adminpanel.php");
           exit();
