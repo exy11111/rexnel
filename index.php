@@ -361,7 +361,7 @@ ini_set('display_errors', 1);
 								
 							</div>
 
-							<div class="col-md-6 d-flex flex-column">
+							<div class="col-md-6">
 								<div class="card <?php if($_SESSION['role_id'] == 1):?>h-50<?php endif; ?>">
 									<div class="card-header">
 										<div class="card-title">Stock Overview</div>
