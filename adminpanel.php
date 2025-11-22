@@ -342,7 +342,7 @@ ini_set('display_errors', 1);
 									'color' => ($item['stock'] < $lowStockThreshold) 
 										? 'rgb(255, 99, 71)'                   // red for low stock
 										: generateColorFromString($item['item_name']),
-									'category' => $item['category_name']
+									'category' => $item['category_name'],
 									'branch' => $item['branch_name']
 								];
 							}
