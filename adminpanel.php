@@ -343,6 +343,7 @@ ini_set('display_errors', 1);
 										? 'rgb(255, 99, 71)'                   // red for low stock
 										: generateColorFromString($item['item_name']),
 									'category' => $item['category_name']
+									'branch' => $item['branch_name']
 								];
 							}
 
@@ -366,8 +367,10 @@ ini_set('display_errors', 1);
 							}
 
 							$categories = [];
+							$branches = [];
 							foreach ($items2 as $item) {
 								$categories[$item['category_name']] = true;
+								$branches[$item['branch_name']] = true;
 							}
 							$categories = array_keys($categories);
 
@@ -469,6 +472,21 @@ ini_set('display_errors', 1);
 														<label class="dropdown-item">
 															<input type="checkbox" class="form-check-input me-1 item-filter2" value="<?= htmlspecialchars($category) ?>" checked>
 															<?= htmlspecialchars($category) ?>
+														</label>
+													</li>
+												<?php endforeach; ?>
+											</ul>
+										</div>
+										<div class="dropdown mb-3">
+											<button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+												Filter Branches
+											</button>
+											<ul class="dropdown-menu overflow-auto" id="branchFilterList2" style="max-height: 200px;">
+												<?php foreach ($branches as $branch): ?>
+													<li>
+														<label class="dropdown-item">
+															<input type="checkbox" class="form-check-input me-1 branch-filter2" value="<?= htmlspecialchars($branch) ?>" checked>
+															<?= htmlspecialchars($branch) ?>
 														</label>
 													</li>
 												<?php endforeach; ?>
@@ -742,6 +760,22 @@ ini_set('display_errors', 1);
 												.map(cb => cb.value);
 
 				const filteredData = itemData2.filter(item => selectedCategories.includes(item.category));
+
+				myItemsChart2.data.labels = filteredData.map(d => d.label);
+				myItemsChart2.data.datasets[0].data = filteredData.map(d => d.stock);
+				myItemsChart2.data.datasets[0].backgroundColor = filteredData.map(d => d.color);
+				myItemsChart2.data.datasets[0].borderColor = filteredData.map(d => d.color);
+
+				myItemsChart2.update();
+			});
+		});
+
+		document.querySelectorAll(".branch-filter2").forEach(function (checkbox) {
+			checkbox.addEventListener("change", function () {
+				const selectedBranch = Array.from(document.querySelectorAll(".item-filter2:checked"))
+												.map(cb => cb.value);
+
+				const filteredData = itemData2.filter(item => selectedBranch.includes(item.branch));
 
 				myItemsChart2.data.labels = filteredData.map(d => d.label);
 				myItemsChart2.data.datasets[0].data = filteredData.map(d => d.stock);
