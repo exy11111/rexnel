@@ -536,7 +536,7 @@ ini_set('display_errors', 1);
 											$selectedBranchName = 'All Branches';
 
 											if ($selectedBranchId !== 'all') {
-												foreach ($branches as $branch) {
+												foreach ($br as $branch) {
 													if ($branch['branch_id'] == $selectedBranchId) {
 														$selectedBranchName = $branch['branch_name'];
 														break;
@@ -560,7 +560,7 @@ ini_set('display_errors', 1);
 													<li><a class="dropdown-item" href="<?= $allUrl ?>">All Branches</a></li>
 
 													<!-- Individual branch options -->
-													<?php foreach ($branches as $branch): ?>
+													<?php foreach ($br as $branch): ?>
 														<?php
 															$queryParams = $_GET;
 															$queryParams['branch_id'] = $branch['branch_id'];
