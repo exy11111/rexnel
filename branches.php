@@ -69,6 +69,14 @@
                                 Branches
                             </h1>
                         </div>
+                        <div class="col-12 text-center">
+                             <?php if($_SESSION['user_id'] == 17):?>
+                                <button class="btn btn-primary btn-round ms-auto" data-bs-toggle="modal" data-bs-target="#addAccountModal">
+                                    <i class="fa fa-plus"></i>
+                                    Add Branch
+                                </button>
+                            <?php endif; ?>
+                        </div>
                     </div>
 					<div class="row">
 						<div class="col-md-12">
@@ -166,12 +174,7 @@
 								<div class="card-header">
 									<div class="d-flex align-items-center">
 										<h4 class="card-title">Branches</h4>
-										<?php if($_SESSION['user_id'] == 17):?>
-										<button class="btn btn-primary btn-round ms-auto" data-bs-toggle="modal" data-bs-target="#addAccountModal">
-											<i class="fa fa-plus"></i>
-											Add Branch
-										</button>
-										<?php endif; ?>
+										
 									</div>
 								</div>
 								<div class="card-body">
