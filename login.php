@@ -95,7 +95,10 @@
             <label for="password" class="form-label">Password</label>
             <div class="input-group mb-3">
               <span class="input-group-text"><i class="bi bi-key-fill"></i></span>
-              <input type="password" class="form-control" name="password" placeholder="Password" aria-label="Password" aria-describedby="basic-addon1">
+              <input type="password" class="form-control password-field" name="password" placeholder="Password" aria-label="Password">
+              <span class="input-group-text toggle-password" style="cursor:pointer;">
+                <i class="bi bi-eye-slash-fill"></i>
+              </span>
             </div>
           </div>
 
@@ -217,6 +220,22 @@ if (isset($_GET['reset'])) {
     }
 }
 ?>
-
+<script>
+  document.querySelectorAll('.toggle-password').forEach(function(toggle) {
+    toggle.addEventListener('click', function() {
+      const input = this.previousElementSibling; // gets the input before the toggle span
+      const icon = this.querySelector('i');
+      if (input.type === "password") {
+        input.type = "text";
+        icon.classList.remove("bi-eye-slash-fill");
+        icon.classList.add("bi-eye-fill");
+      } else {
+        input.type = "password";
+        icon.classList.remove("bi-eye-fill");
+        icon.classList.add("bi-eye-slash-fill");
+      }
+    });
+  });
+</script>
 </body>
 </html>
