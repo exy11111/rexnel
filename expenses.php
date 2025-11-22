@@ -260,7 +260,7 @@ ini_set('display_errors', 1);
 					</h5>
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
-				<form action="process_addsupplierorder.php" method="POST">
+				<form action="process_addexpense.php" method="POST">
 					<div class="modal-body">
 						<p class="small">Add an expense using this form.</p>
 						<div class="row">
@@ -279,49 +279,24 @@ ini_set('display_errors', 1);
 							</div>
 							<div class="col-sm-12">
 								<div class="form-group form-group-default">
-									<label for="category">Quantity</label>
-									<input type="number" class="form-control" name="quantity" id="order_quantity" required>
+									<label for="category">Amount</label>
+									<input type="number" class="form-control" name="amount" required>
 								</div>
 							</div>
-							<div class="col-sm-12">
-								<div class="d-flex justify-content-between align-items-center" style="padding: 8px 0;">
-									<span>Unit Price</span>
-									<span id="unit_cost_display" style="color: #333;">₱0.00</span>
+                            <div class="col-sm-12">
+								<div class="form-group form-group-default">
+									<label for="category">Comment</label>
+									<input type="text" class="form-control" name="comment" required>
 								</div>
 							</div>
 
-							<div class="col-sm-12">
-								<div class="d-flex justify-content-between align-items-center" style="padding: 8px 0; font-weight: 700; font-size: 1.25rem; color: #E94E1B;">
-									<span>Total Price</span>
-									<span id="total_price">₱0.00</span>
-								</div>
-							</div>
 						</div>
 					</div>
 					<div class="modal-footer border-0">
-						<button type="submit" class="btn btn-success">Order</button>
+						<button type="submit" class="btn btn-success">Submit</button>
 						<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
 					</div>
 				</form>
-				<script>
-					const itemSelect = document.getElementById("order_itemId");
-					const unitCostDisplay = document.getElementById("unit_cost_display");
-					const totalPriceDisplay = document.getElementById("total_price");
-					const quantityInput = document.getElementById("order_quantity");
-
-					function updatePrices() {
-						const selectedOption = itemSelect.options[itemSelect.selectedIndex];
-						const unitPrice = parseFloat(selectedOption.getAttribute("data-price")) || 0;
-						const quantity = parseInt(quantityInput.value) || 0;
-						const total = unitPrice * quantity;
-
-						unitCostDisplay.textContent = "₱" + unitPrice.toLocaleString(undefined, {minimumFractionDigits: 2});
-						totalPriceDisplay.textContent = "₱" + total.toLocaleString(undefined, {minimumFractionDigits: 2});
-					}
-
-					itemSelect.addEventListener("change", updatePrices);
-					quantityInput.addEventListener("input", updatePrices);
-				</script>
 			</div>
 		</div>
 	</div>
