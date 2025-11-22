@@ -88,21 +88,26 @@
                                                 </p>
 
                                                 <?php if ($_SESSION['user_id'] == 17): ?>
-                                                    <div class="w-100">
-                                                        <button type="button" 
-                                                            class="btn btn-primary btn-primary btn-lg w-50" 
-                                                            data-bs-toggle="modal" 
-                                                            data-bs-target="#editBranchModal" 
-                                                            title="Edit Task">
-                                                            <i class="fa fa-edit"></i> Open
-                                                        </button>
-
-                                                        <button type="button" 
-                                                            class="btn btn-danger btn-danger remove-btn w-50" 
-                                                            data-id="<?= htmlspecialchars($row['branch_id']) ?>" 
-                                                            title="Remove">
-                                                            <i class="fa fa-times"></i> Delete
-                                                        </button>
+                                                    <div class="row">
+                                                        <div class="col-6">
+                                                            <button type="button" 
+                                                                class="btn btn-primary btn-primary btn-lg w-100 mx-2" 
+                                                                data-bs-toggle="modal" 
+                                                                data-bs-target="#editBranchModal" 
+                                                                title="Edit Task">
+                                                                <i class="fa fa-edit"></i> Open
+                                                            </button>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <button type="button" 
+                                                                class="btn btn-danger btn-danger remove-btn w-100 mx-2" 
+                                                                data-id="<?= htmlspecialchars($row['branch_id']) ?>" 
+                                                                title="Remove">
+                                                                <i class="fa fa-times"></i> Delete
+                                                            </button>
+                                                        </div>
+                                                        
+                                                        
                                                     </div>
                                                 <?php endif; ?>
                                             </div>
