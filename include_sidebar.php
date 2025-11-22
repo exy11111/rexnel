@@ -153,12 +153,12 @@
                 </li>
                 <?php if($_SESSION['role_id'] == 1):?>
                 <li class="nav-item ">
-                    <a data-bs-toggle="collapse" href="#expenses"  class="text-white">
+                    <a data-bs-toggle="collapse" href="#expenses2"  class="text-white">
                         <i class="fas fa-layer-group"></i>
                         <p>Expense Management</p>
                         <span class="caret"></span>
                     </a>
-                    <div class="collapse" id="expenses">
+                    <div class="collapse" id="expenses2">
                         <ul class="nav nav-collapse">
                             
                             <li>
