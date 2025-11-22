@@ -101,7 +101,7 @@
                                                     <div class="row">
                                                         <div class="col-6">
                                                             <button type="button" 
-                                                                class="btn btn-primary btn-primary btn-lg w-100 mx-2" 
+                                                                class="btn btn-primary w-100 mx-2" 
                                                                 data-bs-toggle="modal" 
                                                                 data-bs-target="#editBranchModal" 
                                                                 title="Edit Task">
