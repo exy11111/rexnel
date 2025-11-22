@@ -25,16 +25,8 @@
     <div class="sidebar-wrapper scrollbar scrollbar-inner">
         <div class="sidebar-content">
             <ul class="nav nav-secondary">
-                <?php if($_SESSION['role_id'] == 1): ?>
                 <li class="nav-item ">
-                    <a href="adminpanel.php" class="text-white">
-                        <i class="fas fa-home"></i>
-                        <p>Admin Panel</p>
-                    </a>
-                </li>
-                <?php endif; ?>
-                <li class="nav-item ">
-                    <a href="index.php" class="text-white">
+                    <a href="<?php if($_SESSION['role_id'] == 2):?>index.php<?php else: ?>adminpanel.php<?php endif; ?>" class="text-white">
                         <i class="fas fa-home"></i>
                         <p>Dashboard</p>
                     </a>
