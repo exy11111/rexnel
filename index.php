@@ -368,6 +368,64 @@ ini_set('display_errors', 1);
 
 							</div>
 						</div>
+
+						<div class="row">
+							<div class="col-md-6 d-flex flex-column">
+								<div class="card">
+									<div class="card-header">
+										<div class="card-title">Stock Overview</div>
+									</div>
+									<div class="card-body">
+										<div class="chart-container">
+											<canvas id="items_chart"></canvas>
+										</div>
+										<div class="dropdown mb-3">
+											<button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+												Filter Items
+											</button>
+											<ul class="dropdown-menu overflow-auto" id="itemFilterList" style="max-height: 200px;">
+												<?php foreach ($itemNames as $index => $item): ?>
+													<li>
+														<label class="dropdown-item">
+															<input type="checkbox" class="form-check-input me-1 item-filter" value="<?= $index ?>" checked>
+															<?= htmlspecialchars($item) ?>
+														</label>
+													</li>
+												<?php endforeach; ?>
+											</ul>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6 d-flex flex-column">
+								<div class="card">
+									<div class="card-header">
+										<div class="card-title">Stock Overview</div>
+									</div>
+									<div class="card-body">
+										<div class="chart-container">
+											<canvas id="items_chart2"></canvas>
+										</div>
+										<div class="dropdown mb-3">
+											<button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+												Filter Items
+											</button>
+											<ul class="dropdown-menu overflow-auto" id="itemFilterList" style="max-height: 200px;">
+												<?php foreach ($itemNames as $index => $item): ?>
+													<li>
+														<label class="dropdown-item">
+															<input type="checkbox" class="form-check-input me-1 item-filter" value="<?= $index ?>" checked>
+															<?= htmlspecialchars($item) ?>
+														</label>
+													</li>
+												<?php endforeach; ?>
+											</ul>
+										</div>
+									</div>
+								</div>
+							</div>
+							
+						</div>
 						<?php endif; ?>
 						<?php if ($_SESSION['role_id'] == 2): ?>
 						<div class="row">
