@@ -590,7 +590,10 @@ ini_set('display_errors', 1);
 		$itemStocks = [];
 		$colors = [];
 
-		$sql = "SELECT item_name, stock, size_name FROM items JOIN sizes ON items.size_id = sizes.size_id WHERE is_disabled = 0";
+		$sql = "SELECT item_name, stock, size_name, branch_name FROM items 
+		JOIN sizes ON items.size_id = sizes.size_id 
+		JOIN branch ON items.branch_id = branch.branch_id
+		WHERE is_disabled = 0";
 		$stmt = $conn->prepare($sql);
 		$stmt->execute();
 		$items2 = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -613,7 +616,7 @@ ini_set('display_errors', 1);
 		}
 
 		foreach ($items2 as $item) {
-			$itemNames2[] = $item['item_name'].' '.$item['size_name'];
+			$itemNames2[] = $item['branch_name'].' '.$item['item_name'].' '.$item['size_name'];
 			$itemStocks2[] = $item['stock'];
 			
 			if ($item['stock'] < $lowStockThreshold) {
