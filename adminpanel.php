@@ -724,7 +724,7 @@ ini_set('display_errors', 1);
 													?>
 													<li><a class="dropdown-item" href="<?= $url ?>">All Branches</a></li>
 
-													<?php foreach ($branches as $branch): 
+													<?php foreach ($br as $branch): 
 														$params = $_GET;
 														$params['top_brand_branch'] = $branch['branch_id'];
 														$url = basename($_SERVER['PHP_SELF']) . '?' . http_build_query($params);
