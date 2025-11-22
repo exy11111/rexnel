@@ -61,14 +61,15 @@
 			<div class="container">
 				<div class="page-inner">
 					<div class="page-header">
-						<div class="row">
-                            <div class="col-12 text-center">
-                                <h1 class="w-100 text-center" style="float:none !important;">
-                                    Branches
-                                </h1>
-                            </div>
-                        </div>
+						
 					</div>
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            <h1 class="w-100 text-center">
+                                Branches
+                            </h1>
+                        </div>
+                    </div>
 					<div class="row">
 						<div class="col-md-12">
                             <div class="row">
