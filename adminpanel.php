@@ -311,11 +311,11 @@ ini_set('display_errors', 1);
 							$itemStocks = [];
 							$colors = [];
 
-							$sql = "SELECT items.item_name, items.stock, sizes.size_name, branch.branch_name, category.category_name 
+							$sql = "SELECT items.item_name, items.stock, sizes.size_name, branch.branch_name, categories.category_name 
 							FROM items
 							JOIN sizes ON items.size_id = sizes.size_id
 							JOIN branch ON items.branch_id = branch.branch_id
-							JOIN category ON items.category_id = category.category_id
+							JOIN categories ON items.category_id = categories.category_id
 							WHERE is_disabled = 0";
 							$stmt = $conn->prepare($sql);
 							$stmt->execute();
