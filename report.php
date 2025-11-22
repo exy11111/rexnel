@@ -377,6 +377,21 @@
 
 							$daily_sales = $stmt->fetchColumn();
 
+							$weekStart = date('Y-m-d', strtotime('monday this week'));
+							$weekEnd   = date('Y-m-d', strtotime('sunday this week'));
+														$sql = "SELECT SUM(price) AS weekly_sales
+									FROM purchases
+									WHERE date BETWEEN :weekStart AND :weekEnd
+									AND branch_id = :branch_id";
+
+							$stmt = $conn->prepare($sql);
+							$stmt->bindParam(':weekStart', $weekStart);
+							$stmt->bindParam(':weekEnd', $weekEnd);
+							$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
+							$stmt->execute();
+
+							$weekly_sales = $stmt->fetchColumn();
+
 							$thisMonth = date("Y-m");
 							$sql = "SELECT SUM(price) AS monthly_sales
 								FROM purchases
@@ -400,7 +415,7 @@
 
 
 						?>
-						<div class="col-sm-6 col-md-4">
+						<div class="col-sm-6 col-md-3">
 							<a href="#">
 								<div class="card card1 card-stats card-round">
 									<div class="card-body">
@@ -422,7 +437,29 @@
 								</div>
 							</a>
 						</div>
-						<div class="col-sm-6 col-md-4">
+						<div class="col-sm-6 col-md-3">
+							<a href="#">
+								<div class="card card1 card-stats card-round">
+									<div class="card-body">
+										<div class="row align-items-center">
+											<div class="col-icon">
+												<div class="icon-big text-center icon-success bubble-shadow-small">
+													<i class="fas fa-luggage-cart"></i>
+												</div>
+											</div>
+											<div class="col col-stats ms-3 ms-sm-0">
+												<div class="numbers w-100">
+													<p class="card-category">Weekly Sales</p>
+													<h4 class="card-title">₱<?php echo number_format($weekly_sales, 2) ?></h4>
+												</div>
+												<span id="percentageText" class="text-muted float-end"></span>
+											</div>
+										</div>
+									</div>
+								</div>
+							</a>
+						</div>
+						<div class="col-sm-6 col-md-3">
 							<a href="#">
 								<div class="card card1 card-stats card-round">
 									<div class="card-body ">
@@ -443,7 +480,7 @@
 								</div>
 							</a>
 						</div>
-						<div class="col-sm-6 col-md-4">
+						<div class="col-sm-6 col-md-3">
 							<a href="#">
 								<div class="card card1 card-stats card-round">
 									<div class="card-body">
