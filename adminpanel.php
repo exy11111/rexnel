@@ -733,13 +733,6 @@ ini_set('display_errors', 1);
 			options: {
 				responsive: true,
 				maintainAspectRatio: false,
-				scales: {
-					yAxes: [{
-						ticks: {
-							beginAtZero: true
-						}
-					}]
-				},
 				legend: {
 					display: false 
 				}
