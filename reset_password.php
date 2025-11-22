@@ -43,21 +43,27 @@ if (isset($_GET['ftoken'])) {
         </div>
         <div class="modal-body">
           <input type="hidden" name="ftoken" value="<?= htmlspecialchars($ftoken) ?>">
-          <div class="mb-3 position-relative">
-            <label for="new_password" class="form-label">New Password</label>
-            <input type="password" name="new_password" id="new_password" class="form-control" required>
-            <span class="position-absolute top-50 end-0 translate-middle-y me-3 toggle-password" style="cursor:pointer;">
-              <i class="bi bi-eye" id="toggleNew"></i>
+         <div class="input-group mb-3">
+            <input type="password" 
+                class="form-control password-field" 
+                name="password" 
+                placeholder="Fill password" 
+                required>
+            <span class="input-group-text toggle-password" style="cursor:pointer;">
+                <i class="bi bi-eye-slash-fill"></i>
             </span>
-          </div>
+        </div>
 
-          <div class="mb-3 position-relative">
-            <label for="confirm_password" class="form-label">Confirm Password</label>
-            <input type="password" name="confirm_password" id="confirm_password" class="form-control" required>
-            <span class="position-absolute top-50 end-0 translate-middle-y me-3 toggle-password" style="cursor:pointer;">
-              <i class="bi bi-eye" id="toggleConfirm"></i>
+        <div class="input-group mb-3">
+            <input type="password" 
+                class="form-control password-field" 
+                name="confirm_password" 
+                placeholder="Confirm password" 
+                required>
+            <span class="input-group-text toggle-password" style="cursor:pointer;">
+                <i class="bi bi-eye-slash-fill"></i>
             </span>
-          </div>
+        </div>
         <div class="modal-footer">
           <a href="login.php" class="btn btn-secondary">Cancel</a>
           <button type="submit" class="btn btn-success">Update Password</button>
@@ -84,28 +90,22 @@ if (isset($_GET['ftoken'])) {
 <?php endif; ?>
 
 <script>
-  // Toggle function
-  function togglePassword(inputId, iconId) {
-    const input = document.getElementById(inputId);
-    const icon = document.getElementById(iconId);
-    if (input.type === "password") {
-      input.type = "text";
-      icon.classList.remove("bi-eye");
-      icon.classList.add("bi-eye-slash");
-    } else {
-      input.type = "password";
-      icon.classList.remove("bi-eye-slash");
-      icon.classList.add("bi-eye");
-    }
-  }
-
-  document.getElementById("toggleNew").addEventListener("click", function() {
-    togglePassword("new_password", "toggleNew");
-  });
-
-  document.getElementById("toggleConfirm").addEventListener("click", function() {
-    togglePassword("confirm_password", "toggleConfirm");
-  });
+    // Select all toggle-password buttons
+    document.querySelectorAll('.toggle-password').forEach(function(toggle) {
+        toggle.addEventListener('click', function() {
+            const input = this.previousElementSibling; // the input before the span
+            const icon = this.querySelector('i');
+            if (input.type === "password") {
+                input.type = "text";
+                icon.classList.remove("bi-eye-slash-fill");
+                icon.classList.add("bi-eye-fill");
+            } else {
+                input.type = "password";
+                icon.classList.remove("bi-eye-fill");
+                icon.classList.add("bi-eye-slash-fill");
+            }
+        });
+    });
 </script>
 
 </body>
