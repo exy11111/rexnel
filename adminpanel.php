@@ -738,9 +738,9 @@ ini_set('display_errors', 1);
 				selectedIndices.push(parseInt(cb.value));
 				});
 
-				const filteredLabels = selectedIndices.map(i => itemNames[i]);
-				const filteredStocks = selectedIndices.map(i => itemStocks[i]);
-				const filteredColors = selectedIndices.map(i => colors[i]);
+				const filteredLabels = selectedIndices.map(i => itemNames2[i]);
+				const filteredStocks = selectedIndices.map(i => itemStocks2[i]);
+				const filteredColors = selectedIndices.map(i => colors2[i]);
 
 				myItemsChart2.data.labels = filteredLabels;
 				myItemsChart2.data.datasets[0].data = filteredStocks;
