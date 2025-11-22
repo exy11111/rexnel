@@ -27,6 +27,11 @@ ini_set('display_errors', 1);
     $stmt->execute();
     $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+    $sql = "SELECT * FROM expensetype";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $expensetype = $stmt->fetchAll();
+
 ?>
 
 <!DOCTYPE html>
@@ -105,7 +110,7 @@ ini_set('display_errors', 1);
 										<h4 class="card-title">Expenses</h4>
 										<div class="ms-auto">
 											<?php if($_SESSION['role_id'] == 1):?>
-											<button class="btn btn-success btn-round" data-bs-toggle="modal" data-bs-target="#orderModal">
+											<button class="btn btn-success btn-round" data-bs-toggle="modal" data-bs-target="#addExpenseModal">
 												<i class="fa fa-plus"></i>
 												Add Expense
 											</button>
@@ -121,6 +126,7 @@ ini_set('display_errors', 1);
 													<th>ID</th>
 													<th>Date</th>
 													<th>Type</th>
+                                                    <th>Amount</th>
                                                     <th>Comment</th>
 													<th style="width: 10%">Action</th>
 												</tr>
@@ -132,6 +138,7 @@ ini_set('display_errors', 1);
                                                         echo "<td>".htmlspecialchars($row['expense_id'])."</td>";
 														echo "<td>" . date("F d, Y", strtotime($row['created_at'])) . "</td>";
 														echo "<td>".htmlspecialchars($row['expense_name'])."</td>";
+                                                        echo "<td>₱".number_format($row['amount'], 2)."</td>";
 														echo "<td>".htmlspecialchars($row['comment'])."</td>";
 														echo "<td>
 																<div class='form-button-action'>
@@ -149,7 +156,7 @@ ini_set('display_errors', 1);
 												?>
 											</tbody>
 										</table>
-                                        
+                                        <!--
                                         <script>
                                             document.addEventListener('DOMContentLoaded', function() {
                                                 const removeButtons = document.querySelectorAll('.remove-btn');
@@ -217,6 +224,7 @@ ini_set('display_errors', 1);
                                             });
 
                                         </script>
+                                        -->
 									</div>
 								</div>
 							</div>
@@ -239,24 +247,7 @@ ini_set('display_errors', 1);
 			</footer>
 		</div>
 	</div>
-
-	<?php include ('modal_editordersupplier.php'); ?>
-	<?php 
-	
-	$sql = "SELECT item_id, barcode, item_name, category_name, brand_name, supplier_name, size_name, price, stock, supplier_price
-	FROM items i 
-	JOIN categories c ON i.category_id = c.category_id
-	JOIN brands b ON b.brand_id = i.brand_id
-	JOIN suppliers s ON s.supplier_id = i.supplier_id
-	JOIN sizes ss ON i.size_id = ss.size_id
-	WHERE i.branch_id = :branch_id";
-    $stmt = $conn->prepare($sql);
-	$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
-    $stmt->execute();
-    $itemdata = $stmt->fetchAll(PDO::FETCH_ASSOC);
-	
-	?>
-	<div class="modal fade" id="orderModal" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal fade" id="addExpenseModal" tabindex="-1" role="dialog" aria-hidden="true">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header border-0">
@@ -264,34 +255,23 @@ ini_set('display_errors', 1);
 						<span class="fw-mediumbold">
 						Add</span> 
 						<span class="fw-light">
-							Order
+							Expense
 						</span>
 					</h5>
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
 				<form action="process_addsupplierorder.php" method="POST">
 					<div class="modal-body">
-						<p class="small">Add an order using this form.</p>
+						<p class="small">Add an expense using this form.</p>
 						<div class="row">
 							<div class="col-sm-12">
 								<div class="form-group form-group-default">
-									<label>Barcode</label>
-									<input type="text" name="barcode" id="stock_barcode2" class="form-control" oninput="validatePhoneNumber(this)" placeholder="fill barcode">
-									<script>
-										function validatePhoneNumber(input) {
-											input.value = input.value.replace(/[^0-9]/g, '');
-										}
-									</script>
-								</div>
-							</div>
-							<div class="col-sm-12">
-								<div class="form-group form-group-default">
-									<label>Item Name</label>
-									<select class="form-select" name="item_id" id="order_itemId" required>
-										<option value="">Select Item</option>
+									<label>Expense Type</label>
+									<select class="form-select" name="expensetype_id" required>
+										<option value="">Select Type</option>
 										<?php 
-											foreach ($itemdata as $row){
-												echo "<option value='".$row['item_id']."' data-price='".$row['supplier_price']."'>".$row['item_name']."</option>";
+											foreach ($expensetype as $row){
+												echo "<option value='".$row['expensetype_id']."'>".$row['expense_name']."</option>";
 											}
 										?>
 									</select>
