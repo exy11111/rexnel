@@ -39,6 +39,16 @@
 	<link rel="stylesheet" href="assets/css/plugins.min.css">
 	<link rel="stylesheet" href="assets/css/kaiadmin.min.css">
 
+    <style>
+        .text-truncate-one-line {
+    white-space: nowrap;        /* force single line */
+    overflow: hidden;           /* hide overflow */
+    text-overflow: ellipsis;    /* add ... */
+    display: block;             /* required for some cases */
+    max-width: 100%;            /* allow responsive truncation */
+}
+    </style>
+
 </head>
 <body>
 	<div class="wrapper">
@@ -77,8 +87,8 @@
                                                     <?= htmlspecialchars($row['branch_name']) ?>
                                                 </h5>
 
-                                                <p class="mb-1">
-                                                   <?= htmlspecialchars($row['location']) ?>
+                                                <p class="mb-1 text-truncate-one-line">
+                                                    <?= htmlspecialchars($row['location']) ?>
                                                 </p>
 
                                                 <p class="mb-3">
