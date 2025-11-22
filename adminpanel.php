@@ -546,7 +546,7 @@ ini_set('display_errors', 1);
 											
 										?>
 										<div class="d-flex align-items-center">
-											<div class="dropdown">
+											<div class="dropdown ms-2">
 												<button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="branchFilterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
 													<?= htmlspecialchars($selectedBranchName) ?>
 												</button>
@@ -572,7 +572,7 @@ ini_set('display_errors', 1);
 													<?php endforeach; ?>
 												</ul>
 											</div>
-											<div class="dropdown">
+											<div class="dropdown ms-2">
 												<button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
 													<?= htmlspecialchars($filterLabel) ?>
 												</button>
