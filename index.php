@@ -805,32 +805,6 @@ ini_set('display_errors', 1);
 			}
 		});
 
-		var myItemsChart2 = new Chart(items_chart2, {
-			type: 'bar',
-			data: {
-				labels: itemNames2,
-				datasets: [{
-					label: "Stock",
-					backgroundColor: colors2,
-					borderColor: colors2,
-					data: itemStocks2
-				}],
-			},
-			options: {
-				responsive: true,
-				maintainAspectRatio: false,
-				scales: {
-					yAxes: [{
-						ticks: {
-							beginAtZero: true
-						}
-					}]
-				},
-				legend: {
-					display: false 
-				}
-			}
-		});
 		document.querySelectorAll(".item-filter").forEach(function (checkbox) {
 			checkbox.addEventListener("change", function () {
 				let selectedIndices = [];
@@ -892,6 +866,32 @@ ini_set('display_errors', 1);
 		<?php endif; ?>
 
 		<?php if($_SESSION['role_id'] == 1): ?>
+			var myItemsChart2 = new Chart(items_chart2, {
+				type: 'bar',
+				data: {
+					labels: itemNames2,
+					datasets: [{
+						label: "Stock",
+						backgroundColor: colors2,
+						borderColor: colors2,
+						data: itemStocks2
+					}],
+				},
+				options: {
+					responsive: true,
+					maintainAspectRatio: false,
+					scales: {
+						yAxes: [{
+							ticks: {
+								beginAtZero: true
+							}
+						}]
+					},
+					legend: {
+						display: false 
+					}
+				}
+			});
 			let salesChart;
 
 			function loadSalesChart(startDate = '', endDate = '') {
