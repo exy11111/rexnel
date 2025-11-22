@@ -142,6 +142,30 @@
                             </li>
                             <?php endif; ?>
                             <li>
+                                <a href="#">
+                                    <span class="sub-item text-white">Request Stock</span>
+                                </a>
+                            </li>
+                            
+                        </ul>
+                    </div>
+                </li>
+                <?php if($_SESSION['role_id'] == 1):?>
+                <li class="nav-item ">
+                    <a data-bs-toggle="collapse" href="#expenses"  class="text-white">
+                        <i class="fas fa-layer-group"></i>
+                        <p>Expense Management</p>
+                        <span class="caret"></span>
+                    </a>
+                    <div class="collapse" id="expenses">
+                        <ul class="nav nav-collapse">
+                            
+                            <li>
+                                <a href="#">
+                                    <span class="sub-item text-white">Expenses</span>
+                                </a>
+                            </li>                 
+                            <li>
                                 <a href="adminorderhistory.php">
                                     <span class="sub-item text-white">Order History</span>
                                 </a>
@@ -150,6 +174,7 @@
                         </ul>
                     </div>
                 </li>
+                <?php endif; ?>
                 
                 
                 <li class="nav-item ">
