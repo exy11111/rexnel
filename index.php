@@ -339,10 +339,10 @@ ini_set('display_errors', 1);
 
 						<?php if ($_SESSION['role_id'] == 1):?>
 						<div class="row">
-							<div class="col-3">
+							<div class="col-2">
 
 							</div>
-							<div class="col-md-6 d-flex flex-column">
+							<div class="col-md-8 d-flex flex-column">
 								<div class="card h-100">
 									<div class="card-header">
 										<div class="card-title">Sales Overview</div>
@@ -364,7 +364,7 @@ ini_set('display_errors', 1);
 									</div>
                             	</div>
 							</div>
-							<div class="col-3">
+							<div class="col-2">
 
 							</div>
 						</div>
