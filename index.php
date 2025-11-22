@@ -681,10 +681,20 @@ ini_set('display_errors', 1);
 		$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
 		$stmt->execute();
 		$items = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+		$sql = "SELECT item_name, stock, size_name FROM items JOIN sizes ON items.size_id = sizes.size_id WHERE is_disabled = 0";
+		$stmt = $conn->prepare($sql);
+		$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
+		$stmt->execute();
+		$items2 = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		
 		$itemNames = [];
 		$itemStocks = [];
 		$colors = [];
+
+		$itemNames2 = [];
+		$itemStocks2 = [];
+		$colors2 = [];
 		
 		$lowStockThreshold = 10;
 		
@@ -696,6 +706,17 @@ ini_set('display_errors', 1);
 				$colors[] = 'rgb(255, 99, 71)'; 
 			} else {
 				$colors[] = 'rgb(34, 193, 34)';
+			}
+		}
+
+		foreach ($items2 as $item) {
+			$itemNames2[] = $item['item_name'].' '.$item['size_name'];
+			$itemStocks2[] = $item['stock'];
+			
+			if ($item['stock'] < $lowStockThreshold) {
+				$colors2[] = 'rgb(255, 99, 71)'; 
+			} else {
+				$colors2[] = 'rgb(34, 193, 34)';
 			}
 		}
 
@@ -719,13 +740,19 @@ ini_set('display_errors', 1);
 		
 	<script>
 		var itemNames = <?php echo json_encode($itemNames); ?>;
+		var itemNames2 = <?php echo json_encode($itemNames2); ?>;
+
 		var itemStocks = <?php echo json_encode($itemStocks); ?>;
+		var itemStocks2 = <?php echo json_encode($itemStocks2); ?>;
+
 		var colors = <?php echo json_encode($colors); ?>;
+		var colors2 = <?php echo json_encode($colors2); ?>;
 
 		var labels = <?php echo json_encode($labels); ?>;
     	var values = <?php echo json_encode($values); ?>;
 		
 		var items_chart = document.getElementById("items_chart").getContext("2d");
+		var items_chart2 = document.getElementById("items_chart2").getContext("2d");
 		var sales_chart = document.getElementById("sales_chart").getContext("2d");
 		
 		var myItemsChart = new Chart(items_chart, {
@@ -737,6 +764,33 @@ ini_set('display_errors', 1);
 					backgroundColor: colors,
 					borderColor: colors,
 					data: itemStocks
+				}],
+			},
+			options: {
+				responsive: true,
+				maintainAspectRatio: false,
+				scales: {
+					yAxes: [{
+						ticks: {
+							beginAtZero: true
+						}
+					}]
+				},
+				legend: {
+					display: false 
+				}
+			}
+		});
+
+		var myItemsChart2 = new Chart(items_chart2, {
+			type: 'bar',
+			data: {
+				labels: itemNames2,
+				datasets: [{
+					label: "Stock",
+					backgroundColor: colors2,
+					borderColor: colors2,
+					data: itemStocks2
 				}],
 			},
 			options: {
