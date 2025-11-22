@@ -671,12 +671,12 @@ ini_set('display_errors', 1);
 		var myItemsChart2 = new Chart(items_chart2, {
 			type: 'pie',
 			data: {
-				labels: itemNames2,
+				labels: itemData2.map(item => item.label),
 				datasets: [{
 					label: "Stock",
-					backgroundColor: colors2,
-					borderColor: colors2,
-					data: itemStocks2
+					backgroundColor:  itemData2.map(item => item.color),
+					borderColor:  itemData2.map(item => item.color),
+					data: itemData2.map(item => item.stock)
 				}],
 			},
 			options: {
