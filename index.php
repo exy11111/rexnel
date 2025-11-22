@@ -295,7 +295,7 @@ ini_set('display_errors', 1);
 						
 						<!-- FETCH -->
 						<?php
-							$sql = "SELECT item_name, stock, size_name FROM items JOIN sizes ON items.size_id = sizes.size_id WHERE items.branch_id = :branch_id";
+							$sql = "SELECT item_name, stock, size_name FROM items JOIN sizes ON items.size_id = sizes.size_id WHERE items.branch_id = :branch_id AND is_disabled = 0";
 							$stmt = $conn->prepare($sql);
 							$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
 							$stmt->execute();
@@ -304,6 +304,19 @@ ini_set('display_errors', 1);
 							$itemNames = [];
 							$itemStocks = [];
 							$colors = [];
+
+							$sql = "SELECT item_name, stock, size_name FROM items JOIN sizes ON items.size_id = sizes.size_id WHERE is_disabled = 0";
+							$stmt = $conn->prepare($sql);
+							$stmt->execute();
+							$items2 = $stmt->fetchAll(PDO::FETCH_ASSOC);
+							
+							$itemNames = [];
+							$itemStocks = [];
+							$colors = [];
+
+							$itemNames2 = [];
+							$itemStocks2 = [];
+							$colors2 = [];
 							
 							$lowStockThreshold = 10;
 							
@@ -315,6 +328,17 @@ ini_set('display_errors', 1);
 									$colors[] = 'rgb(255, 99, 71)'; 
 								} else {
 									$colors[] = 'rgb(34, 193, 34)';
+								}
+							}
+
+							foreach ($items2 as $item) {
+								$itemNames2[] = $item['item_name'].' '.$item['size_name'];
+								$itemStocks2[] = $item['stock'];
+								
+								if ($item['stock'] < $lowStockThreshold) {
+									$colors2[] = 'rgb(255, 99, 71)'; 
+								} else {
+									$colors2[] = 'rgb(34, 193, 34)';
 								}
 							}
 
@@ -404,14 +428,14 @@ ini_set('display_errors', 1);
 									</div>
 									<div class="card-body">
 										<div class="chart-container">
-											<canvas id="items_chart2"></canvas>
+											<canvas id="items_chart"></canvas>
 										</div>
 										<div class="dropdown mb-3">
 											<button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
 												Filter Items
 											</button>
-											<ul class="dropdown-menu overflow-auto" id="itemFilterList" style="max-height: 200px;">
-												<?php foreach ($itemNames as $index => $item): ?>
+											<ul class="dropdown-menu overflow-auto" id="itemFilterList2" style="max-height: 200px;">
+												<?php foreach ($itemNames2 as $index => $item): ?>
 													<li>
 														<label class="dropdown-item">
 															<input type="checkbox" class="form-check-input me-1 item-filter" value="<?= $index ?>" checked>
@@ -459,7 +483,7 @@ ini_set('display_errors', 1);
 									</div>
 									<div class="card-body">
 										<div class="chart-container">
-											<canvas id="items_chart"></canvas>
+											<canvas id="items_chart2"></canvas>
 										</div>
 										<div class="dropdown mb-3">
 											<button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
