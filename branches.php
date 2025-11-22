@@ -62,8 +62,8 @@
 				<div class="page-inner">
 					<div class="page-header">
 						<div class="row">
-                            <div class="col-12">
-                                <h1>
+                            <div class="col-12 text-center">
+                                <h1 class="w-100 text-center">
                                     Branches
                                 </h1>
                             </div>
