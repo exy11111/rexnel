@@ -131,7 +131,15 @@ ini_set('display_errors', 1);
 						$sql = "SELECT SUM(amount) FROM supplier_orders so JOIN items i ON so.item_id = i.item_id";
 						$stmt = $conn->prepare($sql);
 						$stmt->execute();
-						$all_expenses = $stmt->fetchColumn();
+						$supplier_expenses = $stmt->fetchColumn();
+
+						$sql = "SELECT SUM(amount) FROM expenses";
+						$stmt = $conn->prepare($sql);
+						$stmt->execute();
+						$expenses = $stmt->fetchColumn();
+
+						$all_expenses = $supplier_expenses + $expenses;
+
 
 						$all_profit = $all_revenue - $all_expenses;
 					?>

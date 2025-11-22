@@ -162,7 +162,7 @@
                         <ul class="nav nav-collapse">
                             
                             <li>
-                                <a href="#">
+                                <a href="expenses.php">
                                     <span class="sub-item text-white">Expenses</span>
                                 </a>
                             </li>                 
