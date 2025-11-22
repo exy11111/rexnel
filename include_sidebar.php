@@ -140,12 +140,13 @@
                                     <span class="sub-item text-white">Stock Requests</span>
                                 </a>
                             </li>
-                            <?php endif; ?>
+                            <?php else: ?>
                             <li>
                                 <a href="#">
                                     <span class="sub-item text-white">Request Stock</span>
                                 </a>
                             </li>
+                            <?php endif; ?>
                             
                         </ul>
                     </div>
