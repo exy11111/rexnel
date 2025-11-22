@@ -9,7 +9,7 @@
 		$_SESSION['branch_id'] = 1;
 	}
 
-	$sql = "SELECT item_id, barcode, item_name, category_name, brand_name, supplier_name, size_name, price, stock, supplier_price
+	$sql = "SELECT item_id, barcode, item_name, category_name, brand_name, supplier_name, size_name, price, stock, supplier_price, (price - supplier_price) as profit
 	FROM items i 
 	JOIN categories c ON i.category_id = c.category_id
 	JOIN brands b ON b.brand_id = i.brand_id
@@ -426,6 +426,7 @@
 													<th>Supplier</th>
 													<th>Size</th>
 													<th>Price</th>
+													<th>Gross Profit</th>
 													<th>Stock</th>
 													<th>Status</th>
 													<?php if($_SESSION['role_id'] == 1):?> <th style="width: 10%">Action</th> <?php endif; ?>
@@ -455,6 +456,7 @@
 														echo "<td>".htmlspecialchars($row['supplier_name'])."</td>";
 														echo "<td>".htmlspecialchars($row['size_name'])."</td>";
 														echo "<td>₱" . number_format($row['price'], 2) . "</td>";
+														echo "<td>₱" . number_format($row['profit'], 2) . "</td>";
 														echo "<td>" . number_format($row['stock']) . "</td>";
 														echo "<td> <span class='" . $class. "'>".$status."</span></td>";
 														if($_SESSION['role_id'] == 1){
