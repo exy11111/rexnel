@@ -221,7 +221,7 @@ ini_set('display_errors', 1);
                                                                         }
                                                                     }
                                                                 };
-                                                                xhr.send('size_id=' + sizeId);
+                                                                xhr.send('expense_id=' + sizeId);
                                                             }
                                                         });
                                                     });
