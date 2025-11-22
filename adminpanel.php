@@ -521,6 +521,9 @@ ini_set('display_errors', 1);
 												case 'today':
 													$filterLabel = "Today";
 													break;
+												case 'week':
+													$filterLabel = "This Week";  // new case added
+													break;
 												case 'month':
 													$filterLabel = "This Month";
 													break;
@@ -581,6 +584,7 @@ ini_set('display_errors', 1);
 
 													$productFilters = [
 														'today' => 'Today',
+														'week'  => 'This Week',  // new filter
 														'month' => 'This Month',
 														'year'  => 'This Year',
 														'all'   => 'All Time'
@@ -612,13 +616,20 @@ ini_set('display_errors', 1);
 										$params = [];
 										
 										$today = date('Y-m-d');
+										$startOfWeek = date('Y-m-d', strtotime('monday this week'));
+										$endOfWeek = date('Y-m-d', strtotime('sunday this week'));
 										$thisMonth = date('m');
 										$thisYear  = date('Y');
 
 										if ($topProductFilter === 'today') {
 											$where .= " AND DATE(p.date) = :today";
 											$params[':today'] = $today;
-										} elseif ($topProductFilter === 'month') {
+										} elseif ($topProductFilter === 'week') {
+											$where .= " AND DATE(p.date) BETWEEN :startOfWeek AND :endOfWeek";
+											$params[':startOfWeek'] = $startOfWeek;
+											$params[':endOfWeek'] = $endOfWeek;
+										}
+										 elseif ($topProductFilter === 'month') {
 											$where .= " AND YEAR(p.date) = :year AND MONTH(p.date) = :month";
 											$params[':year']  = $thisYear;
 											$params[':month'] = $thisMonth;
@@ -688,6 +699,9 @@ ini_set('display_errors', 1);
 												case 'today':
 													$filterLabelBrand = "Today";
 													break;
+												case 'week':                       // new case
+													$filterLabelBrand = "This Week";
+													break;
 												case 'month':
 													$filterLabelBrand = "This Month";
 													break;
@@ -741,6 +755,7 @@ ini_set('display_errors', 1);
 												$brandFilters = [
 													'all'   => 'All Time',
 													'today' => 'Today',
+													'week'  => 'This Week',   // new option
 													'month' => 'This Month',
 													'year'  => 'This Year'
 												];
@@ -769,13 +784,20 @@ ini_set('display_errors', 1);
 										$paramsBrand = [];
 										
 										$today = date('Y-m-d');
+										$startOfWeek = date('Y-m-d', strtotime('monday this week'));
+										$endOfWeek   = date('Y-m-d', strtotime('sunday this week'));
 										$thisMonth = date('m');
 										$thisYear  = date('Y');
 										
 										if ($topBrandFilter === 'today') {
 											$whereBrand .= " AND DATE(p.date) = :today";
 											$paramsBrand[':today'] = $today;
-										} elseif ($topBrandFilter === 'month') {
+										} elseif ($topBrandFilter === 'week') {              // new condition
+											$whereBrand .= " AND DATE(p.date) BETWEEN :startOfWeek AND :endOfWeek";
+											$paramsBrand[':startOfWeek'] = $startOfWeek;
+											$paramsBrand[':endOfWeek'] = $endOfWeek;
+										} 
+										elseif ($topBrandFilter === 'month') {
 											$whereBrand .= " AND YEAR(p.date) = :year AND MONTH(p.date) = :month";
 											$paramsBrand[':year']  = $thisYear;
 											$paramsBrand[':month'] = $thisMonth;
