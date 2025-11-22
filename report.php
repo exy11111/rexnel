@@ -1074,5 +1074,18 @@
             <?php endif; ?>
         </script>
     <?php endif; ?>
+
+	<?php if (isset($_GET['accstatus'])): ?>
+        <script>
+            <?php if ($_GET['accstatus'] == 'error'): ?>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Account editing failed.',
+                    text: 'here was an issue updating the account. Please try again.',
+                }).then((result) => {
+                });
+            <?php endif; ?>
+        </script>
+    <?php endif; ?>
 </body>
 </html>

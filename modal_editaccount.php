@@ -77,16 +77,33 @@
                         </div>
                         <div class="col-sm-12">
                             <div class="form-group form-group-default">
-                                <label>Password</label>
+                                <label>Current Password</label>
+                                <div class="input-group">
+                                    <input type="password" 
+                                        class="form-control password-field" 
+                                        name="old_password" 
+                                        placeholder="fill password" 
+                                        required
+                                    >
+                                    <span class="input-group-text toggle-password mb-3" style="cursor:pointer;">
+                                        <i class="bi bi-eye-slash-fill"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group form-group-default">
+                                <label>New Password</label>
                                 <div class="input-group">
                                     <input type="password" 
                                         class="form-control password-field" 
                                         name="password" 
                                         placeholder="fill password" 
-                                        required>
-                                        <span class="input-group-text toggle-password mb-3" style="cursor:pointer;">
-                                            <i class="bi bi-eye-slash-fill"></i>
-                                        </span>
+                                        required
+                                    >
+                                    <span class="input-group-text toggle-password mb-3" style="cursor:pointer;">
+                                        <i class="bi bi-eye-slash-fill"></i>
+                                    </span>
                                 </div>
                             </div>
                         </div>

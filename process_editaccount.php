@@ -17,11 +17,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST['username'];
     $email = $_POST['email'];
     $password = $_POST['password'];
+    $old_password = $_POST['old_password'];
     $user_id = $_POST['user_id'];
     $destination = $_POST['destination'] ?? "staff.php";
     $branch_id = $_POST['branch_id'];
     $verification_token = bin2hex(random_bytes(16));
     $profile_photo_path = null;
+
+    
 
     if (isset($_FILES['profile_photo']) && $_FILES['profile_photo']['error'] === UPLOAD_ERR_OK) {
         $uploadDir = 'uploads/profile_photos/';
@@ -52,7 +55,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     try {
         // Check if username already exists for other users
-        $sql = "SELECT username, ud.email FROM users u LEFT JOIN userdetails ud ON u.user_id = ud.user_id WHERE u.user_id = :user_id";
+        $sql = "SELECT username, ud.email, password FROM users u LEFT JOIN userdetails ud ON u.user_id = ud.user_id WHERE u.user_id = :user_id";
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':user_id', $user_id);
         $stmt->execute();
@@ -61,6 +64,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (!$currentData) {
             header("Location: " . $destination . "?editstatus=notfound");
             exit();
+        }
+
+        if(empty($old_password)){
+            header("Location: report.php?accstatus=error");
+            exit();
+        }
+        else{
+             if (!password_verify($old_password, $currentData['password'])) {
+                header("Location: report.php?accstatus=error");
+                exit();
+             }
         }
 
         // Check if username is already taken by others
