@@ -432,9 +432,9 @@ ini_set('display_errors', 1);
 						<div class="row">
 
 							<div class="col-md-6 d-flex flex-column">
-								<div class="card">
+								<div class="card h-100">
 									<div class="card-header">
-										<div class="card-title">Stock Overview</div>
+										<div class="card-title">Stock Overview (<?php echo $branch_name ?>)</div>
 									</div>
 									<div class="card-body">
 										<div class="chart-container">
@@ -462,7 +462,7 @@ ini_set('display_errors', 1);
 							<div class="col-md-6 d-flex flex-column">
 								<div class="card">
 									<div class="card-header">
-										<div class="card-title">Stock Overview</div>
+										<div class="card-title">Stock Overview (All Branches)</div>
 									</div>
 									<div class="card-body">
 										<div class="chart-container">
@@ -470,7 +470,7 @@ ini_set('display_errors', 1);
 										</div>
 										<div class="dropdown mb-3">
 											<button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-												Filter Items
+												Filter Categories
 											</button>
 											<ul class="dropdown-menu overflow-auto" id="itemFilterList2" style="max-height: 200px;">
 												<?php foreach ($categories as $category): ?>
