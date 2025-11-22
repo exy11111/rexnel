@@ -129,6 +129,7 @@ ini_set('display_errors', 1);
 												<?php 
 													foreach($data as $row){
 														echo "<tr data-id=".htmlspecialchars($row['expense_id']).">";
+                                                        echo "<td>".htmlspecialchars($row['expense_id'])."</td>";
 														echo "<td>" . date("F d, Y", strtotime($row['created_at'])) . "</td>";
 														echo "<td>".htmlspecialchars($row['expense_name'])."</td>";
 														echo "<td>".htmlspecialchars($row['comment'])."</td>";
