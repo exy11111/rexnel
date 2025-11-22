@@ -28,6 +28,7 @@ if (isset($_GET['ftoken'])) {
     <meta charset="UTF-8">
     <title>Reset Password</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 </head>
 <body>
 
@@ -42,15 +43,21 @@ if (isset($_GET['ftoken'])) {
         </div>
         <div class="modal-body">
           <input type="hidden" name="ftoken" value="<?= htmlspecialchars($ftoken) ?>">
-          <div class="mb-3">
+          <div class="mb-3 position-relative">
             <label for="new_password" class="form-label">New Password</label>
             <input type="password" name="new_password" id="new_password" class="form-control" required>
+            <span class="position-absolute top-50 end-0 translate-middle-y me-3 toggle-password" style="cursor:pointer;">
+              <i class="bi bi-eye" id="toggleNew"></i>
+            </span>
           </div>
-          <div class="mb-3">
+
+          <div class="mb-3 position-relative">
             <label for="confirm_password" class="form-label">Confirm Password</label>
             <input type="password" name="confirm_password" id="confirm_password" class="form-control" required>
+            <span class="position-absolute top-50 end-0 translate-middle-y me-3 toggle-password" style="cursor:pointer;">
+              <i class="bi bi-eye" id="toggleConfirm"></i>
+            </span>
           </div>
-        </div>
         <div class="modal-footer">
           <a href="login.php" class="btn btn-secondary">Cancel</a>
           <button type="submit" class="btn btn-success">Update Password</button>
@@ -75,6 +82,31 @@ if (isset($_GET['ftoken'])) {
     });
 </script>
 <?php endif; ?>
+
+<script>
+  // Toggle function
+  function togglePassword(inputId, iconId) {
+    const input = document.getElementById(inputId);
+    const icon = document.getElementById(iconId);
+    if (input.type === "password") {
+      input.type = "text";
+      icon.classList.remove("bi-eye");
+      icon.classList.add("bi-eye-slash");
+    } else {
+      input.type = "password";
+      icon.classList.remove("bi-eye-slash");
+      icon.classList.add("bi-eye");
+    }
+  }
+
+  document.getElementById("toggleNew").addEventListener("click", function() {
+    togglePassword("new_password", "toggleNew");
+  });
+
+  document.getElementById("toggleConfirm").addEventListener("click", function() {
+    togglePassword("confirm_password", "toggleConfirm");
+  });
+</script>
 
 </body>
 </html>
