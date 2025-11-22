@@ -583,10 +583,12 @@
 													<h5 class="card-title mb-1"><?php echo $row['item_name'];?></h5>
 													<p class="mb-1">Price: ₱<?php echo number_format($row['price'], 2);?></p>
 												</div>
-												<div class="flex-grow-1 text-center">
-													<p class="mb-0 fw-bold">Sold: <?php echo $row['total_sold'];?></p>
+												<div>
+													<div class="flex-grow-1 text-center">
+														<p class="mb-0 fw-bold">Sold: <?php echo $row['total_sold'];?></p>
+													</div>
+													<a href="stock.php" class="btn btn-primary btn-sm">View</a>
 												</div>
-												<a href="stock.php" class="btn btn-primary btn-sm">View</a>
 											</div>
 										</div>
 									<?php 
@@ -713,10 +715,12 @@
 												<div>
 													<h5 class="card-title mb-1"><?php echo $row['brand_name'];?></h5>
 												</div>
-												<div class="flex-grow-1 text-center">
-													<p class="mb-0 fw-bold">Sold: <?php echo $row['total_sold'];?></p>
+												<div>
+													<div class="flex-grow-1 text-center">
+														<p class="mb-0 fw-bold">Sold: <?php echo $row['total_sold'];?></p>
+													</div>
+													<a href="brands.php" class="btn btn-primary btn-sm">View</a>
 												</div>
-												<a href="brands.php" class="btn btn-primary btn-sm">View</a>
 											</div>
 										</div>
 									<?php 
