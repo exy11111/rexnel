@@ -702,6 +702,26 @@ ini_set('display_errors', 1);
 				const filteredStocks = selectedIndices.map(i => itemStocks[i]);
 				const filteredColors = selectedIndices.map(i => colors[i]);
 
+				myItemsChart2.data.labels = filteredLabels;
+				myItemsChart2.data.datasets[0].data = filteredStocks;
+				myItemsChart2.data.datasets[0].backgroundColor = filteredColors;
+				myItemsChart2.data.datasets[0].borderColor = filteredColors;
+
+				myItemsChart2.update();
+			});
+		});
+
+		document.querySelectorAll(".item-filter2").forEach(function (checkbox) {
+			checkbox.addEventListener("change", function () {
+				let selectedIndices = [];
+				document.querySelectorAll(".item-filter2:checked").forEach(cb => {
+				selectedIndices.push(parseInt(cb.value));
+				});
+
+				const filteredLabels = selectedIndices.map(i => itemNames[i]);
+				const filteredStocks = selectedIndices.map(i => itemStocks[i]);
+				const filteredColors = selectedIndices.map(i => colors[i]);
+
 				myItemsChart.data.labels = filteredLabels;
 				myItemsChart.data.datasets[0].data = filteredStocks;
 				myItemsChart.data.datasets[0].backgroundColor = filteredColors;
