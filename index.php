@@ -388,40 +388,72 @@ ini_set('display_errors', 1);
 									</div>
 								</div>
 								<?php if($_SESSION['role_id'] == 2): ?>
-								<div class="card mt-auto">
-									<div class="card-body">
-										<h5 class="card-title mb-2">Recent Activity</h5>
-										<div class="row">
-											<div class="col-md-4">
-												<ul>
-													<li><strong>Last Login:</strong> <?php echo $_SESSION['last_login']?></li>
-													<li>
-														<strong>Recent Order:</strong>
-														<?php if ($recent_order): ?>
-															<span class="me-2">Order #<?php echo htmlspecialchars($recent_order['purchase_id']); ?>:</span>
-															₱<span class="text-muted"><?php echo number_format($recent_order['price'], 2); ?></span>
-														<?php else: ?>
-															None
-														<?php endif; ?>
-													</li>
-												</ul>
-											</div>
-											<div class="col-md-8">
-												<ul>
-													<?php if(!$_SESSION['user_id'] == 17): ?><li><strong>Recent Notification:</strong> <?php echo $recent_notif['message']?></li><?php endif; ?>
-													<li>
-														<strong>Lowest Stock Alert:</strong> 
-														<?php if ($lowest_stock && $lowest_stock['stock'] <= 100): ?>
-															<?php echo htmlspecialchars($lowest_stock['item_name']); ?>: 
-															<?php echo number_format($lowest_stock['stock']); ?> stock left
-														<?php else: echo 'None';?>
-														<?php endif; ?>
-													</li>
-												</ul>
+									<?php 
+										$sql = "SELECT purchase_id, price, date, payment_method 
+										FROM purchases p1 
+										JOIN payment_method p2 ON p1.pm_id = p2.pm_id
+										WHERE p1.branch_id = :branch_id
+										ORDER BY p1.date DESC 
+										LIMIT 1";
+										$stmt = $conn->prepare($sql);
+										$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
+										$stmt->execute();
+										$recent_order = $stmt->fetch(PDO::FETCH_ASSOC);
+
+										$sql = "SELECT * FROM notifications WHERE user_id = :user_id ORDER BY created_at DESC LIMIT 1";
+										$stmt = $conn->prepare($sql);
+										$stmt->bindParam(':user_id', $_SESSION['user_id']);
+										$stmt->execute();
+										$recent_notif = $stmt->fetch(PDO::FETCH_ASSOC);
+
+										$sql = "SELECT item_id, barcode, item_name, category_name, brand_name, supplier_name, size_name, price, stock
+												FROM items i 
+												JOIN categories c ON i.category_id = c.category_id
+												JOIN brands b ON b.brand_id = i.brand_id
+												JOIN suppliers s ON s.supplier_id = i.supplier_id
+												JOIN sizes ss ON i.size_id = ss.size_id
+												WHERE i.branch_id = :branch_id
+												ORDER BY stock ASC
+												LIMIT 1";
+										$stmt = $conn->prepare($sql);
+										$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
+										$stmt->execute();
+										$lowest_stock = $stmt->fetch(PDO::FETCH_ASSOC);
+									?>
+									<div class="card mt-auto">
+										<div class="card-body">
+											<h5 class="card-title mb-2">Recent Activity</h5>
+											<div class="row">
+												<div class="col-md-4">
+													<ul>
+														<li><strong>Last Login:</strong> <?php echo $_SESSION['last_login']?></li>
+														<li>
+															<strong>Recent Order:</strong>
+															<?php if ($recent_order): ?>
+																<span class="me-2">Order #<?php echo htmlspecialchars($recent_order['purchase_id']); ?>:</span>
+																₱<span class="text-muted"><?php echo number_format($recent_order['price'], 2); ?></span>
+															<?php else: ?>
+																None
+															<?php endif; ?>
+														</li>
+													</ul>
+												</div>
+												<div class="col-md-8">
+													<ul>
+														<?php if(!$_SESSION['user_id'] == 17): ?><li><strong>Recent Notification:</strong> <?php echo $recent_notif['message']?></li><?php endif; ?>
+														<li>
+															<strong>Lowest Stock Alert:</strong> 
+															<?php if ($lowest_stock && $lowest_stock['stock'] <= 100): ?>
+																<?php echo htmlspecialchars($lowest_stock['item_name']); ?>: 
+																<?php echo number_format($lowest_stock['stock']); ?> stock left
+															<?php else: echo 'None';?>
+															<?php endif; ?>
+														</li>
+													</ul>
+												</div>
 											</div>
 										</div>
 									</div>
-								</div>
 								<?php endif; ?>
 							</div>
 						</div>
