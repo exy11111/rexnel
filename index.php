@@ -295,7 +295,7 @@ ini_set('display_errors', 1);
 						
 						<!-- FETCH -->
 						<?php
-							$sql = "SELECT item_name, stock, size_name FROM items JOIN sizes ON items.size_id = sizes.size_id WHERE items.branch_id = :branch_id AND is_disabled = 0";
+							$sql = "SELECT item_name, stock, size_name FROM items JOIN sizes ON items.size_id = sizes.size_id WHERE items.branch_id = :branch_id";
 							$stmt = $conn->prepare($sql);
 							$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
 							$stmt->execute();
@@ -304,19 +304,6 @@ ini_set('display_errors', 1);
 							$itemNames = [];
 							$itemStocks = [];
 							$colors = [];
-
-							$sql = "SELECT item_name, stock, size_name FROM items JOIN sizes ON items.size_id = sizes.size_id WHERE is_disabled = 0";
-							$stmt = $conn->prepare($sql);
-							$stmt->execute();
-							$items2 = $stmt->fetchAll(PDO::FETCH_ASSOC);
-							
-							$itemNames = [];
-							$itemStocks = [];
-							$colors = [];
-
-							$itemNames2 = [];
-							$itemStocks2 = [];
-							$colors2 = [];
 							
 							$lowStockThreshold = 10;
 							
@@ -328,17 +315,6 @@ ini_set('display_errors', 1);
 									$colors[] = 'rgb(255, 99, 71)'; 
 								} else {
 									$colors[] = 'rgb(34, 193, 34)';
-								}
-							}
-
-							foreach ($items2 as $item) {
-								$itemNames2[] = $item['item_name'].' '.$item['size_name'];
-								$itemStocks2[] = $item['stock'];
-								
-								if ($item['stock'] < $lowStockThreshold) {
-									$colors2[] = 'rgb(255, 99, 71)'; 
-								} else {
-									$colors2[] = 'rgb(34, 193, 34)';
 								}
 							}
 
@@ -360,22 +336,17 @@ ini_set('display_errors', 1);
 								$values[] = (float) $row['total_price'];
 							}
 						?>
-
-						<?php if ($_SESSION['role_id'] == 1):?>
 						<div class="row">
-							<div class="col-2">
-
-							</div>
-							<div class="col-md-8 d-flex flex-column">
+							<div class="col-md-6 d-flex flex-column">
 								<div class="card h-100">
 									<div class="card-header">
 										<div class="card-title">Sales Overview</div>
 									</div>
 									<div class="card-body">
-										<div class="chart-container mb-1">
+										<div class="chart-container mb-5">
 											<canvas id="sales_chart"></canvas>
 										</div>
-										<div class="row mb-1">
+										<div class="row mb-3">
 											<div class="col">
 												<label for="startDate">Start Date</label>
 												<input type="date" id="startDate" class="form-control">
@@ -386,14 +357,10 @@ ini_set('display_errors', 1);
 											</div>
 										</div>
 									</div>
-                            	</div>
+								</div>
+								
 							</div>
-							<div class="col-2">
 
-							</div>
-						</div>
-
-						<div class="row">
 							<div class="col-md-6 d-flex flex-column">
 								<div class="card">
 									<div class="card-header">
@@ -402,88 +369,6 @@ ini_set('display_errors', 1);
 									<div class="card-body">
 										<div class="chart-container">
 											<canvas id="items_chart"></canvas>
-										</div>
-										<div class="dropdown mb-3">
-											<button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-												Filter Items
-											</button>
-											<ul class="dropdown-menu overflow-auto" id="itemFilterList" style="max-height: 200px;">
-												<?php foreach ($itemNames as $index => $item): ?>
-													<li>
-														<label class="dropdown-item">
-															<input type="checkbox" class="form-check-input me-1 item-filter" value="<?= $index ?>" checked>
-															<?= htmlspecialchars($item) ?>
-														</label>
-													</li>
-												<?php endforeach; ?>
-											</ul>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="col-md-6 d-flex flex-column">
-								<div class="card">
-									<div class="card-header">
-										<div class="card-title">Stock Overview</div>
-									</div>
-									<div class="card-body">
-										<div class="chart-container">
-											<canvas id="items_chart"></canvas>
-										</div>
-										<div class="dropdown mb-3">
-											<button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-												Filter Items
-											</button>
-											<ul class="dropdown-menu overflow-auto" id="itemFilterList2" style="max-height: 200px;">
-												<?php foreach ($itemNames2 as $index => $item): ?>
-													<li>
-														<label class="dropdown-item">
-															<input type="checkbox" class="form-check-input me-1 item-filter" value="<?= $index ?>" checked>
-															<?= htmlspecialchars($item) ?>
-														</label>
-													</li>
-												<?php endforeach; ?>
-											</ul>
-										</div>
-									</div>
-								</div>
-							</div>
-							
-						</div>
-						<?php endif; ?>
-						<?php if ($_SESSION['role_id'] == 2): ?>
-						<div class="row">
-							<div class="col-md-6 d-flex flex-column">
-								<div class="card h-100">
-									<div class="card-header">
-										<div class="card-title">Sales Overview</div>
-									</div>
-									<div class="card-body">
-										<div class="chart-container mb-1">
-											<canvas id="sales_chart"></canvas>
-										</div>
-										<div class="row mb-1">
-											<div class="col">
-												<label for="startDate">Start Date</label>
-												<input type="date" id="startDate" class="form-control">
-											</div>
-											<div class="col">
-												<label for="endDate">End Date</label>
-												<input type="date" id="endDate" class="form-control">
-											</div>
-										</div>
-									</div>
-                            	</div>
-							</div>
-
-							<div class="col-md-6 d-flex flex-column">
-								<div class="card">
-									<div class="card-header">
-										<div class="card-title">Stock Overview</div>
-									</div>
-									<div class="card-body">
-										<div class="chart-container">
-											<canvas id="items_chart2"></canvas>
 										</div>
 										<div class="dropdown mb-3">
 											<button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
@@ -570,7 +455,6 @@ ini_set('display_errors', 1);
 								</div>
 							</div>
 						</div>
-						<?php endif; ?>
 					</div>
 					
 				</div>
@@ -705,19 +589,10 @@ ini_set('display_errors', 1);
 		$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
 		$stmt->execute();
 		$items = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-		$sql = "SELECT item_name, stock, size_name FROM items JOIN sizes ON items.size_id = sizes.size_id WHERE is_disabled = 0";
-		$stmt = $conn->prepare($sql);
-		$stmt->execute();
-		$items2 = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		
 		$itemNames = [];
 		$itemStocks = [];
 		$colors = [];
-
-		$itemNames2 = [];
-		$itemStocks2 = [];
-		$colors2 = [];
 		
 		$lowStockThreshold = 10;
 		
@@ -729,17 +604,6 @@ ini_set('display_errors', 1);
 				$colors[] = 'rgb(255, 99, 71)'; 
 			} else {
 				$colors[] = 'rgb(34, 193, 34)';
-			}
-		}
-
-		foreach ($items2 as $item) {
-			$itemNames2[] = $item['item_name'].' '.$item['size_name'];
-			$itemStocks2[] = $item['stock'];
-			
-			if ($item['stock'] < $lowStockThreshold) {
-				$colors2[] = 'rgb(255, 99, 71)'; 
-			} else {
-				$colors2[] = 'rgb(34, 193, 34)';
 			}
 		}
 
@@ -763,19 +627,13 @@ ini_set('display_errors', 1);
 		
 	<script>
 		var itemNames = <?php echo json_encode($itemNames); ?>;
-		var itemNames2 = <?php echo json_encode($itemNames2); ?>;
-
 		var itemStocks = <?php echo json_encode($itemStocks); ?>;
-		var itemStocks2 = <?php echo json_encode($itemStocks2); ?>;
-
 		var colors = <?php echo json_encode($colors); ?>;
-		var colors2 = <?php echo json_encode($colors2); ?>;
 
 		var labels = <?php echo json_encode($labels); ?>;
     	var values = <?php echo json_encode($values); ?>;
 		
 		var items_chart = document.getElementById("items_chart").getContext("2d");
-		var items_chart2 = document.getElementById("items_chart2").getContext("2d");
 		var sales_chart = document.getElementById("sales_chart").getContext("2d");
 		
 		var myItemsChart = new Chart(items_chart, {
@@ -804,7 +662,6 @@ ini_set('display_errors', 1);
 				}
 			}
 		});
-
 		document.querySelectorAll(".item-filter").forEach(function (checkbox) {
 			checkbox.addEventListener("change", function () {
 				let selectedIndices = [];
@@ -825,130 +682,40 @@ ini_set('display_errors', 1);
 			});
 		});
 
-		<?php if ($_SESSION['role_id'] == 2): ?>
-
-			var mySalesChart = new Chart(sales_chart, {
-				type: 'line',
-				data: {
-					labels: labels,
-					datasets: [{
-						label: 'Total Purchases',
-						data: values,
-						borderColor: 'rgb(255, 99, 132)',
-						backgroundColor: 'rgba(255, 99, 132, 0.2)',
-						lineTension: 0.1
-					}]
-				},
-				options: {
-					responsive: true,
-					scales: {
-						x: {
-							title: {
-								display: true,
-								text: 'Date'
-							}
-						},
-						y: {
-							title: {
-								display: true,
-								text: 'Total Price'
-							},
-							beginAtZero: true
+		var mySalesChart = new Chart(sales_chart, {
+			type: 'line',
+			data: {
+				labels: labels,
+				datasets: [{
+					label: 'Total Purchases',
+					data: values,
+					borderColor: 'rgb(255, 99, 132)',
+					backgroundColor: 'rgba(255, 99, 132, 0.2)',
+					lineTension: 0.1
+				}]
+			},
+			options: {
+				responsive: true,
+				scales: {
+					x: {
+						title: {
+							display: true,
+							text: 'Date'
 						}
 					},
-					legend: {
-						display: false 
+					y: {
+						title: {
+							display: true,
+							text: 'Total Price'
+						},
+						beginAtZero: true
 					}
-				}
-			});
-
-		
-		<?php endif; ?>
-
-		<?php if($_SESSION['role_id'] == 1): ?>
-			var myItemsChart2 = new Chart(items_chart2, {
-				type: 'bar',
-				data: {
-					labels: itemNames2,
-					datasets: [{
-						label: "Stock",
-						backgroundColor: colors2,
-						borderColor: colors2,
-						data: itemStocks2
-					}],
 				},
-				options: {
-					responsive: true,
-					maintainAspectRatio: false,
-					scales: {
-						yAxes: [{
-							ticks: {
-								beginAtZero: true
-							}
-						}]
-					},
-					legend: {
-						display: false 
-					}
+				legend: {
+					display: false 
 				}
-			});
-			let salesChart;
-
-			function loadSalesChart(startDate = '', endDate = '') {
-				// Build query string
-				let url = 'process_getsalesoverview.php';
-				if(startDate && endDate) {
-					url += `?start=${encodeURIComponent(startDate)}&end=${encodeURIComponent(endDate)}`;
-				}
-
-				fetch(url)
-					.then(response => {
-						if(!response.ok) throw new Error('Network response was not ok');
-						return response.text();
-					})
-					.then(text => {
-						if(text.trim() === "") throw new Error('Empty response from server');
-						return JSON.parse(text);
-					})
-					.then(chartData => {
-						const ctx = document.getElementById('sales_chart').getContext('2d');
-
-						// Destroy previous chart if exists
-						if(salesChart) salesChart.destroy();
-
-						salesChart = new Chart(ctx, {
-							type: 'line',
-							data: chartData,
-							options: {
-								responsive: true,
-								scales: {
-									y: {
-										beginAtZero: true,
-										ticks: {
-											callback: value => '₱' + value.toLocaleString()
-										}
-									},
-									x: {
-										ticks: {
-											autoSkip: true,
-											maxTicksLimit: 10,
-											callback: label => {
-												const date = new Date(label);
-												if(!isNaN(date.getTime())) {
-													return date.toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' });
-												}
-												return label;
-											}
-										}
-									}
-								}
-							}
-						});
-					})
-					.catch(error => console.error('Fetch/Parsing Error:', error));
 			}
-			loadSalesChart();
-		<?php endif; ?>
+		});
 
 		const originalLabels = <?php echo json_encode($labels); ?>;
 		const originalValues = <?php echo json_encode($values); ?>;
