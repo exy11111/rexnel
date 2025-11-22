@@ -31,6 +31,14 @@
                         <p>Dashboard</p>
                     </a>
                 </li>
+                <?php if($_SESSION['role_id'] == 1):?>
+                <li class="nav-item">
+                    <a href="branches.php" class="text-white">
+                        <i class="fas fa-home"></i>
+                        <p>Branches</p>
+                    </a>
+                </li>
+                <?php endif; ?>
                 <li class="nav-section">
                     <span class="sidebar-mini-icon">
                         <i class="fa fa-ellipsis-h"></i>
