@@ -371,12 +371,6 @@ ini_set('display_errors', 1);
 							}
 							$categories = array_keys($categories);
 
-							$branches = [];
-							foreach ($items2 as $item) {
-								$branches[$item['branch_name']] = true; // store unique branch names
-							}
-							$branches = array_keys($branches);
-
 							$sql = "SELECT DATE(date) AS day, SUM(price) AS total_price
 							FROM purchases
 							WHERE branch_id = :branch_id
@@ -475,22 +469,6 @@ ini_set('display_errors', 1);
 														<label class="dropdown-item">
 															<input type="checkbox" class="form-check-input me-1 item-filter2" value="<?= htmlspecialchars($category) ?>" checked>
 															<?= htmlspecialchars($category) ?>
-														</label>
-													</li>
-												<?php endforeach; ?>
-											</ul>
-										</div>
-
-										<div class="dropdown mb-3">
-											<button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-												Filter Branches
-											</button>
-											<ul class="dropdown-menu overflow-auto" id="branchFilterList2" style="max-height: 200px;">
-												<?php foreach ($branches as $branch): ?>
-													<li>
-														<label class="dropdown-item">
-															<input type="checkbox" class="form-check-input me-1 branch-filter2" value="<?= htmlspecialchars($branch) ?>" checked>
-															<?= htmlspecialchars($branch) ?>
 														</label>
 													</li>
 												<?php endforeach; ?>
@@ -758,30 +736,21 @@ ini_set('display_errors', 1);
 			});
 		});
 
-		function updateChart2() {
-			const selectedCategories = Array.from(document.querySelectorAll(".item-filter2:checked"))
-											.map(cb => cb.value);
-			const selectedBranches = Array.from(document.querySelectorAll(".branch-filter2:checked"))
-										.map(cb => cb.value);
+		document.querySelectorAll(".item-filter2").forEach(function (checkbox) {
+			checkbox.addEventListener("change", function () {
+				const selectedCategories = Array.from(document.querySelectorAll(".item-filter2:checked"))
+												.map(cb => cb.value);
 
-			const filteredData = itemData2.filter(item => 
-				selectedCategories.includes(item.category) &&
-				selectedBranches.includes(item.label.split(' ')[0]) // or adjust if branch is separate
-			);
+				const filteredData = itemData2.filter(item => selectedCategories.includes(item.category));
 
-			myItemsChart2.data.labels = filteredData.map(d => d.label);
-			myItemsChart2.data.datasets[0].data = filteredData.map(d => d.stock);
-			myItemsChart2.data.datasets[0].backgroundColor = filteredData.map(d => d.color);
-			myItemsChart2.data.datasets[0].borderColor = filteredData.map(d => d.color);
+				myItemsChart2.data.labels = filteredData.map(d => d.label);
+				myItemsChart2.data.datasets[0].data = filteredData.map(d => d.stock);
+				myItemsChart2.data.datasets[0].backgroundColor = filteredData.map(d => d.color);
+				myItemsChart2.data.datasets[0].borderColor = filteredData.map(d => d.color);
 
-			myItemsChart2.update();
-		}
-
-		// Add event listeners for both category and branch filters
-		document.querySelectorAll(".item-filter2, .branch-filter2").forEach(function (checkbox) {
-			checkbox.addEventListener("change", updateChart2);
+				myItemsChart2.update();
+			});
 		});
-		updateChart2();
 
 		const startDateInput = document.getElementById('startDate');
 		const endDateInput = document.getElementById('endDate');
