@@ -110,7 +110,7 @@
                                                         </div>
                                                         <div class="col-6">
                                                             <button type="button" 
-                                                                class="btn btn-danger btn-danger remove-btn w-100 mx-2" 
+                                                                class="btn btn-danger remove-btn w-100 mx-2" 
                                                                 data-id="<?= htmlspecialchars($row['branch_id']) ?>" 
                                                                 title="Remove">
                                                                 <i class="fa fa-times"></i> Delete
