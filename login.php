@@ -26,6 +26,7 @@
         $_SESSION['last_login'] = $todayDateTime;
         $_SESSION['role_id'] = $user['role_id'];
 
+        $_SESSION['branch_id'] = $user['branch_id'];
         if($_SESSION['role_id'] == 1){
           header("Location: adminpanel.php");
           exit();
@@ -39,8 +40,6 @@
           header("Location: supplier.php");
           exit();
         }
-
-        $_SESSION['branch_id'] = $user['branch_id'];
 
         header("Location: purchase.php");
         exit();
