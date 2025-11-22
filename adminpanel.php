@@ -339,9 +339,22 @@ ini_set('display_errors', 1);
 								$itemData2[] = [
 									'label' => $item['branch_name'].' '.$item['item_name'].' '.$item['size_name'],
 									'stock' => $item['stock'],
-									'color' => ($item['stock'] < $lowStockThreshold) ? 'rgb(255, 99, 71)' : 'rgb(34, 193, 34)',
+									'color' => ($item['stock'] < $lowStockThreshold) 
+										? 'rgb(255, 99, 71)'           // low stock → red
+										: randomColorExceptRed(),
 									'category' => $item['category_name']
 								];
+							}
+
+							function randomColorExceptRed() {
+								do {
+									$r = rand(0, 255);
+									$g = rand(0, 255);
+									$b = rand(0, 255);
+									// Reject mostly-red colors
+								} while ($r > 200 && $g < 80 && $b < 80);
+
+								return "rgb($r, $g, $b)";
 							}
 
 							$categories = [];
