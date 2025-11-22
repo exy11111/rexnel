@@ -17,7 +17,7 @@ ini_set('display_errors', 1);
 	}
 
 
-	$sql = "SELECT e.expense_id, et.expense_name, e.comment, e.amount, e.created_at, b.branch_name
+	$sql = "SELECT e.expense_id, e.expensetype_id, et.expense_name, e.comment, e.amount, e.created_at, b.branch_name
     FROM expenses e
     LEFT JOIN expensetype et ON e.expensetype_id = et.expensetype_id
     LEFT JOIN branch b ON b.branch_id = e.branch_id
