@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email'])) {
             $mail->Host = 'smtp.hostinger.com';
             $mail->SMTPAuth = true;
             $mail->Username = 'support@houseoflocal.store';
-            $mail->Password = 'S8uN4#qPm2bV!rYx';
+            $mail->Password = 'pM&ka&M7';
             $mail->SMTPSecure = 'ssl';
             $mail->Port = 465;
 
