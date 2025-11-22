@@ -66,11 +66,6 @@
                                 </a>
                             </li>
                             <?php endif; ?>
-                            <li>
-                                <a href="branches.php">
-                                    <span class="sub-item text-white">Branches</span>
-                                </a>
-                            </li>
                         </ul>
                     </div>
                 </li>
