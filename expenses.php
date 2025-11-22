@@ -17,7 +17,7 @@ ini_set('display_errors', 1);
 	}
 
 
-	$sql = "SELECT e.expense_id, et.expensetype_name, e.comment, e.amount, e.created_at, b.branch_name
+	$sql = "SELECT e.expense_id, et.expense_name, e.comment, e.amount, e.created_at, b.branch_name
     FROM expenses e
     LEFT JOIN expensetype et ON e.expensetype_id = et.expensetype_id
     LEFT JOIN branch b ON b.branch_id = e.branch_id
@@ -130,7 +130,7 @@ ini_set('display_errors', 1);
 													foreach($data as $row){
 														echo "<tr data-id=".htmlspecialchars($row['expense_id']).">";
 														echo "<td>" . date("F d, Y", strtotime($row['date'])) . "</td>";
-														echo "<td>".htmlspecialchars($row['expensetype_name'])."</td>";
+														echo "<td>".htmlspecialchars($row['expense_name'])."</td>";
 														echo "<td>".htmlspecialchars($row['comment'])."</td>";
 														echo "<td>
 																<div class='form-button-action'>
