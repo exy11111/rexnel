@@ -322,10 +322,10 @@ ini_set('display_errors', 1);
 							$items2 = $stmt->fetchAll(PDO::FETCH_ASSOC);
 							$itemData2 = [];
 
-							$sql = "SELECT * FROM categories";
+							$sql = "SELECT * FROM branch";
 							$stmt = $conn->prepare($sql);
 							$stmt->execute();
-							$cat = $stmt->fetchAll();
+							$br = $stmt->fetchAll();
 							
 							
 							$lowStockThreshold = 10;
@@ -473,11 +473,11 @@ ini_set('display_errors', 1);
 												Filter Items
 											</button>
 											<ul class="dropdown-menu overflow-auto" id="itemFilterList2" style="max-height: 200px;">
-												<?php foreach ($cat as $category): ?>
+												<?php foreach ($categories as $category): ?>
 													<li>
 														<label class="dropdown-item">
-															<input type="checkbox" class="form-check-input me-1 item-filter2" value="<?= htmlspecialchars($category['category_name']) ?>" checked>
-															<?= htmlspecialchars($category['category_name']) ?>
+															<input type="checkbox" class="form-check-input me-1 item-filter2" value="<?= htmlspecialchars($category) ?>" checked>
+															<?= htmlspecialchars($category) ?>
 														</label>
 													</li>
 												<?php endforeach; ?>
@@ -488,11 +488,11 @@ ini_set('display_errors', 1);
 												Filter Branches
 											</button>
 											<ul class="dropdown-menu overflow-auto" id="branchFilterList2" style="max-height: 200px;">
-												<?php foreach ($branches as $branch): ?>
+												<?php foreach ($br as $branch): ?>
 													<li>
 														<label class="dropdown-item">
-															<input type="checkbox" class="form-check-input me-1 branch-filter2" value="<?= htmlspecialchars($branch) ?>" checked>
-															<?= htmlspecialchars($branch) ?>
+															<input type="checkbox" class="form-check-input me-1 branch-filter2" value="<?= htmlspecialchars($branch['branch_name']) ?>" checked>
+															<?= htmlspecialchars($branch['branch_name']) ?>
 														</label>
 													</li>
 												<?php endforeach; ?>
