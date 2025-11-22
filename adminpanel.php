@@ -531,8 +531,47 @@ ini_set('display_errors', 1);
 													$filterLabel = "All Time";
 													break;
 											}
+
+											$selectedBranchId = isset($_GET['branch_id']) ? $_GET['branch_id'] : 'all';
+											$selectedBranchName = 'All Branches';
+
+											if ($selectedBranchId !== 'all') {
+												foreach ($branches as $branch) {
+													if ($branch['branch_id'] == $selectedBranchId) {
+														$selectedBranchName = $branch['branch_name'];
+														break;
+													}
+												}
+											}
+											
 										?>
 										<div class="d-flex align-items-center">
+											<div class="dropdown">
+												<button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="branchFilterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+													<?= htmlspecialchars($selectedBranchName) ?>
+												</button>
+												<ul class="dropdown-menu" aria-labelledby="branchFilterDropdown">
+													<!-- All Branches option -->
+													<?php
+														$queryParams = $_GET;
+														$queryParams['branch_id'] = 'all';
+														$allUrl = basename($_SERVER['PHP_SELF']) . '?' . http_build_query($queryParams);
+													?>
+													<li><a class="dropdown-item" href="<?= $allUrl ?>">All Branches</a></li>
+
+													<!-- Individual branch options -->
+													<?php foreach ($branches as $branch): ?>
+														<?php
+															$queryParams = $_GET;
+															$queryParams['branch_id'] = $branch['branch_id'];
+															$url = basename($_SERVER['PHP_SELF']) . '?' . http_build_query($queryParams);
+														?>
+														<li>
+															<a class="dropdown-item" href="<?= $url ?>"><?= htmlspecialchars($branch['branch_name']) ?></a>
+														</li>
+													<?php endforeach; ?>
+												</ul>
+											</div>
 											<div class="dropdown">
 												<button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
 													<?= htmlspecialchars($filterLabel) ?>
@@ -567,6 +606,7 @@ ini_set('display_errors', 1);
 
 									<?php 
 										$topProductFilter = isset($_GET['top_product_filter']) ? $_GET['top_product_filter'] : 'all';
+										$selectedBranch = isset($_GET['branch_id']) ? $_GET['branch_id'] : 'all';
 
 										$where = "WHERE 1";
 										$params = [];
@@ -585,6 +625,10 @@ ini_set('display_errors', 1);
 										} elseif ($topProductFilter === 'year') {
 											$where .= " AND YEAR(p.date) = :year";
 											$params[':year'] = $thisYear;
+										}
+										if ($selectedBranch !== 'all') {
+											$where .= " AND p.branch_id = :branch_id";
+											$params[':branch_id'] = $selectedBranch;
 										}							
 
 										$sql = "SELECT 
