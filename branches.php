@@ -100,13 +100,11 @@
                                                 <?php if ($_SESSION['user_id'] == 17): ?>
                                                     <div class="row">
                                                         <div class="col-6">
-                                                            <button type="button" 
+                                                            <a href="index.php?b=<?php echo $row['branch_id']?>"
                                                                 class="btn btn-primary w-100 mx-2" 
-                                                                data-bs-toggle="modal" 
-                                                                data-bs-target="#editBranchModal" 
                                                                 title="Edit Task">
                                                                 <i class="fa fa-edit"></i> Open
-                                                            </button>
+                                                            </a>
                                                         </div>
                                                         <div class="col-6">
                                                             <button type="button" 

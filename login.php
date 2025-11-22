@@ -27,7 +27,7 @@
         $_SESSION['role_id'] = $user['role_id'];
 
         if($_SESSION['role_id'] == 1){
-          header("Location: adminportal.php");
+          header("Location: adminpanel.php");
           exit();
         }
         else if($_SESSION['role_id'] == 3){
