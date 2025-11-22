@@ -63,7 +63,7 @@
 					<div class="page-header">
 						<div class="row">
                             <div class="col-12 text-center">
-                                <h1 class="w-100 text-center">
+                                <h1 class="w-100 text-center" style="float:none !important;">
                                     Branches
                                 </h1>
                             </div>
