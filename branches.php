@@ -70,7 +70,7 @@
                             <div class="row">
                                 <?php foreach ($branch_data1 as $row): ?>
                                     <div class="col-md-4 mb-3">
-                                        <div class="card shadow-sm" data-id="<?= htmlspecialchars($row['branch_id']) ?>">
+                                        <div class="card shadow-sm h-100" data-id="<?= htmlspecialchars($row['branch_id']) ?>">
                                             
                                             <div class="card-body text-center">
                                                 <h5 class="card-title mb-2">
@@ -90,7 +90,7 @@
                                                 <?php if ($_SESSION['user_id'] == 17): ?>
                                                     <div class="d-flex justify-content-between">
                                                         <button type="button" 
-                                                            class="btn btn-link btn-primary btn-lg" 
+                                                            class="btn btn-primary btn-primary btn-lg" 
                                                             data-bs-toggle="modal" 
                                                             data-bs-target="#editBranchModal" 
                                                             title="Edit Task">
@@ -98,7 +98,7 @@
                                                         </button>
 
                                                         <button type="button" 
-                                                            class="btn btn-link btn-danger remove-btn" 
+                                                            class="btn btn-danger btn-danger remove-btn" 
                                                             data-id="<?= htmlspecialchars($row['branch_id']) ?>" 
                                                             title="Remove">
                                                             <i class="fa fa-times"></i>
