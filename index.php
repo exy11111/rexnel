@@ -681,6 +681,8 @@ ini_set('display_errors', 1);
 			});
 		});
 
+		let salesChart;
+
 		function loadSalesChart(startDate = '', endDate = '') {
 			// Build query string
 			let url = 'process_getsalesoverview.php';
