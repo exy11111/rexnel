@@ -3,6 +3,12 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 	require ('session.php');
 	require ('db.php');
+
+	if($_SESSION['role_id'] == 1){
+		header('Location: adminpanel.php');
+		exit;
+	}
+
 	if(isset($_GET['b'])){
 		$_SESSION['branch_id'] = $_GET['b'];
 	}
