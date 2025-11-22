@@ -634,6 +634,7 @@ ini_set('display_errors', 1);
     	var values = <?php echo json_encode($values); ?>;
 		
 		var items_chart = document.getElementById("items_chart").getContext("2d");
+		var sales_chart = document.getElementById("sales_chart").getContext("2d");
 		
 		var myItemsChart = new Chart(items_chart, {
 			type: 'bar',
@@ -681,62 +682,100 @@ ini_set('display_errors', 1);
 			});
 		});
 
-		let salesChart;
+		<?php if ($_SESSION['role_id'] == 2): ?>
 
-		function loadSalesChart(startDate = '', endDate = '') {
-			// Build query string
-			let url = 'process_getsalesoverview.php';
-			if(startDate && endDate) {
-				url += `?start=${encodeURIComponent(startDate)}&end=${encodeURIComponent(endDate)}`;
+		var mySalesChart = new Chart(sales_chart, {
+			type: 'line',
+			data: {
+				labels: labels,
+				datasets: [{
+					label: 'Total Purchases',
+					data: values,
+					borderColor: 'rgb(255, 99, 132)',
+					backgroundColor: 'rgba(255, 99, 132, 0.2)',
+					lineTension: 0.1
+				}]
+			},
+			options: {
+				responsive: true,
+				scales: {
+					x: {
+						title: {
+							display: true,
+							text: 'Date'
+						}
+					},
+					y: {
+						title: {
+							display: true,
+							text: 'Total Price'
+						},
+						beginAtZero: true
+					}
+				},
+				legend: {
+					display: false 
+				}
 			}
+		});
+		<?php else if($_SESSION['role_id'] == 1): ?>
+			let salesChart;
 
-			fetch(url)
-				.then(response => {
-					if(!response.ok) throw new Error('Network response was not ok');
-					return response.text();
-				})
-				.then(text => {
-					if(text.trim() === "") throw new Error('Empty response from server');
-					return JSON.parse(text);
-				})
-				.then(chartData => {
-					const ctx = document.getElementById('sales_chart').getContext('2d');
+			function loadSalesChart(startDate = '', endDate = '') {
+				// Build query string
+				let url = 'process_getsalesoverview.php';
+				if(startDate && endDate) {
+					url += `?start=${encodeURIComponent(startDate)}&end=${encodeURIComponent(endDate)}`;
+				}
 
-					// Destroy previous chart if exists
-					if(salesChart) salesChart.destroy();
+				fetch(url)
+					.then(response => {
+						if(!response.ok) throw new Error('Network response was not ok');
+						return response.text();
+					})
+					.then(text => {
+						if(text.trim() === "") throw new Error('Empty response from server');
+						return JSON.parse(text);
+					})
+					.then(chartData => {
+						const ctx = document.getElementById('sales_chart').getContext('2d');
 
-					salesChart = new Chart(ctx, {
-						type: 'line',
-						data: chartData,
-						options: {
-							responsive: true,
-							scales: {
-								y: {
-									beginAtZero: true,
-									ticks: {
-										callback: value => '₱' + value.toLocaleString()
-									}
-								},
-								x: {
-									ticks: {
-										autoSkip: true,
-										maxTicksLimit: 10,
-										callback: label => {
-											const date = new Date(label);
-											if(!isNaN(date.getTime())) {
-												return date.toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' });
+						// Destroy previous chart if exists
+						if(salesChart) salesChart.destroy();
+
+						salesChart = new Chart(ctx, {
+							type: 'line',
+							data: chartData,
+							options: {
+								responsive: true,
+								scales: {
+									y: {
+										beginAtZero: true,
+										ticks: {
+											callback: value => '₱' + value.toLocaleString()
+										}
+									},
+									x: {
+										ticks: {
+											autoSkip: true,
+											maxTicksLimit: 10,
+											callback: label => {
+												const date = new Date(label);
+												if(!isNaN(date.getTime())) {
+													return date.toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' });
+												}
+												return label;
 											}
-											return label;
 										}
 									}
 								}
 							}
-						}
-					});
-				})
-				.catch(error => console.error('Fetch/Parsing Error:', error));
-		}
-		loadSalesChart();
+						});
+					})
+					.catch(error => console.error('Fetch/Parsing Error:', error));
+			}
+			loadSalesChart();
+		<?php endif; ?>
 
 		const originalLabels = <?php echo json_encode($labels); ?>;
 		const originalValues = <?php echo json_encode($values); ?>;
