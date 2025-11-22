@@ -468,35 +468,41 @@ ini_set('display_errors', 1);
 										<div class="chart-container">
 											<canvas id="items_chart2"></canvas>
 										</div>
-										<div class="dropdown mb-3">
-											<button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-												Filter Categories
-											</button>
-											<ul class="dropdown-menu overflow-auto" id="itemFilterList2" style="max-height: 200px;">
-												<?php foreach ($categories as $category): ?>
-													<li>
-														<label class="dropdown-item">
-															<input type="checkbox" class="form-check-input me-1 item-filter2" value="<?= htmlspecialchars($category) ?>" checked>
-															<?= htmlspecialchars($category) ?>
-														</label>
-													</li>
-												<?php endforeach; ?>
-											</ul>
-										</div>
-										<div class="dropdown mb-3">
-											<button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-												Filter Branches
-											</button>
-											<ul class="dropdown-menu overflow-auto" id="branchFilterList2" style="max-height: 200px;">
-												<?php foreach ($br as $branch): ?>
-													<li>
-														<label class="dropdown-item">
-															<input type="checkbox" class="form-check-input me-1 branch-filter2" value="<?= htmlspecialchars($branch['branch_name']) ?>" checked>
-															<?= htmlspecialchars($branch['branch_name']) ?>
-														</label>
-													</li>
-												<?php endforeach; ?>
-											</ul>
+										<div class="row">
+											<div class="col-3">
+												<div class="dropdown mb-3">
+													<button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+														Filter Categories
+													</button>
+													<ul class="dropdown-menu overflow-auto" id="itemFilterList2" style="max-height: 200px;">
+														<?php foreach ($categories as $category): ?>
+															<li>
+																<label class="dropdown-item">
+																	<input type="checkbox" class="form-check-input me-1 item-filter2" value="<?= htmlspecialchars($category) ?>" checked>
+																	<?= htmlspecialchars($category) ?>
+																</label>
+															</li>
+														<?php endforeach; ?>
+													</ul>
+												</div>
+											</div>
+											<div class="col-3">
+												<div class="dropdown mb-3">
+													<button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+														Filter Branches
+													</button>
+													<ul class="dropdown-menu overflow-auto" id="branchFilterList2" style="max-height: 200px;">
+														<?php foreach ($br as $branch): ?>
+															<li>
+																<label class="dropdown-item">
+																	<input type="checkbox" class="form-check-input me-1 branch-filter2" value="<?= htmlspecialchars($branch['branch_name']) ?>" checked>
+																	<?= htmlspecialchars($branch['branch_name']) ?>
+																</label>
+															</li>
+														<?php endforeach; ?>
+													</ul>
+												</div>
+											</div>
 										</div>
 									</div>
 								</div>
