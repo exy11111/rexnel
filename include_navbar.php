@@ -178,10 +178,6 @@
                                 </div>
                             </li>
                             <li>
-                                <?php if($_SESSION['user_id'] == 17):?>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="adminportal.php">Change Branch</a>
-                                <?php endif; ?>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#" id="accountSetting" data-bs-toggle="modal" data-bs-target="#editAccountModal" data-id="<?php if(isset($_SESSION['user_id'])){echo $_SESSION['user_id'];}  ?>">Account Setting</a>
                                 <div class="dropdown-divider"></div>
