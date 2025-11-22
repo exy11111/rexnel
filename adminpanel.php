@@ -340,19 +340,27 @@ ini_set('display_errors', 1);
 									'label' => $item['branch_name'].' '.$item['item_name'].' '.$item['size_name'],
 									'stock' => $item['stock'],
 									'color' => ($item['stock'] < $lowStockThreshold) 
-										? 'rgb(255, 99, 71)'           // low stock → red
-										: randomColorExceptRed(),
+                    ? 'rgb(255, 99, 71)'                   // red for low stock
+                    : generateColorFromString($item['item_name']),
 									'category' => $item['category_name']
 								];
 							}
 
-							function randomColorExceptRed() {
-								do {
-									$r = rand(0, 255);
-									$g = rand(0, 255);
-									$b = rand(0, 255);
-									// Reject mostly-red colors
-								} while ($r > 200 && $g < 80 && $b < 80);
+							function generateColorFromString($str) {
+								// hash the string to get a number
+								$hash = crc32($str);
+								
+								// Use bit masking to get RGB values
+								$r = ($hash & 0xFF0000) >> 16;
+								$g = ($hash & 0x00FF00) >> 8;
+								$b = $hash & 0x0000FF;
+
+								// Avoid mostly-red colors (reserved for low stock)
+								if ($r > 200 && $g < 80 && $b < 80) {
+									$r = 100 + ($r % 100);
+									$g = 100 + ($g % 100);
+									$b = 100 + ($b % 100);
+								}
 
 								return "rgb($r, $g, $b)";
 							}
