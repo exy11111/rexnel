@@ -65,6 +65,11 @@
                                     <span class="sub-item text-white">Supplier</span>
                                 </a>
                             </li>
+                            <li>
+                                <a href="#">
+                                    <span class="sub-item text-white">Login History</span>
+                                </a>
+                            </li>
                             <?php endif; ?>
                         </ul>
                     </div>
