@@ -63,7 +63,7 @@
 					<div class="page-header">
 						
 					</div>
-                    <div class="row">
+                    <div class="row mb-4">
                         <div class="col-12 text-center">
                             <h1 class="w-100 text-center">
                                 Branches
@@ -169,6 +169,57 @@
                             </script>
                             <?php include 'modal_editbranch.php'; ?>
                         </div>
+                        <div class="modal fade" id="addAccountModal" tabindex="-1" role="dialog" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header border-0">
+                                        <h5 class="modal-title">
+                                            <span class="fw-mediumbold">
+                                            New</span> 
+                                            <span class="fw-light">
+                                                Branch
+                                            </span>
+                                        </h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <form action="process_addbranch.php" method="POST">
+                                        <div class="modal-body">
+                                            <p class="small">Create a new branch using this form, make sure you fill them all</p>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="form-group form-group-default">
+                                                        <label>Branch Name</label>
+                                                        <input type="text" class="form-control" name="branch_name" placeholder="fill branch name" required>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="form-group form-group-default">
+                                                        <label>Location</label>
+                                                        <input type="text" class="form-control" name="location" placeholder="fill location" required>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 ">
+                                                    <div class="form-group form-group-default">
+                                                        <label>Opening Time</label>
+                                                        <input type="time" class="form-control" name="opening_time" value="08:30" required>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 ps-0">
+                                                    <div class="form-group form-group-default">
+                                                        <label>Closing Time</label>
+                                                        <input type="time" class="form-control" name="closing_time" value="22:30" required>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer border-0">
+                                            <button type="submit" class="btn btn-primary">Add</button>	
+                                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                         <!--
 							<div class="card">
 								<div class="card-header">
@@ -178,57 +229,7 @@
 									</div>
 								</div>
 								<div class="card-body">
-									<div class="modal fade" id="addAccountModal" tabindex="-1" role="dialog" aria-hidden="true">
-										<div class="modal-dialog" role="document">
-											<div class="modal-content">
-												<div class="modal-header border-0">
-													<h5 class="modal-title">
-														<span class="fw-mediumbold">
-														New</span> 
-														<span class="fw-light">
-															Branch
-														</span>
-													</h5>
-													<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-												</div>
-                                                <form action="process_addbranch.php" method="POST">
-												    <div class="modal-body">
-													    <p class="small">Create a new branch using this form, make sure you fill them all</p>
-                                                        <div class="row">
-                                                            <div class="col-md-12">
-                                                                <div class="form-group form-group-default">
-                                                                    <label>Branch Name</label>
-                                                                    <input type="text" class="form-control" name="branch_name" placeholder="fill branch name" required>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-12">
-                                                                <div class="form-group form-group-default">
-                                                                    <label>Location</label>
-                                                                    <input type="text" class="form-control" name="location" placeholder="fill location" required>
-                                                                </div>
-                                                            </div>
-															<div class="col-md-6 ">
-                                                                <div class="form-group form-group-default">
-                                                                    <label>Opening Time</label>
-                                                                    <input type="time" class="form-control" name="opening_time" value="08:30" required>
-                                                                </div>
-                                                            </div>
-															<div class="col-md-6 ps-0">
-                                                                <div class="form-group form-group-default">
-                                                                    <label>Closing Time</label>
-                                                                    <input type="time" class="form-control" name="closing_time" value="22:30" required>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-									    			</div>
-                                                    <div class="modal-footer border-0">
-                                                        <button type="submit" class="btn btn-primary">Add</button>	
-                                                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                                                    </div>
-                                                </form>
-											</div>
-										</div>
-									</div>
+									
                                         -->
           
 							</div>
