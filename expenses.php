@@ -143,13 +143,17 @@ ini_set('display_errors', 1);
 														echo "<td>".htmlspecialchars($row['comment'])."</td>";
 														echo "<td>
 																<div class='form-button-action'>
-																	<a href='#' class='btn btn-link btn-primary btn-lg' 
-																		data-bs-toggle='modal' 
-																		data-bs-target='#viewItemModal' 
-																		data-id='".htmlspecialchars($row['expense_id'])."' 
-																		title='Edit Expense'>
-																		<i class='bi bi-pencil-square'></i>
-																	</a>
+																	<a href='#'
+                                                                        class='btn btn-link btn-primary btn-lg edit-expense-btn'
+                                                                        data-bs-toggle='modal'
+                                                                        data-bs-target='#editExpenseModal'
+                                                                        data-id='".htmlspecialchars($row["expense_id"])."'
+                                                                        data-type='".htmlspecialchars($row["expensetype_id"])."'
+                                                                        data-amount='".htmlspecialchars($row["amount"])."'
+                                                                        data-comment='".htmlspecialchars($row["comment"])."'
+                                                                        title='Edit Expense'>
+                                                                        <i class='bi bi-pencil-square'></i>
+                                                                    </a>
                                                                     <a href='#' class='btn btn-link btn-danger btn-lg remove-btn' 
 																		data-id='".htmlspecialchars($row['expense_id'])."' 
 																		title='Remove Expense'>
@@ -304,48 +308,61 @@ ini_set('display_errors', 1);
 			</div>
 		</div>
 	</div>
-	<!-- Modal -->
-	<div class="modal modal-lg fade" id="editStatusModal" tabindex="-1" role="dialog" aria-hidden="true">
-	<div class="modal-dialog" role="document">
-		<div class="modal-content">
-			<div class="modal-header border-0">
-				<h5 class="modal-title">
-					<span class="fw-mediumbold">
-					Edit</span> 
-					<span class="fw-light">
-						Status
-					</span>
-				</h5>
-				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-			</div>
-			<form action="process_editstatus_supplier.php" method="POST">
-				<div class="modal-body">
-					<p class="small">Edit the Status below.</p>
-					<div class="row">		
-						<div class="col-sm-12">
-							<div class="form-group form-group-default">
-								<label for="category">Status</label>
-								<select class="form-select" id="editStatus" name="status" required>
-									<option value="">Select Status</option>
-									<option value="Pending">Pending</option>
-									<option value="Accepted">Accepted</option>
-									<option value="Shipping">Shipping</option>
-									<option value="Delivered">Delivered</option>
-									<option value="Received">Received</option>
-								</select>
+    <div class="modal fade" id="editExpenseModal" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header border-0">
+					<h5 class="modal-title">
+						<span class="fw-mediumbold">
+						Edit</span> 
+						<span class="fw-light">
+							Expense
+						</span>
+					</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<form action="process_editexpense.php" method="POST">
+                    <input type="hidden" name="expense_id" id="editExpenseId">
+					<div class="modal-body">
+						<p class="small">Edit an expense using this form.</p>
+						<div class="row">
+							<div class="col-sm-12">
+								<div class="form-group form-group-default">
+									<label>Expense Type</label>
+									<select class="form-select" name="expensetype_id" id="editExpenseTypeId" required>
+										<option value="">Select Type</option>
+										<?php 
+											foreach ($expensetype as $row){
+												echo "<option value='".$row['expensetype_id']."'>".$row['expense_name']."</option>";
+											}
+										?>
+									</select>
+								</div>
 							</div>
+							<div class="col-sm-12">
+								<div class="form-group form-group-default">
+									<label for="category">Amount (₱)</label>
+									<input type="number" class="form-control" name="amount" id="editAmount" placeholder="1500" required>
+								</div>
+							</div>
+                            <div class="col-sm-12">
+								<div class="form-group form-group-default">
+									<label for="category">Comment</label>
+									<input type="text" class="form-control" name="comment" id="editComment" required>
+								</div>
+							</div>
+
 						</div>
 					</div>
-					<input type="text" name="item_id" id="editOrderId" hidden>
-				</div>
-				<div class="modal-footer border-0">
-					<button type="submit" class="btn btn-primary">Save Changes</button>
-					<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-				</div>
-			</form>
+					<div class="modal-footer border-0">
+						<button type="submit" class="btn btn-success">Submit</button>
+						<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+					</div>
+				</form>
+			</div>
 		</div>
 	</div>
-	</div>
+	
 	<!--   Core JS Files   -->
 	<script src="assets/js/core/jquery-3.7.1.min.js"></script>
 	<script src="assets/js/core/popper.min.js"></script>
@@ -504,5 +521,22 @@ ini_set('display_errors', 1);
 	});
 	});
 	</script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll(".edit-expense-btn").forEach(btn => {
+                btn.addEventListener("click", function () {
+                    
+                    document.getElementById("editExpenseTypeId").value = this.dataset.type;
+                    document.getElementById("editAmount").value = this.dataset.amount;
+                    document.getElementById("editComment").value = this.dataset.comment;
+
+                    // optional hidden input to know what ID to update
+                    let hiddenId = document.getElementById("editExpenseId");
+                    if (hiddenId) hiddenId.value = this.dataset.id;
+                });
+            });
+        });
+    </script>
 </body>
 </html>
