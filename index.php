@@ -684,7 +684,6 @@ ini_set('display_errors', 1);
 
 		$sql = "SELECT item_name, stock, size_name FROM items JOIN sizes ON items.size_id = sizes.size_id WHERE is_disabled = 0";
 		$stmt = $conn->prepare($sql);
-		$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
 		$stmt->execute();
 		$items2 = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		
