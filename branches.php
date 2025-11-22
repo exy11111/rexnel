@@ -51,24 +51,11 @@
 			<div class="container">
 				<div class="page-inner">
 					<div class="page-header">
-						<?php 
-						$sql = "SELECT branch_name FROM branch WHERE branch_id = :branch_id";
-						$stmt = $conn->prepare($sql);
-						$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
-						$stmt->execute();
-						$branch_name = $stmt->fetchColumn();
-						?>
 						<ul class="breadcrumbs mb-3">
 							<li class="nav-home">
 								<a href="index.php">
 									<i class="icon-home"></i>
 								</a>
-							</li>
-							<li class="separator">
-								<i class="icon-arrow-right"></i>
-							</li>
-							<li class="nav-item">
-								<a href="#">Account Management</a>
 							</li>
 							<li class="separator">
 								<i class="icon-arrow-right"></i>
@@ -146,44 +133,55 @@
 										</div>
 									</div>
 									<div class="table-responsive">
-										<table id="accounts" class="display table table-striped table-hover">
-											<thead>
-												<tr>
-													<th>ID</th>
-													<th>Branch Name</th>
-													<th>Location</th>
-													<th>Operating Hours</th>
-													<?php if($_SESSION['user_id'] == 17):?>
-													<th style="width: 10%">Action</th>
-													<?php endif; ?>
-												</tr>
-											</thead>
-											<tbody>
-                                                <?php
-                                                    foreach ($branch_data1 as $row) {
-                                                        echo "<tr data-id=".htmlspecialchars($row['branch_id']).">";
-														echo "<td>". htmlspecialchars($row['branch_id']) . "</td>";
-                                                        echo "<td>". htmlspecialchars($row['branch_name']) . "</td>";
-														echo "<td>" . htmlspecialchars($row['location']) . "</td>";
-														echo "<td>" . date("g:iA", strtotime($row['opening_time'])) . " to " . date("g:iA", strtotime($row['closing_time'])) . "</td>";
-                                                        if($_SESSION['user_id'] == 17){
-															echo "<td>
-                                                                <div class='form-button-action'>
-                                                                    <button type='button' class='btn btn-link btn-primary btn-lg' data-bs-toggle='modal' data-bs-target='#editBranchModal' title='Edit Task'>
-                                                                        <i class='fa fa-edit'></i>
+										<div class="row">
+                                            <?php foreach ($branch_data1 as $row): ?>
+                                                <div class="col-md-4 mb-3">
+                                                    <div class="card shadow-sm" data-id="<?= htmlspecialchars($row['branch_id']) ?>">
+                                                        
+                                                        <div class="card-body">
+                                                            <h5 class="card-title mb-2">
+                                                                <?= htmlspecialchars($row['branch_name']) ?>
+                                                            </h5>
+
+                                                            <p class="mb-1">
+                                                                <strong>ID:</strong> <?= htmlspecialchars($row['branch_id']) ?>
+                                                            </p>
+
+                                                            <p class="mb-1">
+                                                                <strong>Location:</strong> <?= htmlspecialchars($row['location']) ?>
+                                                            </p>
+
+                                                            <p class="mb-3">
+                                                                <strong>Operating Hours:</strong> 
+                                                                <?= date("g:iA", strtotime($row['opening_time'])) ?> 
+                                                                to 
+                                                                <?= date("g:iA", strtotime($row['closing_time'])) ?>
+                                                            </p>
+
+                                                            <?php if ($_SESSION['user_id'] == 17): ?>
+                                                                <div class="d-flex justify-content-between">
+                                                                    <button type="button" 
+                                                                        class="btn btn-link btn-primary btn-lg" 
+                                                                        data-bs-toggle="modal" 
+                                                                        data-bs-target="#editBranchModal" 
+                                                                        title="Edit Task">
+                                                                        <i class="fa fa-edit"></i>
                                                                     </button>
-                                                                    <button type='button' class='btn btn-link btn-danger remove-btn' data-id='".htmlspecialchars($row['branch_id'])."' title='Remove'>
-                                                                        <i class='fa fa-times'></i>
+
+                                                                    <button type="button" 
+                                                                        class="btn btn-link btn-danger remove-btn" 
+                                                                        data-id="<?= htmlspecialchars($row['branch_id']) ?>" 
+                                                                        title="Remove">
+                                                                        <i class="fa fa-times"></i>
                                                                     </button>
                                                                 </div>
-                                                            </td>";
-														}
-														
-                                                        echo "</tr>";
-                                                    }
-                                                ?>
-											</tbody>
-										</table>
+                                                            <?php endif; ?>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            <?php endforeach; ?>
+                                        </div>
+
                                         <script>
                                             document.addEventListener('DOMContentLoaded', function() {
                                                 const removeButtons = document.querySelectorAll('.remove-btn');
