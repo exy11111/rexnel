@@ -336,6 +336,40 @@ ini_set('display_errors', 1);
 								$values[] = (float) $row['total_price'];
 							}
 						?>
+
+						<?php if ($_SESSION['role_id'] == 1):?>
+						<div class="row">
+							<div class="col-3">
+
+							</div>
+							<div class="col-md-6 d-flex flex-column">
+								<div class="card h-100">
+									<div class="card-header">
+										<div class="card-title">Sales Overview</div>
+									</div>
+									<div class="card-body">
+										<div class="chart-container mb-1">
+											<canvas id="sales_chart"></canvas>
+										</div>
+										<div class="row mb-1">
+											<div class="col">
+												<label for="startDate">Start Date</label>
+												<input type="date" id="startDate" class="form-control">
+											</div>
+											<div class="col">
+												<label for="endDate">End Date</label>
+												<input type="date" id="endDate" class="form-control">
+											</div>
+										</div>
+									</div>
+                            	</div>
+							</div>
+							<div class="col-3">
+
+							</div>
+						</div>
+						<?php endif; ?>
+						<?php if ($_SESSION['role_id'] == 2): ?>
 						<div class="row">
 							<div class="col-md-6 d-flex flex-column">
 								<div class="card h-100">
@@ -358,7 +392,6 @@ ini_set('display_errors', 1);
 										</div>
 									</div>
                             	</div>
-								
 							</div>
 
 							<div class="col-md-6 d-flex flex-column">
@@ -455,6 +488,7 @@ ini_set('display_errors', 1);
 								</div>
 							</div>
 						</div>
+						<?php endif; ?>
 					</div>
 					
 				</div>
