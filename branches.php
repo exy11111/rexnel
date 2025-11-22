@@ -88,20 +88,20 @@
                                                 </p>
 
                                                 <?php if ($_SESSION['user_id'] == 17): ?>
-                                                    <div class="d-flex justify-content-between">
+                                                    <div class="w-100">
                                                         <button type="button" 
-                                                            class="btn btn-primary btn-primary btn-lg" 
+                                                            class="btn btn-primary btn-primary btn-lg w-50" 
                                                             data-bs-toggle="modal" 
                                                             data-bs-target="#editBranchModal" 
                                                             title="Edit Task">
-                                                            <i class="fa fa-edit"></i>
+                                                            <i class="fa fa-edit"></i> Open
                                                         </button>
 
                                                         <button type="button" 
-                                                            class="btn btn-danger btn-danger remove-btn" 
+                                                            class="btn btn-danger btn-danger remove-btn w-50" 
                                                             data-id="<?= htmlspecialchars($row['branch_id']) ?>" 
                                                             title="Remove">
-                                                            <i class="fa fa-times"></i>
+                                                            <i class="fa fa-times"></i> Delete
                                                         </button>
                                                     </div>
                                                 <?php endif; ?>
