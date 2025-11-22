@@ -82,7 +82,32 @@ ini_set('display_errors', 1);
 						$stmt->execute();
 						$branch_name = $stmt->fetchColumn();
 						?>
-						<h3 class="fw-bold mb-3"><?php echo $branch_name; ?></h3>
+						<h3 class="fw-bold mb-3">
+							<?php if ($_SESSION['role_id'] == 1):?>
+								<style>
+								.gear-icon {
+									cursor: pointer;
+									transition: color 0.2s, background-color 0.2s;
+									padding: 3px;
+									border-radius: 4px;
+								}
+
+								.gear-icon:hover {
+									background-color:rgb(192, 192, 192);
+									color: black;
+								}
+								</style>
+
+								<?php 
+									$sql = "SELECT * from branch";
+									$stmt = $conn->prepare($sql);
+									$stmt->execute();
+									$branches = $stmt->fetchAll();
+								?>
+								<a href="branches.php"><i class="bi bi-arrow-left gear-icon"></i></a>
+							<?php endif; ?>
+							<?php echo $branch_name; ?>
+						</h3>
 						<ul class="breadcrumbs mb-3">
 							<li class="nav-home">
 								<a href="index.php">
