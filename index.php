@@ -603,8 +603,21 @@ ini_set('display_errors', 1);
 			if ($item['stock'] < $lowStockThreshold) {
 				$colors[] = 'rgb(255, 99, 71)'; 
 			} else {
-				$colors[] = 'rgb(34, 193, 34)';
+				$colors[] = randomColorExceptRed();
 			}
+		}
+
+		function randomColorExceptRed() {
+			do {
+				$r = rand(0, 255);
+				$g = rand(0, 255);
+				$b = rand(0, 255);
+
+				// Reject mostly-red colors
+				// (r high AND g/b low → red-like)
+			} while ($r > 200 && $g < 80 && $b < 80);
+
+			return "rgb($r, $g, $b)";
 		}
 
 		$sql = "SELECT DATE(date) AS day, SUM(price) AS total_price
