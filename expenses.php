@@ -147,7 +147,7 @@ ini_set('display_errors', 1);
 																		data-bs-target='#viewItemModal' 
 																		data-id='".htmlspecialchars($row['expense_id'])."' 
 																		title='View Order'>
-																		<i class='bi bi-eye-fill'></i>
+																		<i class='bi bi-pencil-square'></i>
 																	</a>
                                                                 </div>
 															</td>";
@@ -279,8 +279,8 @@ ini_set('display_errors', 1);
 							</div>
 							<div class="col-sm-12">
 								<div class="form-group form-group-default">
-									<label for="category">Amount</label>
-									<input type="number" class="form-control" name="amount" required>
+									<label for="category">Amount (₱)</label>
+									<input type="number" class="form-control" name="amount" placeholder="1500" required>
 								</div>
 							</div>
                             <div class="col-sm-12">
@@ -387,21 +387,15 @@ ini_set('display_errors', 1);
             <?php if ($_GET['status'] == 'success'): ?>
                 Swal.fire({
                     icon: 'success',
-                    title: 'Size Added!',
-                    text: 'The size has been successfully created.',
+                    title: 'Expense Added!',
+                    text: 'The expense has been successfully created.',
                 }).then((result) => {
                 });
             <?php elseif ($_GET['status'] == 'error'): ?>
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
-                    text: 'Something went wrong while creating the size.',
-                });
-            <?php elseif ($_GET['status'] == 'exist'): ?>
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Size already exists.',
+                    text: 'Something went wrong while creating the expense.',
                 });
             <?php endif; ?>
         </script>
