@@ -3,8 +3,8 @@ require('session.php');
 require('db.php'); 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $id = $_POST['id'];
-    $qty = $_POST['qty'];
+    $id = $_GET['id'];
+    $qty = $_GET['qty'];
 
     try{
         $sql = "UPDATE stock_requests SET status = 'Received' WHERE id = :id";
