@@ -312,7 +312,6 @@ error_reporting(E_ALL);
                                                                             <option value="Accepted">Accepted</option>
                                                                             <option value="Shipping">Shipping</option>
                                                                             <option value="Delivered">Delivered</option>
-                                                                            <option value="Received">Received</option>
                                                                             <option value="Cancelled">Cancelled</option>
                                                                         </select>
                                                                     </div>
