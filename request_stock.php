@@ -28,6 +28,18 @@ error_reporting(E_ALL);
     $stmt->execute();
     $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+	$sql = "SELECT item_id, barcode, item_name, category_name, brand_name, supplier_name, size_name, price, stock, supplier_price, (price - supplier_price) as profit
+	FROM items i 
+	JOIN categories c ON i.category_id = c.category_id
+	JOIN brands b ON b.brand_id = i.brand_id
+	JOIN suppliers s ON s.supplier_id = i.supplier_id
+	JOIN sizes ss ON i.size_id = ss.size_id
+	WHERE i.branch_id = :branch_id AND is_disabled = 0";
+    $stmt = $conn->prepare($sql);
+	$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
+    $stmt->execute();
+    $data2 = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
 
 <!DOCTYPE html>
@@ -276,6 +288,64 @@ error_reporting(E_ALL);
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.0/dist/sweetalert2.all.min.js"></script>
 	<?php include 'modal_profile.php'?>
 	<?php include 'modal_editaccount.php';?>
+
+	<div class="modal fade" id="requestStockModal" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header border-0">
+					<h5 class="modal-title">
+						<span class="fw-mediumbold">
+						Request</span> 
+						<span class="fw-light">
+							Stock
+						</span>
+					</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<form action="process_requeststock.php" method="POST">
+					<div class="modal-body">
+						<p class="small">Request a stock using this form.</p>
+						<div class="row">
+							<div class="col-sm-12">
+								<div class="form-group form-group-default">
+									<label>Barcode</label>
+									<input type="text" name="barcode" id="stock_barcode" class="form-control" oninput="validatePhoneNumber(this)" placeholder="fill barcode">
+									<script>
+										function validatePhoneNumber(input) {
+											input.value = input.value.replace(/[^0-9]/g, '');
+										}
+									</script>
+								</div>
+							</div>
+							<div class="col-sm-12">
+								<div class="form-group form-group-default">
+									<label>Item Name</label>
+									<select class="form-select" name="item_id" id="stock_itemId" required>
+										<option value="">Select Item</option>
+										<?php 
+											foreach ($data2 as $row){
+												echo "<option value='".$row['item_id']."'>".$row['item_name']." ".$row['size_name']."</option>";
+											}
+										?>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm-12">
+								<div class="form-group form-group-default">
+									<label for="category">Quantity</label>
+									<input type="number" class="form-control" name="quantity">
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer border-0">
+						<button type="submit" class="btn btn-primary">Request</button>
+						<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
 	<!-- Auto populate in edit modal -->
     <script>
         $(document).ready(function() {
