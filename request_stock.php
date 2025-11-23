@@ -21,7 +21,7 @@ error_reporting(E_ALL);
     LEFT JOIN items i ON i.item_id = sr.item_id
     LEFT JOIN categories c ON c.category_id = i.category_id
     LEFT JOIN sizes s ON s.size_id = i.size_id
-    WHERE branch_id = :branch_id
+    WHERE sr.branch_id = :branch_id
     ";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(":branch_id", $_SESSION['branch_id']);
