@@ -204,12 +204,6 @@ error_reporting(E_ALL);
                                                                     <i class='fa fa-edit'></i>
                                                                 </button>";
                                                             }
-                                                             echo "<button type='button' class='btn btn-link btn-danger remove-btn' 
-                                                                        data-id='".htmlspecialchars($row['id'])."' 
-                                                                        title='Cancel'>
-                                                                        <i class='fa fa-times'></i>
-                                                                </button>";
-
                                                             echo "</div>
                                                                 </td>";
 														}
