@@ -142,7 +142,7 @@
                             </li>
                             <?php else: ?>
                             <li>
-                                <a href="#">
+                                <a href="request_stock.php">
                                     <span class="sub-item text-white">Request Stock</span>
                                 </a>
                             </li>
