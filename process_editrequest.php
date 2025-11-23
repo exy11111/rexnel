@@ -17,7 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
     catch (PDOException $e) {
-        header("Location: stockrequests.php?editstatus=error");
+        header("Location: stock_requests.php?editstatus=error");
         exit();
     }
     
