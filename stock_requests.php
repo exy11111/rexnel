@@ -184,7 +184,7 @@ error_reporting(E_ALL);
 														echo "<td>".htmlspecialchars($row['branch_name'])."</td>";
 														echo "<td>".htmlspecialchars($row['firstname'])." ".htmlspecialchars($row['lastname'])."</td>";
 														echo "<td>".htmlspecialchars($row['item_name'])." ".htmlspecialchars($row['size_name'])."</td>";
-														echo "<td>".htmlspecialchars($row['category'])."</td>";
+														echo "<td>".htmlspecialchars($row['category_name'])."</td>";
 														echo "<td>".htmlspecialchars($row['quantity'])."</td>";
 														echo "<td> <span class='" . $class. "'>".$status."</span></td>";
 														if($_SESSION['role_id'] == 1){
