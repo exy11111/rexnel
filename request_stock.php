@@ -218,6 +218,8 @@ error_reporting(E_ALL);
 
                                                     btn.addEventListener('click', function() {
                                                         let id = this.getAttribute('data-id');
+                                                        let qty = this.getAttribute('data-quantity');
+
 
                                                         Swal.fire({
                                                             title: "Mark as Received?",
