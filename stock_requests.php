@@ -212,74 +212,6 @@ error_reporting(E_ALL);
 												?>
 											</tbody>
 										</table>
-										<script>
-                                            document.addEventListener('DOMContentLoaded', function() {
-                                                const removeButtons = document.querySelectorAll('.remove-btn');
-                                                
-                                                removeButtons.forEach(button => {
-                                                    button.addEventListener('click', function() {
-                                                        const itemId = this.getAttribute('data-id');
-                                                        Swal.fire({
-                                                            title: 'Are you sure?',
-                                                            text: "This action cannot be undone!",
-                                                            icon: 'warning',
-                                                            showCancelButton: true,
-                                                            confirmButtonColor: '#d33',
-                                                            cancelButtonColor: '#3085d6',
-                                                            confirmButtonText: 'Yes, delete it!',
-                                                            cancelButtonText: 'Cancel'
-                                                        }).then((result) => {
-                                                            if (result.isConfirmed) {
-                                                                const xhr = new XMLHttpRequest();
-                                                                xhr.open('POST', 'process_cancelrequest.php', true);
-                                                                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-                                                                xhr.onload = function() {
-                                                                    if (xhr.status === 200) {
-                                                                        if (xhr.responseText === 'success') {
-                                                                            Swal.fire('Deleted!', 'The request has been cancelled.', 'success').then(() => {
-                                                                                window.location.href = 'stock.php';
-                                                                            });
-                                                                        } else if(xhr.responseText === 'exist'){
-																			Swal.fire({
-																				title: 'Stock in this item will also be deleted.',
-																				text: "Are you sure? This action cannot be undone!",
-																				icon: 'warning',
-																				showCancelButton: true,
-																				confirmButtonColor: '#d33',
-																				cancelButtonColor: '#3085d6',
-																				confirmButtonText: 'Yes, delete it!',
-																				cancelButtonText: 'Cancel'
-																			}).then((result) => {
-																				if (result.isConfirmed) {
-																					const xhr1 = new XMLHttpRequest();
-																					xhr1.open('POST', 'process_cancelrequest.php', true);
-																					xhr1.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-																					xhr1.onload = function() {
-																						if (xhr1.status === 200) {
-																							if (xhr1.responseText === 'success') {
-																								Swal.fire('Deleted!', 'The item has been cancelled.', 'success').then(() => {
-																									window.location.href = 'stock.php';
-																								});
-																							}
-																						}
-																					}
-																					xhr1.send('id=' + brandId);
-																				}
-																			});
-																		}
-																		else {
-                                                                            Swal.fire('Error!', 'There was an error deleting the item.', 'error');
-                                                                        }
-                                                                    }
-                                                                };
-                                                                xhr.send('id=' + itemId);
-                                                            }
-                                                        });
-                                                    });
-                                                });
-                                            });
-
-                                        </script>
 										<!-- Modal -->
 										<div class="modal modal-lg fade" id="editRequestModal" tabindex="-1" role="dialog" aria-hidden="true">
 											<div class="modal-dialog" role="document">
@@ -294,7 +226,7 @@ error_reporting(E_ALL);
 														</h5>
 														<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 													</div>
-													<form action="process_edititem.php" method="POST">
+													<form action="process_editrequest.php" method="POST">
 														<div class="modal-body">
 															<p class="small">Edit the request details below.</p>
 															<div class="row">
@@ -375,70 +307,6 @@ error_reporting(E_ALL);
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.0/dist/sweetalert2.all.min.js"></script>
 	<?php include 'modal_profile.php'?>
 	<?php include 'modal_editaccount.php';?>
-
-	<!-- Edit Branch Modal -->
-	<div class="modal fade" id="editBranchModal" tabindex="-1" aria-hidden="true">
-		<div class="modal-dialog modal-sm modal-dialog-centered">
-			<div class="modal-content">
-				<div class="modal-header border-0">
-					<h5 class="modal-title">Select Branch</h5>
-					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-				</div>
-				<div class="modal-body">
-					<select id="branchSelect" class="form-select">
-						<option value="">-- Select Branch --</option>
-						<?php foreach($branches as $branch): ?>
-							<option value="<?php echo htmlspecialchars($branch['branch_id']); ?>">
-								<?php echo htmlspecialchars($branch['branch_name']); ?>
-							</option>
-						<?php endforeach; ?>
-					</select>
-				</div>
-				<div class="modal-footer border-0">
-					<button type="button" id="confirmBranchBtn" class="btn btn-primary">Confirm</button>
-					<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-				</div>
-			</div>
-		</div>
-	</div>
-	<script>
-	document.getElementById('confirmBranchBtn').addEventListener('click', function() {
-		const select = document.getElementById('branchSelect');
-		const branchId = select.value;
-
-		if(branchId) {
-			window.location.href = 'stock.php?b=' + encodeURIComponent(branchId);
-		} else {
-			Swal.fire({
-				icon: 'warning',
-				title: 'Oops...',
-				text: 'Please select a branch!'
-			});
-		}
-	});
-	</script>
-
-	<script>
-		function updateUnitCost() {
-		const select = document.getElementById('order_itemId');
-		const selectedOption = select.options[select.selectedIndex];
-		const unitCost = selectedOption.getAttribute('data-unit-cost') || 0;
-
-		const unitCostDisplay = document.getElementById('unit_cost_display');
-		unitCostDisplay.textContent = '₱' + parseFloat(unitCost).toFixed(2);
-
-		calculateTotal();
-		}
-
-		function calculateTotal() {
-		const quantity = parseFloat(document.getElementById('quantity').value) || 0;
-		const unitCostText = document.getElementById('unit_cost_display').textContent.replace('₱', '');
-		const unitCost = parseFloat(unitCostText) || 0;
-
-		const total = quantity * unitCost;
-		document.getElementById('total_price').textContent = '₱' + total.toFixed(2);
-		}
-	</script>
 	<!-- Auto populate in edit modal -->
     <script>
         $(document).ready(function() {
@@ -544,15 +412,15 @@ error_reporting(E_ALL);
             <?php if ($_GET['editstatus'] == 'success'): ?>
                 Swal.fire({
                     icon: 'success',
-                    title: 'Item Edited!',
-                    text: 'The item has been successfully edited.',
+                    title: 'Status Edited!',
+                    text: 'The status has been successfully edited.',
                 }).then((result) => {
                 });
             <?php elseif ($_GET['editstatus'] == 'error'): ?>
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
-                    text: 'Something went wrong while editing the item.',
+                    text: 'Something went wrong while editing the status.',
                 });
             <?php endif; ?>
         </script>
