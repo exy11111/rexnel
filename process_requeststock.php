@@ -23,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bindParam(':created_at', $now);
         $stmt->execute();
 
-        header("Location: request_sdtock.php?status=success");
+        header("Location: request_stock.php?status=success");
         exit();
     }
     catch (PDOException $e) {

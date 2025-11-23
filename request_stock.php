@@ -22,6 +22,7 @@ error_reporting(E_ALL);
     LEFT JOIN categories c ON c.category_id = i.category_id
     LEFT JOIN sizes s ON s.size_id = i.size_id
     WHERE sr.branch_id = :branch_id
+	ORDER BY created_at DESC
     ";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(":branch_id", $_SESSION['branch_id']);
