@@ -32,7 +32,7 @@ error_reporting(E_ALL);
 <html lang="en">
 <head>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-	<title>Items</title>
+	<title>Stock Requests</title>
 	<meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
 	<link rel="icon" href="assets/img/holicon.png" type="image/x-icon"/>
 
@@ -117,7 +117,7 @@ error_reporting(E_ALL);
 								<i class="icon-arrow-right"></i>
 							</li>
 							<li class="nav-item">
-								<a href="#">Items</a>
+								<a href="#">Stock Requests</a>
 							</li>
 						</ul>
 					</div>
@@ -126,7 +126,7 @@ error_reporting(E_ALL);
 							<div class="card">
 								<div class="card-header">
 									<div class="d-flex align-items-center">
-										<h4 class="card-title">Items</h4>
+										<h4 class="card-title">Stock Requests</h4>
 										<div class="ms-auto">
 										</div>
 										
