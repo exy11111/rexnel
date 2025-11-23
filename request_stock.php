@@ -12,7 +12,7 @@ error_reporting(E_ALL);
 		$_SESSION['branch_id'] = 1;
 	}
 
-	$sql = "SELECT sr.id, sr.user_id, sr.item_id, sr.quantity, sr.status, 
+	$sql = "SELECT sr.id, sr.user_id, sr.item_id, sr.quantity, sr.status, sr.created_at,
     b.branch_name, ud.firstname, ud.lastname,
     i.item_name, c.category_name, s.size_name
     FROM stock_requests sr
@@ -156,6 +156,7 @@ error_reporting(E_ALL);
 											<thead>
 												<tr>
                                                     <th>Requested By</th>
+													<th>Date</th>
 													<th>Item Name</th>
 													<th>Category</th>
                                                     <th>Quantity</th>
@@ -200,6 +201,7 @@ error_reporting(E_ALL);
 
 														echo "<tr data-id=".htmlspecialchars($row['id']).">";
 														echo "<td>".htmlspecialchars($row['firstname'])." ".htmlspecialchars($row['lastname'])."</td>";
+														echo "<td>" . date("F j, Y g:iA", strtotime($row['created_at'])) . "</td>";
 														echo "<td>".htmlspecialchars($row['item_name'])." ".htmlspecialchars($row['size_name'])."</td>";
 														echo "<td>".htmlspecialchars($row['category_name'])."</td>";
 														echo "<td>".htmlspecialchars($row['quantity'])."</td>";
