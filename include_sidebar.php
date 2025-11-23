@@ -136,7 +136,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="#">
+                                <a href="stock_requests.php">
                                     <span class="sub-item text-white">Stock Requests</span>
                                 </a>
                             </li>

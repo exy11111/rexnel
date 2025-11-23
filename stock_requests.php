@@ -143,6 +143,7 @@ error_reporting(E_ALL);
 													<th>Category</th>
                                                     <th>Quantity</th>
 													<th>Status</th>
+                                                    <th>Action</th>
 												</tr>
 											</thead>
 											<tbody>
