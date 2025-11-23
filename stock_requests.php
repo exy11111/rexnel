@@ -19,7 +19,7 @@ error_reporting(E_ALL);
     LEFT JOIN branch b ON sr.branch_id = b.branch_id
     LEFT JOIN userdetails ud ON ud.user_id = sr.user_id
     LEFT JOIN items i ON i.item_id = sr.item_id
-    LEFT JOIN category c ON c.category_id = i.category_id
+    LEFT JOIN categories c ON c.category_id = i.category_id
     LEFT JOIN sizes s ON s.size_id = i.size_id
     ";
     $stmt = $conn->prepare($sql);
