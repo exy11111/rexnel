@@ -142,6 +142,10 @@ error_reporting(E_ALL);
 									<div class="d-flex align-items-center">
 										<h4 class="card-title">Request Stock</h4>
 										<div class="ms-auto">
+											<button class="btn btn-secondary btn-round me-3" data-bs-toggle="modal" data-bs-target="#requestStockModal">
+												<i class="fa fa-plus"></i>
+												Request Stock
+											</button>
 										</div>
 										
 									</div>
