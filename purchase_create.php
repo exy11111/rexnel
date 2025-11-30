@@ -262,7 +262,7 @@
 					document.getElementById('available_stock').value = data.stock;
 					setTimeout(() => {
 						addRow();
-					}, 1000);
+					}, 2000);
 				}
 			})
 			.catch(error => console.error('Error:', error));
