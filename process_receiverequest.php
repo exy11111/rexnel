@@ -29,9 +29,21 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         $stmt->bindParam(':item_id', $item_id, PDO::PARAM_INT);
         $stmt->execute();
 
+        $sql = "SELECT item_name FROM items WHERE item_id = :item_id";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':item_id', $item_id);
+        $stmt->execute();
+        $item_name = $stmt->fetchColumn();
+
+        $sql = "SELECT branch_name FROM branch WHERE branch_id = :branch_id";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':branch_id', $branch_id);
+        $stmt->execute();
+        $branch_name = $stmt->fetchColumn();
+
         //received notif para kay super admin
         $received_by = $_SESSION['username'];
-        $message = "$received_by successfully received the order: {$item_name}, {$item_quantity} pcs, ₱{$amount}";
+        $message = "[$branch_name] $received_by successfully received the order: {$item_name}, {$item_quantity} pcs, ₱{$amount}";
         $icon = "bi-plus-circle";
         $target_url = "stock_requests.php";
         $timestamp = date('Y-m-d H:i:s');
