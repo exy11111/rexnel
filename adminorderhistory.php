@@ -355,7 +355,7 @@
 										<option value="">Select Item</option>
 										<?php 
 											foreach ($itemdata as $row){
-												echo "<option value='".$row['item_id']."' data-price='".$row['supplier_price']."'>".$row['item_name']."</option>";
+												echo "<option value='".$row['item_id']."' data-price='".$row['supplier_price']."'>".$row['item_name']." ".$row['size_name']."</option>";
 											}
 										?>
 									</select>
