@@ -138,3 +138,50 @@
     </div>
 </div>
 
+<script>
+document.addEventListener('click', function (e) {
+    if (e.target.closest('.toggle-password')) {
+        const toggle = e.target.closest('.toggle-password');
+        const input = toggle.parentElement.querySelector('input.password-field');
+        const icon = toggle.querySelector('i');
+
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.classList.remove('bi-eye-slash-fill');
+            icon.classList.add('bi-eye-fill');
+        } else {
+            input.type = 'password';
+            icon.classList.remove('bi-eye-fill');
+            icon.classList.add('bi-eye-slash-fill');
+        }
+    }
+});
+</script>
+
+<script>
+document.getElementById('editAccountForm').addEventListener('submit', function(e) {
+    const password = this.querySelector('input[name="password"]').value;
+    const confirmPassword = this.querySelector('input[name="confirm_password"]').value;
+
+    if (password !== confirmPassword) {
+        e.preventDefault();
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Passwords do not match!'
+        });
+        return false;
+    }
+
+    if (password.length < 6) {
+        e.preventDefault();
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Password must be at least 6 characters long!'
+        });
+        return false;
+    }
+});
+</script>
+
