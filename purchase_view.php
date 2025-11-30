@@ -19,11 +19,18 @@
     $stmt->execute();
     $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-	$sql = "SELECT cash, change_cash FROM purchases WHERE purchase_id = :purchase_id";
+	$sql = "SELECT cash, change_cash, ref, pm_id FROM purchases WHERE purchase_id = :purchase_id";
 	$stmt = $conn->prepare($sql);
     $stmt->bindParam(':purchase_id', $_GET['purchase_id']);
     $stmt->execute();
     $cash = $stmt->fetch(PDO::FETCH_ASSOC);
+
+	if($cash['pm_id'] == 1){
+		$payment_method = "Cash";
+	}
+	else{
+		$payment_method = "GCash";
+	}
 
 	$stmt = $conn->prepare("SELECT proof_image FROM purchases WHERE purchase_id = :id");
 	$stmt->execute([':id' => $purchase_id]);
@@ -143,8 +150,12 @@
 								</table>
 							</div>
 							<h5 class="text-end" id="totalPrice">Total Price: ₱<?php echo number_format($totalPrice, 2); ?></h5>
-							<h5 class="text-end" id="totalPaid">Paid: ₱<?php echo number_format($cash['cash'], 2); ?></h5>
+							<h5 class="text-end" id="totalPaid">Paid: ₱<?php echo number_format($cash['cash'], 2); ?> <?php echo $payment_method?></h5>
+							<?php if $cash['pm_id'] == 1:?>
 							<h5 class="text-end" id="totalChange">Change: ₱<?php echo number_format($cash['change_cash'], 2); ?></h5>
+							<?php else: ?>
+							<h5 class="text-end" id="totalChange">Ref #: <?php echo $cash['ref']; ?></h5>
+							<?php endif; ?>
 
 							<?php if (!empty($proofImagePath) && file_exists($proofImagePath)): ?>
 								<div class="text-center mt-4">
