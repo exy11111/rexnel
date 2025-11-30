@@ -260,7 +260,9 @@
 					document.getElementById('size').value = data.size_name;
 					document.getElementById('price').value = data.price;
 					document.getElementById('available_stock').value = data.stock;
-					addRow();
+					setTimeout(() => {
+						addRow();
+					}, 1000);
 				}
 			})
 			.catch(error => console.error('Error:', error));
