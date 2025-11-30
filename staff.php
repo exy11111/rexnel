@@ -134,6 +134,7 @@
                                                                     <label class="<?php if($_SESSION['role_id'] != 1): echo 'd-none'; endif; ?>">Role</label>
                                                                     <select name="role_id" class="form-select <?php if($_SESSION['role_id'] != 1): echo 'd-none'; endif; ?>">
                                                                         <option value="2">Branch Admin</option>
+                                                                        <option value="1">Super Admin</option>
 																	</select>
                                                                 </div>
                                                             </div>
