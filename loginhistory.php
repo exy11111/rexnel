@@ -108,7 +108,7 @@
 												<?php 
 													foreach($data as $row){
 														echo "<tr data-id=".htmlspecialchars($row['id']).">";
-														echo "<td>".htmlspecialchars($row['id'])."</td>";
+														echo "<td class='d-none'>".htmlspecialchars($row['id'])."</td>";
 														echo "<td>".htmlspecialchars($row['firstname'])." ".htmlspecialchars($row['lastname'])."</td>";
 														echo "<td>".htmlspecialchars($row['branch_name'])."</td>";
 														echo "<td>" . date("F j, Y g:ia", strtotime($row['date'])) . "</td>";
