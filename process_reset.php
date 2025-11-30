@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ftoken'], $_POST['new
         exit;
     } else {
         // Invalid token, redirect to login with an error
-        header('Location: login.php?reset=error');
+        header('Location: login.php?reset=error1');
         exit;
     }
 } else {
