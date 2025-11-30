@@ -227,6 +227,32 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.0/dist/sweetalert2.all.min.js"></script>
 	<?php include 'modal_profile.php'?>
 	<?php include 'modal_editaccount.php';?>
+	<!-- Auto populate in edit modal -->
+    <script>
+        $(document).ready(function() {
+            $('#accountSetting').on('click', function() {
+                var userId = $(this).attr('data-id');
+                $.ajax({
+                    url: 'process_getaccountdata.php',
+                    type: 'GET',
+                    data: { id: userId },
+                    dataType: 'json',
+                    success: function(data) {
+                        $('#editFirstName').val(data.firstname);
+                        $('#editLastName').val(data.lastname);
+                        $('#editUsername').val(data.username);
+                        $('#editUserId').val(data.user_id);
+						$('#editEmail').val(data.email);
+						$('#editDestination').val('index.php');
+                        $('#editAccountModal').modal('show');
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error fetching data: " + error);
+                    }
+                });
+            });
+        });
+    </script>
 	<script>
 		document.getElementById('barcode').addEventListener('change', function() {
 			let barcode = this.value;
