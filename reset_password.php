@@ -46,7 +46,7 @@ if (isset($_GET['ftoken'])) {
          <div class="input-group mb-3">
             <input type="password" 
                 class="form-control password-field" 
-                name="password" 
+                name="new_password" 
                 placeholder="Fill password" 
                 required>
             <span class="input-group-text toggle-password" style="cursor:pointer;">
