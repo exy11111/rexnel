@@ -69,7 +69,7 @@
                         }
                     }
                 
-                    $sql = "SELECT * FROM notifications WHERE user_id = :user_id ORDER BY created_at DESC LIMIT 5";
+                    $sql = "SELECT * FROM notifications WHERE user_id = :user_id ORDER BY created_at DESC";
                     $stmt = $conn->prepare($sql);
                     $stmt->bindParam(':user_id', $_SESSION['user_id']);
                     $stmt->execute();
