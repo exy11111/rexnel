@@ -90,7 +90,7 @@
                                                     <?= htmlspecialchars($row['branch_name']) ?>
                                                 </h5>
 
-                                                <p class="mb-1 text-truncate-one-line">
+                                                <p class="mb-1">
                                                     <?= htmlspecialchars($row['location']) ?>
                                                 </p>
 
