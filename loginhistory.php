@@ -16,8 +16,7 @@
     FROM login_history lh
     LEFT JOIN users u ON u.user_id = lh.user_id
     LEFT JOIN userdetails ud ON u.user_id = ud.user_id
-    LEFT JOIN branch b ON u.branch_id = b.branch_id
-    ORDER BY lh.id DESC";
+    LEFT JOIN branch b ON u.branch_id = b.branch_id";
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -182,9 +181,12 @@
 		$(document).ready(function() {
 			
 
-			// Add Row
 			$('#sizes').DataTable({
-				"pageLength": 10,
+				pageLength: 10,
+				columnDefs: [
+					{ type: 'date', targets: 0 }
+				],
+				order: [[0, 'desc']]
 			});
 
 			var action = '<td> <div class="form-button-action"> <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg" data-original-title="Edit Task"> <i class="fa fa-edit"></i> </button> <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Remove"> <i class="fa fa-times"></i> </button> </div> </td>';
