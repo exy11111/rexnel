@@ -185,7 +185,7 @@ error_reporting(E_ALL);
 														echo "<tr data-id=".htmlspecialchars($row['id']).">";
 														echo "<td>".htmlspecialchars($row['branch_name'])."</td>";
 														echo "<td>".htmlspecialchars($row['firstname'])." ".htmlspecialchars($row['lastname'])."</td>";
-														echo "<td>" . date("F j, Y g:iA", strtotime($row['created_at'])) . "</td>";
+														echo "<td data-order='".strtotime($row['created_at'])."'>" . date("F j, Y g:iA", strtotime($row['created_at'])) . "</td>";
 														echo "<td>".htmlspecialchars($row['item_name'])." ".htmlspecialchars($row['size_name'])."</td>";
 														echo "<td>".htmlspecialchars($row['category_name'])."</td>";
 														echo "<td>".htmlspecialchars($row['quantity'])."</td>";
@@ -341,7 +341,8 @@ error_reporting(E_ALL);
 
 			// Add Row
 			$('#add-row').DataTable({
-				"pageLength": 10,
+				pageLength: 10,
+				order: [[3, 'desc']]
 			});
 
 			var action = '<td> <div class="form-button-action"> <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg" data-original-title="Edit Task"> <i class="fa fa-edit"></i> </button> <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Remove"> <i class="fa fa-times"></i> </button> </div> </td>';
