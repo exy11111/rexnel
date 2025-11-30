@@ -192,8 +192,8 @@
 										<?php endforeach; ?>
 									</select>
 								</div>
-								<input type="date" id="startDate" class="form-control" value="<?php echo date('Y-m-d'); ?>">
-								<input type="time" id="startTime" class="form-control" value="<?php echo date('H:i'); ?>">
+								<input type="date" id="startDate" class="form-control" value="<?php echo date('Y-m-d'); ?>" hidden>
+								<input type="time" id="startTime" class="form-control" value="<?php echo date('H:i'); ?>" hidden>
 							</div>
                         </div>
                     </div>
