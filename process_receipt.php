@@ -16,6 +16,7 @@ $payment_method = $data['payment_method'];
 $branch_id = $data['branch_id'];
 $date = $data['dateSel'];
 $time = $data['timeSel'];
+$ref = $data['reference_number'] ?? null;
 $dateTime = $date . ' ' . $time;
 
 // Default values
@@ -72,8 +73,8 @@ try {
 
     // ✅ Insert into purchases table (added cash & change_cash)
     $stmt = $conn->prepare("
-        INSERT INTO purchases (price, pm_id, date, branch_id, proof_image, cash, change_cash) 
-        VALUES (:price, :pm_id, :date, :branch_id, :proof_image, :cash, :change_cash)
+        INSERT INTO purchases (price, pm_id, date, branch_id, proof_image, cash, change_cash, ref) 
+        VALUES (:price, :pm_id, :date, :branch_id, :proof_image, :cash, :change_cash, :ref)
     ");
     $stmt->execute([
         ':price' => $total_price,
@@ -82,7 +83,8 @@ try {
         ':date' => $dateTime,
         ':proof_image' => $proofImagePath,
         ':cash' => $cash,
-        ':change_cash' => $change_cash
+        ':change_cash' => $change_cash,
+        ':ref' => $ref
     ]);
 
     $purchase_id = $conn->lastInsertId();

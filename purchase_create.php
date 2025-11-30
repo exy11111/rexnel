@@ -497,36 +497,28 @@
 			}).then((result) => {
 				if (result.isConfirmed) {
 
-					if (paymentMethod === "2") { // adjust "1" to your actual GCash pm_id
+					if (paymentMethod === "2") { // GCash
 						Swal.fire({
-						title: "Scan to Pay via GCash",
-						html: `
-							<p>Please scan this QR code and upload proof of payment before confirming.</p>
-							<img src="gcash.jpg" alt="GCash QR Code" style="max-width: 100%; height: auto; margin-bottom: 15px;">
-							<input type="file" id="proofImage" accept="image/*" class="swal2-file" style="display:block; margin: 0 auto;">
-						`,
-						showCancelButton: true,
-						confirmButtonText: "Submit Proof",
-						cancelButtonText: "Cancel",
-						preConfirm: () => {
-							const fileInput = document.getElementById("proofImage");
-							if (!fileInput.files[0]) {
-								Swal.showValidationMessage("You must upload a proof of payment image.");
-								return false;
+							title: "Pay via GCash",
+							html: `
+								<p>Please enter your GCash reference number to confirm payment.</p>
+								<input type="text" id="referenceNumber" class="swal2-input" placeholder="Reference Number" style="display:block; margin: 0 auto;">
+							`,
+							showCancelButton: true,
+							confirmButtonText: "Submit",
+							cancelButtonText: "Cancel",
+							preConfirm: () => {
+								const refInput = document.getElementById("referenceNumber").value.trim();
+								if (!refInput) {
+									Swal.showValidationMessage("You must enter the reference number.");
+									return false;
+								}
+								return refInput;
 							}
+						}).then((result) => {
+							if (result.isConfirmed && result.value) {
+								const referenceNumber = result.value;
 
-							return new Promise((resolve) => {
-								const reader = new FileReader();
-								reader.onload = () => {
-									resolve({
-										image: reader.result
-									});
-								};
-								reader.readAsDataURL(fileInput.files[0]);
-							});
-						}
-						}).then((qrResult) => {
-							if (qrResult.isConfirmed && qrResult.value && qrResult.value.image) {
 								fetch("process_receipt.php", {
 									method: "POST",
 									headers: { "Content-Type": "application/json" },
@@ -535,7 +527,7 @@
 										total_price: totalPrice,
 										payment_method: paymentMethod,
 										branch_id: <?php echo $_SESSION['branch_id']; ?>,
-										proof_image: qrResult.value.image,
+										reference_number: referenceNumber,
 										dateSel: dateSelected,
 										timeSel: timeSelected
 									})
