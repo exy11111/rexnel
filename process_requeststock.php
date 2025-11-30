@@ -29,9 +29,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->execute();
         $item_name = $stmt->fetchColumn();
 
+        $sql = "SELECT branch_name FROM branch WHERE branch_id = :branch_id";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':branch_id', $branch_id);
+        $stmt->execute();
+        $branch_name = $stmt->fetchColumn();
+
         //received notif para kay super admin
         $received_by = $_SESSION['username'];
-        $message = "$received_by requested an order: {$item_name}, {$quantity} pcs";
+        $message = "[$branch_name] $received_by requested an order: {$item_name}, {$quantity} pcs";
         $icon = "bi-plus-circle";
         $target_url = "stock_requests.php";
         $timestamp = date('Y-m-d H:i:s');
