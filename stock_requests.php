@@ -197,7 +197,7 @@ error_reporting(E_ALL);
                                                                     <div class='form-button-action'>";
 
                                                             // Show EDIT only if status is NOT Received or Cancelled
-                                                            if ($status !== 'Received' && $status !== 'Cancelled') {
+                                                            if ($status !== 'Received' && $status !== 'Cancelled' && $status !== 'Delivered') {
                                                                 echo "<button type='button' 
                                                                     class='btn btn-link btn-primary btn-lg edit-btn'
                                                                     data-bs-toggle='modal' 
