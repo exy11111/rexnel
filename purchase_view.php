@@ -150,7 +150,7 @@
 								</table>
 							</div>
 							<h5 class="text-end" id="totalPrice">Total Price: ₱<?php echo number_format($totalPrice, 2); ?></h5>
-							<h5 class="text-end" id="totalPaid">Paid: ₱<?php echo number_format($cash['cash'], 2); ?> <?php echo $payment_method?></h5>
+							<h5 class="text-end" id="totalPaid">Paid <?php echo $payment_method?>: ₱<?php echo number_format($cash['cash'], 2); ?></h5>
 							<?php if ($cash['pm_id'] == 1):?>
 							<h5 class="text-end" id="totalChange">Change: ₱<?php echo number_format($cash['change_cash'], 2); ?></h5>
 							<?php else: ?>
