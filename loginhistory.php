@@ -17,7 +17,7 @@
     LEFT JOIN users u ON u.user_id = lh.user_id
     LEFT JOIN userdetails ud ON u.user_id = ud.user_id
     LEFT JOIN branch b ON u.branch_id = b.branch_id
-    ORDER BY date DESC";
+    ORDER BY lh.date DESC";
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
