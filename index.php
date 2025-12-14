@@ -696,7 +696,7 @@ ini_set('display_errors', 1);
 				datasets: [{
 					label: 'Total Purchases',
 					data: values,
-					borderColor: 'rgb(255, 99, 132)',
+					borderColor: 'rgb(54, 162, 235)',
 					backgroundColor: 'rgba(255, 99, 132, 0.2)',
 					lineTension: 0.1
 				}]
