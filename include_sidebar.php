@@ -137,7 +137,12 @@
                             </li>
                             <li>
                                 <a href="stock_requests.php">
-                                    <span class="sub-item text-white">Stock Requests</span>
+                                    <span class="sub-item text-white">Supply Chain Status</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="adminorderhistory.php">
+                                    <span class="sub-item text-white">Stock Request</span>
                                 </a>
                             </li>
                             <?php else: ?>
@@ -166,11 +171,6 @@
                                     <span class="sub-item text-white">Expenses</span>
                                 </a>
                             </li>                 
-                            <li>
-                                <a href="adminorderhistory.php">
-                                    <span class="sub-item text-white">Order History</span>
-                                </a>
-                            </li>
                             
                         </ul>
                     </div>
