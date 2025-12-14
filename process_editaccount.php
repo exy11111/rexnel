@@ -65,16 +65,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             header("Location: " . $destination . "?editstatus=notfound");
             exit();
         }
-
-        if(empty($old_password)){
-            header("Location: report.php?accstatus=error");
-            exit();
-        }
         else{
-             if (!password_verify($old_password, $currentData['password'])) {
-                header("Location: report.php?accstatus=error");
-                exit();
-             }
+            if(!empty($old_password)){
+                if (!password_verify($old_password, $currentData['password'])) {
+                    header("Location: report.php?accstatus=error");
+                    exit();
+                }
+            }
+            
         }
 
         // Check if username is already taken by others
