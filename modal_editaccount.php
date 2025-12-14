@@ -83,7 +83,6 @@
                                         class="form-control password-field" 
                                         name="old_password" 
                                         placeholder="fill password" 
-                                        required
                                     >
                                     <span class="input-group-text toggle-password mb-3" style="cursor:pointer;">
                                         <i class="bi bi-eye-slash-fill"></i>
@@ -99,7 +98,6 @@
                                         class="form-control password-field" 
                                         name="password" 
                                         placeholder="fill password" 
-                                        required
                                     >
                                     <span class="input-group-text toggle-password mb-3" style="cursor:pointer;">
                                         <i class="bi bi-eye-slash-fill"></i>
@@ -114,8 +112,7 @@
                                     <input type="password" 
                                         class="form-control password-field" 
                                         name="confirm_password" 
-                                        placeholder="fill password" 
-                                        required>
+                                        placeholder="fill password" >
                                         <span class="input-group-text toggle-password mb-3" style="cursor:pointer;">
                                             <i class="bi bi-eye-slash-fill"></i>
                                         </span>
