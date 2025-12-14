@@ -3,11 +3,19 @@
 	require ('db.php');
 
 	if(isset($_GET['b'])){
-		$_SESSION['branch_id'] = $_GET['b'];
+		if (!is_numeric($_GET['b'])) {
+			$_SESSION['branch_id'] = 1;
+		}
+		else{
+			$_SESSION['branch_id'] = $_GET['b'];
+		}
+		
 	}
-	else if($_SESSION['branch_id'] == 0){
+	if($_SESSION['branch_id'] == 0){
 		$_SESSION['branch_id'] = 1;
 	}
+
+	$branch_id = $_SESSION['branch_id'];
 
 	$sql = "SELECT item_id, barcode, item_name, category_name, brand_name, supplier_name, size_name, price, stock, supplier_price, (price - supplier_price) as profit
 	FROM items i 
