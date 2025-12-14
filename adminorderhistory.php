@@ -32,7 +32,7 @@
 <html lang="en">
 <head>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-	<title>Order History</title>
+	<title>Stock Request</title>
 	<meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
 	<link rel="icon" href="assets/img/holicon.png" type="image/x-icon"/><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
@@ -123,7 +123,7 @@
 								<i class="icon-arrow-right"></i>
 							</li>
 							<li class="nav-item">
-								<a href="#">Order History</a>
+								<a href="#">Stock Request</a>
 							</li>
 						</ul>
 					</div>
@@ -132,7 +132,7 @@
 							<div class="card">
 								<div class="card-header">
                                     <div class="d-flex align-items-center">
-										<h4 class="card-title">Orders</h4>
+										<h4 class="card-title">Stock Requests</h4>
 										<div class="ms-auto">
 											<?php if($_SESSION['role_id'] == 1):?>
 											<button class="btn btn-success btn-round" data-bs-toggle="modal" data-bs-target="#orderModal">
