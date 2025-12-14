@@ -37,7 +37,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $icon = "bi-plus-circle";
         $timestamp = date('Y-m-d H:i:s');
 
-        $sql = "SELECT user_id, role_id FROM users WHERE role_id IN (2, 3)";
+        $sql = "SELECT user_id, role_id FROM users WHERE role_id IN (3)";
         $stmt = $conn->prepare($sql);
         $stmt->execute();
         $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -45,8 +45,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         foreach ($users as $user) {
             if ($user['role_id'] == 3) {
                 $target_url = "orderssupplier.php";
-            } elseif ($user['role_id'] == 2) {
-                $target_url = "adminorderhistory.php";
             }
             $sql = "INSERT INTO notifications (user_id, message, icon, target_url, created_at) 
                     VALUES (:user_id, :message, :icon, :target_url, :created_at)";
