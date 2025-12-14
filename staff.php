@@ -282,7 +282,6 @@
                                             });
 
                                         </script>
-                                        <?php include 'modal_editaccount.php';?>
 									</div>
 								</div>
 							</div>
