@@ -14,7 +14,7 @@
                     <p class="small">Edit the account details below.</p>
                     <div class="row">
                         <?php if(isset($branch_data)):?>
-                        <div class="col-sm-12">
+                        <div class="col-sm-12 d-none">
                             <div class="form-group form-group-default">
                                 <label>Branch</label>
                                 <select name="branch_id" id="editBranchId" class="form-select">
