@@ -495,6 +495,7 @@
                     title: 'Account Edited!',
                     text: 'The account has been successfully edited.',
                 }).then((result) => {
+                    window.location.href="staff.php";
                 });
             <?php elseif ($_GET['editstatus'] == 'error'): ?>
                 Swal.fire({
