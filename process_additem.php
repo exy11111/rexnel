@@ -16,7 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     try {
         $sql = "SELECT * FROM items WHERE (barcode = :barcode AND branch_id = :branch_id)
         OR 
-        (item_name = :item_name AND size_id = :size_id AND supplier_id = :supplier_id AND brand_id = :brand_id AND category_id = :category_id)";
+        (item_name = :item_name AND size_id = :size_id AND supplier_id = :supplier_id AND brand_id = :brand_id AND category_id = :category_id AND branch_id = :branch_id)";
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':barcode', $barcode);
         $stmt->bindParam(':item_name', $item_name);
