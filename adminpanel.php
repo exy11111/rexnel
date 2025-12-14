@@ -385,7 +385,7 @@ ini_set('display_errors', 1);
 											<canvas id="items_chart2"></canvas>
 										</div>
 										<div class="row mt-3">
-											<div class="col-3">
+											<div class="col-6">
 												<div class="dropdown mb-3">
 													<button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
 														Filter Categories
@@ -402,7 +402,7 @@ ini_set('display_errors', 1);
 													</ul>
 												</div>
 											</div>
-											<div class="col-3">
+											<div class="col-6 text-end">
 												<div class="dropdown mb-3">
 													<button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
 														Filter Branches
