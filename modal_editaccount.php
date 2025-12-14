@@ -160,25 +160,28 @@ document.getElementById('editAccountForm').addEventListener('submit', function(e
     const password = this.querySelector('input[name="password"]').value;
     const confirmPassword = this.querySelector('input[name="confirm_password"]').value;
 
-    if (password !== confirmPassword) {
-        e.preventDefault();
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Passwords do not match!'
-        });
-        return false;
-    }
+    if(password && confirmPassword){
+        if (password !== confirmPassword) {
+            e.preventDefault();
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Passwords do not match!'
+            });
+            return false;
+        }
 
-    if (password.length < 6) {
-        e.preventDefault();
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Password must be at least 6 characters long!'
-        });
-        return false;
+        if (password.length < 6) {
+            e.preventDefault();
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Password must be at least 6 characters long!'
+            });
+            return false;
+        }
     }
+    
 });
 </script>
 
