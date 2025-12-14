@@ -1083,6 +1083,19 @@ ini_set('display_errors', 1);
 				url += `?start=${encodeURIComponent(startDate)}&end=${encodeURIComponent(endDate)}`;
 			}
 
+			const colors = [
+			'#36A2EB', // blue
+			'#4CAF50', // green
+			'#FFCE56', // yellow
+			'#9C27B0', // purple
+			'#FF9800', // orange
+			'#795548', // brown
+			'#607D8B', // blue-gray
+			'#00BCD4', // cyan
+			'#3F51B5', // indigo
+			'#8BC34A'  // light green
+			];
+
 			fetch(url)
 				.then(response => {
 					if(!response.ok) throw new Error('Network response was not ok');
@@ -1095,6 +1108,12 @@ ini_set('display_errors', 1);
 				.then(chartData => {
 					const ctx = document.getElementById('sales_chart').getContext('2d');
 
+					chartData.datasets.forEach((ds, index) => {
+						const color = colors[index % colors.length];
+						ds.borderColor = color;
+						ds.backgroundColor = color + '33';
+						ds.pointBackgroundColor = color;
+					});
 					// Destroy previous chart if exists
 					if(salesChart) salesChart.destroy();
 
@@ -1116,8 +1135,12 @@ ini_set('display_errors', 1);
 										maxTicksLimit: 10,
 										callback: label => {
 											const date = new Date(label);
-											if(!isNaN(date.getTime())) {
-												return date.toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' });
+											if (!isNaN(date.getTime())) {
+												return date.toLocaleDateString('en-US', {
+													year: 'numeric',
+													month: 'short',
+													day: 'numeric'
+												});
 											}
 											return label;
 										}
