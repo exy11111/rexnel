@@ -89,6 +89,11 @@
                                 </a>
                             </li>
                             <li>
+                                <a href="stocklow.php">
+                                    <span class="sub-item text-white">Low Stocks</span>
+                                </a>
+                            </li>
+                            <li>
                                 <a href="categories.php">
                                     <span class="sub-item text-white">Categories</span>
                                 </a>
