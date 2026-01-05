@@ -46,27 +46,81 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email'])) {
             $mail->isHTML(true);
             $mail->Subject = 'Reset Your Password - House of Local';
             $mail->Body = '
-                <html>
-                <head>
+            <html>
+            <head>
                 <style>
+                    body {
+                        font-family: Arial, Helvetica, sans-serif;
+                        color: #333333;
+                        line-height: 1.6;
+                    }
+                    .container {
+                        max-width: 600px;
+                        margin: auto;
+                        padding: 20px;
+                        border: 1px solid #e0e0e0;
+                    }
                     .button {
                         display: inline-block;
-                        padding: 10px 18px;
+                        padding: 12px 22px;
                         font-size: 14px;
-                        color: white;
+                        color: #ffffff !important;
                         background-color: #2c3e50;
                         text-decoration: none;
                         border-radius: 4px;
+                        margin-top: 10px;
+                    }
+                    .footer {
+                        font-size: 12px;
+                        color: #777777;
+                        margin-top: 25px;
                     }
                 </style>
-                </head>
-                <body>
-                    <p>Click the button below to reset your password:</p>
-                    <p><a href="' . $reset_link . '" class="button">Reset Password</a></p>
-                    <p>If the button doesn\'t work, copy and paste this link into your browser:</p>
-                    <p><a href="' . $reset_link . '">' . $reset_link . '</a></p>
-                </body>
-                </html>
+            </head>
+            <body>
+                <div class="container">
+                    <p>Dear Valued Customer,</p>
+
+                    <p>
+                        We received a request to reset the password associated with your
+                        <strong>House of Local</strong> account.
+                    </p>
+
+                    <p>
+                        To proceed with resetting your password, please click the button below:
+                    </p>
+
+                    <p>
+                        <a href="' . $reset_link . '" class="button">Reset Password</a>
+                    </p>
+
+                    <p>
+                        If the button above does not work, you may copy and paste the following link
+                        into your web browser:
+                    </p>
+
+                    <p>
+                        <a href="' . $reset_link . '">' . $reset_link . '</a>
+                    </p>
+
+                    <p>
+                        If you did not request a password reset, please disregard this email.
+                        Your account will remain secure.
+                    </p>
+
+                    <p>Thank you,</p>
+                    <p>
+                        <strong>House of Local Support Team</strong>
+                    </p>
+
+                    <div class="footer">
+                        <p>
+                            This is an automated message. Please do not reply to this email.
+                        </p>
+                    </div>
+                </div>
+            </body>
+            </html>
             ';
 
             $mail->send();
