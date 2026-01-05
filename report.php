@@ -918,6 +918,12 @@ productSheet["!cols"] = [
     { wch: 18 }  // Revenue
 ];
 
+brandSheet["!cols"] = [
+    { wch: 30 }, // Product name
+    { wch: 12 }, // Price
+    { wch: 18 }  // Revenue
+];
+
     /* =========================
        CREATE WORKBOOK
     ========================= */
