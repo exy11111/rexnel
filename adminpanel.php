@@ -229,7 +229,7 @@ ini_set('display_errors', 1);
 											<div class="col col-stats ms-3 ms-sm-0">
 												<div class="numbers w-100">
 													<p class="card-category">Return of Investment</p>
-													<h4 class="card-title text-success"><?= number_format($roi, 2) ?>%</h4>
+													<h4 class="card-title"><?= number_format($roi, 2) ?>%</h4>
 													
 												</div>
 											</div>
