@@ -623,7 +623,11 @@
 									foreach ($topProducts as $row): 
 										if ($counter >= 3) break;
 									?>
-										<div class="card mb-3">
+										<div class="card mb-3 top-product"
+										data-name="<?= htmlspecialchars($row['item_name']) ?>"
+										data-price="<?= $row['price'] ?>"
+										data-sold="<?= $row['total_sold'] ?>"
+										data-revenue="<?= $row['total_revenue'] ?>">
 											<div class="card-body d-flex justify-content-between align-items-center">
 												<div>
 													<h5 class="card-title mb-1"><?php echo $row['item_name'];?></h5>
@@ -756,7 +760,10 @@
 									foreach ($topBrands as $row): 
 										if ($counter >= 3) break;
 									?>
-										<div class="card mb-3">
+										<div class="card mb-3 top-brand"
+										data-name="<?= htmlspecialchars($row['brand_name']) ?>"
+										data-sold="<?= $row['total_sold'] ?>"
+										data-revenue="<?= $row['total_revenue'] ?>">
 											<div class="card-body d-flex justify-content-between align-items-center">
 												<div>
 													<h5 class="card-title mb-1"><?php echo $row['brand_name'];?></h5>
@@ -851,36 +858,84 @@
 	<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
 	<script>
-	function exportDashboardExcel() {
+function exportDashboardExcel() {
 
-		const data = [
-			["Dashboard Report"],
-			[],
-			["Total Revenue", document.getElementById("totalRevenue").innerText],
-			["Total Expenses", document.getElementById("totalExpenses").innerText],
-			["Total Profit", document.getElementById("totalProfit").innerText],
-			[],
-			["Items Sold"],
-			["Daily", document.getElementById("dailyItems").innerText],
-			["Monthly", document.getElementById("monthlyItems").innerText],
-			["Yearly", document.getElementById("yearlyItems").innerText],
-			["All Time", document.getElementById("allTimeItems").innerText],
-			[],
-			["Sales"],
-			["Daily Sales", document.getElementById("dailySales").innerText],
-			["Weekly Sales", document.getElementById("weeklySales").innerText],
-			["Monthly Sales", document.getElementById("monthlySales").innerText],
-			["Yearly Sales", document.getElementById("yearlySales").innerText],
-		];
+    /* =========================
+       SUMMARY SHEET
+    ========================= */
+    const summaryData = [
+        ["Dashboard Summary"],
+        [],
+        ["Total Revenue", document.getElementById("totalRevenue")?.innerText || ""],
+        ["Total Expenses", document.getElementById("totalExpenses")?.innerText || ""],
+        ["Total Profit", document.getElementById("totalProfit")?.innerText || ""],
+        [],
+        ["Items Sold"],
+        ["Daily", document.getElementById("dailyItems")?.innerText || ""],
+        ["Monthly", document.getElementById("monthlyItems")?.innerText || ""],
+        ["Yearly", document.getElementById("yearlyItems")?.innerText || ""],
+        ["All Time", document.getElementById("allTimeItems")?.innerText || ""],
+        [],
+        ["Sales"],
+        ["Daily Sales", document.getElementById("dailySales")?.innerText || ""],
+        ["Weekly Sales", document.getElementById("weeklySales")?.innerText || ""],
+        ["Monthly Sales", document.getElementById("monthlySales")?.innerText || ""],
+        ["Yearly Sales", document.getElementById("yearlySales")?.innerText || ""],
+    ];
 
-		const worksheet = XLSX.utils.aoa_to_sheet(data);
-		const workbook = XLSX.utils.book_new();
+    const summarySheet = XLSX.utils.aoa_to_sheet(summaryData);
 
-		XLSX.utils.book_append_sheet(workbook, worksheet, "Dashboard");
+    /* =========================
+       TOP PRODUCTS SHEET
+    ========================= */
+    const productRows = [
+        ["Product Name", "Price", "Total Sold", "Total Revenue"]
+    ];
 
-		XLSX.writeFile(workbook, "dashboard_report.xlsx");
-	}
-	</script>
+    document.querySelectorAll(".top-product").forEach(card => {
+        productRows.push([
+            card.dataset.name,
+            parseFloat(card.dataset.price),
+            parseInt(card.dataset.sold),
+            parseFloat(card.dataset.revenue)
+        ]);
+    });
+
+    const productSheet = XLSX.utils.aoa_to_sheet(productRows);
+
+    /* =========================
+       TOP BRANDS SHEET
+    ========================= */
+    const brandRows = [
+        ["Brand Name", "Total Sold", "Total Revenue"]
+    ];
+
+    document.querySelectorAll(".top-brand").forEach(card => {
+        brandRows.push([
+            card.dataset.name,
+            parseInt(card.dataset.sold),
+            parseFloat(card.dataset.revenue)
+        ]);
+    });
+
+    const brandSheet = XLSX.utils.aoa_to_sheet(brandRows);
+
+    /* =========================
+       CREATE WORKBOOK
+    ========================= */
+    const workbook = XLSX.utils.book_new();
+
+    XLSX.utils.book_append_sheet(workbook, summarySheet, "Summary");
+    XLSX.utils.book_append_sheet(workbook, productSheet, "Top Products");
+    XLSX.utils.book_append_sheet(workbook, brandSheet, "Top Brands");
+
+    /* =========================
+       DOWNLOAD
+    ========================= */
+    const today = new Date().toISOString().split('T')[0];
+    XLSX.writeFile(workbook, `dashboard_report_${today}.xlsx`);
+}
+</script>
 
 	<?php include 'modal_profile.php'?>
 	<?php include 'modal_editaccount.php';?>
