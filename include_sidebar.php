@@ -192,7 +192,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="report.php">
+                                <a href="report_select.php">
                                     <span class="sub-item text-white">Report</span>
                                 </a>
                             </li>
