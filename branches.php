@@ -2,7 +2,7 @@
 	require ('session.php');
 	require ('db.php');
 
-	if($_SESSION['user_id'] != 17){
+	if($_SESSION['role_id'] != 1){
 		header('Location: index.php?access=denied');
 		exit();
 	}
