@@ -132,12 +132,15 @@
 							</ul>
 						</div>
 
-						<div>
-							<button class="btn btn-primary" id="downloadPdfBtn">Download as PDF</button>
+						<div class="d-flex justify-content-end align-items-center gap-2 mb-3">
+							<button class="btn btn-primary" id="downloadPdfBtn">
+								Download as PDF
+							</button>
+
+							<button class="btn btn-success" onclick="exportDashboardExcel()">
+								Download as Excel File
+							</button>
 						</div>
-						<button class="btn btn-success mb-3" onclick="exportDashboardExcel()">
-							Download as Excel File
-						</button>
 
 					</div>
 
