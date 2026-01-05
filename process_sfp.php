@@ -79,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email'])) {
             </head>
             <body>
                 <div class="container">
-                    <p>Dear Valued Customer,</p>
+                    <p>Dear Valued User,</p>
 
                     <p>
                         We received a request to reset the password associated with your

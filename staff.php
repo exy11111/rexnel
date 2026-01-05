@@ -166,17 +166,18 @@
                                                                 <div class="form-group form-group-default">
                                                                     <label>Password</label>
                                                                     <div class="input-group">
-                                                                        <input type="password" 
-                                                                            class="form-control password-field" 
-                                                                            name="password" 
-                                                                            placeholder="fill password" 
+                                                                        <input type="password"
+                                                                            class="form-control password-field"
+                                                                            name="password"
+                                                                            id="password"
+                                                                            placeholder="Fill password"
                                                                             required>
-                                                                            <span class="input-group-text toggle-password mb-3" style="cursor:pointer;">
-                                                                                <i class="bi bi-eye-slash-fill"></i>
-                                                                            </span>
+                                                                        <span class="input-group-text toggle-password mb-3" style="cursor:pointer;">
+                                                                            <i class="bi bi-eye-slash-fill"></i>
+                                                                        </span>
                                                                     </div>
+                                                                    <small id="passwordError" class="text-danger d-none"></small>
                                                                 </div>
-                                                                
                                                             </div>
                                                         </div>
                                                         
@@ -556,6 +557,60 @@
                         console.error("Error fetching data: " + error);
                     }
                 });
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const passwordInput = document.getElementById("password");
+            const errorMsg = document.getElementById("passwordError");
+            const form = document.querySelector("form");
+
+            function validatePassword(password) {
+                if (password.length < 8) {
+                    return "Password must be at least 8 characters long.";
+                }
+                if (!/[A-Z]/.test(password)) {
+                    return "Password must contain at least one uppercase letter.";
+                }
+                if (!/[^a-zA-Z0-9]/.test(password)) {
+                    return "Password must contain at least one symbol.";
+                }
+                if (!/[a-zA-Z0-9]/.test(password)) {
+                    return "Password must be alphanumeric.";
+                }
+                return "";
+            }
+
+            // Live validation
+            passwordInput.addEventListener("input", function () {
+                const error = validatePassword(passwordInput.value);
+
+                if (error) {
+                    errorMsg.textContent = error;
+                    errorMsg.classList.remove("d-none");
+                    passwordInput.classList.add("is-invalid");
+                } else {
+                    errorMsg.textContent = "";
+                    errorMsg.classList.add("d-none");
+                    passwordInput.classList.remove("is-invalid");
+                }
+            });
+
+            // Form submit validation (SweetAlert)
+            form.addEventListener("submit", function (e) {
+                const error = validatePassword(passwordInput.value);
+
+                if (error) {
+                    e.preventDefault();
+
+                    Swal.fire({
+                        icon: "error",
+                        title: "Invalid Password",
+                        text: error,
+                        confirmButtonText: "OK"
+                    });
+                }
             });
         });
     </script>
