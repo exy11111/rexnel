@@ -135,6 +135,10 @@
 						<div>
 							<button class="btn btn-primary" id="downloadPdfBtn">Download as PDF</button>
 						</div>
+						<button class="btn btn-success mb-3" onclick="exportDashboardExcel()">
+							Download as Excel File
+						</button>
+
 					</div>
 
 					<!-- -->
@@ -175,8 +179,7 @@
 											<div class="col col-stats ms-3 ms-sm-0">
 												<div class="numbers w-100">
 													<p class="card-category">Total Revenue</p>
-													<h4 class="card-title">₱<?php echo number_format($all_revenue, 2) ?></h4>
-													
+													<h4 id="totalRevenue" class="card-title">₱<?php echo number_format($all_revenue, 2) ?></h4>
 												</div>
 											</div>
 										</div>
@@ -197,7 +200,7 @@
 											<div class="col col-stats ms-3 ms-sm-0">
 												<div class="numbers w-100">
 													<p class="card-category">Total Expenses</p>
-													<h4 class="card-title">₱<?php echo number_format($all_expenses, 2) ?></h4>
+													<h4 id="totalExpenses" class="card-title">₱<?php echo number_format($all_expenses, 2) ?></h4>
 													
 												</div>
 											</div>
@@ -219,7 +222,7 @@
 											<div class="col col-stats ms-3 ms-sm-0">
 												<div class="numbers w-100">
 													<p class="card-category">Total Profit</p>
-													<h4 class="card-title">₱<?php echo number_format($all_profit, 2) ?></h4>
+													<h4 id="totalProfit" class="card-title">₱<?php echo number_format($all_profit, 2) ?></h4>
 													
 												</div>
 												<span id="percentageText" class="text-muted float-end"></span>
@@ -291,7 +294,7 @@
 											<div class="col col-stats ms-3 ms-sm-0">
 												<div class="numbers w-100">
 													<p class="card-category">Daily Items Sold</p>
-													<h4 class="card-title"><?php echo $total_quantity_today ?></h4>
+													<h4 id="dailyItems" class="card-title"><?php echo $total_quantity_today ?></h4>
 												</div>
 												<span id="percentageText" class="text-muted float-end"></span>
 											</div>
@@ -313,7 +316,7 @@
 											<div class="col col-stats ms-3 ms-sm-0">
 												<div class="numbers">
 													<p class="card-category">Monthly Items Sold</p>
-													<h4 class="card-title"><?php echo $total_quantity_month ?></h4>
+													<h4 id="monthlyItems" class="card-title"><?php echo $total_quantity_month ?></h4>
 												</div>
 											</div>
 										</div>
@@ -334,7 +337,7 @@
 											<div class="col col-stats ms-3 ms-sm-0">
 												<div class="numbers">
 													<p class="card-category">Yearly Items Sold</p>
-													<h4 class="card-title"><?php echo $total_quantity_year ?></h4>
+													<h4 id="yearlyItems" class="card-title"><?php echo $total_quantity_year ?></h4>
 												</div>
 											</div>
 										</div>
@@ -355,7 +358,7 @@
 											<div class="col col-stats ms-3 ms-sm-0">
 												<div class="numbers">
 													<p class="card-category">All Time Items Sold</p>
-													<h4 class="card-title"><?php echo $total_quantity_alltime ?></h4>
+													<h4 id="allTimeItems" class="card-title"><?php echo $total_quantity_alltime ?></h4>
 												</div>
 											</div>
 										</div>
@@ -428,7 +431,7 @@
 											<div class="col col-stats ms-3 ms-sm-0">
 												<div class="numbers w-100">
 													<p class="card-category">Daily Sales</p>
-													<h4 class="card-title">₱<?php echo number_format($daily_sales, 2) ?></h4>
+													<h4 id="dailySales" class="card-title">₱<?php echo number_format($daily_sales, 2) ?></h4>
 												</div>
 												<span id="percentageText" class="text-muted float-end"></span>
 											</div>
@@ -450,7 +453,7 @@
 											<div class="col col-stats ms-3 ms-sm-0">
 												<div class="numbers w-100">
 													<p class="card-category">Weekly Sales</p>
-													<h4 class="card-title">₱<?php echo number_format($weekly_sales, 2) ?></h4>
+													<h4 id="weeklySales" class="card-title">₱<?php echo number_format($weekly_sales, 2) ?></h4>
 												</div>
 												<span id="percentageText" class="text-muted float-end"></span>
 											</div>
@@ -472,7 +475,7 @@
 											<div class="col col-stats ms-3 ms-sm-0">
 												<div class="numbers">
 													<p class="card-category">Monthly Sales</p>
-													<h4 class="card-title">₱<?php echo number_format($monthly_sales, 2) ?></h4>
+													<h4 id="monthlySales" class="card-title">₱<?php echo number_format($monthly_sales, 2) ?></h4>
 												</div>
 											</div>
 										</div>
@@ -493,7 +496,7 @@
 											<div class="col col-stats ms-3 ms-sm-0">
 												<div class="numbers">
 													<p class="card-category">Yearly Sales</p>
-													<h4 class="card-title">₱<?php echo number_format($yearly_sales, 2) ?></h4>
+													<h4 id="yearlySales" class="card-title">₱<?php echo number_format($yearly_sales, 2) ?></h4>
 												</div>
 											</div>
 										</div>
@@ -845,6 +848,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.0/dist/sweetalert2.all.min.js"></script>
 	<!-- Chart JS -->
 	<script src="assets/js/plugin/chart.js/chart.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
 	<?php include 'modal_profile.php'?>
 	<?php include 'modal_editaccount.php';?>
@@ -1130,5 +1134,38 @@
             <?php endif; ?>
         </script>
     <?php endif; ?>
+
+	<script>
+	function exportDashboardExcel() {
+
+		const data = [
+			["Dashboard Summary"],
+			[],
+			["Total Revenue", document.getElementById("totalRevenue").innerText],
+			["Total Expenses", document.getElementById("totalExpenses").innerText],
+			["Total Profit", document.getElementById("totalProfit").innerText],
+			[],
+			["Items Sold"],
+			["Daily", document.getElementById("dailyItems").innerText],
+			["Monthly", document.getElementById("monthlyItems").innerText],
+			["Yearly", document.getElementById("yearlyItems").innerText],
+			["All Time", document.getElementById("allTimeItems").innerText],
+			[],
+			["Sales"],
+			["Daily Sales", document.getElementById("dailySales").innerText],
+			["Weekly Sales", document.getElementById("weeklySales").innerText],
+			["Monthly Sales", document.getElementById("monthlySales").innerText],
+			["Yearly Sales", document.getElementById("yearlySales").innerText],
+		];
+
+		const worksheet = XLSX.utils.aoa_to_sheet(data);
+		const workbook = XLSX.utils.book_new();
+
+		XLSX.utils.book_append_sheet(workbook, worksheet, "Dashboard");
+
+		XLSX.writeFile(workbook, "dashboard_report.xlsx");
+	}
+	</script>
+
 </body>
 </html>
