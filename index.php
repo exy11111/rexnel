@@ -162,9 +162,15 @@ ini_set('display_errors', 1);
 						$all_expenses = $supplier_expenses + $expenses;
 
 						$all_profit = $all_revenue - $all_expenses;
+
+						if ($all_expenses > 0) {
+							$roi = ($all_profit / $all_expenses) * 100;
+						} else {
+							$roi = 0;
+						}
 					?>
 					<div class="row">
-						<div class="col-sm-6 col-md-4">
+						<div class="col-sm-6 col-md-3">
 							<a href="purchase.php">
 								<div class="card card1 card-stats card-round">
 									<div class="card-body">
@@ -186,7 +192,7 @@ ini_set('display_errors', 1);
 								</div>
 							</a>
 						</div>	
-						<div class="col-sm-6 col-md-4">
+						<div class="col-sm-6 col-md-3">
 							<a href="#">
 								<div class="card card1 card-stats card-round">
 									<div class="card-body">
@@ -208,7 +214,7 @@ ini_set('display_errors', 1);
 								</div>
 							</a>
 						</div>	
-						<div class="col-sm-6 col-md-4">
+						<div class="col-sm-6 col-md-3">
 							<a href="purchase.php">
 								<div class="card card1 card-stats card-round">
 									<div class="card-body">
@@ -230,6 +236,27 @@ ini_set('display_errors', 1);
 								</div>
 							</a>
 						</div>	
+						<div class="col-sm-6 col-md-3">
+							<a href="report.php">
+								<div class="card card1 card-stats card-round">
+									<div class="card-body">
+										<div class="row align-items-center">
+											<div class="col-icon">
+												<div class="icon-big text-center icon-success bubble-shadow-small">
+													<i class="fas fa-chart-line"></i>
+												</div>
+											</div>
+											<div class="col col-stats ms-3 ms-sm-0">
+												<div class="numbers w-100">
+													<p class="card-category">Return of Investment</p>
+													<h4 class="card-title"><?= number_format($roi, 2) ?>%</h4>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</a>
+						</div>
 					</div>
 
 					<div class="row">
