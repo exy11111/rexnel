@@ -850,6 +850,38 @@
 	<script src="assets/js/plugin/chart.js/chart.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
+	<script>
+	function exportDashboardExcel() {
+
+		const data = [
+			["Dashboard Report"],
+			[],
+			["Total Revenue", document.getElementById("totalRevenue").innerText],
+			["Total Expenses", document.getElementById("totalExpenses").innerText],
+			["Total Profit", document.getElementById("totalProfit").innerText],
+			[],
+			["Items Sold"],
+			["Daily", document.getElementById("dailyItems").innerText],
+			["Monthly", document.getElementById("monthlyItems").innerText],
+			["Yearly", document.getElementById("yearlyItems").innerText],
+			["All Time", document.getElementById("allTimeItems").innerText],
+			[],
+			["Sales"],
+			["Daily Sales", document.getElementById("dailySales").innerText],
+			["Weekly Sales", document.getElementById("weeklySales").innerText],
+			["Monthly Sales", document.getElementById("monthlySales").innerText],
+			["Yearly Sales", document.getElementById("yearlySales").innerText],
+		];
+
+		const worksheet = XLSX.utils.aoa_to_sheet(data);
+		const workbook = XLSX.utils.book_new();
+
+		XLSX.utils.book_append_sheet(workbook, worksheet, "Dashboard");
+
+		XLSX.writeFile(workbook, "dashboard_report.xlsx");
+	}
+	</script>
+
 	<?php include 'modal_profile.php'?>
 	<?php include 'modal_editaccount.php';?>
 	<!-- Edit Branch Modal -->
@@ -1134,38 +1166,6 @@
             <?php endif; ?>
         </script>
     <?php endif; ?>
-
-	<script>
-	function exportDashboardExcel() {
-
-		const data = [
-			["Dashboard Summary"],
-			[],
-			["Total Revenue", document.getElementById("totalRevenue").innerText],
-			["Total Expenses", document.getElementById("totalExpenses").innerText],
-			["Total Profit", document.getElementById("totalProfit").innerText],
-			[],
-			["Items Sold"],
-			["Daily", document.getElementById("dailyItems").innerText],
-			["Monthly", document.getElementById("monthlyItems").innerText],
-			["Yearly", document.getElementById("yearlyItems").innerText],
-			["All Time", document.getElementById("allTimeItems").innerText],
-			[],
-			["Sales"],
-			["Daily Sales", document.getElementById("dailySales").innerText],
-			["Weekly Sales", document.getElementById("weeklySales").innerText],
-			["Monthly Sales", document.getElementById("monthlySales").innerText],
-			["Yearly Sales", document.getElementById("yearlySales").innerText],
-		];
-
-		const worksheet = XLSX.utils.aoa_to_sheet(data);
-		const workbook = XLSX.utils.book_new();
-
-		XLSX.utils.book_append_sheet(workbook, worksheet, "Dashboard");
-
-		XLSX.writeFile(workbook, "dashboard_report.xlsx");
-	}
-	</script>
 
 </body>
 </html>
