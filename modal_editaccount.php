@@ -156,32 +156,52 @@ document.addEventListener('click', function (e) {
 </script>
 
 <script>
-document.getElementById('editAccountForm').addEventListener('submit', function(e) {
-    const password = this.querySelector('input[name="password"]').value;
-    const confirmPassword = this.querySelector('input[name="confirm_password"]').value;
+document.addEventListener("DOMContentLoaded", function () {
 
-    if(password && confirmPassword){
+    const modal = document.getElementById("editAccountModal");
+    if (!modal) return; // safety guard
+
+    const passwordInput = modal.querySelector('input[name="password"]');
+    const confirmInput  = modal.querySelector('input[name="confirm_password"]');
+    const form = modal.querySelector("form");
+
+    function validateEditPassword(password, confirmPassword) {
+
+        if (password.length < 8) {
+            return "Password must be at least 8 characters long.";
+        }
+        if (!/[A-Z]/.test(password)) {
+            return "Password must contain at least one uppercase letter.";
+        }
+        if (!/[^a-zA-Z0-9]/.test(password)) {
+            return "Password must contain at least one symbol.";
+        }
         if (password !== confirmPassword) {
-            e.preventDefault();
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Passwords do not match!'
-            });
-            return false;
+            return "Passwords do not match.";
         }
 
-        if (password.length < 6) {
-            e.preventDefault();
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Password must be at least 6 characters long!'
-            });
-            return false;
-        }
+        return "";
     }
-    
+
+    form.addEventListener("submit", function (e) {
+        const password = passwordInput.value.trim();
+        const confirmPassword = confirmInput.value.trim();
+
+        const error = validateEditPassword(password, confirmPassword);
+
+        if (error) {
+            e.preventDefault();
+
+            Swal.fire({
+                icon: "error",
+                title: "Unable to Update Password",
+                text: error,
+                confirmButtonText: "OK"
+            });
+        }
+    });
+
 });
 </script>
+
 
