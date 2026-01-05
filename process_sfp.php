@@ -7,8 +7,8 @@ require 'db.php';
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email'])) {
-    $email = $_POST['email'];
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_POST['email'])) {
+    $email = $_GET['email'];
 
     // Check if email exists
     $stmt = $conn->prepare("SELECT users.user_id FROM users JOIN userdetails ON users.user_id = userdetails.user_id WHERE userdetails.email = :email");
