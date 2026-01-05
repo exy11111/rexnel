@@ -94,29 +94,31 @@
                             <div class="form-group form-group-default">
                                 <label>New Password</label>
                                 <div class="input-group">
-                                    <input type="password" 
-                                        class="form-control password-field" 
-                                        name="password" 
-                                        placeholder="fill password" 
-                                    >
+                                    <input type="password"
+                                        class="form-control password-field new-password"
+                                        name="password"
+                                        placeholder="fill password">
                                     <span class="input-group-text toggle-password mb-3" style="cursor:pointer;">
                                         <i class="bi bi-eye-slash-fill"></i>
                                     </span>
                                 </div>
+                                <small class="text-danger d-none password-error"></small>
                             </div>
                         </div>
+
                         <div class="col-sm-12">
                             <div class="form-group form-group-default">
                                 <label>Confirm Password</label>
                                 <div class="input-group">
-                                    <input type="password" 
-                                        class="form-control password-field" 
-                                        name="confirm_password" 
-                                        placeholder="fill password" >
-                                        <span class="input-group-text toggle-password mb-3" style="cursor:pointer;">
-                                            <i class="bi bi-eye-slash-fill"></i>
-                                        </span>
+                                    <input type="password"
+                                        class="form-control password-field confirm-password"
+                                        name="confirm_password"
+                                        placeholder="fill password">
+                                    <span class="input-group-text toggle-password mb-3" style="cursor:pointer;">
+                                        <i class="bi bi-eye-slash-fill"></i>
+                                    </span>
                                 </div>
+                                <small class="text-danger d-none confirm-error"></small>
                             </div>
                         </div>
                         <input type="hidden" name="user_id" id="editUserId">
@@ -159,49 +161,64 @@ document.addEventListener('click', function (e) {
 document.addEventListener("DOMContentLoaded", function () {
 
     const modal = document.getElementById("editAccountModal");
-    if (!modal) return; // safety guard
+    if (!modal) return;
 
-    const passwordInput = modal.querySelector('input[name="password"]');
-    const confirmInput  = modal.querySelector('input[name="confirm_password"]');
-    const form = modal.querySelector("form");
+    const newPassword = modal.querySelector(".new-password");
+    const confirmPassword = modal.querySelector(".confirm-password");
+    const newPassError = modal.querySelector(".password-error");
+    const confirmError = modal.querySelector(".confirm-error");
 
-    function validateEditPassword(password, confirmPassword) {
-
-        if (password.length < 8) {
+    function validateNewPassword(value) {
+        if (value.length < 8) {
             return "Password must be at least 8 characters long.";
         }
-        if (!/[A-Z]/.test(password)) {
+        if (!/[A-Z]/.test(value)) {
             return "Password must contain at least one uppercase letter.";
         }
-        if (!/[^a-zA-Z0-9]/.test(password)) {
+        if (!/[^a-zA-Z0-9]/.test(value)) {
             return "Password must contain at least one symbol.";
         }
-        if (password !== confirmPassword) {
-            return "Passwords do not match.";
-        }
-
         return "";
     }
 
-    form.addEventListener("submit", function (e) {
-        const password = passwordInput.value.trim();
-        const confirmPassword = confirmInput.value.trim();
-
-        const error = validateEditPassword(password, confirmPassword);
-
-        if (error) {
-            e.preventDefault();
-
-            Swal.fire({
-                icon: "error",
-                title: "Unable to Update Password",
-                text: error,
-                confirmButtonText: "OK"
-            });
+    function toggleError(input, errorEl, message) {
+        if (message) {
+            errorEl.textContent = message;
+            errorEl.classList.remove("d-none");
+            input.classList.add("is-invalid");
+        } else {
+            errorEl.textContent = "";
+            errorEl.classList.add("d-none");
+            input.classList.remove("is-invalid");
         }
+    }
+
+    // 🔐 New Password — full validation
+    newPassword.addEventListener("input", function () {
+        const error = validateNewPassword(newPassword.value);
+        toggleError(newPassword, newPassError, error);
+
+        // Re-check confirm password when new password changes
+        if (confirmPassword.value !== "") {
+            const matchError =
+                confirmPassword.value !== newPassword.value
+                    ? "Passwords do not match."
+                    : "";
+            toggleError(confirmPassword, confirmError, matchError);
+        }
+    });
+
+    // 🔁 Confirm Password — MATCH ONLY
+    confirmPassword.addEventListener("input", function () {
+        const error =
+            confirmPassword.value !== newPassword.value
+                ? "Passwords do not match."
+                : "";
+        toggleError(confirmPassword, confirmError, error);
     });
 
 });
 </script>
+
 
 
