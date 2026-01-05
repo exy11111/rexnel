@@ -18,7 +18,7 @@
 <html lang="en">
 <head>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-	<title>Branches</title>
+	<title>Select Branch</title>
 	<meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
 	<link rel="icon" href="assets/img/holicon.png" type="image/x-icon"/>
 
@@ -67,16 +67,8 @@
                     <div class="row mb-4">
                         <div class="col-12 text-center">
                             <h1 class="w-100 text-center">
-                                Branches
+                                Select Branch
                             </h1>
-                        </div>
-                        <div class="col-12 text-center">
-                             <?php if($_SESSION['user_id'] == 17):?>
-                                <button class="btn btn-primary btn-round ms-auto" data-bs-toggle="modal" data-bs-target="#addAccountModal">
-                                    <i class="fa fa-plus"></i>
-                                    Add Branch
-                                </button>
-                            <?php endif; ?>
                         </div>
                     </div>
 					<div class="row">
