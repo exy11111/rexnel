@@ -623,11 +623,7 @@
 									foreach ($topProducts as $row): 
 										if ($counter >= 3) break;
 									?>
-										<div class="card mb-3 top-product"
-										data-name="<?= htmlspecialchars($row['item_name']) ?>"
-										data-price="<?= $row['price'] ?>"
-										data-sold="<?= $row['total_sold'] ?>"
-										data-revenue="<?= $row['total_revenue'] ?>">
+										<div class="card mb-3">
 											<div class="card-body d-flex justify-content-between align-items-center">
 												<div>
 													<h5 class="card-title mb-1"><?php echo $row['item_name'];?></h5>
@@ -760,10 +756,7 @@
 									foreach ($topBrands as $row): 
 										if ($counter >= 3) break;
 									?>
-										<div class="card mb-3 top-brand"
-										data-name="<?= htmlspecialchars($row['brand_name']) ?>"
-										data-sold="<?= $row['total_sold'] ?>"
-										data-revenue="<?= $row['total_revenue'] ?>">
+										<div class="card mb-3">
 											<div class="card-body d-flex justify-content-between align-items-center">
 												<div>
 													<h5 class="card-title mb-1"><?php echo $row['brand_name'];?></h5>
@@ -885,40 +878,42 @@ function exportDashboardExcel() {
 
     const summarySheet = XLSX.utils.aoa_to_sheet(summaryData);
 
-    /* =========================
-       TOP PRODUCTS SHEET
-    ========================= */
     const productRows = [
-        ["Product Name", "Price", "Total Sold", "Total Revenue"]
-    ];
+    ["Product Name", "Price", "Total Sold", "Total Revenue"]
+];
 
-    document.querySelectorAll(".top-product").forEach(card => {
-        productRows.push([
-            card.dataset.name,
-            parseFloat(card.dataset.price),
-            parseInt(card.dataset.sold),
-            parseFloat(card.dataset.revenue)
-        ]);
-    });
+document.querySelectorAll("#viewAllModal .top-product-modal").forEach(card => {
+    productRows.push([
+        card.dataset.name,
+        parseFloat(card.dataset.price),
+        parseInt(card.dataset.sold),
+        parseFloat(card.dataset.revenue)
+    ]);
+});
 
-    const productSheet = XLSX.utils.aoa_to_sheet(productRows);
+const productSheet = XLSX.utils.aoa_to_sheet(productRows);
 
-    /* =========================
-       TOP BRANDS SHEET
-    ========================= */
-    const brandRows = [
-        ["Brand Name", "Total Sold", "Total Revenue"]
-    ];
+   
+const brandRows = [
+    ["Brand Name", "Total Sold", "Total Revenue"]
+];
 
-    document.querySelectorAll(".top-brand").forEach(card => {
-        brandRows.push([
-            card.dataset.name,
-            parseInt(card.dataset.sold),
-            parseFloat(card.dataset.revenue)
-        ]);
-    });
+document.querySelectorAll("#viewAllBrandsModal .top-brand-modal").forEach(card => {
+    brandRows.push([
+        card.dataset.brand,
+        parseInt(card.dataset.sold),
+        parseFloat(card.dataset.revenue)
+    ]);
+});
 
-    const brandSheet = XLSX.utils.aoa_to_sheet(brandRows);
+const brandSheet = XLSX.utils.aoa_to_sheet(brandRows);
+
+productSheet["!cols"] = [
+    { wch: 30 }, // Product name
+    { wch: 12 }, // Price
+    { wch: 12 }, // Sold
+    { wch: 18 }  // Revenue
+];
 
     /* =========================
        CREATE WORKBOOK
