@@ -213,7 +213,7 @@ error_reporting(E_ALL);
                                                                     <div class='form-button-action'>";
 
                                                             // Show EDIT only if status is NOT Received or Cancelled
-                                                            if ($row['status'] === 'Shipping') {
+                                                            if ($row['status'] === 'Shipping' || $row['status'] === 'Delivered') {
 
                                                                 // Mark as Received button
                                                                 echo "<button type='button'
