@@ -411,21 +411,15 @@ error_reporting(E_ALL);
             <?php if ($_GET['status'] == 'success'): ?>
                 Swal.fire({
                     icon: 'success',
-                    title: 'Item Added!',
-                    text: 'The item has been successfully created.',
+                    title: 'Item Requested!',
+                    text: 'The item has been successfully requested.',
                 }).then((result) => {
                 });
             <?php elseif ($_GET['status'] == 'error'): ?>
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
-                    text: 'Something went wrong while creating the item.',
-                });
-            <?php elseif ($_GET['status'] == 'exist'): ?>
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Item already exists.',
+                    text: 'Something went wrong while requesting the item.',
                 });
             <?php endif; ?>
         </script>
