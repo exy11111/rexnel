@@ -484,6 +484,12 @@
                     title: 'Oops...',
                     text: 'Username already exists.',
                 });
+                <?php elseif ($_GET['status'] == 'email_exists'): ?>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Email already exists.',
+                });
             <?php endif; ?>
         </script>
     <?php endif; ?>

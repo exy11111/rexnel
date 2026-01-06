@@ -9,15 +9,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = $_POST['password'];
     $branch_id = $_POST['branch_id'];
     $email = $_POST['email'];
-    if($_SESSION['role_id'] == 2){
-        header("Location: staff.php?status=error");
-        exit();//pansamantala
-    }
-    else{
-        $role_id = $_POST['role_id'];
-    }
+    $role_id = $_POST['role_id'];
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
     try {
+        $checkEmailSql = "SELECT 1 FROM userdetails WHERE email = :email LIMIT 1";
+        $checkStmt = $conn->prepare($checkEmailSql);
+        $checkStmt->bindParam(':email', $email);
+        $checkStmt->execute();
+
+        if ($checkStmt->fetch()) {
+            // Email already exists
+            header("Location: staff.php?status=email_exists");
+            exit();
+        }
         $sql = "INSERT INTO users (username, password, branch_id, role_id) VALUES (:username, :password, :branch_id, :role_id)";
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':username', $username);
