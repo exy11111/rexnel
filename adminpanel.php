@@ -121,6 +121,11 @@ ini_set('display_errors', 1);
 			height: 14px;
 			margin-right: 8px;
 			flex-shrink: 0;
+		}.chart-center-wrapper {
+			display: flex;
+			justify-content: center;   
+			align-items: center;       
+			min-height: 350px;        
 		}
 	</style>
 
@@ -445,8 +450,10 @@ ini_set('display_errors', 1);
 											</div>
 
 											<!-- PIE CHART (RIGHT) -->
-											<div class="col-md-8 d-flex justify-content-center">
-												<canvas id="items_chart2" style="max-width: 420px;"></canvas>
+											<div class="col-md-8 d-flex">
+												<div class="chart-center-wrapper w-100">
+													<canvas id="items_chart2"></canvas>
+												</div>
 											</div>
 										</div>
 										<div class="row mt-3">
