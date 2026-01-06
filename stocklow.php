@@ -433,6 +433,7 @@
 													<th>Brand</th>
 													<th>Supplier</th>
 													<th>Size</th>
+													<th>Wholesale</th>
 													<th>Price</th>
 													<th>Gross Profit</th>
 													<th>Stock</th>
@@ -463,6 +464,7 @@
 														echo "<td>".htmlspecialchars($row['brand_name'])."</td>";
 														echo "<td>".htmlspecialchars($row['supplier_name'])."</td>";
 														echo "<td>".htmlspecialchars($row['size_name'])."</td>";
+														echo "<td>₱" . number_format($row['supplier_price'], 2) . "</td>";
 														echo "<td>₱" . number_format($row['price'], 2) . "</td>";
 														echo "<td>₱" . number_format($row['profit'], 2) . "</td>";
 														echo "<td>" . number_format($row['stock']) . "</td>";
