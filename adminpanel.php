@@ -91,8 +91,32 @@ ini_set('display_errors', 1);
 			background-color: #f8f9fa;
 		}.nav-item.active a {
 			color: #fff !important;
+		}.chart-legend-scroll {
+			max-height: 260px;        /* adjust height */
+			overflow-y: auto;
+			padding-right: 10px;
 		}
 
+		.chart-legend-scroll ul {
+			list-style: none;
+			padding-left: 0;
+			margin: 0;
+		}
+
+		.chart-legend-scroll li {
+			display: flex;
+			align-items: center;
+			margin-bottom: 8px;
+			font-size: 13px;
+			cursor: pointer;
+		}
+
+		.chart-legend-scroll span.color-box {
+			width: 14px;
+			height: 14px;
+			display: inline-block;
+			margin-right: 8px;
+		}
 	</style>
 
 </head>
@@ -412,6 +436,16 @@ ini_set('display_errors', 1);
 										<div class="chart-container">
 											<canvas id="items_chart2"></canvas>
 										</div>
+										<div class="row">
+											<div class="col-md-7">
+												<canvas id="items_chart2"></canvas>
+											</div>
+
+											<div class="col-md-5">
+												<div id="itemsLegend2" class="chart-legend-scroll"></div>
+											</div>
+										</div>
+
 										<div class="row mt-3">
 											<div class="col-6">
 												<div class="dropdown mb-3">
@@ -882,7 +916,66 @@ ini_set('display_errors', 1);
 	<script src="assets/js/plugin/jsvectormap/jsvectormap.min.js"></script>
 	<script src="assets/js/plugin/jsvectormap/world.js"></script>
 
-	
+	<script>
+		const rawData2 = <?= json_encode($itemData2) ?>;
+
+		const pieLabels2 = rawData2.map(i => i.label);
+		const pieValues2 = rawData2.map(i => i.stock);
+		const pieColors2 = rawData2.map(i => i.color);
+
+		const ctx2 = document.getElementById('items_chart2').getContext('2d');
+
+		const itemsChart2 = new Chart(ctx2, {
+			type: 'pie',
+			data: {
+				labels: pieLabels2,
+				datasets: [{
+					data: pieValues2,
+					backgroundColor: pieColors2
+				}]
+			},
+			options: {
+				responsive: true,
+				plugins: {
+					legend: {
+						display: false // 👈 disable built-in legend
+					},
+					tooltip: {
+						callbacks: {
+							label: (ctx) => `${ctx.label}: ${ctx.raw} stock`
+						}
+					}
+				}
+			}
+		});
+
+
+		// ✅ Create scrollable legend
+		function generateScrollableLegend(chart, containerId) {
+			const container = document.getElementById(containerId);
+			container.innerHTML = '<ul></ul>';
+
+			chart.data.labels.forEach((label, i) => {
+				const li = document.createElement('li');
+
+				li.innerHTML = `
+					<span class="color-box" style="background:${chart.data.datasets[0].backgroundColor[i]}"></span>
+					${label} (${chart.data.datasets[0].data[i]})
+				`;
+
+				// click = toggle slice
+				li.onclick = () => {
+					chart.toggleDataVisibility(i);
+					chart.update();
+				};
+
+				container.querySelector('ul').appendChild(li);
+			});
+		}
+
+		generateScrollableLegend(itemsChart2, 'itemsLegend2');
+		</script>
+
 
 	<!-- Kaiadmin JS -->
 	<script src="assets/js/kaiadmin.min.js"></script>
