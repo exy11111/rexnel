@@ -438,7 +438,7 @@
 													<th>Gross Profit</th>
 													<th>Stock</th>
 													<th>Status</th>
-													<?php if($_SESSION['role_id'] == 1):?> <th style="width: 10%">Action</th> <?php endif; ?>
+													<?php if($_SESSION['role_id'] != 1):?> <th style="width: 10%">Action</th> <?php endif; ?>
 												</tr>
 											</thead>
 											<tbody>
