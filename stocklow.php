@@ -471,14 +471,11 @@
 														echo "<td>₱" . number_format($row['profit'], 2) . "</td>";
 														echo "<td>" . number_format($row['stock']) . "</td>";
 														echo "<td> <span class='" . $class. "'>".$status."</span></td>";
-														if($_SESSION['role_id'] == 1){
+														if($_SESSION['role_id'] != 1){
 															echo "<td>
                                                                 <div class='form-button-action'>
                                                                     <button type='button' class='btn btn-link btn-primary btn-lg' data-bs-toggle='modal' data-bs-target='#editItemModal' title='Edit Task'>
                                                                         <i class='fa fa-edit'></i>
-                                                                    </button>
-                                                                    <button type='button' class='btn btn-link btn-danger remove-btn' data-id='".htmlspecialchars($row['item_id'])."' title='Remove'>
-                                                                        <i class='fa fa-times'></i>
                                                                     </button>
                                                                 </div>
                                                             </td>";
