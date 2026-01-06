@@ -92,7 +92,7 @@ ini_set('display_errors', 1);
 		}.nav-item.active a {
 			color: #fff !important;
 		}.chart-legend-scroll {
-			max-height: 260px;        /* adjust height */
+			max-height: 350px;
 			overflow-y: auto;
 			padding-right: 10px;
 		}
@@ -109,13 +109,18 @@ ini_set('display_errors', 1);
 			margin-bottom: 8px;
 			font-size: 13px;
 			cursor: pointer;
+			white-space: nowrap;
 		}
 
-		.chart-legend-scroll span.color-box {
+		.chart-legend-scroll li:hover {
+			opacity: 0.7;
+		}
+
+		.chart-legend-scroll .color-box {
 			width: 14px;
 			height: 14px;
-			display: inline-block;
 			margin-right: 8px;
+			flex-shrink: 0;
 		}
 	</style>
 
@@ -433,19 +438,17 @@ ini_set('display_errors', 1);
 										<div class="card-title">Stock Overview (All Branches)</div>
 									</div>
 									<div class="card-body">
-										<div class="chart-container">
-											<canvas id="items_chart2"></canvas>
-										</div>
-										<div class="row">
-											<div class="col-md-7">
-												<canvas id="items_chart2"></canvas>
-											</div>
-
-											<div class="col-md-5">
+										<div class="row align-items-start">
+											<!-- LEGEND (LEFT) -->
+											<div class="col-md-4">
 												<div id="itemsLegend2" class="chart-legend-scroll"></div>
 											</div>
-										</div>
 
+											<!-- PIE CHART (RIGHT) -->
+											<div class="col-md-8 d-flex justify-content-center">
+												<canvas id="items_chart2" style="max-width: 420px;"></canvas>
+											</div>
+										</div>
 										<div class="row mt-3">
 											<div class="col-6">
 												<div class="dropdown mb-3">
