@@ -473,12 +473,21 @@
 														echo "<td> <span class='" . $class. "'>".$status."</span></td>";
 														if($_SESSION['role_id'] != 1){
 															echo "<td>
-                                                                <div class='form-button-action'>
-                                                                    <button type='button' class='btn btn-link btn-primary btn-lg' data-bs-toggle='modal' data-bs-target='#editItemModal' title='Edit Task'>
-                                                                        <i class='fa fa-edit'></i>
-                                                                    </button>
-                                                                </div>
-                                                            </td>";
+																<div class='form-button-action'>
+																	<button 
+																		type='button'
+																		class='btn btn-link btn-primary btn-lg request-stock-btn'
+																		data-bs-toggle='modal'
+																		data-bs-target='#requestStockModal'
+																		data-item-id='".htmlspecialchars($row['item_id'])."'
+																		data-barcode='".htmlspecialchars($row['barcode'])."'
+																		data-item-name='".htmlspecialchars($row['item_name']." ".$row['size_name'])."'
+																		title='Request Stock'
+																	>
+																		<i class='fa fa-box'></i>
+																	</button>
+																</div>
+															</td>";
 														}
                                                         echo "</tr>";
 													}
@@ -740,6 +749,99 @@
 				text: 'Please select a branch!'
 			});
 		}
+	});
+	</script>
+	<?php 
+	$sql = "SELECT item_id, barcode, item_name, category_name, brand_name, supplier_name, size_name, price, stock, supplier_price, (price - supplier_price) as profit
+	FROM items i 
+	JOIN categories c ON i.category_id = c.category_id
+	JOIN brands b ON b.brand_id = i.brand_id
+	JOIN suppliers s ON s.supplier_id = i.supplier_id
+	JOIN sizes ss ON i.size_id = ss.size_id
+	WHERE i.branch_id = :branch_id AND is_disabled = 0";
+    $stmt = $conn->prepare($sql);
+	$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
+    $stmt->execute();
+    $data69 = $stmt->fetchAll(PDO::FETCH_ASSOC);
+	?>
+	<div class="modal fade" id="requestStockModal" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header border-0">
+					<h5 class="modal-title">
+						<span class="fw-mediumbold">
+						Request</span> 
+						<span class="fw-light">
+							Stock
+						</span>
+					</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<form action="process_requeststock.php" method="POST">
+					<div class="modal-body">
+						<p class="small">Request a stock using this form.</p>
+						<div class="row">
+							<div class="col-sm-12">
+								<div class="form-group form-group-default">
+									<label>Barcode</label>
+									<input type="text" name="barcode" id="stock_barcode3" class="form-control" oninput="validatePhoneNumber(this)" placeholder="fill barcode">
+									<script>
+										function validatePhoneNumber(input) {
+											input.value = input.value.replace(/[^0-9]/g, '');
+										}
+									</script>
+								</div>
+							</div>
+							<div class="col-sm-12">
+								<div class="form-group form-group-default">
+									<label>Item Name</label>
+									<select class="form-select" name="item_id" id="stock_itemId3" required>
+										<option value="">Select Item</option>
+										<?php 
+											foreach ($data69 as $row){
+												echo "<option value='".$row['item_id']."'>".$row['item_name']." ".$row['size_name']."</option>";
+											}
+										?>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm-12">
+								<div class="form-group form-group-default">
+									<label for="category">Quantity</label>
+									<input type="number" class="form-control" name="quantity">
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer border-0">
+						<button type="submit" class="btn btn-primary">Request</button>
+						<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+	<script>
+	document.addEventListener('DOMContentLoaded', function () {
+		document.querySelectorAll('.request-stock-btn').forEach(button => {
+			button.addEventListener('click', function () {
+
+				const itemId   = this.getAttribute('data-item-id');
+				const barcode  = this.getAttribute('data-barcode');
+				const itemName = this.getAttribute('data-item-name');
+
+				// Set barcode
+				document.getElementById('stock_barcode3').value = barcode;
+
+				// Select the correct item in dropdown
+				const itemSelect = document.getElementById('stock_itemId3');
+				itemSelect.value = itemId;
+
+				// Optional: trigger change if needed
+				itemSelect.dispatchEvent(new Event('change'));
+			});
+		});
 	});
 	</script>
 
