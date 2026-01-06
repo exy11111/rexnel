@@ -240,7 +240,7 @@ error_reporting(E_ALL);
                                                                         <select name="status" id="editStatus" class="form-control" required>
                                                                             <option value="Pending">Pending</option>
                                                                             <option value="Accepted">Accepted</option>
-                                                                            <option value="Shipping">Shipping</option>
+                                                                            <option value="Shipping">Ship</option>
                                                                             <option value="Cancelled">Cancelled</option>
                                                                         </select>
                                                                     </div>
