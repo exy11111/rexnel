@@ -254,7 +254,7 @@
 																	</select>
 																</div>
 															</div>
-															<div class="col-sm-3">
+															<div class="col-sm-3 h-100">
 																<div class="form-group form-group-default">
 																	<label>Price</label>
 																	<input type="number" name="price" step=0.01 class="form-control" placeholder="fill price" required>
