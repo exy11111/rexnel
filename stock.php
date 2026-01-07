@@ -261,11 +261,36 @@
 																</div>
 															</div>
 															<div class="col-sm-3">
-																<div class="form-group form-group-default">
-																	<label>
-																		<input type="checkbox" name="is_discounted" id="is_discounted" value="1">
-																		Discounted Item
-																	</label>
+																<div class="form-group">
+																	<label class="form-label">Discount</label>
+																	<div class="selectgroup w-100">
+																		
+																		<!-- YES -->
+																		<label class="selectgroup-item">
+																			<input type="radio"
+																				name="is_discounted"
+																				value="1"
+																				class="selectgroup-input"
+																				onchange="toggleDiscount(true)">
+																			<span class="selectgroup-button selectgroup-button-icon">
+																				<i class="fa fa-tag"></i>
+																			</span>
+																		</label>
+
+																		<!-- NO (default) -->
+																		<label class="selectgroup-item">
+																			<input type="radio"
+																				name="is_discounted"
+																				value="0"
+																				class="selectgroup-input"
+																				checked
+																				onchange="toggleDiscount(false)">
+																			<span class="selectgroup-button selectgroup-button-icon">
+																				<i class="fa fa-times"></i>
+																			</span>
+																		</label>
+
+																	</div>
 																</div>
 															</div>
 															<div class="col-sm-3">
@@ -1016,6 +1041,21 @@
 			.catch(error => console.error('Error:', error));
 		});
     </script>
+
+	<script>
+	function toggleDiscount(isDiscounted) {
+		const discountInput = document.getElementById('discount_price');
+
+		if (isDiscounted) {
+			discountInput.disabled = false;
+			discountInput.required = true;
+		} else {
+			discountInput.disabled = true;
+			discountInput.required = false;
+			discountInput.value = '';
+		}
+	}
+	</script>
 
 
 
