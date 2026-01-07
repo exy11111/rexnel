@@ -192,7 +192,15 @@
 						</div>
 					</div>
                     <div class="d-flex justify-content-center mb-5">
-						<button id="downloadPDF" class="btn btn-primary">Download Receipt PDF</button>
+						<div class="row">
+							<div class="col">
+								<button id="downloadPDF" class="btn btn-primary">Download Receipt PDF</button>
+								<button id="printReceipt" class="btn btn-secondary">
+									Print as Receipt
+								</button>
+							</div>
+						</div>
+						
 					</div>
                 </div>
 			</div>
@@ -255,101 +263,163 @@
     </script>
 
 	<script>
-	document.getElementById("downloadPDF").addEventListener("click", function () {
-		const { jsPDF } = window.jspdf;
-		const doc = new jsPDF({ unit: 'pt' });
+(function () {
+	const { jsPDF } = window.jspdf;
 
-		const centerX = doc.internal.pageSize.getWidth() / 2;
+	function generateReceiptPDF(mode) {
+		const doc = new jsPDF({ unit: "pt" });
+
 		const pageWidth = doc.internal.pageSize.getWidth();
+		const centerX = pageWidth / 2;
 		const marginRight = 40;
 		const topMargin = 40;
 
-		// TITLE
-		doc.setFontSize(16);
+		// ======================
+		// HEADER
+		// ======================
 		doc.setFont("helvetica", "bold");
+		doc.setFontSize(16);
 		doc.text("House of Local", centerX, topMargin, { align: "center" });
 
-		// BRANCH NAME
-		doc.setFontSize(11);
 		doc.setFont("helvetica", "normal");
+		doc.setFontSize(11);
 		doc.text("<?php echo $branch_name; ?>", centerX, topMargin + 15, { align: "center" });
 
-		// DATE
 		doc.setFontSize(10);
 		doc.text("Date: <?php echo date('F j, Y - h:i A'); ?>", 40, topMargin + 35);
 
+		// ======================
 		// TABLE
-		const tableStartY = topMargin + 50;
-
+		// ======================
 		doc.autoTable({
-			startY: tableStartY,
-			head: [["Item Name", "Quantity", "Size", "Price"]],
+			startY: topMargin + 50,
+			head: [["Item Name", "Qty", "Size", "Price"]],
 			body: [
 				<?php foreach ($data as $row): ?>
-					[
-						"<?php echo addslashes($row['item_name']); ?>",
-						"<?php echo $row['quantity']; ?>",
-						"<?php echo $row['size_name']; ?>",
-						"Php <?php echo number_format($row['item_price'], 2); ?>"
-					],
+				[
+					"<?php echo addslashes($row['item_name']); ?>",
+					"<?php echo $row['quantity']; ?>",
+					"<?php echo $row['size_name']; ?>",
+					"<?php echo ($row['is_discounted'] ? '🏷 ' : ''); ?>₱<?php echo number_format($row['item_price'], 2); ?>"
+				],
 				<?php endforeach; ?>
 			],
-			theme: 'grid',
+			theme: "grid",
 			headStyles: { fillColor: [0, 0, 0], textColor: [255, 255, 255] },
-			styles: {
-				fontSize: 10,
-				cellPadding: 4
-			}
+			styles: { fontSize: 10, cellPadding: 4 }
 		});
 
+		// ======================
 		// TOTALS
+		// ======================
 		let finalY = doc.lastAutoTable.finalY + 20;
 
 		doc.setFont("helvetica", "bold");
 		doc.setFontSize(11);
-		doc.text("Total: Php <?php echo number_format($totalPrice, 2); ?>", pageWidth - marginRight, finalY, { align: "right" });
+		doc.text(
+			"Total: ₱<?php echo number_format($totalPrice, 2); ?>",
+			pageWidth - marginRight,
+			finalY,
+			{ align: "right" }
+		);
 
 		finalY += 15;
-		doc.text("Paid: Php <?php echo number_format($cash['cash'], 2); ?>", pageWidth - marginRight, finalY, { align: "right" });
+		doc.text(
+			"Paid (<?php echo $cash['pm_id'] == 1 ? 'Cash' : 'GCash'; ?>): ₱<?php echo number_format($cash['cash'], 2); ?>",
+			pageWidth - marginRight,
+			finalY,
+			{ align: "right" }
+		);
 
 		finalY += 15;
-		doc.text("Change: Php <?php echo number_format($cash['change_cash'], 2); ?>", pageWidth - marginRight, finalY, { align: "right" });
 
-		// PROOF OF PAYMENT (if exists)
+		<?php if ($cash['pm_id'] == 1): ?>
+			doc.text(
+				"Change: ₱<?php echo number_format($cash['change_cash'], 2); ?>",
+				pageWidth - marginRight,
+				finalY,
+				{ align: "right" }
+			);
+		<?php else: ?>
+			doc.text(
+				"GCash Ref #: <?php echo $cash['ref']; ?>",
+				pageWidth - marginRight,
+				finalY,
+				{ align: "right" }
+			);
+		<?php endif; ?>
+
+		// ======================
+		// PROOF OF PAYMENT
+		// ======================
 		<?php if (!empty($proofImagePath) && file_exists($proofImagePath)): ?>
 			const img = new Image();
 			img.src = "<?php echo $proofImagePath; ?>";
 			img.onload = function () {
-				let imgWidth = 200; // max width
-				let imgHeight = (img.height / img.width) * imgWidth;
-				let posY = finalY + 40;
+				const imgWidth = 200;
+				const imgHeight = (img.height / img.width) * imgWidth;
+				const posY = finalY + 40;
 
-				// Add caption
 				doc.setFont("helvetica", "bold");
 				doc.setFontSize(11);
-				doc.text("Proof of Payment:", centerX, posY, { align: "center" });
+				doc.text("Proof of Payment", centerX, posY, { align: "center" });
 
-				// Add image
-				doc.addImage(img, "JPEG", centerX - (imgWidth / 2), posY + 10, imgWidth, imgHeight);
+				doc.addImage(
+					img,
+					"JPEG",
+					centerX - imgWidth / 2,
+					posY + 10,
+					imgWidth,
+					imgHeight
+				);
 
-				// THANK YOU message after image
 				doc.setFont("helvetica", "italic");
 				doc.setFontSize(11);
-				doc.text("Thank you for your purchase!", centerX, posY + imgHeight + 40, { align: "center" });
+				doc.text(
+					"Thank you for your purchase!",
+					centerX,
+					posY + imgHeight + 40,
+					{ align: "center" }
+				);
 
-				// Save PDF after image loads
-				doc.save("HouseOfLocal_Receipt_<?php echo date('Ymd_His'); ?>.pdf");
+				finalizePDF(doc, mode);
 			};
 		<?php else: ?>
-			// THANK YOU message if no proof image
 			doc.setFont("helvetica", "italic");
 			doc.setFontSize(11);
-			doc.text("Thank you for your purchase!", centerX, finalY + 30, { align: "center" });
-
-			doc.save("HouseOfLocal_Receipt_<?php echo date('Ymd_His'); ?>.pdf");
+			doc.text(
+				"Thank you for your purchase!",
+				centerX,
+				finalY + 30,
+				{ align: "center" }
+			);
+			finalizePDF(doc, mode);
 		<?php endif; ?>
+	}
+
+	function finalizePDF(doc, mode) {
+		if (mode === "print") {
+			doc.autoPrint();
+			const blobUrl = doc.output("bloburl");
+			window.open(blobUrl, "_blank");
+		} else {
+			doc.save("HouseOfLocal_Receipt_<?php echo date('Ymd_His'); ?>.pdf");
+		}
+	}
+
+	// ======================
+	// BUTTON HANDLERS
+	// ======================
+	document.getElementById("downloadPDF").addEventListener("click", function () {
+		generateReceiptPDF("download");
 	});
-	</script>
+
+	document.getElementById("printReceipt").addEventListener("click", function () {
+		generateReceiptPDF("print");
+	});
+})();
+</script>
+
 
 
 </body>
