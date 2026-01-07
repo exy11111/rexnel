@@ -418,6 +418,7 @@ ITEM               QTY   AMOUNT
 
 <?php if ($row['is_discounted']): ?>
  * DISCOUNT APPLIED
+	
 <?php endif; ?>
 <?php endforeach; ?>
 
