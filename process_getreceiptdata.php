@@ -18,7 +18,7 @@ if (isset($_GET['item_id'])) {
                  AND i.discount_price IS NOT NULL
             THEN i.discount_price
             ELSE i.price
-        END AS unit_price,
+        END AS price,
 
         i.is_discounted
 
