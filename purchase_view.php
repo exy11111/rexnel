@@ -195,7 +195,7 @@
 						<div class="row">
 							<div class="col">
 								<button id="downloadPDF" class="btn btn-primary">Download Receipt PDF</button>
-								<button id="printReceipt" class="btn btn-secondary">
+								<button onclick="printReceipt()" class="btn btn-secondary">
 									Print as Receipt
 								</button>
 							</div>
@@ -263,163 +263,153 @@
     </script>
 
 	<script>
-(function () {
-	const { jsPDF } = window.jspdf;
+	document.getElementById("downloadPDF").addEventListener("click", function () {
+		const { jsPDF } = window.jspdf;
+		const doc = new jsPDF({ unit: 'pt' });
 
-	function generateReceiptPDF(mode) {
-		const doc = new jsPDF({ unit: "pt" });
-
+		const centerX = doc.internal.pageSize.getWidth() / 2;
 		const pageWidth = doc.internal.pageSize.getWidth();
-		const centerX = pageWidth / 2;
 		const marginRight = 40;
 		const topMargin = 40;
 
-		// ======================
-		// HEADER
-		// ======================
-		doc.setFont("helvetica", "bold");
+		// TITLE
 		doc.setFontSize(16);
+		doc.setFont("helvetica", "bold");
 		doc.text("House of Local", centerX, topMargin, { align: "center" });
 
-		doc.setFont("helvetica", "normal");
+		// BRANCH NAME
 		doc.setFontSize(11);
+		doc.setFont("helvetica", "normal");
 		doc.text("<?php echo $branch_name; ?>", centerX, topMargin + 15, { align: "center" });
 
+		// DATE
 		doc.setFontSize(10);
 		doc.text("Date: <?php echo date('F j, Y - h:i A'); ?>", 40, topMargin + 35);
 
-		// ======================
 		// TABLE
-		// ======================
+		const tableStartY = topMargin + 50;
+
 		doc.autoTable({
-			startY: topMargin + 50,
-			head: [["Item Name", "Qty", "Size", "Price"]],
+			startY: tableStartY,
+			head: [["Item Name", "Quantity", "Size", "Price"]],
 			body: [
 				<?php foreach ($data as $row): ?>
-				[
-					"<?php echo addslashes($row['item_name']); ?>",
-					"<?php echo $row['quantity']; ?>",
-					"<?php echo $row['size_name']; ?>",
-					"<?php echo ($row['is_discounted'] ? '🏷 ' : ''); ?>₱<?php echo number_format($row['item_price'], 2); ?>"
-				],
+					[
+						"<?php echo addslashes($row['item_name']); ?>",
+						"<?php echo $row['quantity']; ?>",
+						"<?php echo $row['size_name']; ?>",
+						"Php <?php echo number_format($row['item_price'], 2); ?>"
+					],
 				<?php endforeach; ?>
 			],
-			theme: "grid",
+			theme: 'grid',
 			headStyles: { fillColor: [0, 0, 0], textColor: [255, 255, 255] },
-			styles: { fontSize: 10, cellPadding: 4 }
+			styles: {
+				fontSize: 10,
+				cellPadding: 4
+			}
 		});
 
-		// ======================
 		// TOTALS
-		// ======================
 		let finalY = doc.lastAutoTable.finalY + 20;
 
 		doc.setFont("helvetica", "bold");
 		doc.setFontSize(11);
-		doc.text(
-			"Total: ₱<?php echo number_format($totalPrice, 2); ?>",
-			pageWidth - marginRight,
-			finalY,
-			{ align: "right" }
-		);
+		doc.text("Total: Php <?php echo number_format($totalPrice, 2); ?>", pageWidth - marginRight, finalY, { align: "right" });
 
 		finalY += 15;
-		doc.text(
-			"Paid (<?php echo $cash['pm_id'] == 1 ? 'Cash' : 'GCash'; ?>): ₱<?php echo number_format($cash['cash'], 2); ?>",
-			pageWidth - marginRight,
-			finalY,
-			{ align: "right" }
-		);
+		doc.text("Paid: Php <?php echo number_format($cash['cash'], 2); ?>", pageWidth - marginRight, finalY, { align: "right" });
 
 		finalY += 15;
+		doc.text("Change: Php <?php echo number_format($cash['change_cash'], 2); ?>", pageWidth - marginRight, finalY, { align: "right" });
 
-		<?php if ($cash['pm_id'] == 1): ?>
-			doc.text(
-				"Change: ₱<?php echo number_format($cash['change_cash'], 2); ?>",
-				pageWidth - marginRight,
-				finalY,
-				{ align: "right" }
-			);
-		<?php else: ?>
-			doc.text(
-				"GCash Ref #: <?php echo $cash['ref']; ?>",
-				pageWidth - marginRight,
-				finalY,
-				{ align: "right" }
-			);
-		<?php endif; ?>
-
-		// ======================
-		// PROOF OF PAYMENT
-		// ======================
+		// PROOF OF PAYMENT (if exists)
 		<?php if (!empty($proofImagePath) && file_exists($proofImagePath)): ?>
 			const img = new Image();
 			img.src = "<?php echo $proofImagePath; ?>";
 			img.onload = function () {
-				const imgWidth = 200;
-				const imgHeight = (img.height / img.width) * imgWidth;
-				const posY = finalY + 40;
+				let imgWidth = 200; // max width
+				let imgHeight = (img.height / img.width) * imgWidth;
+				let posY = finalY + 40;
 
+				// Add caption
 				doc.setFont("helvetica", "bold");
 				doc.setFontSize(11);
-				doc.text("Proof of Payment", centerX, posY, { align: "center" });
+				doc.text("Proof of Payment:", centerX, posY, { align: "center" });
 
-				doc.addImage(
-					img,
-					"JPEG",
-					centerX - imgWidth / 2,
-					posY + 10,
-					imgWidth,
-					imgHeight
-				);
+				// Add image
+				doc.addImage(img, "JPEG", centerX - (imgWidth / 2), posY + 10, imgWidth, imgHeight);
 
+				// THANK YOU message after image
 				doc.setFont("helvetica", "italic");
 				doc.setFontSize(11);
-				doc.text(
-					"Thank you for your purchase!",
-					centerX,
-					posY + imgHeight + 40,
-					{ align: "center" }
-				);
+				doc.text("Thank you for your purchase!", centerX, posY + imgHeight + 40, { align: "center" });
 
-				finalizePDF(doc, mode);
+				// Save PDF after image loads
+				doc.save("HouseOfLocal_Receipt_<?php echo date('Ymd_His'); ?>.pdf");
 			};
 		<?php else: ?>
+			// THANK YOU message if no proof image
 			doc.setFont("helvetica", "italic");
 			doc.setFontSize(11);
-			doc.text(
-				"Thank you for your purchase!",
-				centerX,
-				finalY + 30,
-				{ align: "center" }
-			);
-			finalizePDF(doc, mode);
-		<?php endif; ?>
-	}
+			doc.text("Thank you for your purchase!", centerX, finalY + 30, { align: "center" });
 
-	function finalizePDF(doc, mode) {
-		if (mode === "print") {
-			doc.autoPrint();
-			const blobUrl = doc.output("bloburl");
-			window.open(blobUrl, "_blank");
-		} else {
 			doc.save("HouseOfLocal_Receipt_<?php echo date('Ymd_His'); ?>.pdf");
-		}
-	}
-
-	// ======================
-	// BUTTON HANDLERS
-	// ======================
-	document.getElementById("downloadPDF").addEventListener("click", function () {
-		generateReceiptPDF("download");
+		<?php endif; ?>
 	});
+	</script>
+	<script>
+function printReceipt() {
+    const receipt = document.getElementById("receiptContent").innerHTML;
 
-	document.getElementById("printReceipt").addEventListener("click", function () {
-		generateReceiptPDF("print");
-	});
-})();
+    const printWindow = window.open("", "", "width=400,height=600");
+
+    printWindow.document.write(`
+        <html>
+        <head>
+            <title>Receipt</title>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    font-size: 12px;
+                }
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                }
+                th, td {
+                    border: 1px solid #000;
+                    padding: 4px;
+                    text-align: left;
+                }
+                th {
+                    background: #000;
+                    color: #fff;
+                }
+                .text-end {
+                    text-align: right;
+                }
+                .text-center {
+                    text-align: center;
+                }
+                img {
+                    max-width: 100%;
+                }
+            </style>
+        </head>
+        <body>
+            ${receipt}
+        </body>
+        </html>
+    `);
+
+    printWindow.document.close();
+    printWindow.focus();
+
+    printWindow.print();
+    printWindow.close();
+}
 </script>
-
 
 
 </body>
