@@ -91,8 +91,20 @@ try {
 
     // Insert purchased items
     $stmt = $conn->prepare("
-        INSERT INTO purchase_items (purchase_id, item_id, quantity) 
-        VALUES (:purchase_id, :item_id, :quantity)
+       INSERT INTO purchase_items (
+            purchase_id,
+            item_id,
+            quantity,
+            unit_price,
+            is_discounted
+        )
+        VALUES (
+            :purchase_id,
+            :item_id,
+            :quantity,
+            :unit_price,
+            :is_discounted
+        )
     ");
 
     foreach ($receipt as $item) {
@@ -100,7 +112,16 @@ try {
             throw new Exception("Missing item details.");
         }
 
-        $stmt1 = $conn->prepare("SELECT stock, item_name FROM items WHERE item_id = :item_id");
+        $stmt1 = $conn->prepare("
+            SELECT 
+                stock,
+                item_name,
+                price,
+                is_discounted,
+                discount_price
+            FROM items
+            WHERE item_id = :item_id
+        ");
         $stmt1->execute([':item_id' => $item['item_id']]);
         $row = $stmt1->fetch(PDO::FETCH_ASSOC);
 
@@ -110,6 +131,12 @@ try {
 
         $quantity = $row['stock'];
         $item_name = $row['item_name'];
+        $is_discounted = (int)$row['is_discounted'];
+
+        $unit_price = null;
+        if ($is_discounted === 1 && $row['discount_price'] !== null) {
+            $unit_price = $row['discount_price'];
+        }
 
         if ($quantity < $item['quantity']) {
             throw new Exception("Item '{$item_name}' is out of stock.");
@@ -118,7 +145,9 @@ try {
         $stmt->execute([
             ':purchase_id' => $purchase_id,
             ':item_id' => $item['item_id'],
-            ':quantity' => $item['quantity']
+            ':quantity' => $item['quantity'],
+            ':unit_price' => $unit_price,
+            ':is_discounted' => $is_discounted
         ]);
 
         $newQuantity = $quantity - $item['quantity'];

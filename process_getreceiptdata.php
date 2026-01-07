@@ -9,24 +9,34 @@ if (isset($_GET['item_id'])) {
     $sql = "
     SELECT 
         i.item_name,
-        i.stock,
-        ss.size_name,
+        pi.quantity,
+        s.size_name,
 
-        /* Effective price */
-        CASE 
-            WHEN i.is_discounted = 1 
-                 AND i.discount_price IS NOT NULL
-            THEN i.discount_price
+        /* Price per unit (discount-aware) */
+        CASE
+            WHEN pi.is_discounted = 1 
+                AND pi.unit_price IS NOT NULL
+            THEN pi.unit_price
             ELSE i.price
-        END AS price,
+        END AS unit_price,
 
-        i.is_discounted,
-        i.discount_price
+        /* Total per line */
+        pi.quantity * 
+        (
+            CASE
+                WHEN pi.is_discounted = 1 
+                    AND pi.unit_price IS NOT NULL
+                THEN pi.unit_price
+                ELSE i.price
+            END
+        ) AS item_price,
 
-    FROM items i
-    JOIN sizes ss ON ss.size_id = i.size_id
-    WHERE i.item_id = :item_id
-      AND i.is_disabled = 0
+        pi.is_discounted
+
+    FROM purchase_items pi
+    JOIN items i ON i.item_id = pi.item_id
+    JOIN sizes s ON i.size_id = s.size_id
+    WHERE pi.purchase_id = :purchase_id
     ";
 
     $stmt = $conn->prepare($sql);
