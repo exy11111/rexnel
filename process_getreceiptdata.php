@@ -40,7 +40,7 @@ if (isset($_GET['item_id'])) {
     ";
 
     $stmt = $conn->prepare($sql);
-    $stmt->bindParam(':item_id', $item_id);
+    $stmt->bindParam(':purchase_id', $purchase_id);
     $stmt->execute();
 
     if ($stmt->rowCount() > 0) {
