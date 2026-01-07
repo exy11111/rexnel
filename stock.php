@@ -500,7 +500,8 @@
 															$status = "In Stock";
 															$class = "badge badge-success";
 														}
-														$priceClass = ($row['is_discounted'] == 1) ? 'text-warning' : '';
+														$priceClass = ($row['is_discounted'] == 1) ? 'text-warning fw-bold' : '';
+														$priceIcon  = ($row['is_discounted'] == 1) ? "<i class='fa fa-tag me-1'></i>" : '';
 
 														echo "<tr data-id=".htmlspecialchars($row['item_id']).">";
 														echo "<td>".htmlspecialchars($row['barcode'])."</td>";
@@ -512,7 +513,7 @@
 														if($_SESSION['role_id'] == 1){
 															echo "<td>₱" . number_format($row['supplier_price'], 2) . "</td>";
 														}
-														echo "<td class='{$priceClass}'>₱" . number_format($row['price'], 2) . "</td>";
+														echo "<td class='{$priceClass}'>" . $priceIcon . "₱" . number_format($row['price'], 2) . "</td>";
 														echo "<td>₱" . number_format($row['profit'], 2) . "</td>";
 														echo "<td>" . number_format($row['stock']) . "</td>";
 														echo "<td> <span class='" . $class. "'>".$status."</span></td>";
