@@ -248,7 +248,7 @@
 																	</select>
 																</div>
 															</div>
-															<div class="col-sm-3">
+															<div class="col-sm-2">
 																<div class="form-group form-group-default">
 																	<label for="category">Size</label>
 																	<select class="form-select" name="size_id" required>
@@ -267,7 +267,7 @@
 																	<input type="number" name="price" step=0.01 class="form-control" placeholder="fill price" required>
 																</div>
 															</div>
-															<div class="col-sm-3 d-flex align-items-end">
+															<div class="col-sm-2 d-flex align-items-end">
 																<div class="form-group form-group-default w-100">
 																	<label class="form-label">Discount</label>
 
@@ -304,7 +304,7 @@
 																		disabled>
 																</div>
 															</div>
-															<div class="col-sm-3">
+															<div class="col-sm-2">
 																<div class="form-group form-group-default">
 																	<label>Stock</label>
 																	<input type="number" name="stock" class="form-control" placeholder="fill stock" required>
@@ -676,7 +676,7 @@
 																		</select>
 																	</div>
 																</div>
-																<div class="col-sm-4">
+																<div class="col-sm-2">
 																	<div class="form-group form-group-default">
 																		<label for="category">Size</label>
 																		<select class="form-select" name="size_id" id="editSizeId" required>
@@ -689,13 +689,55 @@
 																		</select>
 																	</div>
 																</div>
-																<div class="col-sm-4">
+																<div class="col-sm-3">
 																	<div class="form-group form-group-default">
 																		<label>Price</label>
 																		<input type="number" name="price" step=0.01 id="editPrice" class="form-control" placeholder="fill price" required>
 																	</div>
 																</div>
-																<div class="col-sm-4">
+																<div class="col-sm-2 d-flex align-items-end">
+																	<div class="form-group form-group-default w-100">
+																		<label class="form-label">Discount</label>
+
+																		<div class="selectgroup w-100 d-flex justify-content-center">
+																			<label class="selectgroup-item">
+																				<input type="radio"
+																					name="is_discounted"
+																					id="editDiscountYes"
+																					value="1"
+																					class="selectgroup-input">
+																				<span class="selectgroup-button selectgroup-button-icon">
+																					<i class="fa fa-tag"></i>
+																				</span>
+																			</label>
+
+																			<label class="selectgroup-item">
+																				<input type="radio"
+																					name="is_discounted"
+																					id="editDiscountNo"
+																					value="0"
+																					class="selectgroup-input"
+																					checked>
+																				<span class="selectgroup-button selectgroup-button-icon">
+																					<i class="fa fa-times"></i>
+																				</span>
+																			</label>
+																		</div>
+																	</div>
+																</div>
+																<div class="col-sm-3">
+																	<div class="form-group form-group-default">
+																		<label>Discount Price</label>
+																		<input type="number"
+																			name="discount_price"
+																			id="editDiscountPrice"
+																			step="0.01"
+																			class="form-control"
+																			placeholder="fill discount price"
+																			disabled>
+																	</div>
+																</div>
+																<div class="col-sm-2">
 																	<div class="form-group form-group-default">
 																		<label>Stock</label>
 																		<input type="number" name="stock" id="editStock" class="form-control" placeholder="fill stock" required>
@@ -976,6 +1018,20 @@
 						$('#editSizeId').val(data.size_id);
 						$('#editPrice').val(data.price);
 						$('#editStock').val(data.stock);
+
+						if (data.is_discounted == 1) {
+							$('#editDiscountYes').prop('checked', true);
+							$('#editDiscountPrice')
+								.val(data.discount_price)
+								.prop('disabled', false)
+								.prop('required', true);
+						} else {
+							$('#editDiscountNo').prop('checked', true);
+							$('#editDiscountPrice')
+								.val('')
+								.prop('disabled', true)
+								.prop('required', false);
+						}
 						
                     },
                     error: function(xhr, status, error) {
@@ -1055,6 +1111,15 @@
 			discountInput.value = '';
 		}
 	}
+	</script>
+	<script>
+	$('input[name="is_discounted"]').on('change', function () {
+		if (this.value == 1) {
+			$('#editDiscountPrice').prop('disabled', false).prop('required', true);
+		} else {
+			$('#editDiscountPrice').prop('disabled', true).val('').prop('required', false);
+		}
+	});
 	</script>
 
 

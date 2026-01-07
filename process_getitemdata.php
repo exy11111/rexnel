@@ -4,7 +4,7 @@ require ('session.php');
 
 $item_id = $_GET['id'];
 
-$sql = "SELECT barcode, item_id, item_name, category_id, brand_id, supplier_id, size_id, price, stock, stock_admin FROM items WHERE item_id = :item_id";
+$sql = "SELECT barcode, item_id, item_name, category_id, brand_id, supplier_id, size_id, price, is_discounted, discount_price, stock, stock_admin FROM items WHERE item_id = :item_id";
 $stmt = $conn->prepare($sql);
 $stmt->bindParam(':item_id', $item_id, PDO::PARAM_INT);
 $stmt->execute();
@@ -22,7 +22,9 @@ if ($row) {
         'size_id' => $row['size_id'],
         'price' => $row['price'],
         'stock' => $row['stock'],
-        'stock_admin' => $row['stock_admin']
+        'stock_admin' => $row['stock_admin'],
+        'is_discounted' => $row['is_discounted'],
+        'discount_price' => $row['discount_price']
     ]);
 } else {
     echo json_encode(['error' => 'Item not found']);
