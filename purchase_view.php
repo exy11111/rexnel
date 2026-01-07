@@ -369,30 +369,38 @@ HOUSE OF LOCAL
 --------------------------------
 Date: <?php echo date('m/d/Y h:i A'); ?>
 Payment: <?php echo ($cash['pm_id'] == 1 ? 'CASH' : 'GCASH'); ?>
+
 <?php if ($cash['pm_id'] == 2): ?>
 Ref#: <?php echo $cash['ref']; ?>
 <?php endif; ?>
+
 --------------------------------
 ITEM               QTY   AMOUNT
 --------------------------------
+
 <?php foreach ($data as $row): 
     $name = strtoupper(substr($row['item_name'], 0, 15));
     $qty  = str_pad($row['quantity'], 3, ' ', STR_PAD_LEFT);
     $amt  = str_pad(number_format($row['item_price'], 2), 8, ' ', STR_PAD_LEFT);
 ?>
+
 <?php echo str_pad($name, 15); ?> <?php echo $qty; ?>  <?php echo $amt; ?>
 
 <?php if ($row['is_discounted']): ?>
  * DISCOUNT APPLIED
 <?php endif; ?>
 <?php endforeach; ?>
+
 --------------------------------
+
 TOTAL:     Php <?php echo number_format($totalPrice, 2); ?>
 
 PAID:      Php <?php echo number_format($cash['cash'], 2); ?>
+
 <?php if ($cash['pm_id'] == 1): ?>
 CHANGE:    Php <?php echo number_format($cash['change_cash'], 2); ?>
 <?php endif; ?>
+
 --------------------------------
 THANK YOU FOR YOUR PURCHASE!
 PLEASE COME AGAIN

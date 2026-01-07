@@ -488,127 +488,127 @@
 			}
 
 			Swal.fire({
-	title: "Are you sure you want to checkout?",
-	text: "You won't be able to undo this action.",
-	icon: "warning",
-	showCancelButton: true,
-	confirmButtonText: "Yes, Checkout!",
-	cancelButtonText: "Cancel"
-}).then((result) => {
-	if (!result.isConfirmed) return;
+				title: "Are you sure you want to checkout?",
+				text: "You won't be able to undo this action.",
+				icon: "warning",
+				showCancelButton: true,
+				confirmButtonText: "Yes, Checkout!",
+				cancelButtonText: "Cancel"
+			}).then((result) => {
+				if (!result.isConfirmed) return;
 
-	/* =========================
-	   GCASH PAYMENT
-	========================= */
-	if (paymentMethod === "2") {
+				/* =========================
+				GCASH PAYMENT
+				========================= */
+				if (paymentMethod === "2") {
 
-		Swal.fire({
-			title: "Pay via GCash",
-			html: `
-				<p>Please enter your GCash reference number.</p>
-				<input type="text" id="referenceNumber" class="swal2-input" placeholder="Reference Number">
+					Swal.fire({
+						title: "Pay via GCash",
+						html: `
+							<p>Please enter your GCash reference number.</p>
+							<input type="text" id="referenceNumber" class="swal2-input" placeholder="Reference Number">
 
-				<p class="mt-2">Upload proof of payment (optional)</p>
-				<input type="file" id="proofImage" class="swal2-file" accept="image/*">
-			`,
-			showCancelButton: true,
-			confirmButtonText: "Submit",
-			preConfirm: () => {
-				const ref = document.getElementById("referenceNumber").value.trim();
-				const file = document.getElementById("proofImage").files[0];
+							<p class="mt-2">Upload proof of payment (optional)</p>
+							<input type="file" id="proofImage" class="swal2-file" accept="image/*">
+						`,
+						showCancelButton: true,
+						confirmButtonText: "Submit",
+						preConfirm: () => {
+							const ref = document.getElementById("referenceNumber").value.trim();
+							const file = document.getElementById("proofImage").files[0];
 
-				if (!ref) {
-					Swal.showValidationMessage("Reference number is required.");
-					return false;
+							if (!ref) {
+								Swal.showValidationMessage("Reference number is required.");
+								return false;
+							}
+
+							if (file && !file.type.startsWith("image/")) {
+								Swal.showValidationMessage("Proof must be an image.");
+								return false;
+							}
+
+							if (!file) {
+								return { ref, proof: null };
+							}
+
+							return new Promise((resolve, reject) => {
+								const reader = new FileReader();
+								reader.onload = () => resolve({ ref, proof: reader.result });
+								reader.onerror = () => reject("Failed to read image.");
+								reader.readAsDataURL(file);
+							});
+						}
+					}).then((res) => {
+						if (!res.isConfirmed) return;
+
+						submitReceipt({
+							reference_number: res.value.ref,
+							proof_image: res.value.proof
+						});
+					});
+
+				/* =========================
+				CASH PAYMENT
+				========================= */
+				} else if (paymentMethod === "1") {
+
+					Swal.fire({
+						title: "Cash Payment",
+						html: `
+							<p>Enter cash amount provided:</p>
+							<input type="number" id="cashProvided" class="swal2-input" min="0" step="any">
+						`,
+						showCancelButton: true,
+						confirmButtonText: "Submit",
+						preConfirm: () => {
+							const cash = parseFloat(document.getElementById("cashProvided").value);
+							if (isNaN(cash) || cash < totalPrice) {
+								Swal.showValidationMessage("Insufficient cash.");
+								return false;
+							}
+							return {
+								cash_provided: cash,
+								change: cash - totalPrice
+							};
+						}
+					}).then((res) => {
+						if (!res.isConfirmed) return;
+						submitReceipt(res.value);
+					});
+
+				} else {
+					Swal.fire("Error", "Invalid payment method.", "error");
 				}
-
-				if (file && !file.type.startsWith("image/")) {
-					Swal.showValidationMessage("Proof must be an image.");
-					return false;
-				}
-
-				if (!file) {
-					return { ref, proof: null };
-				}
-
-				return new Promise((resolve, reject) => {
-					const reader = new FileReader();
-					reader.onload = () => resolve({ ref, proof: reader.result });
-					reader.onerror = () => reject("Failed to read image.");
-					reader.readAsDataURL(file);
-				});
-			}
-		}).then((res) => {
-			if (!res.isConfirmed) return;
-
-			submitReceipt({
-				reference_number: res.value.ref,
-				proof_image: res.value.proof
 			});
-		});
 
-	/* =========================
-	   CASH PAYMENT
-	========================= */
-	} else if (paymentMethod === "1") {
-
-		Swal.fire({
-			title: "Cash Payment",
-			html: `
-				<p>Enter cash amount provided:</p>
-				<input type="number" id="cashProvided" class="swal2-input" min="0" step="any">
-			`,
-			showCancelButton: true,
-			confirmButtonText: "Submit",
-			preConfirm: () => {
-				const cash = parseFloat(document.getElementById("cashProvided").value);
-				if (isNaN(cash) || cash < totalPrice) {
-					Swal.showValidationMessage("Insufficient cash.");
-					return false;
-				}
-				return {
-					cash_provided: cash,
-					change: cash - totalPrice
-				};
+			/* =========================
+			SUBMIT RECEIPT (COMMON)
+			========================= */
+			function submitReceipt(extraData = {}) {
+				fetch("process_receipt.php", {
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify({
+						receipt: receiptData,
+						total_price: totalPrice,
+						payment_method: paymentMethod,
+						branch_id: <?php echo $_SESSION['branch_id']; ?>,
+						dateSel: dateSelected,
+						timeSel: timeSelected,
+						...extraData
+					})
+				})
+				.then(res => res.json())
+				.then(data => {
+					if (data.success) {
+						Swal.fire("Success!", "Purchase submitted successfully!", "success")
+						.then(() => window.location.href = "purchase_create.php");
+					} else {
+						Swal.fire("Error!", data.error, "error");
+					}
+				})
+				.catch(err => console.error(err));
 			}
-		}).then((res) => {
-			if (!res.isConfirmed) return;
-			submitReceipt(res.value);
-		});
-
-	} else {
-		Swal.fire("Error", "Invalid payment method.", "error");
-	}
-});
-
-/* =========================
-   SUBMIT RECEIPT (COMMON)
-========================= */
-function submitReceipt(extraData = {}) {
-	fetch("process_receipt.php", {
-		method: "POST",
-		headers: { "Content-Type": "application/json" },
-		body: JSON.stringify({
-			receipt: receiptData,
-			total_price: totalPrice,
-			payment_method: paymentMethod,
-			branch_id: <?php echo $_SESSION['branch_id']; ?>,
-			dateSel: dateSelected,
-			timeSel: timeSelected,
-			...extraData
-		})
-	})
-	.then(res => res.json())
-	.then(data => {
-		if (data.success) {
-			Swal.fire("Success!", "Purchase submitted successfully!", "success")
-			.then(() => window.location.href = "purchase_create.php");
-		} else {
-			Swal.fire("Error!", data.error, "error");
-		}
-	})
-	.catch(err => console.error(err));
-}
 
 		}
 
