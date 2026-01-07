@@ -13,6 +13,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stock = $_POST['stock'];
     $price = $_POST['price'];
     $branch_id = $_SESSION['branch_id'];
+    $is_discounted  = isset($_POST['is_discounted']) ? (int)$_POST['is_discounted'] : 0;
+    $discount_price = ($is_discounted === 1 && isset($_POST['discount_price']) && $_POST['discount_price'] !== '')
+        ? $_POST['discount_price']
+        : null;
 
     try {
         $sql = "SELECT item_id FROM items WHERE 
@@ -44,8 +48,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit();
         }
         else{
-            $sql = "UPDATE items SET barcode = :barcode, item_name = :item_name, category_id = :category_id, brand_id = :brand_id, supplier_id = :supplier_id, size_id = :size_id, stock = :stock, price = :price 
-             WHERE item_id = :item_id";
+            $sql = "UPDATE items SET 
+                barcode = :barcode,
+                item_name = :item_name,
+                category_id = :category_id,
+                brand_id = :brand_id,
+                supplier_id = :supplier_id,
+                size_id = :size_id,
+                stock = :stock,
+                price = :price,
+                is_discounted = :is_discounted,
+                discount_price = :discount_price
+            WHERE item_id = :item_id";
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':barcode', $barcode);
             $stmt->bindParam(':item_name', $item_name);
@@ -56,6 +70,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt->bindParam(':size_id', $size_id);
             $stmt->bindParam(':stock', $stock);
             $stmt->bindParam(':price', $price);
+            $stmt->bindParam(':is_discounted', $is_discounted);
+
+            if ($discount_price === null) {
+                $stmt->bindValue(':discount_price', null, PDO::PARAM_NULL);
+            } else {
+                $stmt->bindValue(':discount_price', $discount_price);
+            }
             
             $stmt->execute();
 

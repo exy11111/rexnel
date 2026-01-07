@@ -1118,7 +1118,7 @@
 		if (this.value == 1) {
 			$('#editDiscountPrice').prop('disabled', false).prop('required', true);
 		} else {
-			$('#editDiscountPrice').prop('disabled', true).val('').prop('required', false);
+			$('#editDiscountPrice').prop('disabled', true).prop('required', false);
 		}
 	});
 	</script>
