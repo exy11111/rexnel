@@ -17,7 +17,14 @@
 
 	$branch_id = $_SESSION['branch_id'];
 
-	$sql = "SELECT item_id, barcode, item_name, category_name, brand_name, supplier_name, size_name, price, stock, supplier_price, (price - supplier_price) as profit
+	$sql = "SELECT item_id, barcode, item_name, category_name, brand_name, supplier_name, size_name, 
+	CASE 
+        WHEN i.is_discounted = 1 
+             AND i.discount_price IS NOT NULL
+        THEN i.discount_price
+        ELSE i.price
+    END AS price, is_discounted,
+	stock, supplier_price, (price - supplier_price) as profit
 	FROM items i 
 	JOIN categories c ON i.category_id = c.category_id
 	JOIN brands b ON b.brand_id = i.brand_id
@@ -254,37 +261,29 @@
 																	</select>
 																</div>
 															</div>
-															<div class="col-sm-3 h-100">
+															<div class="col-sm-3">
 																<div class="form-group form-group-default">
 																	<label>Price</label>
 																	<input type="number" name="price" step=0.01 class="form-control" placeholder="fill price" required>
 																</div>
 															</div>
-															<div class="col-sm-3">
-																<div class="form-group">
+															<div class="col-sm-3 d-flex align-items-end">
+																<div class="form-group form-group-default w-100">
 																	<label class="form-label">Discount</label>
-																	<div class="selectgroup w-100">
+
+																	<div class="selectgroup w-100 d-flex justify-content-center">
 																		
 																		<!-- YES -->
 																		<label class="selectgroup-item">
-																			<input type="radio"
-																				name="is_discounted"
-																				value="1"
-																				class="selectgroup-input"
-																				onchange="toggleDiscount(true)">
+																			<input type="radio" name="is_discounted" value="1" class="selectgroup-input" onchange="toggleDiscount(true)">
 																			<span class="selectgroup-button selectgroup-button-icon">
 																				<i class="fa fa-tag"></i>
 																			</span>
 																		</label>
 
-																		<!-- NO (default) -->
+																		<!-- NO -->
 																		<label class="selectgroup-item">
-																			<input type="radio"
-																				name="is_discounted"
-																				value="0"
-																				class="selectgroup-input"
-																				checked
-																				onchange="toggleDiscount(false)">
+																			<input type="radio" name="is_discounted" value="0" class="selectgroup-input" checked="" onchange="toggleDiscount(false)">
 																			<span class="selectgroup-button selectgroup-button-icon">
 																				<i class="fa fa-times"></i>
 																			</span>
@@ -501,6 +500,7 @@
 															$status = "In Stock";
 															$class = "badge badge-success";
 														}
+														$priceClass = ($row['is_discounted'] == 1) ? 'text-warning' : '';
 
 														echo "<tr data-id=".htmlspecialchars($row['item_id']).">";
 														echo "<td>".htmlspecialchars($row['barcode'])."</td>";
@@ -512,7 +512,7 @@
 														if($_SESSION['role_id'] == 1){
 															echo "<td>₱" . number_format($row['supplier_price'], 2) . "</td>";
 														}
-														echo "<td>₱" . number_format($row['price'], 2) . "</td>";
+														echo "<td class='{$priceClass}'>₱" . number_format($row['price'], 2) . "</td>";
 														echo "<td>₱" . number_format($row['profit'], 2) . "</td>";
 														echo "<td>" . number_format($row['stock']) . "</td>";
 														echo "<td> <span class='" . $class. "'>".$status."</span></td>";

@@ -12,6 +12,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $price = $_POST['price'];
     $stock = $_POST['stock'];
     $branch_id = $_POST['branch_id'];
+    $is_discounted = isset($_POST['is_discounted']) ? (int)$_POST['is_discounted'] : 0;
+    $discount_price = ($is_discounted === 1) ? $_POST['discount_price'] : null;
 
     try {
         $sql = "SELECT * FROM items WHERE (barcode = :barcode AND branch_id = :branch_id)
@@ -32,8 +34,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit();
         }
         else{
-            $sql = "INSERT INTO items (barcode, item_name, category_id, brand_id, supplier_id, size_id, price, stock, branch_id) 
-            VALUES (:barcode, :item_name, :category_id, :brand_id, :supplier_id, :size_id, :price, :stock, :branch_id)";
+            $sql = "INSERT INTO items (barcode, item_name, category_id, brand_id, supplier_id, size_id, price, stock, branch_id, is_discounted, discount_price) 
+            VALUES (:barcode, :item_name, :category_id, :brand_id, :supplier_id, :size_id, :price, :stock, :branch_id, :is_discounted, :discount_price)";
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':barcode', $barcode);
             $stmt->bindParam(':item_name', $item_name);
@@ -43,7 +45,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt->bindParam(':size_id', $size_id);
             $stmt->bindParam(':price', $price);
             $stmt->bindParam(':stock', $stock);
-            $stmt->bindParam(':branch_id', $branch_id);
+            $stmt->bindParam(':is_discounted', $is_discounted);
+            $stmt->bindParam(':discount_price', $discount_price);
             $stmt->execute();
             
             $added_by = $_SESSION['username'];
