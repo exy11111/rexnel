@@ -254,13 +254,33 @@
 																	</select>
 																</div>
 															</div>
-															<div class="col-sm-4">
+															<div class="col-sm-3">
 																<div class="form-group form-group-default">
 																	<label>Price</label>
 																	<input type="number" name="price" step=0.01 class="form-control" placeholder="fill price" required>
 																</div>
 															</div>
-															<div class="col-sm-4">
+															<div class="col-sm-3">
+																<div class="form-group form-group-default">
+																	<label>
+																		<input type="checkbox" name="is_discounted" id="is_discounted" value="1">
+																		Discounted Item
+																	</label>
+																</div>
+															</div>
+															<div class="col-sm-3">
+																<div class="form-group form-group-default">
+																	<label>Discount Price</label>
+																	<input type="number"
+																		name="discount_price"
+																		id="discount_price"
+																		step="0.01"
+																		class="form-control"
+																		placeholder="fill discount price"
+																		disabled>
+																</div>
+															</div>
+															<div class="col-sm-3">
 																<div class="form-group form-group-default">
 																	<label>Stock</label>
 																	<input type="number" name="stock" class="form-control" placeholder="fill stock" required>
