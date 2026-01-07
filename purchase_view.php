@@ -412,7 +412,6 @@ PLEASE COME AGAIN
                     white-space: pre-wrap;
                 }
                 img {
-                    max-width: 100%;
                 }
             </style>
         </head>
