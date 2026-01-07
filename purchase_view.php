@@ -10,10 +10,30 @@
 		$purchase_id = $_GET['purchase_id'];
 	}
 
-	$sql = "SELECT i.item_name, pi.quantity, s.size_name, pi.quantity * i.price AS item_price FROM purchase_items pi
-    JOIN items i ON i.item_id = pi.item_id
-    JOIN sizes s ON i.size_id = s.size_id
-    WHERE purchase_id = :purchase_id";
+	$sql = "
+	SELECT 
+		i.item_name,
+		pi.quantity,
+		s.size_name,
+
+		/* item_price = line total (discount-aware) */
+		pi.quantity *
+		(
+			CASE
+				WHEN pi.is_discounted = 1 
+					AND pi.unit_price IS NOT NULL
+				THEN pi.unit_price
+				ELSE i.price
+			END
+		) AS item_price,
+
+		pi.is_discounted
+
+	FROM purchase_items pi
+	JOIN items i ON i.item_id = pi.item_id
+	JOIN sizes s ON i.size_id = s.size_id
+	WHERE pi.purchase_id = :purchase_id
+	";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':purchase_id', $_GET['purchase_id']);
     $stmt->execute();
