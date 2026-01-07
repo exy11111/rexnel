@@ -500,7 +500,7 @@
 															$status = "In Stock";
 															$class = "badge badge-success";
 														}
-														$priceClass = ($row['is_discounted'] == 1) ? 'text-warning fw-bold' : '';
+														$priceClass = ($row['is_discounted'] == 1) ? 'text-warning fw-bold text-nowrap' : 'text-nowrap';
 														$priceIcon  = ($row['is_discounted'] == 1) ? "<i class='fa fa-tag me-1'></i>" : '';
 
 														echo "<tr data-id=".htmlspecialchars($row['item_id']).">";
