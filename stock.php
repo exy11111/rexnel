@@ -241,7 +241,7 @@
 																	</select>
 																</div>
 															</div>
-															<div class="col-sm-4">
+															<div class="col-sm-3">
 																<div class="form-group form-group-default">
 																	<label for="category">Size</label>
 																	<select class="form-select" name="size_id" required>
