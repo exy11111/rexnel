@@ -358,11 +358,45 @@
 		<?php endif; ?>
 	});
 	</script>
-	<script>
+<script>
 function printReceipt() {
-    const receipt = document.getElementById("receiptContent").innerHTML;
+    const printWindow = window.open("", "", "width=380,height=600");
 
-    const printWindow = window.open("", "", "width=400,height=600");
+    let receiptText = `
+HOUSE OF LOCAL
+<?php echo strtoupper($branch_name); ?>
+
+--------------------------------
+Date: <?php echo date('m/d/Y h:i A'); ?>
+Payment: <?php echo ($cash['pm_id'] == 1 ? 'CASH' : 'GCASH'); ?>
+<?php if ($cash['pm_id'] == 2): ?>
+Ref#: <?php echo $cash['ref']; ?>
+<?php endif; ?>
+--------------------------------
+ITEM               QTY   AMOUNT
+--------------------------------
+<?php foreach ($data as $row): 
+    $name = strtoupper(substr($row['item_name'], 0, 15));
+    $qty  = str_pad($row['quantity'], 3, ' ', STR_PAD_LEFT);
+    $amt  = str_pad(number_format($row['item_price'], 2), 8, ' ', STR_PAD_LEFT);
+?>
+<?php echo str_pad($name, 15); ?> <?php echo $qty; ?>  <?php echo $amt; ?>
+
+<?php if ($row['is_discounted']): ?>
+ * DISCOUNT APPLIED
+<?php endif; ?>
+<?php endforeach; ?>
+--------------------------------
+TOTAL:     Php <?php echo number_format($totalPrice, 2); ?>
+
+PAID:      Php <?php echo number_format($cash['cash'], 2); ?>
+<?php if ($cash['pm_id'] == 1): ?>
+CHANGE:    Php <?php echo number_format($cash['change_cash'], 2); ?>
+<?php endif; ?>
+--------------------------------
+THANK YOU FOR YOUR PURCHASE!
+PLEASE COME AGAIN
+`;
 
     printWindow.document.write(`
         <html>
@@ -370,27 +404,13 @@ function printReceipt() {
             <title>Receipt</title>
             <style>
                 body {
-                    font-family: Arial, sans-serif;
-                    font-size: 12px;
+                    font-family: monospace;
+                    font-size: 11px;
+                    margin: 0;
+                    padding: 5px;
                 }
-                table {
-                    width: 100%;
-                    border-collapse: collapse;
-                }
-                th, td {
-                    border: 1px solid #000;
-                    padding: 4px;
-                    text-align: left;
-                }
-                th {
-                    background: #000;
-                    color: #fff;
-                }
-                .text-end {
-                    text-align: right;
-                }
-                .text-center {
-                    text-align: center;
+                pre {
+                    white-space: pre-wrap;
                 }
                 img {
                     max-width: 100%;
@@ -398,18 +418,25 @@ function printReceipt() {
             </style>
         </head>
         <body>
-            ${receipt}
+            <pre>${receiptText}</pre>
+
+            <?php if (!empty($proofImagePath) && file_exists($proofImagePath)): ?>
+                <div style="text-align:center; margin-top:10px;">
+                    <p>PROOF OF PAYMENT</p>
+                    <img src="<?php echo $proofImagePath; ?>">
+                </div>
+            <?php endif; ?>
         </body>
         </html>
     `);
 
     printWindow.document.close();
     printWindow.focus();
-
     printWindow.print();
     printWindow.close();
 }
 </script>
+
 
 
 </body>
