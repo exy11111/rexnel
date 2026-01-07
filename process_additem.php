@@ -45,8 +45,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt->bindParam(':size_id', $size_id);
             $stmt->bindParam(':price', $price);
             $stmt->bindParam(':stock', $stock);
+            $stmt->bindParam(':branch_id', $branch_id);
             $stmt->bindParam(':is_discounted', $is_discounted);
-            $stmt->bindParam(':discount_price', $discount_price);
+            if ($discount_price === null) {
+                $stmt->bindValue(':discount_price', null, PDO::PARAM_NULL);
+            } else {
+                $stmt->bindValue(':discount_price', $discount_price);
+            }
             $stmt->execute();
             
             $added_by = $_SESSION['username'];
