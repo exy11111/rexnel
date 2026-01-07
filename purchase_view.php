@@ -163,7 +163,13 @@
 												<td><?php echo $row['item_name']; ?></td>
 												<td><?php echo $row['quantity']; ?></td>
 												<td><?php echo $row['size_name']; ?></td>
-												<td>₱<?php echo number_format($row['item_price'], 2); ?></td>
+
+												<td class="<?php echo $row['is_discounted'] ? 'text-warning fw-bold text-nowrap' : 'text-nowrap'; ?>">
+													<?php if ($row['is_discounted']): ?>
+														<i class="fa fa-tag me-1"></i>
+													<?php endif; ?>
+													₱<?php echo number_format($row['item_price'], 2); ?>
+												</td>
 											</tr>
 										<?php endforeach; ?>
 									</tbody>
