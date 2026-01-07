@@ -1029,7 +1029,7 @@
 						} else {
 							$('#editDiscountNo').prop('checked', true);
 							$('#editDiscountPrice')
-								.val(data.discount_price)
+								.val('')
 								.prop('disabled', true)
 								.prop('required', false);
 						}
