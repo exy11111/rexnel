@@ -401,7 +401,6 @@ PLEASE COME AGAIN
     printWindow.document.write(`
         <html>
         <head>
-            <title>Receipt</title>
             <style>
                 body {
                     font-family: monospace;
