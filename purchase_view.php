@@ -399,34 +399,46 @@ PLEASE COME AGAIN
 `;
 
     printWindow.document.write(`
-        <html>
-        <head>
-            <style>
-                body {
-                    font-family: monospace;
-                    font-size: 11px;
-                    margin: 0;
-                    padding: 5px;
-                }
-                pre {
-                    white-space: pre-wrap;
-                }
-                img {
-                }
-            </style>
-        </head>
-        <body>
-            <pre>${receiptText}</pre>
+		<!DOCTYPE html>
+		<html>
+		<head>
+			<meta charset="utf-8">
+			<style>
+				@page {
+					size: auto;
+					margin: 0;
+				}
 
-            <?php if (!empty($proofImagePath) && file_exists($proofImagePath)): ?>
-                <div style="text-align:center; margin-top:10px;">
-                    <p>PROOF OF PAYMENT</p>
-                    <img src="<?php echo $proofImagePath; ?>">
-                </div>
-            <?php endif; ?>
-        </body>
-        </html>
-    `);
+				body {
+					font-family: monospace;
+					font-size: 11px;
+					margin: 0;
+					padding: 5px;
+				}
+
+				pre {
+					white-space: pre-wrap;
+					margin: 0;
+				}
+
+				img {
+					max-width: 100%;
+				}
+			</style>
+		</head>
+		<body>
+			<pre>${receiptText}</pre>
+
+			<?php if (!empty($proofImagePath) && file_exists($proofImagePath)): ?>
+				<div>
+					PROOF OF PAYMENT
+					<br>
+					<img src="<?php echo $proofImagePath; ?>">
+				</div>
+			<?php endif; ?>
+		</body>
+		</html>
+	`);
 
     printWindow.document.close();
     printWindow.focus();
