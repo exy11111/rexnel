@@ -289,7 +289,7 @@ ini_set('display_errors', 1);
 							$itemStocks = [];
 							$colors = [];
 
-							$sql = "SELECT items.item_name, items.stock, sizes.size_name, branch.branch_name, categories.category_name 
+							$sql = "SELECT items.item_id, items.item_name, items.stock, sizes.size_name, branch.branch_name, categories.category_name 
 							FROM items
 							JOIN sizes ON items.size_id = sizes.size_id
 							JOIN branch ON items.branch_id = branch.branch_id
@@ -322,6 +322,7 @@ ini_set('display_errors', 1);
 							foreach ($items2 as $item) {
 								$itemData2[] = [
 									'label' => $item['branch_name'].' '.$item['item_name'].' '.$item['size_name'],
+									'item_name'  => $item['item_name'],
 									'stock' => $item['stock'],
 									'color' => ($item['stock'] < $lowStockThreshold) 
 										? 'rgb(255, 99, 71)'                   // red for low stock
@@ -352,9 +353,11 @@ ini_set('display_errors', 1);
 
 							$categories = [];
 							$branches = [];
+							$filterItems = [];
 							foreach ($items2 as $item) {
 								$categories[$item['category_name']] = true;
 								$branches[$item['branch_name']] = true;
+								$filterItems[$item['item_id']] = true;
 							}
 							$categories = array_keys($categories);
 
@@ -457,7 +460,7 @@ ini_set('display_errors', 1);
 											</div>
 										</div>
 										<div class="row mt-3">
-											<div class="col-6">
+											<div class="col-4">
 												<div class="dropdown mb-3">
 													<button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
 														Filter Categories
@@ -474,7 +477,24 @@ ini_set('display_errors', 1);
 													</ul>
 												</div>
 											</div>
-											<div class="col-6 text-end">
+											<div class="col-4 text-center">
+												<div class="dropdown mb-3">
+													<button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+														Filter Items
+													</button>
+													<ul class="dropdown-menu overflow-auto" id="branchFilterList2" style="max-height: 200px;">
+														<?php foreach ($br as $branch): ?>
+															<li>
+																<label class="dropdown-item">
+																	<input type="checkbox" class="form-check-input me-1 branch-filter2" value="<?= htmlspecialchars($branch['branch_name']) ?>" checked>
+																	<?= htmlspecialchars($branch['branch_name']) ?>
+																</label>
+															</li>
+														<?php endforeach; ?>
+													</ul>
+												</div>
+											</div>
+											<div class="col-4 text-end">
 												<div class="dropdown mb-3">
 													<button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
 														Filter Branches
@@ -967,6 +987,10 @@ ini_set('display_errors', 1);
 
 			chart.data.labels.forEach((label, i) => {
 				const li = document.createElement('li');
+				li.style.cursor = 'pointer';
+				li.style.display = 'flex';
+				li.style.alignItems = 'center';
+				li.style.marginBottom = '6px';
 
 				li.innerHTML = `
 					<span class="color-box" style="background:${chart.data.datasets[0].backgroundColor[i]}"></span>
@@ -975,7 +999,11 @@ ini_set('display_errors', 1);
 
 				// click = toggle slice
 				li.onclick = () => {
-					chart.toggleDataVisibility(i);
+					const meta = chart.getDatasetMeta(0);
+
+					// toggle visibility
+					meta.data[i].hidden = !meta.data[i].hidden;
+
 					chart.update();
 				};
 
