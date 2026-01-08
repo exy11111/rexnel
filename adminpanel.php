@@ -460,7 +460,7 @@ ini_set('display_errors', 1);
 											</div>
 										</div>
 										<div class="row mt-3">
-											<div class="col-4">
+											<div class="col-6">
 												<div class="dropdown mb-3">
 													<button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
 														Filter Categories
@@ -477,24 +477,7 @@ ini_set('display_errors', 1);
 													</ul>
 												</div>
 											</div>
-											<div class="col-4 text-center">
-												<div class="dropdown mb-3">
-													<button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-														Filter Items
-													</button>
-													<ul class="dropdown-menu overflow-auto" id="branchFilterList2" style="max-height: 200px;">
-														<?php foreach ($br as $branch): ?>
-															<li>
-																<label class="dropdown-item">
-																	<input type="checkbox" class="form-check-input me-1 branch-filter2" value="<?= htmlspecialchars($branch['branch_name']) ?>" checked>
-																	<?= htmlspecialchars($branch['branch_name']) ?>
-																</label>
-															</li>
-														<?php endforeach; ?>
-													</ul>
-												</div>
-											</div>
-											<div class="col-4 text-end">
+											<div class="col-6 text-end">
 												<div class="dropdown mb-3">
 													<button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
 														Filter Branches
@@ -981,77 +964,6 @@ ini_set('display_errors', 1);
 			}
 		});
 
-
-		const originalPieData = {
-			labels: [...itemsChart2.data.labels],
-			values: [...itemsChart2.data.datasets[0].data],
-			colors: [...itemsChart2.data.datasets[0].backgroundColor]
-		};
-
-		// Track which labels are enabled
-		let pieVisibility = {};
-		originalPieData.labels.forEach(label => {
-			pieVisibility[label] = true;
-		});
-
-		function rebuildPieChart(chart) {
-			const labels = [];
-			const values = [];
-			const colors = [];
-
-			originalPieData.labels.forEach((label, i) => {
-				if (pieVisibility[label]) {
-					labels.push(label);
-					values.push(originalPieData.values[i]);
-					colors.push(originalPieData.colors[i]);
-				}
-			});
-
-			chart.data.labels = labels;
-			chart.data.datasets[0].data = values;
-			chart.data.datasets[0].backgroundColor = colors;
-
-			chart.update();
-		}
-
-		function generateScrollableLegend(chart, containerId) {
-			const container = document.getElementById(containerId);
-			container.innerHTML = '<ul class="list-unstyled mb-0"></ul>';
-
-			originalPieData.labels.forEach((label, i) => {
-				const li = document.createElement('li');
-				li.style.cursor = 'pointer';
-				li.style.display = 'flex';
-				li.style.alignItems = 'center';
-				li.style.marginBottom = '6px';
-
-				// strike-through if hidden
-				if (!pieVisibility[label]) {
-					li.style.textDecoration = 'line-through';
-					li.style.opacity = '0.5';
-				}
-
-				li.innerHTML = `
-					<span class="color-box me-2"
-						style="width:12px;height:12px;
-								background:${originalPieData.colors[i]}">
-					</span>
-					<span>${label} (${originalPieData.values[i]})</span>
-				`;
-
-				li.onclick = () => {
-					// toggle state
-					pieVisibility[label] = !pieVisibility[label];
-
-					rebuildPieChart(chart);
-					generateScrollableLegend(chart, containerId);
-				};
-
-				container.querySelector('ul').appendChild(li);
-			});
-		}
-
-		generateScrollableLegend(itemsChart2, 'itemsLegend2');
 		</script>
 
 
@@ -1415,5 +1327,68 @@ ini_set('display_errors', 1);
 	</script>
 	<!-- Auto populate in edit modal -->
     <script src="editmodal.js"></script>
+
+	<script>
+		const originalPieData2 = {
+			labels: [...myItemsChart2.data.labels],
+			values: [...myItemsChart2.data.datasets[0].data],
+			colors: [...myItemsChart2.data.datasets[0].backgroundColor]
+		};
+
+		let pieState2 = {};
+		originalPieData2.labels.forEach(l => pieState2[l] = true);
+		function rebuildPieChart2() {
+			const labels = [];
+			const values = [];
+			const colors = [];
+
+			originalPieData2.labels.forEach((label, i) => {
+				if (pieState2[label]) {
+					labels.push(label);
+					values.push(originalPieData2.values[i]);
+					colors.push(originalPieData2.colors[i]);
+				}
+			});
+
+			myItemsChart2.data.labels = labels;
+			myItemsChart2.data.datasets[0].data = values;
+			myItemsChart2.data.datasets[0].backgroundColor = colors;
+
+			myItemsChart2.update();
+		}
+
+		function generateScrollableLegend(chart, containerId) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = '<ul class="list-unstyled mb-0"></ul>';
+
+    originalPieData2.labels.forEach((label, i) => {
+        const li = document.createElement('li');
+        li.style.cursor = 'pointer';
+        li.style.display = 'flex';
+        li.style.alignItems = 'center';
+        li.style.marginBottom = '6px';
+
+        if (!pieState2[label]) {
+            li.style.textDecoration = 'line-through';
+            li.style.opacity = '0.5';
+        }
+
+        li.innerHTML = `
+            <span class="color-box me-2"
+                  style="width:12px;height:12px;
+                         background:${originalPieData2.colors[i]}"></span>
+            ${label} (${originalPieData2.values[i]})
+        `;
+
+        li.onclick = () => {
+            pieState2[label] = !pieState2[label];
+            rebuildPieChart2();
+            generateScrollableLegend(chart, containerId);
+        };
+
+        container.querySelector('ul').appendChild(li);
+    });
+}generateScrollableLegend(myItemsChart2, 'itemsLegend2');
+	</script>
 </body>
 </html>
