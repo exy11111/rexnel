@@ -715,6 +715,7 @@ document.addEventListener("click", function (e) {
 
     // Trigger price update
     itemSelect.dispatchEvent(new Event("change"));
+    document.getElementById("order_quantity").focus();
 });
 </script>
 
