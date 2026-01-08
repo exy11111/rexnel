@@ -141,6 +141,11 @@
                                 </a>
                             </li>
                             <li>
+                                <a href="stock_admin_low.php">
+                                    <span class="sub-item text-white">Low Stock (Main)</span>
+                                </a>
+                            </li>
+                            <li>
                                 <a href="stock_requests.php">
                                     <span class="sub-item text-white">Supply Chain Status</span>
                                 </a>
