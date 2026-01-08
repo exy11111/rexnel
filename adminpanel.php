@@ -938,32 +938,6 @@ ini_set('display_errors', 1);
 
 		const ctx2 = document.getElementById('items_chart2').getContext('2d');
 
-		const itemsChart2 = new Chart(ctx2, {
-			type: 'pie',
-			data: {
-				labels: pieLabels2,
-				datasets: [{
-					data: pieValues2,
-					backgroundColor: pieColors2
-				}]
-			},
-			options: {
-				responsive: true,
-				legend: {
-					display: false // ✅ correct for v2
-				},
-				tooltips: {
-					callbacks: {
-						label: function(tooltipItem, data) {
-							const label = data.labels[tooltipItem.index] || '';
-							const value = data.datasets[0].data[tooltipItem.index];
-							return label + ': ' + value + ' stock';
-						}
-					}
-				}
-			}
-		});
-
 		</script>
 
 
