@@ -1101,17 +1101,34 @@ ini_set('display_errors', 1);
 				li.style.alignItems = 'center';
 				li.style.marginBottom = '6px';
 
+				const meta = chart.getDatasetMeta(0);
+
+				// apply initial crossed-out state
+				if (meta.data[i].hidden) {
+					li.style.textDecoration = 'line-through';
+					li.style.opacity = '0.5';
+				}
+
 				li.innerHTML = `
-					<span class="color-box" style="background:${chart.data.datasets[0].backgroundColor[i]}"></span>
+					<span class="color-box"
+						style="background:${chart.data.datasets[0].backgroundColor[i]};
+								width:12px;height:12px;display:inline-block;margin-right:6px">
+					</span>
 					${label} (${chart.data.datasets[0].data[i]})
 				`;
 
-				// click = toggle slice
 				li.onclick = () => {
-					const meta = chart.getDatasetMeta(0);
-
-					// toggle visibility
+					// toggle slice visibility
 					meta.data[i].hidden = !meta.data[i].hidden;
+
+					// toggle legend cross-out
+					if (meta.data[i].hidden) {
+						li.style.textDecoration = 'line-through';
+						li.style.opacity = '0.5';
+					} else {
+						li.style.textDecoration = 'none';
+						li.style.opacity = '1';
+					}
 
 					chart.update();
 				};
