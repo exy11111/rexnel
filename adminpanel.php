@@ -938,6 +938,39 @@ ini_set('display_errors', 1);
 
 		const ctx2 = document.getElementById('items_chart2').getContext('2d');
 
+
+		// ✅ Create scrollable legend
+		function generateScrollableLegend(chart, containerId) {
+			const container = document.getElementById(containerId);
+			container.innerHTML = '<ul></ul>';
+
+			chart.data.labels.forEach((label, i) => {
+				const li = document.createElement('li');
+				li.style.cursor = 'pointer';
+				li.style.display = 'flex';
+				li.style.alignItems = 'center';
+				li.style.marginBottom = '6px';
+
+				li.innerHTML = `
+					<span class="color-box" style="background:${chart.data.datasets[0].backgroundColor[i]}"></span>
+					${label} (${chart.data.datasets[0].data[i]})
+				`;
+
+				// click = toggle slice
+				li.onclick = () => {
+					const meta = chart.getDatasetMeta(0);
+
+					// toggle visibility
+					meta.data[i].hidden = !meta.data[i].hidden;
+
+					chart.update();
+				};
+
+				container.querySelector('ul').appendChild(li);
+			});
+		}
+
+		generateScrollableLegend(itemsChart2, 'itemsLegend2');
 		</script>
 
 
