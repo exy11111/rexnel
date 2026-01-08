@@ -982,31 +982,69 @@ ini_set('display_errors', 1);
 		});
 
 
-		// ✅ Create scrollable legend
+		const originalPieData = {
+			labels: [...itemsChart2.data.labels],
+			values: [...itemsChart2.data.datasets[0].data],
+			colors: [...itemsChart2.data.datasets[0].backgroundColor]
+		};
+
+		// Track which labels are enabled
+		let pieVisibility = {};
+		originalPieData.labels.forEach(label => {
+			pieVisibility[label] = true;
+		});
+
+		function rebuildPieChart(chart) {
+			const labels = [];
+			const values = [];
+			const colors = [];
+
+			originalPieData.labels.forEach((label, i) => {
+				if (pieVisibility[label]) {
+					labels.push(label);
+					values.push(originalPieData.values[i]);
+					colors.push(originalPieData.colors[i]);
+				}
+			});
+
+			chart.data.labels = labels;
+			chart.data.datasets[0].data = values;
+			chart.data.datasets[0].backgroundColor = colors;
+
+			chart.update();
+		}
+
 		function generateScrollableLegend(chart, containerId) {
 			const container = document.getElementById(containerId);
-			container.innerHTML = '<ul></ul>';
+			container.innerHTML = '<ul class="list-unstyled mb-0"></ul>';
 
-			chart.data.labels.forEach((label, i) => {
+			originalPieData.labels.forEach((label, i) => {
 				const li = document.createElement('li');
 				li.style.cursor = 'pointer';
 				li.style.display = 'flex';
 				li.style.alignItems = 'center';
 				li.style.marginBottom = '6px';
 
+				// strike-through if hidden
+				if (!pieVisibility[label]) {
+					li.style.textDecoration = 'line-through';
+					li.style.opacity = '0.5';
+				}
+
 				li.innerHTML = `
-					<span class="color-box" style="background:${chart.data.datasets[0].backgroundColor[i]}"></span>
-					${label} (${chart.data.datasets[0].data[i]})
+					<span class="color-box me-2"
+						style="width:12px;height:12px;
+								background:${originalPieData.colors[i]}">
+					</span>
+					<span>${label} (${originalPieData.values[i]})</span>
 				`;
 
-				// click = toggle slice
 				li.onclick = () => {
-					const meta = chart.getDatasetMeta(0);
+					// toggle state
+					pieVisibility[label] = !pieVisibility[label];
 
-					// toggle visibility
-					meta.data[i].hidden = !meta.data[i].hidden;
-
-					chart.update();
+					rebuildPieChart(chart);
+					generateScrollableLegend(chart, containerId);
 				};
 
 				container.querySelector('ul').appendChild(li);
