@@ -1120,7 +1120,7 @@ ini_set('display_errors', 1);
 			});
 		}
 
-		generateScrollableLegend(itemsChart2, 'itemsLegend2');
+		generateScrollableLegend(myItemsChart2, 'itemsLegend2');
 
 		document.querySelectorAll(".item-filter").forEach(function (checkbox) {
 			checkbox.addEventListener("change", function () {
