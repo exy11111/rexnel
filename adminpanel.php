@@ -966,13 +966,15 @@ ini_set('display_errors', 1);
 			},
 			options: {
 				responsive: true,
-				plugins: {
-					legend: {
-						display: false // 👈 disable built-in legend
-					},
-					tooltip: {
-						callbacks: {
-							label: (ctx) => `${ctx.label}: ${ctx.raw} stock`
+				legend: {
+					display: false // ✅ correct for v2
+				},
+				tooltips: {
+					callbacks: {
+						label: function(tooltipItem, data) {
+							const label = data.labels[tooltipItem.index] || '';
+							const value = data.datasets[0].data[tooltipItem.index];
+							return label + ': ' + value + ' stock';
 						}
 					}
 				}
