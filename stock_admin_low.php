@@ -194,8 +194,14 @@
 														if($_SESSION['role_id'] == 1){
 															echo "<td>
                                                                 <div class='form-button-action'>
-                                                                    <button type='button' class='btn btn-link btn-primary btn-lg' data-bs-toggle='modal' data-bs-target='#editItemModal' title='Edit Task'>
-                                                                        <i class='fa fa-edit'></i>
+                                                                    <button type='button'
+                                                                        class='btn btn-link btn-success btn-lg openOrderModal'
+                                                                        data-bs-toggle='modal'
+                                                                        data-bs-target='#orderModal'
+                                                                        data-barcode='".htmlspecialchars($row['barcode'])."'
+                                                                        data-item-id='".htmlspecialchars($row['item_id'])."'
+                                                                        title='Order Stock'>
+                                                                        <i class='fa fa-shopping-cart'></i>
                                                                     </button>
                                                                 </div>
                                                             </td>";
@@ -317,6 +323,110 @@
 					<button type="button" id="confirmBranchBtn" class="btn btn-primary">Confirm</button>
 					<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
 				</div>
+			</div>
+		</div>
+	</div>
+    <?php 
+	
+	$sql = "SELECT item_id, barcode, item_name, category_name, brand_name, supplier_name, size_name, price, stock, supplier_price
+	FROM items i 
+	JOIN categories c ON i.category_id = c.category_id
+	JOIN brands b ON b.brand_id = i.brand_id
+	JOIN suppliers s ON s.supplier_id = i.supplier_id
+	JOIN sizes ss ON i.size_id = ss.size_id
+	WHERE i.branch_id = :branch_id";
+    $stmt = $conn->prepare($sql);
+	$stmt->bindParam(':branch_id', $_SESSION['branch_id']);
+    $stmt->execute();
+    $itemdata = $stmt->fetchAll(PDO::FETCH_ASSOC);
+	
+	?>
+    <div class="modal fade" id="orderModal" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header border-0">
+					<h5 class="modal-title">
+						<span class="fw-mediumbold">
+						Add</span> 
+						<span class="fw-light">
+							Order
+						</span>
+					</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<form action="process_addsupplierorder.php" method="POST">
+					<div class="modal-body">
+						<p class="small">Add an order using this form.</p>
+						<div class="row">
+							<div class="col-sm-12">
+								<div class="form-group form-group-default">
+									<label>Barcode</label>
+									<input type="text" name="barcode" id="stock_barcode2" class="form-control" oninput="validatePhoneNumber(this)" placeholder="fill barcode">
+									<script>
+										function validatePhoneNumber(input) {
+											input.value = input.value.replace(/[^0-9]/g, '');
+										}
+									</script>
+								</div>
+							</div>
+							<div class="col-sm-12">
+								<div class="form-group form-group-default">
+									<label>Item Name</label>
+									<select class="form-select" name="item_id" id="order_itemId" required>
+										<option value="">Select Item</option>
+										<?php 
+											foreach ($itemdata as $row){
+												echo "<option value='".$row['item_id']."' data-price='".$row['supplier_price']."'>".$row['item_name']." ".$row['size_name']."</option>";
+											}
+										?>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm-12">
+								<div class="form-group form-group-default">
+									<label for="category">Quantity</label>
+									<input type="number" class="form-control" name="quantity" id="order_quantity" required>
+								</div>
+							</div>
+							<div class="col-sm-12">
+								<div class="d-flex justify-content-between align-items-center" style="padding: 8px 0;">
+									<span>Unit Price</span>
+									<span id="unit_cost_display" style="color: #333;">₱0.00</span>
+								</div>
+							</div>
+
+							<div class="col-sm-12">
+								<div class="d-flex justify-content-between align-items-center" style="padding: 8px 0; font-weight: 700; font-size: 1.25rem; color: #E94E1B;">
+									<span>Total Price</span>
+									<span id="total_price">₱0.00</span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer border-0">
+						<button type="submit" class="btn btn-success">Order</button>
+						<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+					</div>
+				</form>
+				<script>
+					const itemSelect = document.getElementById("order_itemId");
+					const unitCostDisplay = document.getElementById("unit_cost_display");
+					const totalPriceDisplay = document.getElementById("total_price");
+					const quantityInput = document.getElementById("order_quantity");
+
+					function updatePrices() {
+						const selectedOption = itemSelect.options[itemSelect.selectedIndex];
+						const unitPrice = parseFloat(selectedOption.getAttribute("data-price")) || 0;
+						const quantity = parseInt(quantityInput.value) || 0;
+						const total = unitPrice * quantity;
+
+						unitCostDisplay.textContent = "₱" + unitPrice.toLocaleString(undefined, {minimumFractionDigits: 2});
+						totalPriceDisplay.textContent = "₱" + total.toLocaleString(undefined, {minimumFractionDigits: 2});
+					}
+
+					itemSelect.addEventListener("change", updatePrices);
+					quantityInput.addEventListener("input", updatePrices);
+				</script>
 			</div>
 		</div>
 	</div>
@@ -587,6 +697,26 @@
 			.catch(error => console.error('Error:', error));
 		});
     </script>
+
+    <script>
+document.addEventListener("click", function (e) {
+    const button = e.target.closest(".openOrderModal");
+    if (!button) return;
+
+    const barcode = button.getAttribute("data-barcode");
+    const itemId = button.getAttribute("data-item-id");
+
+    // Populate barcode
+    document.getElementById("stock_barcode2").value = barcode;
+
+    // Select item in dropdown
+    const itemSelect = document.getElementById("order_itemId");
+    itemSelect.value = itemId;
+
+    // Trigger price update
+    itemSelect.dispatchEvent(new Event("change"));
+});
+</script>
 
 
 
