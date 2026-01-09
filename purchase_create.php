@@ -253,365 +253,326 @@
             });
         });
     </script>
-	<script>
-		document.getElementById('barcode').addEventListener('change', function() {
-			let barcode = this.value;
+<script>
+document.getElementById('barcode').addEventListener('change', async function () {
+	const barcode = this.value.trim();
+	if (!barcode) return;
 
-			fetch('process_getbarcodedata.php', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-				body: 'barcode=' + barcode
-			})
-			.then(response => response.json())
-			.then(data => {
-				if (data.error) {
-					Swal.fire({
-						icon: 'error',
-						title: 'Error',
-						text: data.error
-					});
-					console.log(data);
-					document.getElementById('item_id').value = '';
-					document.getElementById('category').value = '';
-					document.getElementById('brand').value = '';
-					document.getElementById('supplier').value = '';
-					document.getElementById('size').value = '';
-					document.getElementById('price').value = '';
-					document.getElementById('available_stock').value = '';
-					document.getElementById('quantity').value = '';
-				} else {
-					console.log(data);
-					document.getElementById('item_id').value = data.item_id;
-					document.getElementById('category').value = data.category_name;
-					document.getElementById('brand').value = data.brand_name;
-					document.getElementById('supplier').value = data.supplier_name;
-					document.getElementById('size').value = data.size_name;
-					document.getElementById('price').value = data.price;
-					document.getElementById('available_stock').value = data.stock;
-					setTimeout(() => {
-						addRow();
-					}, 1000);
-				}
-			})
-			.catch(error => console.error('Error:', error));
+	const res = await fetch('process_getbarcodedata.php', {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+		body: 'barcode=' + encodeURIComponent(barcode)
+	});
+
+	const data = await res.json();
+	if (data.error) {
+		Swal.fire("Error", data.error, "error");
+		clearInputs();
+		return;
+	}
+
+	fillItemInputs(data);
+	setTimeout(addRow, 300);
+});
+
+document.getElementById('item_id').addEventListener('change', async function () {
+	const itemId = this.value;
+	if (!itemId) return;
+
+	const res = await fetch('process_getbarcodedata.php', {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+		body: 'item_id=' + encodeURIComponent(itemId)
+	});
+
+	const data = await res.json();
+	if (data.error) {
+		Swal.fire("Error", data.error, "error");
+		clearInputs();
+		return;
+	}
+
+	fillItemInputs(data);
+});
+
+function fillItemInputs(data) {
+	document.getElementById('item_id').value = data.item_id;
+	document.getElementById('barcode').value = data.barcode || '';
+	document.getElementById('category').value = data.category_name;
+	document.getElementById('brand').value = data.brand_name;
+	document.getElementById('supplier').value = data.supplier_name;
+	document.getElementById('size').value = data.size_name;
+	document.getElementById('price').value = data.price;
+	document.getElementById('available_stock').value = data.stock;
+}
+
+function clearInputs() {
+	['item_id','barcode','category','brand','supplier','size','price','available_stock','quantity']
+	.forEach(id => document.getElementById(id).value = '');
+}
+</script>
+<script>
+function addRow() {
+	const itemId = document.getElementById("item_id").value;
+	const qty = parseInt(document.getElementById("quantity").value || 1);
+	const stock = parseInt(document.getElementById("available_stock").value);
+
+	if (!itemId || qty < 1 || qty > stock) {
+		Swal.fire("Error", "Invalid quantity or item.", "error");
+		return;
+	}
+
+	fetch("process_getreceiptdata.php?item_id=" + itemId)
+	.then(res => res.json())
+	.then(data => {
+		const tbody = document.querySelector("#receipt tbody");
+		const rows = tbody.querySelectorAll("tr");
+
+		for (let row of rows) {
+			if (row.dataset.itemId === itemId) {
+				const newQty = parseInt(row.children[1].innerText) + qty;
+				row.children[1].innerText = newQty;
+				row.children[3].innerText = "₱" + (newQty * data.price).toFixed(2);
+				updateTotalPrice();
+				clearInputs();
+				return;
+			}
+		}
+
+		const tr = document.createElement("tr");
+		tr.dataset.itemId = itemId;
+		tr.innerHTML = `
+			<td>${data.item_name}</td>
+			<td>${qty}</td>
+			<td>${data.size_name}</td>
+			<td>₱${(qty * data.price).toFixed(2)}</td>
+			<td>
+				<button class="btn btn-danger btn-sm" onclick="removeRow(this)">×</button>
+			</td>
+			<td hidden>${itemId}</td>
+		`;
+		tbody.appendChild(tr);
+
+		updateTotalPrice();
+		clearInputs();
+	});
+}
+
+function removeRow(btn) {
+	btn.closest("tr").remove();
+	updateTotalPrice();
+}
+
+function updateTotalPrice() {
+	let total = 0;
+	document.querySelectorAll("#receipt tbody tr").forEach(row => {
+		total += parseFloat(row.children[3].innerText.replace("₱",""));
+	});
+	document.getElementById("totalPrice").innerText = "Total Price: ₱" + total.toFixed(2);
+}
+
+document.getElementById("sbtn").addEventListener("click", e => {
+	e.preventDefault();
+	addRow();
+});
+</script>
+<script>
+function submitReceipt() {
+
+	const rows = document.querySelectorAll("#receipt tbody tr");
+	if (!rows.length) {
+		Swal.fire("Error", "Receipt is empty.", "error");
+		return;
+	}
+
+	const pm = document.querySelector("select[name='pm_id']").value;
+	if (!pm || pm === "Choose Payment Method") {
+		Swal.fire("Error", "Select payment method.", "error");
+		return;
+	}
+
+	const receipt = [...rows].map(r => ({
+		item_id: parseInt(r.children[5].innerText),
+		quantity: parseInt(r.children[1].innerText),
+		price: parseFloat(r.children[3].innerText.replace("₱",""))
+	}));
+
+	const total = getTotalPrice();
+
+	Swal.fire({
+		title: "Confirm Checkout?",
+		icon: "warning",
+		showCancelButton: true
+	}).then(res => {
+		if (!res.isConfirmed) return;
+		pm === "1" ? cashFlow(receipt, total) : gcashFlow(receipt, total);
+	});
+}
+</script>
+<script>
+function cashFlow(receipt, total) {
+	Swal.fire({
+		title: "Cash Payment",
+		input: "number",
+		preConfirm: cash => {
+			if (!cash || cash < total) {
+				Swal.showValidationMessage("Insufficient cash");
+				return false;
+			}
+			return cash;
+		}
+	}).then(res => {
+		if (!res.isConfirmed) return;
+		sendToServer(receipt, total, { cash: res.value, change: res.value - total, pm_id: 1 });
+	});
+}
+
+function gcashFlow(receipt, total) {
+	Swal.fire({
+		title: "GCash Reference",
+		input: "text",
+		preConfirm: ref => ref || Swal.showValidationMessage("Reference required")
+	}).then(res => {
+		if (!res.isConfirmed) return;
+		sendToServer(receipt, total, { ref: res.value, pm_id: 2 });
+	});
+}
+</script>
+<script>
+function sendToServer(receipt, total, pay) {
+	fetch("process_receipt.php", {
+		method: "POST",
+		headers: { "Content-Type": "application/json" },
+		body: JSON.stringify({
+			receipt,
+			total_price: total,
+			payment_method: pay.pm_id,
+			branch_id: <?php echo $_SESSION['branch_id']; ?>,
+			dateSel: startDate.value,
+			timeSel: startTime.value,
+			...pay
+		})
+	})
+	.then(res => res.json())
+	.then(data => {
+		if (!data.success) {
+			Swal.fire("Error", data.error, "error");
+			return;
+		}
+
+		Swal.fire("Success", "Printing receipt…", "success")
+		.then(() => {
+			printReceiptAuto(pay);
+			setTimeout(() => location.href = "purchase_create.php", 500);
 		});
+	});
+}
+</script>
+<script>
+function printReceiptAuto(extra = {}) {
 
-		document.getElementById('item_id').addEventListener('change', function() {
-			let itemId = this.value;
+	const rows = document.querySelectorAll("#receipt tbody tr");
+	if (!rows.length) {
+		Swal.fire("Error", "No items to print.", "error");
+		return;
+	}
 
-			fetch('process_getbarcodedata.php', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-				body: 'item_id=' + itemId
-			})
-			.then(response => response.json())
-			.then(data => {
-				if (data.error) {
-					Swal.fire({
-						icon: 'error',
-						title: 'Error',
-						text: data.error
-					});
-					document.getElementById('barcode').value = '';
-					document.getElementById('category').value = '';
-					document.getElementById('brand').value = '';
-					document.getElementById('supplier').value = '';
-					document.getElementById('size').value = '';
-					document.getElementById('price').value = '';
-					document.getElementById('available_stock').value = '';
-					document.getElementById('quantity').value = '';
-				} else {
-					document.getElementById('barcode').value = data.barcode;
-					document.getElementById('category').value = data.category_name;
-					document.getElementById('brand').value = data.brand_name;
-					document.getElementById('supplier').value = data.supplier_name;
-					document.getElementById('size').value = data.size_name;
-					document.getElementById('price').value = data.price;
-					document.getElementById('available_stock').value = data.stock;
-				}
-			})
-			.catch(error => console.error('Error:', error));
-		});
+	let lines = [];
 
-		function addRow() {
-			let item_id = document.getElementById("item_id").value;
-			let quantity = parseFloat(document.getElementById("quantity").value) || 1;
-			let available = parseFloat(document.getElementById('available_stock').value);
+	// HEADER
+	lines.push("HOUSE OF LOCAL");
+	lines.push("");
+	lines.push("--------------------------------");
+	lines.push("Date: " + new Date().toLocaleString());
 
-			if (!item_id) {
-				Swal.fire({
-					icon: 'error',
-					title: 'Error!',
-					text: "Please enter an item."
-				});
-				return;
-			} else if (quantity < 1) {
-				Swal.fire({
-					icon: 'error',
-					title: 'Error!',
-					text: "Please enter a valid quantity."
-				});
-				return;
-			} else if(quantity > available){
-				Swal.fire({
-					icon: 'error',
-					title: 'Error!',
-					text: "Item out of stock."
-				});
-				return;
+	const paymentSelect = document.querySelector("select[name='pm_id']");
+	const paymentText = paymentSelect
+		? paymentSelect.options[paymentSelect.selectedIndex].text.toUpperCase()
+		: "CASH";
+
+	lines.push("Payment: " + paymentText);
+
+	if (extra.ref) {
+		lines.push("Ref#: " + extra.ref);
+	}
+
+	lines.push("--------------------------------");
+	lines.push("ITEM            QTY   AMOUNT");
+	lines.push("--------------------------------");
+
+	let total = 0;
+
+	// ITEMS
+	rows.forEach(row => {
+		const td = row.querySelectorAll("td");
+
+		const name = td[0].innerText.toUpperCase().substring(0, 15);
+		const qty  = td[1].innerText;
+		const amt  = td[3].innerText.replace("₱", "").trim();
+
+		total += parseFloat(amt);
+
+		lines.push(
+			name.padEnd(15) +
+			qty.padStart(3) +
+			"  " +
+			amt.padStart(8)
+		);
+	});
+
+	// TOTALS
+	lines.push("--------------------------------");
+	lines.push("TOTAL:     Php " + total.toFixed(2));
+
+	if (extra.cash !== undefined) {
+		lines.push("PAID:      Php " + extra.cash.toFixed(2));
+		lines.push("CHANGE:    Php " + extra.change.toFixed(2));
+	}
+
+	lines.push("--------------------------------");
+	lines.push("THANK YOU FOR YOUR PURCHASE!");
+	lines.push("PLEASE COME AGAIN");
+
+	openPrintWindow(lines.join("\n"));
+}
+</script>
+<script>
+function openPrintWindow(receiptText) {
+
+	const printWindow = window.open("", "", "width=380,height=600");
+
+	printWindow.document.write(`
+	<!DOCTYPE html>
+	<html>
+	<head>
+		<meta charset="utf-8">
+		<style>
+			@page {
+				margin: 0;
 			}
-
-			fetch("process_getreceiptdata.php?item_id=" + encodeURIComponent(item_id))
-				.then(response => response.json())
-				.then(data => {
-					if (data.error) {
-						Swal.fire({
-							icon: 'error',
-							title: 'Error!',
-							text: data.error
-						});
-						return;
-					}
-
-					let table = document.getElementById("receipt").getElementsByTagName("tbody")[0];
-					let rows = table.getElementsByTagName("tr");
-					let pricePerUnit = parseFloat(data.price);
-					let updated = false;
-
-					// Check if item already exists
-					for (let i = 0; i < rows.length; i++) {
-						let existingItemId = rows[i].getElementsByTagName("td")[5].innerText;
-						
-						if (existingItemId === item_id) {
-							let existingQuantity = parseFloat(rows[i].getElementsByTagName("td")[1].innerText);
-							let newQuantity = existingQuantity + quantity;
-							let newTotalPrice = newQuantity * pricePerUnit;
-							
-							rows[i].getElementsByTagName("td")[1].innerText = newQuantity;
-							rows[i].getElementsByTagName("td")[3].innerText = "₱" + newTotalPrice.toFixed(2);
-							updated = true;
-							break;
-						}
-					}
-
-					if (!updated) {
-						let newRow = table.insertRow();
-						let cell1 = newRow.insertCell(0);
-						let cell2 = newRow.insertCell(1);
-						let cell3 = newRow.insertCell(2);
-						let cell4 = newRow.insertCell(3);
-						let cell5 = newRow.insertCell(4);
-						let cell6 = newRow.insertCell(5);
-
-						cell1.innerHTML = data.item_name;
-						cell2.innerHTML = quantity;
-						cell3.innerHTML = data.size_name;
-						cell4.innerHTML = "₱" + (quantity * pricePerUnit).toFixed(2);
-						cell5.innerHTML = "<button type='button' class='btn btn-link btn-danger' title='Remove' onclick='deleteRow(this)'><i class='fa fa-times'></i></button>";
-						cell6.innerHTML = item_id;
-						cell6.style.display = "none";
-					}
-
-					document.getElementById("item_id").value = "";
-					document.getElementById('barcode').value = '';
-					document.getElementById('category').value = '';
-					document.getElementById('brand').value = '';
-					document.getElementById('supplier').value = '';
-					document.getElementById('size').value = '';
-					document.getElementById('price').value = '';
-					document.getElementById('available_stock').value = '';
-					document.getElementById('quantity').value = '';
-
-					updateTotalPrice();
-				})
-				.catch(error => console.error("Error:", error));
-		}
-
-
-		document.getElementById("sbtn").addEventListener("click", function(event) {
-			event.preventDefault();
-			addRow();
-		});
-
-		function updateTotalPrice() {
-			let total = 0;
-			let table = document.getElementById("receipt");
-			let rows = table.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
-
-			for (let i = 0; i < rows.length; i++) {
-				let cell4 = rows[i].getElementsByTagName("td")[3];
-				let price = parseFloat(cell4.innerText.replace("₱", "").replace(",", "")) || 0;
-				total += price;
+			body {
+				font-family: monospace;
+				font-size: 11px;
+				margin: 0;
+				padding: 5px;
 			}
-
-			document.getElementById("totalPrice").innerText = "Total Price: ₱" + total.toFixed(2);
-		}
-
-		function deleteRow(button) {
-			let row = button.parentNode.parentNode;
-			row.parentNode.removeChild(row);
-			updateTotalPrice();
-		}
-
-		function submitReceipt() {
-			let table = document.getElementById("receipt");
-			let rows = table.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
-			let receiptData = [];
-			let dateSelected = document.getElementById('startDate').value;
-			let timeSelected = document.getElementById('startTime').value;
-
-			let paymentMethod = document.querySelector("select[name='pm_id']").value;
-			if (paymentMethod === "Choose Payment Method") {
-				Swal.fire("Error!", "Please select a valid payment method.", "error");
-				return;
+			pre {
+				white-space: pre-wrap;
+				margin: 0;
 			}
+		</style>
+	</head>
+	<body>
+		<pre>${receiptText}</pre>
+	</body>
+	</html>
+	`);
 
-			let totalPriceText = document.getElementById("totalPrice").innerText;
-			let totalPrice = parseFloat(totalPriceText.replace("Total Price: ₱", "").replace(",", ""));
-
-			for (let i = 0; i < rows.length; i++) {
-				let cells = rows[i].getElementsByTagName("td");
-
-				let rowData = {
-					quantity: parseInt(cells[1].innerText), // Convert to integer
-					price: parseFloat(cells[3].innerText.replace("₱", "").trim()).toFixed(2), // Convert to decimal (10,2)
-					item_id: parseInt(cells[5] ? cells[5].innerText : "0") // Convert to integer (default 0 if empty)
-				};
-
-				receiptData.push(rowData);
-			}
-
-
-			if (receiptData.length === 0) {
-				Swal.fire("Error!", "Your receipt is empty. Add items before checking out.", "error");
-				return;
-			}
-
-			Swal.fire({
-				title: "Are you sure you want to checkout?",
-				text: "You won't be able to undo this action.",
-				icon: "warning",
-				showCancelButton: true,
-				confirmButtonText: "Yes, Checkout!",
-				cancelButtonText: "Cancel"
-			}).then((result) => {
-				if (!result.isConfirmed) return;
-
-				/* =========================
-				GCASH PAYMENT
-				========================= */
-				if (paymentMethod === "2") {
-
-					Swal.fire({
-						title: "Pay via GCash",
-						html: `
-							<p>Please enter your GCash reference number.</p>
-							<input type="text" id="referenceNumber" class="swal2-input" placeholder="Reference Number">
-
-							<p class="mt-2">Upload proof of payment (optional)</p>
-							<input type="file" id="proofImage" class="swal2-file" accept="image/*">
-						`,
-						showCancelButton: true,
-						confirmButtonText: "Submit",
-						preConfirm: () => {
-							const ref = document.getElementById("referenceNumber").value.trim();
-							const file = document.getElementById("proofImage").files[0];
-
-							if (!ref) {
-								Swal.showValidationMessage("Reference number is required.");
-								return false;
-							}
-
-							if (file && !file.type.startsWith("image/")) {
-								Swal.showValidationMessage("Proof must be an image.");
-								return false;
-							}
-
-							if (!file) {
-								return { ref, proof: null };
-							}
-
-							return new Promise((resolve, reject) => {
-								const reader = new FileReader();
-								reader.onload = () => resolve({ ref, proof: reader.result });
-								reader.onerror = () => reject("Failed to read image.");
-								reader.readAsDataURL(file);
-							});
-						}
-					}).then((res) => {
-						if (!res.isConfirmed) return;
-
-						submitReceipt({
-							reference_number: res.value.ref,
-							proof_image: res.value.proof
-						});
-					});
-
-				/* =========================
-				CASH PAYMENT
-				========================= */
-				} else if (paymentMethod === "1") {
-
-					Swal.fire({
-						title: "Cash Payment",
-						html: `
-							<p>Enter cash amount provided:</p>
-							<input type="number" id="cashProvided" class="swal2-input" min="0" step="any">
-						`,
-						showCancelButton: true,
-						confirmButtonText: "Submit",
-						preConfirm: () => {
-							const cash = parseFloat(document.getElementById("cashProvided").value);
-							if (isNaN(cash) || cash < totalPrice) {
-								Swal.showValidationMessage("Insufficient cash.");
-								return false;
-							}
-							return {
-								cash_provided: cash,
-								change: cash - totalPrice
-							};
-						}
-					}).then((res) => {
-						if (!res.isConfirmed) return;
-						submitReceipt(res.value);
-					});
-
-				} else {
-					Swal.fire("Error", "Invalid payment method.", "error");
-				}
-			});
-
-			/* =========================
-			SUBMIT RECEIPT (COMMON)
-			========================= */
-			function submitReceipt(extraData = {}) {
-				fetch("process_receipt.php", {
-					method: "POST",
-					headers: { "Content-Type": "application/json" },
-					body: JSON.stringify({
-						receipt: receiptData,
-						total_price: totalPrice,
-						payment_method: paymentMethod,
-						branch_id: <?php echo $_SESSION['branch_id']; ?>,
-						dateSel: dateSelected,
-						timeSel: timeSelected,
-						...extraData
-					})
-				})
-				.then(res => res.json())
-				.then(data => {
-					if (data.success) {
-						Swal.fire("Success!", "Purchase submitted successfully!", "success")
-						.then(() => window.location.href = "purchase_create.php");
-					} else {
-						Swal.fire("Error!", data.error, "error");
-					}
-				})
-				.catch(err => console.error(err));
-			}
-
-		}
-
-	</script>
+	printWindow.document.close();
+	printWindow.focus();
+	printWindow.print();
+	printWindow.onafterprint = () => printWindow.close();
+}
+</script>
 </body>
 </html>
