@@ -2,11 +2,6 @@
 	require ('session.php');
 	require ('db.php');
 
-	if($_SESSION['role_id'] != 1){
-		header('Location: index.php?access=denied');
-		exit();
-	}
-
     $sql = "SELECT * FROM branch";
     $stmt = $conn->prepare($sql);
     $stmt->execute();

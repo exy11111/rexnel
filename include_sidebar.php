@@ -202,7 +202,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="report_select.php">
+                                <a href="<?php if($_SESSION['role_id'] == 1):?>report_select.php<?php else:?>report.php<?php endif;?>">
                                     <span class="sub-item text-white">Report</span>
                                 </a>
                             </li>
