@@ -525,8 +525,11 @@ function printReceiptAuto(extra = {}) {
 	lines.push("TOTAL:     Php " + total.toFixed(2));
 
 	if (extra.cash !== undefined) {
-		lines.push("PAID:      Php " + extra.cash.toFixed(2));
-		lines.push("CHANGE:    Php " + extra.change.toFixed(2));
+		const cash   = parseFloat(extra.cash) || 0;
+		const change = parseFloat(extra.change) || 0;
+
+		lines.push("PAID:      Php " + cash.toFixed(2));
+		lines.push("CHANGE:    Php " + change.toFixed(2));
 	}
 
 	lines.push("--------------------------------");
