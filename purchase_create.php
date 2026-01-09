@@ -574,5 +574,14 @@ function openPrintWindow(receiptText) {
 	printWindow.onafterprint = () => printWindow.close();
 }
 </script>
+<script>
+function getTotalPrice() {
+	const el = document.getElementById("totalPrice");
+	if (!el) return 0;
+
+	const text = el.innerText || "";
+	return parseFloat(text.replace(/[^\d.]/g, "")) || 0;
+}
+</script>
 </body>
 </html>
