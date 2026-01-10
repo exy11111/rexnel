@@ -495,8 +495,27 @@ function sendToServer(receipt, total, pay) {
 			return;
 		}
 
-		Swal.fire("Success", "Printing receipt…", "success")
-		.then(() => {
+		// ✅ Cash → show change
+		let message = "Printing receipt…";
+
+		if (pay.pm_id === 1) {
+			message = `
+				<div style="font-size:18px">
+					<strong>Change:</strong> ₱${pay.change.toFixed(2)}
+				</div>
+				<div style="margin-top:8px;color:#666">
+					Printing receipt…
+				</div>
+			`;
+		}
+
+		Swal.fire({
+			title: "Success",
+			html: message,
+			icon: "success",
+			timer: 1500,
+			showConfirmButton: false
+		}).then(() => {
 			printReceiptAuto(pay);
 			setTimeout(() => location.href = "purchase_create.php", 500);
 		});
