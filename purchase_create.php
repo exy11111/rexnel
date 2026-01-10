@@ -429,12 +429,47 @@ function cashFlow(receipt, total) {
 
 function gcashFlow(receipt, total) {
 	Swal.fire({
-		title: "GCash Reference",
-		input: "text",
-		preConfirm: ref => ref || Swal.showValidationMessage("Reference required")
-	}).then(res => {
+		title: "GCash Payment",
+		html: `
+			<input id="gcashRef" class="swal2-input" placeholder="GCash Reference">
+			<input id="gcashImage" type="file" class="swal2-file" accept="image/*">
+			<small style="color:#666">Proof image is optional</small>
+		`,
+		focusConfirm: false,
+		preConfirm: () => {
+			const ref = document.getElementById("gcashRef").value.trim();
+			const file = document.getElementById("gcashImage").files[0];
+
+			if (!ref) {
+				Swal.showValidationMessage("Reference required");
+				return false;
+			}
+
+			return { ref, file };
+		}
+	}).then(async (res) => {
 		if (!res.isConfirmed) return;
-		sendToServer(receipt, total, { ref: res.value, pm_id: 2 });
+
+		let proofImage = null;
+
+		if (res.value.file) {
+			proofImage = await fileToBase64(res.value.file);
+		}
+
+		sendToServer(receipt, total, {
+			pm_id: 2,
+			reference_number: res.value.ref,
+			proof_image: proofImage
+		});
+	});
+}
+
+function fileToBase64(file) {
+	return new Promise((resolve, reject) => {
+		const reader = new FileReader();
+		reader.onload = () => resolve(reader.result);
+		reader.onerror = reject;
+		reader.readAsDataURL(file);
 	});
 }
 </script>
