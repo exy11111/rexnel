@@ -517,7 +517,7 @@ function sendToServer(receipt, total, pay) {
 			showConfirmButton: false
 		}).then(() => {
 			printReceiptAuto(pay);
-			setTimeout(() => location.href = "purchase_create.php", 500);
+			setTimeout(() => location.href = "purchase_create.php", 3000);
 		});
 	});
 }
