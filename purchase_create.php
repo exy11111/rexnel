@@ -432,7 +432,7 @@ function gcashFlow(receipt, total) {
 		title: "GCash Payment",
 		html: `
 			<input id="gcashRef" class="swal2-input" placeholder="GCash Reference">
-			<input id="gcashImage" type="file" class="swal2-file" accept="image/*">
+			<input id="gcashImage" type="file" class="swal2-file" accept="image/*"><br>
 			<small style="color:#666">Proof image is optional</small>
 		`,
 		focusConfirm: false,
