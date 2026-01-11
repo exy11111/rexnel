@@ -325,6 +325,18 @@
 														<button type="submit" class="btn btn-primary">Add</button>
 														<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
 													</div>
+													<script>
+													document.getElementById('discount_percent').addEventListener('input', calculateDiscount);
+													document.getElementById('original_price').addEventListener('input', calculateDiscount);
+
+													function calculateDiscount() {
+														const price = parseFloat(document.getElementById('original_price').value) || 0;
+														const percent = parseFloat(document.getElementById('discount_percent').value) || 0;
+
+														const discountAmount = (price * percent) / 100;
+														document.getElementById('discount_price').value = discountAmount.toFixed(2);
+													}
+													</script>
 												</form>
 											</div>
 										</div>
