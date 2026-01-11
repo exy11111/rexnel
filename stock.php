@@ -698,7 +698,10 @@
 																<div class="col-sm-3">
 																	<div class="form-group form-group-default">
 																		<label>Price</label>
-																		<input type="number" name="price" step=0.01 id="editPrice" class="form-control" placeholder="fill price" required>
+																		<input type="number" name="price" step="0.01"
+																			id="editPrice"
+																			class="form-control js-price"
+																			data-discount-group="edit">
 																	</div>
 																</div>
 																<div class="col-sm-2 d-flex align-items-end">
@@ -737,8 +740,8 @@
 																		<input type="number"
 																			class="form-control js-discount-percent"
 																			step="0.01"
-																			placeholder="%"
-																			data-discount-group="edit">
+																			data-discount-group="edit"
+																			placeholder="%">
 																	</div>
 																</div>
 																<div class="col-sm-3">
@@ -747,7 +750,6 @@
 																		<input type="number"
 																			name="discount_price"
 																			id="editDiscountPrice"
-																			step="0.01"
 																			class="form-control js-discount-price"
 																			data-discount-group="edit"
 																			readonly>
