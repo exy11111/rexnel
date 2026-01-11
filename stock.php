@@ -333,8 +333,9 @@
 														const price = parseFloat(document.getElementById('original_price').value) || 0;
 														const percent = parseFloat(document.getElementById('discount_percent').value) || 0;
 
-														const discountAmount = (price * percent) / 100;
-														document.getElementById('discount_price').value = discountAmount.toFixed(2);
+														const discountedPrice = price - (price * percent / 100);
+
+														document.getElementById('discount_price').value = discountedPrice.toFixed(2);
 													}
 													</script>
 												</form>
