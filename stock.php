@@ -264,7 +264,7 @@
 															<div class="col-sm-3">
 																<div class="form-group form-group-default">
 																	<label>Price</label>
-																	<input type="number" name="price" step=0.01 class="form-control" placeholder="fill price" required>
+																	<input type="number" name="price" id="original_price" step=0.01 class="form-control" placeholder="fill price" required>
 																</div>
 															</div>
 															<div class="col-sm-2 d-flex align-items-end">
