@@ -299,6 +299,7 @@
 																		id="discount_percent"
 																		class="form-control"
 																		step="0.01"
+																		data-discount-group="create"
 																		placeholder="Enter discount %">
 																</div>
 															</div>
@@ -310,6 +311,7 @@
 																		id="discount_price"
 																		class="form-control"
 																		step="0.01"
+																		data-discount-group="create"
 																		readonly>
 																</div>
 															</div>
