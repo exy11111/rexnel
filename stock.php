@@ -736,8 +736,7 @@
 																			class="form-control js-discount-percent"
 																			step="0.01"
 																			placeholder="%"
-																			data-discount-group="edit"
-																			disabled>
+																			data-discount-group="edit">
 																	</div>
 																</div>
 																<div class="col-sm-3">
