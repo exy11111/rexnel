@@ -1171,13 +1171,13 @@ function calculateDiscount(group) {
     const percentInput = document.querySelector(`.js-discount-percent[data-discount-group="${group}"]`);
     const discountPriceInput = document.querySelector(`.js-discount-price[data-discount-group="${group}"]`);
 
+    // <-- Safety check
+    if (!priceInput || !percentInput || !discountPriceInput) return;
+
     const price = parseFloat(priceInput.value) || 0;
     const percent = parseFloat(percentInput.value) || 0;
 
-    const discountedPrice = Math.max(
-        price - (price * percent / 100),
-        0
-    );
+    const discountedPrice = Math.max(price - (price * percent / 100), 0);
 
     discountPriceInput.value = discountedPrice.toFixed(2);
 }
