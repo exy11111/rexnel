@@ -292,19 +292,28 @@
 																	</div>
 																</div>
 															</div>
+															<div class="col-sm-2">
+																<div class="form-group form-group-default">
+																	<label>Discount (%)</label>
+																	<input type="number"
+																		id="discount_percent"
+																		class="form-control"
+																		step="0.01"
+																		placeholder="Enter discount %">
+																</div>
+															</div>
 															<div class="col-sm-3">
 																<div class="form-group form-group-default">
 																	<label>Discount Price</label>
 																	<input type="number"
 																		name="discount_price"
 																		id="discount_price"
-																		step="0.01"
 																		class="form-control"
-																		placeholder="fill discount price"
-																		disabled>
+																		step="0.01"
+																		readonly>
 																</div>
 															</div>
-															<div class="col-sm-2">
+															<div class="col-sm-3">
 																<div class="form-group form-group-default">
 																	<label>Stock</label>
 																	<input type="number" name="stock" class="form-control" placeholder="fill stock" required>
