@@ -1316,14 +1316,6 @@ ini_set('display_errors', 1);
 			percentageChange = '0';
 		}
 
-		if (percentageChange > 0) {
-			document.getElementById("percentageText").classList.add("text-success");
-		} else if (percentageChange < 0) {
-			document.getElementById("percentageText").classList.add("text-danger");
-		} else {
-			document.getElementById("percentageText").classList.add("text-muted");
-		}
-
 		document.getElementById("startDate").addEventListener("change", filterSalesChart);
 		document.getElementById("endDate").addEventListener("change", filterSalesChart);
 
