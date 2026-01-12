@@ -1169,8 +1169,8 @@ ini_set('display_errors', 1);
 			const selectedCategories = getSelectedValues(".item-filter2");
 
 			const allowedItems = itemData2.filter(item =>
-				selectedBranches.includes(item.branch) &&
-				selectedCategories.includes(item.category)
+				selectedBranches.includes(item.branch_name) &&
+				selectedCategories.includes(item.category_name)
 			);
 
 			const itemFilterList = document.getElementById("specificItemFilterList");
@@ -1182,7 +1182,9 @@ ini_set('display_errors', 1);
 				const li = document.createElement("li");
 				li.innerHTML = `
 				<label class="dropdown-item">
-					<input type="checkbox" class="form-check-input me-1 specific-item-filter" value="${label}">
+					<input type="checkbox"
+						class="form-check-input me-1 specific-item-filter"
+						value="${label}">
 					${label}
 				</label>
 				`;
@@ -1199,6 +1201,8 @@ ini_set('display_errors', 1);
 				updateChart();
 			}
 		});
+		updateSpecificItemFilter();
+		updateChart();
 
 		[startDateInput, endDateInput].forEach(input => {
 			input.addEventListener('change', () => {
