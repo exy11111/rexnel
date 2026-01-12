@@ -1143,9 +1143,7 @@ ini_set('display_errors', 1);
 		function getFilteredData() {
 			const selectedBranches = getSelectedValues(".branch-filter2");
 			const selectedCategories = getSelectedValues(".item-filter2");
-			const selectedItems = getSelectedValues(".specific-item-filter"); // NEW
-			const itemOk =
-			selectedItems.length === 0 || selectedItems.includes(item.label);
+			const selectedItems = getSelectedValues(".specific-item-filter");
 
 			return itemData2.filter(item => {
 				const branchOk = selectedBranches.includes(item.branch);
@@ -1167,32 +1165,39 @@ ini_set('display_errors', 1);
 			myItemsChart2.update();
 		}
 		function updateSpecificItemFilter() {
-			const selectedBranches = getSelectedValues(".branch-filter2");
-			const selectedCategories = getSelectedValues(".item-filter2");
+  const selectedBranches = getSelectedValues(".branch-filter2");
+  const selectedCategories = getSelectedValues(".item-filter2");
 
-			const allowedItems = itemData2.filter(item =>
-				selectedBranches.includes(item.branch) &&
-				selectedCategories.includes(item.category)
-			);
+  // remember currently checked items
+  const previouslyChecked = getSelectedValues(".specific-item-filter");
 
-			const itemFilterList = document.getElementById("specificItemFilterList");
-			itemFilterList.innerHTML = "";
+  const allowedItems = itemData2.filter(item =>
+    selectedBranches.includes(item.branch) &&
+    selectedCategories.includes(item.category)
+  );
 
-			const uniqueItems = [...new Set(allowedItems.map(i => i.label))];
+  const itemFilterList = document.getElementById("specificItemFilterList");
+  itemFilterList.innerHTML = "";
 
-			uniqueItems.forEach(label => {
-				const li = document.createElement("li");
-				li.innerHTML = `
-				<label class="dropdown-item">
-					<input type="checkbox"
-						class="form-check-input me-1 specific-item-filter"
-						value="${label}">
-					${label}
-				</label>
-				`;
-				itemFilterList.appendChild(li);
-			});
-		}
+  const uniqueItems = [...new Set(allowedItems.map(i => i.label))];
+
+  uniqueItems.forEach(label => {
+    const isChecked =
+      previouslyChecked.length === 0 || previouslyChecked.includes(label);
+
+    const li = document.createElement("li");
+    li.innerHTML = `
+      <label class="dropdown-item">
+        <input type="checkbox"
+               class="form-check-input me-1 specific-item-filter"
+               value="${label}"
+               ${isChecked ? "checked" : ""}>
+        ${label}
+      </label>
+    `;
+    itemFilterList.appendChild(li);
+  });
+}
 		document.addEventListener("change", function (e) {
 			if (
 				e.target.classList.contains("branch-filter2") ||
