@@ -1169,8 +1169,8 @@ ini_set('display_errors', 1);
 			const selectedCategories = getSelectedValues(".item-filter2");
 
 			const allowedItems = itemData2.filter(item =>
-				selectedBranches.includes(item.branch_name) &&
-				selectedCategories.includes(item.category_name)
+				selectedBranches.includes(item.branch) &&
+				selectedCategories.includes(item.category)
 			);
 
 			const itemFilterList = document.getElementById("specificItemFilterList");
@@ -1203,6 +1203,7 @@ ini_set('display_errors', 1);
 		});
 		updateSpecificItemFilter();
 		updateChart();
+		
 
 		[startDateInput, endDateInput].forEach(input => {
 			input.addEventListener('change', () => {
