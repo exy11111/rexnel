@@ -1315,7 +1315,6 @@ ini_set('display_errors', 1);
 		if (isNaN(percentageChange)) {
 			percentageChange = '0';
 		}
-		document.getElementById("percentageText").textContent = percentageChange + "%";
 
 		if (percentageChange > 0) {
 			document.getElementById("percentageText").classList.add("text-success");
