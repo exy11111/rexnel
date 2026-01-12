@@ -1210,6 +1210,13 @@ ini_set('display_errors', 1);
 		});
 		updateSpecificItemFilter();
 		updateChart();
+		document.addEventListener("click", function (e) {
+  if (
+    e.target.matches(".dropdown-menu, .dropdown-menu *")
+  ) {
+    e.stopPropagation();
+  }
+});
 		
 
 		[startDateInput, endDateInput].forEach(input => {
