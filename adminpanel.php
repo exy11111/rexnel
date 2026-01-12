@@ -441,63 +441,85 @@ ini_set('display_errors', 1);
 							</div>
 
 							<div class="col-md-6 d-flex flex-column">
-								<div class="card">
+								<div class="card h-100">
 									<div class="card-header">
-										<div class="card-title">Stock Overview (All Branches)</div>
+									<div class="card-title">Stock Overview (All Branches)</div>
 									</div>
-									<div class="card-body">
-										<div class="row align-items-start">
-											<!-- LEGEND (LEFT) -->
-											<div class="col-md-4">
-												<div id="itemsLegend2" class="chart-legend-scroll"></div>
-											</div>
 
-											<!-- PIE CHART (RIGHT) -->
-											<div class="col-md-8 d-flex">
-												<div class="chart-center-wrapper w-100">
-													<canvas id="items_chart2"></canvas>
-												</div>
-											</div>
+									<div class="card-body d-flex flex-column">
+
+									<!-- PIE CHART (CENTERED) -->
+									<div class="flex-grow-1 d-flex align-items-center justify-content-center">
+										<div style="height:300px; width:100%;">
+										<canvas id="items_chart2"></canvas>
 										</div>
-										<div class="row mt-3">
-											<div class="col-6">
-												<div class="dropdown mb-3">
-													<button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-														Filter Categories
-													</button>
-													<ul class="dropdown-menu overflow-auto" id="itemFilterList2" style="max-height: 200px;">
-														<?php foreach ($categories as $category): ?>
-															<li>
-																<label class="dropdown-item">
-																	<input type="checkbox" class="form-check-input me-1 item-filter2" value="<?= htmlspecialchars($category) ?>" checked>
-																	<?= htmlspecialchars($category) ?>
-																</label>
-															</li>
-														<?php endforeach; ?>
-													</ul>
-												</div>
-											</div>
-											<div class="col-6 text-end">
-												<div class="dropdown mb-3">
-													<button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-														Filter Branches
-													</button>
-													<ul class="dropdown-menu overflow-auto" id="branchFilterList2" style="max-height: 200px;">
-														<?php foreach ($br as $branch): ?>
-															<li>
-																<label class="dropdown-item">
-																	<input type="checkbox" class="form-check-input me-1 branch-filter2" value="<?= htmlspecialchars($branch['branch_name']) ?>" checked>
-																	<?= htmlspecialchars($branch['branch_name']) ?>
-																</label>
-															</li>
-														<?php endforeach; ?>
-													</ul>
-												</div>
-											</div>
+									</div>
+
+									<!-- FILTERS -->
+									<div class="row mt-3">
+
+										<!-- CATEGORY FILTER -->
+										<div class="col-md-4">
+										<div class="dropdown w-100">
+											<button class="btn btn-outline-primary dropdown-toggle w-100" data-bs-toggle="dropdown">
+											Filter Categories
+											</button>
+											<ul class="dropdown-menu overflow-auto w-100" style="max-height:200px;">
+											<?php foreach ($categories as $category): ?>
+												<li>
+												<label class="dropdown-item">
+													<input type="checkbox"
+														class="form-check-input me-1 item-filter2"
+														value="<?= htmlspecialchars($category) ?>"
+														checked>
+													<?= htmlspecialchars($category) ?>
+												</label>
+												</li>
+											<?php endforeach; ?>
+											</ul>
 										</div>
+										</div>
+
+										<!-- BRANCH FILTER -->
+										<div class="col-md-4">
+										<div class="dropdown w-100">
+											<button class="btn btn-outline-primary dropdown-toggle w-100" data-bs-toggle="dropdown">
+											Filter Branches
+											</button>
+											<ul class="dropdown-menu overflow-auto w-100" style="max-height:200px;">
+											<?php foreach ($br as $branch): ?>
+												<li>
+												<label class="dropdown-item">
+													<input type="checkbox"
+														class="form-check-input me-1 branch-filter2"
+														value="<?= htmlspecialchars($branch['branch_name']) ?>"
+														checked>
+													<?= htmlspecialchars($branch['branch_name']) ?>
+												</label>
+												</li>
+											<?php endforeach; ?>
+											</ul>
+										</div>
+										</div>
+
+										<!-- SPECIFIC ITEM FILTER (DYNAMIC) -->
+										<div class="col-md-4">
+										<div class="dropdown w-100">
+											<button class="btn btn-outline-primary dropdown-toggle w-100" data-bs-toggle="dropdown">
+											Filter Items
+											</button>
+											<ul class="dropdown-menu overflow-auto w-100"
+												id="specificItemFilterList"
+												style="max-height:200px;">
+											<!-- JS injects items here -->
+											</ul>
+										</div>
+										</div>
+
+									</div>
 									</div>
 								</div>
-							</div>
+								</div>
 						</div>
 
 						<div class="row">
@@ -1159,40 +1181,72 @@ ini_set('display_errors', 1);
 			});
 		});
 
-		document.querySelectorAll(".item-filter2").forEach(function (checkbox) {
-			checkbox.addEventListener("change", function () {
-				const selectedCategories = Array.from(document.querySelectorAll(".item-filter2:checked"))
-												.map(cb => cb.value);
-
-				const filteredData = itemData2.filter(item => selectedCategories.includes(item.category));
-
-				myItemsChart2.data.labels = filteredData.map(d => d.label);
-				myItemsChart2.data.datasets[0].data = filteredData.map(d => d.stock);
-				myItemsChart2.data.datasets[0].backgroundColor = filteredData.map(d => d.color);
-				myItemsChart2.data.datasets[0].borderColor = filteredData.map(d => d.color);
-
-				myItemsChart2.update();
-			});
-		});
-
-		document.querySelectorAll(".branch-filter2").forEach(function (checkbox) {
-			checkbox.addEventListener("change", function () {
-				const selectedBranch = Array.from(document.querySelectorAll(".branch-filter2:checked"))
-												.map(cb => cb.value);
-
-				const filteredData = itemData2.filter(item => selectedBranch.includes(item.branch));
-
-				myItemsChart2.data.labels = filteredData.map(d => d.label);
-				myItemsChart2.data.datasets[0].data = filteredData.map(d => d.stock);
-				myItemsChart2.data.datasets[0].backgroundColor = filteredData.map(d => d.color);
-				myItemsChart2.data.datasets[0].borderColor = filteredData.map(d => d.color);
-
-				myItemsChart2.update();
-			});
-		});
-
 		const startDateInput = document.getElementById('startDate');
 		const endDateInput = document.getElementById('endDate');
+
+		function getSelectedValues(selector) {
+			return Array.from(document.querySelectorAll(selector + ":checked"))
+				.map(cb => cb.value);
+		}
+		function getFilteredData() {
+			const selectedBranches = getSelectedValues(".branch-filter2");
+			const selectedCategories = getSelectedValues(".item-filter2");
+			const selectedItems = getSelectedValues(".specific-item-filter"); // NEW
+
+			return itemData2.filter(item => {
+				const branchOk = selectedBranches.includes(item.branch);
+				const categoryOk = selectedCategories.includes(item.category);
+				const itemOk =
+				selectedItems.length === 0 || selectedItems.includes(item.label);
+
+				return branchOk && categoryOk && itemOk;
+			});
+		}
+		function updateChart() {
+			const data = getFilteredData();
+
+			myItemsChart2.data.labels = data.map(d => d.label);
+			myItemsChart2.data.datasets[0].data = data.map(d => d.stock);
+			myItemsChart2.data.datasets[0].backgroundColor = data.map(d => d.color);
+			myItemsChart2.data.datasets[0].borderColor = data.map(d => d.color);
+
+			myItemsChart2.update();
+		}
+		function updateSpecificItemFilter() {
+			const selectedBranches = getSelectedValues(".branch-filter2");
+			const selectedCategories = getSelectedValues(".item-filter2");
+
+			const allowedItems = itemData2.filter(item =>
+				selectedBranches.includes(item.branch) &&
+				selectedCategories.includes(item.category)
+			);
+
+			const itemFilterList = document.getElementById("specificItemFilterList");
+			itemFilterList.innerHTML = "";
+
+			const uniqueItems = [...new Set(allowedItems.map(i => i.label))];
+
+			uniqueItems.forEach(label => {
+				const li = document.createElement("li");
+				li.innerHTML = `
+				<label class="dropdown-item">
+					<input type="checkbox" class="form-check-input me-1 specific-item-filter" value="${label}">
+					${label}
+				</label>
+				`;
+				itemFilterList.appendChild(li);
+			});
+		}
+		document.addEventListener("change", function (e) {
+			if (
+				e.target.classList.contains("branch-filter2") ||
+				e.target.classList.contains("item-filter2") ||
+				e.target.classList.contains("specific-item-filter")
+			) {
+				updateSpecificItemFilter();
+				updateChart();
+			}
+		});
 
 		[startDateInput, endDateInput].forEach(input => {
 			input.addEventListener('change', () => {
