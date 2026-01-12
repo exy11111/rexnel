@@ -1144,6 +1144,8 @@ ini_set('display_errors', 1);
 			const selectedBranches = getSelectedValues(".branch-filter2");
 			const selectedCategories = getSelectedValues(".item-filter2");
 			const selectedItems = getSelectedValues(".specific-item-filter"); // NEW
+			const itemOk =
+			selectedItems.length === 0 || selectedItems.includes(item.label);
 
 			return itemData2.filter(item => {
 				const branchOk = selectedBranches.includes(item.branch);
