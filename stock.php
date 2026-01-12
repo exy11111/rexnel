@@ -264,7 +264,7 @@
 															<div class="col-sm-3">
 																<div class="form-group form-group-default">
 																	<label>Price</label>
-																	<input type="number" name="price" step=0.01 class="form-control" placeholder="fill price" required>
+																	<input type="number" name="price" id="original_price" step=0.01 class="form-control" placeholder="fill price" required>
 																</div>
 															</div>
 															<div class="col-sm-2 d-flex align-items-end">
@@ -292,19 +292,30 @@
 																	</div>
 																</div>
 															</div>
+															<div class="col-sm-2">
+																<div class="form-group form-group-default">
+																	<label>Discount (%)</label>
+																	<input type="number"
+																		id="discount_percent"
+																		class="form-control"
+																		step="0.01"
+																		data-discount-group="create"
+																		placeholder="Enter discount %">
+																</div>
+															</div>
 															<div class="col-sm-3">
 																<div class="form-group form-group-default">
 																	<label>Discount Price</label>
 																	<input type="number"
 																		name="discount_price"
 																		id="discount_price"
-																		step="0.01"
 																		class="form-control"
-																		placeholder="fill discount price"
-																		disabled>
+																		step="0.01"
+																		data-discount-group="create"
+																		readonly>
 																</div>
 															</div>
-															<div class="col-sm-2">
+															<div class="col-sm-3">
 																<div class="form-group form-group-default">
 																	<label>Stock</label>
 																	<input type="number" name="stock" class="form-control" placeholder="fill stock" required>
@@ -316,6 +327,19 @@
 														<button type="submit" class="btn btn-primary">Add</button>
 														<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
 													</div>
+													<script>
+													document.getElementById('discount_percent').addEventListener('input', calculateDiscount);
+													document.getElementById('original_price').addEventListener('input', calculateDiscount);
+
+													function calculateDiscount() {
+														const price = parseFloat(document.getElementById('original_price').value) || 0;
+														const percent = parseFloat(document.getElementById('discount_percent').value) || 0;
+
+														const discountedPrice = price - (price * percent / 100);
+
+														document.getElementById('discount_price').value = discountedPrice.toFixed(2);
+													}
+													</script>
 												</form>
 											</div>
 										</div>
@@ -444,25 +468,6 @@
 														<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
 													</div>
 												</form>
-												<script>
-													const itemSelect = document.getElementById("order_itemId");
-													const unitCostDisplay = document.getElementById("unit_cost_display");
-													const totalPriceDisplay = document.getElementById("total_price");
-													const quantityInput = document.getElementById("order_quantity");
-
-													function updatePrices() {
-														const selectedOption = itemSelect.options[itemSelect.selectedIndex];
-														const unitPrice = parseFloat(selectedOption.getAttribute("data-price")) || 0;
-														const quantity = parseInt(quantityInput.value) || 0;
-														const total = unitPrice * quantity;
-
-														unitCostDisplay.textContent = "₱" + unitPrice.toLocaleString(undefined, {minimumFractionDigits: 2});
-														totalPriceDisplay.textContent = "₱" + total.toLocaleString(undefined, {minimumFractionDigits: 2});
-													}
-
-													itemSelect.addEventListener("change", updatePrices);
-													quantityInput.addEventListener("input", updatePrices);
-												</script>
 											</div>
 										</div>
 									</div>
@@ -693,7 +698,10 @@
 																<div class="col-sm-3">
 																	<div class="form-group form-group-default">
 																		<label>Price</label>
-																		<input type="number" name="price" step=0.01 id="editPrice" class="form-control" placeholder="fill price" required>
+																		<input type="number" name="price" step="0.01"
+																			id="editPrice"
+																			class="form-control js-price"
+																			data-discount-group="edit">
 																	</div>
 																</div>
 																<div class="col-sm-2 d-flex align-items-end">
@@ -726,16 +734,25 @@
 																		</div>
 																	</div>
 																</div>
+																<div class="col-sm-2">
+																	<div class="form-group form-group-default">
+																		<label>Discount (%)</label>
+																		<input type="number"
+																			class="form-control js-discount-percent"
+																			step="0.01"
+																			data-discount-group="edit"
+																			placeholder="%">
+																	</div>
+																</div>
 																<div class="col-sm-3">
 																	<div class="form-group form-group-default">
 																		<label>Discount Price</label>
 																		<input type="number"
 																			name="discount_price"
 																			id="editDiscountPrice"
-																			step="0.01"
-																			class="form-control"
-																			placeholder="fill discount price"
-																			disabled>
+																			class="form-control js-discount-price"
+																			data-discount-group="edit"
+																			readonly>
 																	</div>
 																</div>
 																<div class="col-sm-2">
@@ -1122,6 +1139,64 @@
 		}
 	});
 	</script>
+	<script>
+document.addEventListener('input', handleDiscountCalculation);
+document.addEventListener('change', handleDiscountToggle);
+
+function handleDiscountCalculation(e) {
+    if (!e.target.classList.contains('js-price') &&
+        !e.target.classList.contains('js-discount-percent')) return;
+
+    const group = e.target.dataset.discountGroup;
+    calculateDiscount(group);
+}
+
+function handleDiscountToggle(e) {
+    if (!e.target.classList.contains('js-discount-toggle')) return;
+
+    const group = e.target.dataset.discountGroup;
+    const enabled = e.target.value === "1";
+
+    toggleDiscountFields(group, enabled);
+
+    if (!enabled) {
+        resetDiscount(group);
+    } else {
+        calculateDiscount(group);
+    }
+}
+
+function calculateDiscount(group) {
+    const priceInput = document.querySelector(`.js-price[data-discount-group="${group}"]`);
+    const percentInput = document.querySelector(`.js-discount-percent[data-discount-group="${group}"]`);
+    const discountPriceInput = document.querySelector(`.js-discount-price[data-discount-group="${group}"]`);
+
+    // <-- Safety check
+    if (!priceInput || !percentInput || !discountPriceInput) return;
+
+    const price = parseFloat(priceInput.value) || 0;
+    const percent = parseFloat(percentInput.value) || 0;
+
+    const discountedPrice = Math.max(price - (price * percent / 100), 0);
+
+    discountPriceInput.value = discountedPrice.toFixed(2);
+}
+
+function toggleDiscountFields(group, enabled) {
+    document
+        .querySelectorAll(`[data-discount-group="${group}"].js-discount-percent,
+                           [data-discount-group="${group}"].js-discount-price`)
+        .forEach(el => el.disabled = !enabled);
+}
+
+function resetDiscount(group) {
+    document
+        .querySelectorAll(`[data-discount-group="${group}"].js-discount-percent,
+                           [data-discount-group="${group}"].js-discount-price`)
+        .forEach(el => el.value = '');
+}
+</script>
+
 
 
 

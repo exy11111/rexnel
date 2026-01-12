@@ -429,12 +429,47 @@ function cashFlow(receipt, total) {
 
 function gcashFlow(receipt, total) {
 	Swal.fire({
-		title: "GCash Reference",
-		input: "text",
-		preConfirm: ref => ref || Swal.showValidationMessage("Reference required")
-	}).then(res => {
+		title: "GCash Payment",
+		html: `
+			<input id="gcashRef" class="swal2-input" placeholder="GCash Reference">
+			<input id="gcashImage" type="file" class="swal2-file" accept="image/*"><br>
+			<small style="color:#666">Proof image is optional</small>
+		`,
+		focusConfirm: false,
+		preConfirm: () => {
+			const ref = document.getElementById("gcashRef").value.trim();
+			const file = document.getElementById("gcashImage").files[0];
+
+			if (!ref) {
+				Swal.showValidationMessage("Reference required");
+				return false;
+			}
+
+			return { ref, file };
+		}
+	}).then(async (res) => {
 		if (!res.isConfirmed) return;
-		sendToServer(receipt, total, { ref: res.value, pm_id: 2 });
+
+		let proofImage = null;
+
+		if (res.value.file) {
+			proofImage = await fileToBase64(res.value.file);
+		}
+
+		sendToServer(receipt, total, {
+			pm_id: 2,
+			reference_number: res.value.ref,
+			proof_image: proofImage
+		});
+	});
+}
+
+function fileToBase64(file) {
+	return new Promise((resolve, reject) => {
+		const reader = new FileReader();
+		reader.onload = () => resolve(reader.result);
+		reader.onerror = reject;
+		reader.readAsDataURL(file);
 	});
 }
 </script>
@@ -460,10 +495,29 @@ function sendToServer(receipt, total, pay) {
 			return;
 		}
 
-		Swal.fire("Success", "Printing receipt…", "success")
-		.then(() => {
+		// ✅ Cash → show change
+		let message = "Printing receipt…";
+
+		if (pay.pm_id === 1) {
+			message = `
+				<div style="font-size:18px">
+					<strong>Change:</strong> ₱${pay.change.toFixed(2)}
+				</div>
+				<div style="margin-top:8px;color:#666">
+					Printing receipt…
+				</div>
+			`;
+		}
+
+		Swal.fire({
+			title: "Success",
+			html: message,
+			icon: "success",
+			timer: 1500,
+			showConfirmButton: false
+		}).then(() => {
 			printReceiptAuto(pay);
-			setTimeout(() => location.href = "purchase_create.php", 500);
+			setTimeout(() => location.href = "purchase_create.php", 3000);
 		});
 	});
 }
