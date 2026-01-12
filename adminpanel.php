@@ -1112,54 +1112,6 @@ ini_set('display_errors', 1);
 				}
 			}
 		});
-		function generateScrollableLegend(chart, containerId) {
-			const container = document.getElementById(containerId);
-			container.innerHTML = '<ul></ul>';
-
-			chart.data.labels.forEach((label, i) => {
-				const li = document.createElement('li');
-				li.style.cursor = 'pointer';
-				li.style.display = 'flex';
-				li.style.alignItems = 'center';
-				li.style.marginBottom = '6px';
-
-				const meta = chart.getDatasetMeta(0);
-
-				// apply initial crossed-out state
-				if (meta.data[i].hidden) {
-					li.style.textDecoration = 'line-through';
-					li.style.opacity = '0.5';
-				}
-
-				li.innerHTML = `
-					<span class="color-box"
-						style="background:${chart.data.datasets[0].backgroundColor[i]};
-								width:12px;height:12px;display:inline-block;margin-right:6px">
-					</span>
-					${label} (${chart.data.datasets[0].data[i]})
-				`;
-
-				li.onclick = () => {
-					// toggle slice visibility
-					meta.data[i].hidden = !meta.data[i].hidden;
-
-					// toggle legend cross-out
-					if (meta.data[i].hidden) {
-						li.style.textDecoration = 'line-through';
-						li.style.opacity = '0.5';
-					} else {
-						li.style.textDecoration = 'none';
-						li.style.opacity = '1';
-					}
-
-					chart.update();
-				};
-
-				container.querySelector('ul').appendChild(li);
-			});
-		}
-
-		generateScrollableLegend(myItemsChart2, 'itemsLegend2');
 
 		document.querySelectorAll(".item-filter").forEach(function (checkbox) {
 			checkbox.addEventListener("change", function () {
