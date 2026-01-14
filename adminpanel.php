@@ -448,70 +448,71 @@ ini_set('display_errors', 1);
 
 									<div class="card-body d-flex flex-column">
 
-									<!-- PIE CHART (CENTERED) -->
-									<div class="flex-grow-1 d-flex align-items-center justify-content-center">
-										<div style="height:300px; width:100%;">
-										<canvas id="items_chart2"></canvas>
+									<!-- PIE + LEGEND -->
+									<div class="row flex-grow-1">
+
+										<!-- LEGEND (LEFT) -->
+										<div class="col-md-5">
+										<div id="pieLegend"
+											class="list-group"
+											style="max-height:300px; overflow:auto;">
 										</div>
+										</div>
+
+										<!-- PIE CHART (RIGHT) -->
+										<div class="col-md-7 d-flex align-items-center justify-content-center">
+										<div style="height:300px; width:100%;">
+											<canvas id="items_chart2"></canvas>
+										</div>
+										</div>
+
 									</div>
 
-									<!-- FILTERS -->
-									<div class="row mt-3">
+									<!-- FILTERS (BOTTOM) -->
+									<div class="row mt-4">
 
 										<!-- CATEGORY FILTER -->
-										<div class="col-md-4">
+										<div class="col-md-6">
 										<div class="dropdown w-100">
-											<button class="btn btn-outline-primary dropdown-toggle w-100" data-bs-toggle="dropdown">
+											<button class="btn btn-outline-primary dropdown-toggle w-100"
+													data-bs-toggle="dropdown">
 											Filter Categories
 											</button>
 											<ul class="dropdown-menu overflow-auto w-100" style="max-height:200px;">
 											<?php foreach ($categories as $category): ?>
-												<li>
+											<li>
 												<label class="dropdown-item">
-													<input type="checkbox"
+												<input type="checkbox"
 														class="form-check-input me-1 item-filter2"
 														value="<?= htmlspecialchars($category) ?>"
 														checked>
-													<?= htmlspecialchars($category) ?>
+												<?= htmlspecialchars($category) ?>
 												</label>
-												</li>
+											</li>
 											<?php endforeach; ?>
 											</ul>
 										</div>
 										</div>
 
 										<!-- BRANCH FILTER -->
-										<div class="col-md-4">
+										<div class="col-md-6">
 										<div class="dropdown w-100">
-											<button class="btn btn-outline-primary dropdown-toggle w-100" data-bs-toggle="dropdown">
+											<button class="btn btn-outline-primary dropdown-toggle w-100"
+													data-bs-toggle="dropdown">
 											Filter Branches
 											</button>
 											<ul class="dropdown-menu overflow-auto w-100" style="max-height:200px;">
 											<?php foreach ($br as $branch): ?>
-												<li>
+											<li>
 												<label class="dropdown-item">
-													<input type="checkbox"
+												<input type="checkbox"
 														class="form-check-input me-1 branch-filter2"
 														value="<?= htmlspecialchars($branch['branch_name']) ?>"
 														checked>
-													<?= htmlspecialchars($branch['branch_name']) ?>
+												<?= htmlspecialchars($branch['branch_name']) ?>
 												</label>
-												</li>
+											</li>
 											<?php endforeach; ?>
-											</ul>
-										</div>
-										</div>
-
-										<!-- SPECIFIC ITEM FILTER (DYNAMIC) -->
-										<div class="col-md-4">
-										<div class="dropdown w-100">
-											<button class="btn btn-outline-primary dropdown-toggle w-100" data-bs-toggle="dropdown">
-											Filter Items
-											</button>
-											<ul class="dropdown-menu overflow-auto w-100"
-												id="specificItemFilterList"
-												style="max-height:200px;">
-											<!-- JS injects items here -->
 											</ul>
 										</div>
 										</div>
@@ -1143,16 +1144,11 @@ ini_set('display_errors', 1);
 		function getFilteredData() {
 			const selectedBranches = getSelectedValues(".branch-filter2");
 			const selectedCategories = getSelectedValues(".item-filter2");
-			const selectedItems = getSelectedValues(".specific-item-filter");
 
-			return itemData2.filter(item => {
-				const branchOk = selectedBranches.includes(item.branch);
-				const categoryOk = selectedCategories.includes(item.category);
-				const itemOk =
-				selectedItems.length === 0 || selectedItems.includes(item.label);
-
-				return branchOk && categoryOk && itemOk;
-			});
+			return itemData2.filter(item =>
+				selectedBranches.includes(item.branch) &&
+				selectedCategories.includes(item.category)
+			);
 		}
 		function updateChart() {
 			const data = getFilteredData();
@@ -1164,6 +1160,44 @@ ini_set('display_errors', 1);
 
 			myItemsChart2.update();
 		}
+		function updateChartAndLegend() {
+  const data = getFilteredData();
+
+  // UPDATE PIE
+  myItemsChart2.data.labels = data.map(d => d.label);
+  myItemsChart2.data.datasets[0].data = data.map(d => d.stock);
+  myItemsChart2.data.datasets[0].backgroundColor = data.map(d => d.color);
+  myItemsChart2.data.datasets[0].borderColor = data.map(d => d.color);
+  myItemsChart2.update();
+
+  // UPDATE LEGEND
+  const legend = document.getElementById("pieLegend");
+  legend.innerHTML = "";
+
+  if (data.length === 0) {
+    legend.innerHTML = `<div class="text-muted p-2">No data available</div>`;
+    return;
+  }
+
+  data.forEach(item => {
+    const row = document.createElement("div");
+    row.className = "list-group-item d-flex align-items-center gap-2";
+
+    row.innerHTML = `
+      <span style="
+        width:14px;
+        height:14px;
+        background:${item.color};
+        display:inline-block;
+        border-radius:3px;">
+      </span>
+      <span class="flex-grow-1">${item.label}</span>
+      <strong>${item.stock}</strong>
+    `;
+
+    legend.appendChild(row);
+  });
+}
 		function updateSpecificItemFilter() {
   const selectedBranches = getSelectedValues(".branch-filter2");
   const selectedCategories = getSelectedValues(".item-filter2");
@@ -1198,25 +1232,24 @@ ini_set('display_errors', 1);
     itemFilterList.appendChild(li);
   });
 }
-		document.addEventListener("change", function (e) {
-			if (
-				e.target.classList.contains("branch-filter2") ||
-				e.target.classList.contains("item-filter2") ||
-				e.target.classList.contains("specific-item-filter")
-			) {
-				updateSpecificItemFilter();
-				updateChart();
-			}
-		});
-		updateSpecificItemFilter();
-		updateChart();
-		document.addEventListener("click", function (e) {
+document.addEventListener("change", function (e) {
   if (
-    e.target.matches(".dropdown-menu, .dropdown-menu *")
+    e.target.classList.contains("branch-filter2") ||
+    e.target.classList.contains("item-filter2")
   ) {
+    updateChartAndLegend();
+  }
+});
+
+// keep dropdown open
+document.addEventListener("click", function (e) {
+  if (e.target.closest(".dropdown-menu")) {
     e.stopPropagation();
   }
 });
+
+// initial load
+updateChartAndLegend();
 		
 
 		[startDateInput, endDateInput].forEach(input => {
