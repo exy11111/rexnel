@@ -119,7 +119,7 @@ ini_set('display_errors', 1);
 					</div>
 					<div class="row">
 						<div class="col-sm-6 col-md-4">
-							<a href="purchase.php">
+							<a href="orderssupplier.php">
 								<div class="card card1 card-stats card-round">
 									<div class="card-body">
 										<div class="row align-items-center">
@@ -142,7 +142,7 @@ ini_set('display_errors', 1);
 							</a>
 						</div>
 						<div class="col-sm-6 col-md-4">
-							<a href="stock.php">
+							<a href="#">
 								<div class="card card1 card-stats card-round">
 									<div class="card-body ">
 										<div class="row align-items-center">
@@ -163,7 +163,7 @@ ini_set('display_errors', 1);
 							</a>
 						</div>
 						<div class="col-sm-6 col-md-4">
-							<a href="purchase.php">
+							<a href="#">
 								<div class="card card1 card-stats card-round">
 									<div class="card-body">
 										<div class="row align-items-center">
