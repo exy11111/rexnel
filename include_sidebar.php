@@ -1,8 +1,8 @@
 <!-- Sidebar -->
-<div class="sidebar" style="background-color: <?php if($_SESSION['role_id'] == 1) echo "#000"; else if ($_SESSION['role_id'] == 2) echo "#0449bf";?> !important;">
+<div class="sidebar" style="background-color: <?php if($_SESSION['role_id'] == 1) echo "#000"; else if ($_SESSION['role_id'] == 2) echo "#4766c4";?> !important;">
     <div class="sidebar-logo">
         <!-- Logo Header -->
-        <div class="logo-header" style="background-color: <?php if($_SESSION['role_id'] == 1) echo "#000"; else if ($_SESSION['role_id'] == 2) echo "#0449bf";?> !important;">
+        <div class="logo-header" style="background-color: <?php if($_SESSION['role_id'] == 1) echo "#000"; else if ($_SESSION['role_id'] == 2) echo "#4766c4";?> !important;">
 
             <a href="index.php" class="logo text-white fw-bold">
                 <img src="assets/img/holicon.png" alt="navbar brand" class="navbar-brand" height="40">&nbsp;House of Local
